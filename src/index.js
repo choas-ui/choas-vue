@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import App from 'App'
+import HelloWorld from './components/HelloWorld'
 
 const componentLib = {
-    App
+    HelloWorld
 }
 
 Object.keys(componentLib).forEach(key=>{
