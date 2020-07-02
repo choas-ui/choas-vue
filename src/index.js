@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld'
+import HelloWorld from './lib/HelloWorld/HelloWorld'
 
 const componentLib = {
     HelloWorld
