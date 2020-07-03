@@ -1,6 +1,23 @@
 const path = require('path')
-console.log(process.cwd()+'/src/lib/M')
-console.log(path.resolve(process.cwd(),'src/lib/TreeModal/TreeModal.vue'), 'path')
+
+function getPath(ComponentName) {
+    return path.resolve(process.cwd(),`src/lib/${ComponentName}`)
+}
+
+function getComponentsList(){
+    return [
+        '@vuepress/register-components',
+        {
+            components: [
+                {
+                    name: 'TreeModal',
+                    path: getPath('TreeModal')
+                }
+            ]
+        }
+    ]
+}
+
 module.exports = {
     title: 'Choas-UI',
     description: 'Choas For Vue',
@@ -13,7 +30,7 @@ module.exports = {
             ],
         sidebarDepth: 2,
         sidebar: [
-            ['/', '简介'],
+            ['/', '快速上手'],
             {
                 title: '组件',
                 children: [
@@ -29,20 +46,7 @@ module.exports = {
         ]
     },
     plugins: [
-        [
-            '@vuepress/register-components',
-            {
-                components: [
-                    {
-                        name: 'TreeModal',
-                        path: getPath('TreeModal')
-                    }
-                ]
-            }
-        ]
+        getComponentsList()
     ]
 }
 
-function getPath(ComponentName) {
-    return path.resolve(process.cwd(),`src/lib/${ComponentName}`)
-}
