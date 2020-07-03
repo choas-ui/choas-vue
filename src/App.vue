@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Button @click="clickHandle" class-name="usr-btn-class"><template slot="right"><span>1231</span></template></Button>
+    <Button @click="clickHandle" type="disabled" class-name="usr-btn-class"><template slot="right"><span>1231</span></template></Button>
   </div>
 </template>
 

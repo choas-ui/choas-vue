@@ -1,5 +1,94 @@
 <template>
-  <div>treeModal</div>
+  <div :class="{ inputWrap: canBeEdited }" class="tablecell">
+    <template v-if="!canBeEdited">
+      <div class="input-like">
+        <template v-if="value.length">
+          <span
+                  v-for="(item, index) of value"
+                  :key="index + item.title"
+                  :class="multiple ? 'tag-span' : 'content-span'"
+          >
+            {{ item.title }}
+          </span>
+        </template>
+      </div>
+    </template>
+    <template v-else>
+      <div class="input-like" @click="openModel">
+        <template v-if="value.length">
+          <span
+                  v-for="(item, index) of value"
+                  :key="index + item.title"
+                  :class="multiple ? 'tag-span' : 'content-span'"
+          >
+            {{ item.title }}
+          </span>
+        </template>
+        <template v-else>
+          <span class="placeholder-span">{{ placeholder }}</span>
+        </template>
+      </div>
+      <Modal
+              v-model="showDialog"
+              title="树形弹框"
+              :transfer="false"
+              :width="800"
+              :height="700"
+              @close="closeModule"
+      >
+        <div style="text-align:center">
+          <div class="selectBox">
+            <div class="fn-inline">
+              <label class="fn-inline">
+                <Input v-model="searchValue" placeholder="请输入名称或者机构代码……" />
+              </label>
+              <Button type="primary" @click="searchHandle">搜索</Button>
+              <Button @click="setInitValue">重置</Button>
+            </div>
+          </div>
+          <div class="transferWrap">
+            <div class="alternative">
+              <div class="title">
+                <span>备选项目</span>
+              </div>
+              <div class="selectTree">
+                <Tree
+                        ref="tree"
+                        :data="selfTreeData"
+                        :check-directly="multiple"
+                        :show-checkbox="multiple"
+                        @on-select-change="selectChange"
+                        @on-check-change="selectMultiple"
+                />
+              </div>
+            </div>
+            <div class="Selected">
+              <div class="title">
+                <span>已选择项</span>
+              </div>
+              <div class="select-p-box">
+                <p
+                        v-for="(selectItem, index) of selectData"
+                        :key="index"
+                        class="tree-select"
+                >
+                  {{ selectItem.title }}
+                  <i
+                          class="ivu-icon ivu-icon-ios-close"
+                          @click="multiple ? multipleRemove(selectItem) : singleRemove(selectItem)"
+                  ></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div slot="footer" class="determine">
+          <Button type="error" long @click="closeModule">取消</Button>
+          <Button type="success" long @click="determineMsg">确定</Button>
+        </div>
+      </Modal>
+    </template>
+  </div>
 </template>
 
 <script>

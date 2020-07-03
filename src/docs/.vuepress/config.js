@@ -45,17 +45,24 @@ module.exports = {
             {
                 title: '基础组件',
                 children: [
-                    ['/components/common/button', '按钮'],
+                    ['/components/common/Button/button', '按钮 Button'],
+                    {
+                        title: '弹框 Modal',
+                        children: [
+                            ['/components/common/Modal/mask', '模态层 mask'],
+                            ['/components/common/Modal/cancel', '模态层 cancel'],
+                        ]
+                    }
+
                 ]
             },
             {
                 title: '复合组件',
                 children: [
                     {
-                        title: '弹框',
+                        title: '树形弹框 TreeModal',
                         children: [
-                            ['/components/complex/modal', '一般弹框'],
-                            ['/components/complex/treeModal', '树形弹框'],
+                            ['/components/complex/treeModal', '树形弹框 TreeModal'],
                         ]
                     }
                 ]

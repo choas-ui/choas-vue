@@ -23,6 +23,9 @@
                     return ''
                 }
             },
+            block: {
+                type: Boolean
+            },
             type: {
                 type: String,
                 validator: function (value) {
@@ -53,6 +56,9 @@
                 const prefix =  this.prefix? this.prefix + '-': ''
                 return classNames(
                     this.className,
+                    {
+                        [`${prefix}btn-block`]: this.block,
+                    },
                     {
                         [`${prefix}btn-primary`]: this.type === 'primary' || !(this.type),
                         [`${prefix}btn-success`]: this.type === 'success',
@@ -108,52 +114,53 @@
         padding: 0;
         border: none;
         outline: none;
+        &-block{
+            display: block;
+            width: 100%;
+        }
         &-lg{
-            height: addPX($lg-height);
-            padding: 0 addPX($lg-padding);
-            border-radius: addPX($lg-radius);
-            font-size: 16px;
+            padding: addPX($sm-padding) addPX($lg-padding);
+            border-radius: addPX($sm-radius);
+            font-size: addPX($lg-fs);
         }
         &-df{
-            height: addPX($df-height);
-            padding: 0 addPX($df-padding);
-            border-radius: addPX($df-radius);
-            font-size: 14px;
+            padding: addPX($sm-padding) addPX($lg-padding);
+            border-radius: addPX($sm-radius);
+            font-size: addPX($df-fs);
         }
         &-sm{
-            height: addPX($sm-height);
-            padding: 0 addPX($sm-padding);
+            padding: addPX($sm-padding) addPX($sm-padding);
             border-radius: addPX($sm-radius);
-            font-size: 12px;
+            font-size: addPX($sm-fs);
         }
         &-primary{
             background: $primary;
-            color: #fff;
+            color: $btnFtCr;
         }
         &-success{
             background: $success;
-            color: #fff;
+            color: $btnFtCr;
         }
         &-warning{
             background: $warning;
-            color: #fff;
+            color: $btnFtCr;
         }
         &-danger{
             background: $danger;
-            color: #fff;
+            color: $btnFtCr;
         }
         &-disabled{
             background: $disabled;
-            color: #fff;
+            color: $btnFtCr;
             cursor: not-allowed;
         }
         &-ghost{
             background: none;
             color: $info;
-            border: 1px dashed $info;
+            border: 1px dashed $btnGstCr;
             &:hover{
-                color: #fff;
-                background: $ghost;
+                color: $btnFtCr;
+                background: $btnGstCr;
             }
         }
     }
