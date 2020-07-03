@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <Button @click="clickHandle" class-name="usr-btn-class"><template slot="right"><span>1231</span></template></Button>
   </div>
 </template>
 
@@ -9,12 +9,20 @@
 export default {
   name: 'App',
   components: {
+  },
+  methods: {
+    clickHandle(){
+      console.log(123)
+    }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   body{
     margin: 0;
+  }
+  button.usr-btn-class{
+    background: red;
   }
 </style>

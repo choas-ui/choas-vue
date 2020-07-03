@@ -10,6 +10,14 @@ function getComponentsList(){
         {
             components: [
                 {
+                    name: 'Button',
+                    path: getPath('Button')
+                },
+                {
+                    name: 'Modal',
+                    path: getPath('Modal')
+                },
+                {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
                 }
@@ -24,6 +32,9 @@ module.exports = {
     head: [
         ['link', {rel: 'icon', href: '/logo.png'}]
     ],
+    markdown: {
+        lineNumbers: true
+    },
     themeConfig: {
         nav: [
             {text: '组件', link: '/'}
@@ -32,13 +43,19 @@ module.exports = {
         sidebar: [
             ['/', '快速上手'],
             {
-                title: '组件',
+                title: '基础组件',
+                children: [
+                    ['/components/common/button', '按钮'],
+                ]
+            },
+            {
+                title: '复合组件',
                 children: [
                     {
                         title: '弹框',
                         children: [
-                            ['/components/modal', '一般弹框'],
-                            ['/components/treeModal', '树形弹框'],
+                            ['/components/complex/modal', '一般弹框'],
+                            ['/components/complex/treeModal', '树形弹框'],
                         ]
                     }
                 ]

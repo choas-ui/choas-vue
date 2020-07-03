@@ -1,0 +1,18 @@
+@import "variable";
+.bg{
+  &-primary{
+    background: $primary;
+  }
+  &-success{
+    background: $success;
+  }
+  &-warning{
+    background: $warning;
+  }
+  &-danger{
+    background: $danger;
+  }
+  &-disabled{
+    background: $disabled;
+  }
+}
