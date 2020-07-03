@@ -1,7 +1,7 @@
-import HelloWorld from './HelloWorld'
+import TreeModal from './TreeModal'
 
 const components = [
-    HelloWorld
+    TreeModal
 ];
 
 const install = function (Vue) {
@@ -15,5 +15,5 @@ if (typeof window.Vue !== "undefined" && window.Vue) {
 
 export default {
     install,
-    HelloWorld
+    TreeModal
 }
