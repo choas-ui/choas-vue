@@ -27,33 +27,65 @@ function registerComponentsList() {
 }
 
 module.exports = {
+    base: '/vue/',
     title: 'Choas-UI',
-    description: 'Choas For Vue',
+    description: 'Choas Choas and more',
     head: [
         ['link', {rel: 'icon', href: '/logo.png'}]
     ],
     themeConfig: {
         nav: [
-            {text: '组件', link: '/'}
+            {text: '首页', link: '/'},
+            {text: '组件', link: '/components/'},
+            {text: '日志', link: '/logs/'},
+            {text: 'issues', link: 'https://github.com/faliye/choas-vue/issues'},
+            {text: 'GitHub', link: 'https://github.com/faliye/choas-vue'}
         ],
         sidebarDepth: 2,
-        sidebar: [
-            ['/', '快速上手'],
-            {
-                title: '基础组件',
-                children: [
-                    ['/components/common/Button/button', '按钮 Button'],
-                    ['/components/common/Modal/modal', '模态层 modal'],
-
-                ]
-            },
-            {
-                title: '复合组件',
-                children: [
-                    ['/components/complex/treeModal', '树形弹框 TreeModal'],
-                ]
-            }
-        ]
+        sidebar: {
+            '/components': [
+                ['/components/', '概述'],
+                {
+                    title: '组件',
+                    children:[
+                        {
+                            title: '独立组件',
+                            children: [
+                                [
+                                    '/components/common/button', '按钮 Button'
+                                ],
+                                [
+                                    '/components/common/modal', '弹层 Modal'
+                                ]
+                            ]
+                        },
+                        {
+                            title: '复合组件',
+                            children: [
+                                [
+                                    '/components/complex/treeModal', '树形选择弹框 treeModal'
+                                ],
+                            ]
+                        }
+                    ]
+                }
+            ],
+            '/logs':[
+                {
+                    title: '迭代日志',
+                    children: [
+                        ['/logs/version', '版本信息'],
+                        {
+                            title: 'BUG',
+                            children: [
+                                ['/logs/bug/bug','总览'],
+                                ['/logs/bug/20200704', '20200704']
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     },
     plugins: [
         registerComponentsList(),

@@ -5,7 +5,7 @@
   "main": "./src/lib/index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "docs": "vuepress dev ./src/docs",
+    "docs": "vuepress dev ./src/docs --no-cache",
     "build-lib": "vue-cli-service build",
     "build-docs": "vuepress build ./src/docs"
   },
@@ -25,7 +25,6 @@
     "html-loader": "^1.1.0",
     "less-loader": "^6.2.0",
     "lodash": "^4.17.15",
-    "markdown-it-vue": "^1.1.2",
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.0",
     "style-loader": "^1.2.1",

@@ -1,57 +1,20 @@
-### 快速上手
-
-#### 下载
 ---
-
-``` js
-    npm i -D choas-vue
-    cnpm i -D choas-vue
-    yarn add -D choas-vue
-```
-
-#### 使用
+home: true
+heroImage: /favicon.ico
+actionText: FBI WARNING →
+actionLink: /components/
+features:
+- title: Choas
+  details: As its name, good luck for you
+- title: dependencies
+  details: vue-cli  lodash
+- title: Unbelievable
+  details: I begin to make wheels
 ---
-
-```js
-    import Vue from 'vue'
-    import App from './App.vue'
-    import ChoasUI from './lib'
-    Vue.config.productionTip = false
-    Vue.use(ChoasUI)
-    new Vue({
-      render: h => h(App),
-    }).$mount('#app')
-
-```
-
-####  示例
-
-::: demo Button
-```html
-<template>
-  <div id="app">
-    <Button @click="greeting"></Button>
-  </div>
-</template>
-<script>
-export default {
-    methods: {
-        greeting(){
-            alert("Hello world!");
-        }       
-    }   
-}
-</script>
-```
+:::danger POISON
+It's not a jock.
 :::
+___
+footer: MIT Licensed | Copyright © 2020-present faliye
 
-#### GOOD LUCK
----
-
-希望你不会遇到bug，but life is like a box of chocolate……
-maybe you need this.
-
-    https://github.com/faliye/choas-vue/issues
-    
-    
-祝你好运!!!
+  

@@ -17,7 +17,7 @@
 
 #### 块 block
 ---
-默认inline-block,该属性将button转化为block
+该属性将button转化为block
 
 ::: demo
 ``` html

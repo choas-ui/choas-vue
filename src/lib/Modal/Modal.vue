@@ -9,6 +9,8 @@
                 left: mask? 0 : top? `${left}px`: `calc(50vw - ${width/2}px)`,
             }"
             @click="() =>  !(mask && cancel)|| removeModal()"
+            ref="modalWrap"
+            @mousedown="!mask && dragStart($event)"
     >
 
         <div
@@ -20,8 +22,10 @@
                     left: !mask? 0 : left? `${left}px`: `calc(50vw - ${width/2}px)`,
                 }"
                 @click="($event) => $event.stopPropagation()"
+                ref="modalBox"
+                @mousedown="mask && dragStart($event)"
         >
-            <div :class="getHeaderBox"  v-if="'header' in $scopedSlots  || title">
+            <div :class="getHeaderBox" v-if="'header' in $scopedSlots  || title">
                 <slot name="header">
                     <div :class="getTitleHeader">
                         {{ title }}
@@ -46,6 +50,7 @@
 </template>
 <script>
     import classNames from 'classnames'
+
     export default {
         name: 'Modal',
         props: {
@@ -75,7 +80,7 @@
             },
             type: {
                 type: String,
-                validator(value){
+                validator(value) {
                     return ['success', 'warning', 'danger'].includes(value)
                 }
             },
@@ -115,19 +120,45 @@
         },
         data() {
             return {
-                visible: this.value
+                visible: this.value,
             }
         },
-        model:{
+        model: {
             event: 'change'
         },
-        methods:{
-          removeModal() {
-              this.visible = false
-          }
-        },
-        mounted(){
-            console.log()
+        methods: {
+            removeModal() {
+                this.visible = false
+            },
+            dragStart($event) {
+                let dragFlag = true
+                const draggedObj = !this.mask? this.$refs.modalBox:this.$refs.modalWrap
+                const x = $event.clientX
+                const y = $event.clientY
+                const left = draggedObj.offsetLeft
+                const top = draggedObj.offsetTop
+                const handler = (e) =>{
+                    if(!dragFlag) {
+                        return
+                    }
+                    const  nl = e.clientX - x + left;
+                    const  nt = e.clientY - y + top;
+                    draggedObj.style.cursor = 'move'
+                    draggedObj.style.left = nl + 'px';
+                    draggedObj.style.top = nt + 'px';
+                }
+                draggedObj.addEventListener('mousemove', handler)
+                draggedObj.addEventListener('mouseout', () => {
+                    dragFlag = false
+                    draggedObj.style.cursor = 'default'
+                    draggedObj.removeEventListener('mousemove', handler)
+                })
+                draggedObj.addEventListener('mouseup', () => {
+                    dragFlag = false
+                    draggedObj.style.cursor = 'default'
+                    draggedObj.removeEventListener('mousemove', handler)
+                })
+            },
         },
         computed: {
             getFooter() {
@@ -176,11 +207,11 @@
                 })
             }
         },
-        watch:{
-            value(value){
+        watch: {
+            value(value) {
                 this.visible = value
             },
-            visible(value){
+            visible(value) {
                 this.$emit('change', value)
             }
         }
@@ -190,10 +221,12 @@
     @import "../scss/functions";
     @import "../scss/normal-bg";
     @import "../scss/size";
+
     .modal {
         &-wrap {
             position: fixed;
             z-index: 999;
+
             &-mask {
                 top: 0;
                 left: 0;
@@ -201,7 +234,8 @@
                 bottom: 0;
             }
         }
-        &-box{
+
+        &-box {
             position: absolute;
             background: #fff;
             border-radius: addPX($df-radius);
@@ -212,7 +246,8 @@
             flex-wrap: wrap;
             justify-content: space-between;
             flex-direction: column;
-            &-title{
+
+            &-title {
                 width: 100%;
                 position: relative;
                 height: addPX($df-height);
@@ -221,9 +256,10 @@
                 font-size: addPX($lg-fs);
                 border-bottom: 1px solid $lineColor;
                 justify-items: flex-start;
-                &-header{
+
+                &-header {
                     position: absolute;
-                    padding:addPX($sm-padding) addPX($df-padding);
+                    padding: addPX($sm-padding) addPX($df-padding);
                     width: 100%;
                     height: 100%;
                     text-align: center;
@@ -236,23 +272,27 @@
                     right: 0;
                 }
             }
-            &-controller{
+
+            &-controller {
                 position: absolute;
                 display: flex;
                 text-align: center;
                 right: addPX($lg-padding);
                 top: addPX($sm-padding);
             }
-            &-content{
+
+            &-content {
                 flex: 1;
             }
-            &-footer{
+
+            &-footer {
                 width: 100%;
                 height: addPX($df-height);
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                & button{
+
+                & button {
                     margin-right: addPX($lg-padding);
                 }
             }

@@ -248,7 +248,7 @@ mask控制弹窗有无遮罩
 ```
 :::
 
-#### 拖拽 draggable
+#### 拖动 draggable
 ---
 ::: demo
 ``` html
