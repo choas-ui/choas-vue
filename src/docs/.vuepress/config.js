@@ -1,10 +1,10 @@
 const path = require('path')
 
 function getPath(ComponentName) {
-    return path.resolve(process.cwd(),`src/lib/${ComponentName}`)
+    return path.resolve(process.cwd(), `src/lib/${ComponentName}`)
 }
 
-function getComponentsList(){
+function registerComponentsList() {
     return [
         '@vuepress/register-components',
         {
@@ -32,13 +32,10 @@ module.exports = {
     head: [
         ['link', {rel: 'icon', href: '/logo.png'}]
     ],
-    markdown: {
-        lineNumbers: true
-    },
     themeConfig: {
         nav: [
             {text: '组件', link: '/'}
-            ],
+        ],
         sidebarDepth: 2,
         sidebar: [
             ['/', '快速上手'],
@@ -46,31 +43,44 @@ module.exports = {
                 title: '基础组件',
                 children: [
                     ['/components/common/Button/button', '按钮 Button'],
-                    {
-                        title: '弹框 Modal',
-                        children: [
-                            ['/components/common/Modal/mask', '模态层 mask'],
-                            ['/components/common/Modal/cancel', '模态层 cancel'],
-                        ]
-                    }
+                    ['/components/common/Modal/modal', '模态层 modal'],
 
                 ]
             },
             {
                 title: '复合组件',
                 children: [
-                    {
-                        title: '树形弹框 TreeModal',
-                        children: [
-                            ['/components/complex/treeModal', '树形弹框 TreeModal'],
-                        ]
-                    }
+                    ['/components/complex/treeModal', '树形弹框 TreeModal'],
                 ]
             }
         ]
     },
     plugins: [
-        getComponentsList()
+        registerComponentsList(),
+        [
+            'vuepress-plugin-demo-container'
+        ],
+        //
+        // // 这是 VuePress 默认主题使用这个插件的方式
+        // [
+        //     'vuepress-plugin-container',
+        //     {
+        //         type: 'tip',
+        //         defaultTitle: {
+        //             '/': 'TIP',
+        //             '/zh/': '提示',
+        //         },
+        //
+        //     }
+        // ],
+        // [
+        //     'vuepress-plugin-container',
+        //     {
+        //         type: 'demo',
+        //         before: info => `<div class="theorem"><p class="title">${info}</p>`,
+        //         after: '</div>',
+        //     },
+        // ],
     ]
 }
 

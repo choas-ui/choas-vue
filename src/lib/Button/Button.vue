@@ -124,7 +124,7 @@
             font-size: addPX($lg-fs);
         }
         &-df{
-            padding: addPX($sm-padding) addPX($lg-padding);
+            padding: addPX($sm-padding) addPX($df-padding);
             border-radius: addPX($sm-radius);
             font-size: addPX($df-fs);
         }

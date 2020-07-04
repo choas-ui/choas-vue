@@ -5,9 +5,9 @@
   "main": "./src/lib/index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "docs": "vuepress dev ./src/docs",
-    "lint": "vue-cli-service lint"
+    "build-lib": "vue-cli-service build",
+    "build-docs": "vuepress build ./src/docs"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -18,11 +18,12 @@
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
-    "css-loader": "^3.6.0",
     "classnames": "^2.2.6",
+    "css-loader": "^3.6.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "html-loader": "^1.1.0",
+    "less-loader": "^6.2.0",
     "lodash": "^4.17.15",
     "markdown-it-vue": "^1.1.2",
     "node-sass": "^4.14.1",
@@ -30,7 +31,8 @@
     "style-loader": "^1.2.1",
     "vue-router": "^3.3.4",
     "vue-template-compiler": "^2.6.11",
-    "vuepress": "^1.5.2"
+    "vuepress": "^1.5.2",
+    "vuepress-plugin-demo-container": "^0.1.0"
   },
   "eslintConfig": {
     "root": true,

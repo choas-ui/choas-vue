@@ -1,6 +1,6 @@
 <template>
     <div
-            v-if='visiable'
+            v-if='visible'
             :class="getModalWrapClass"
             :style="{
                 width: mask? '100vw' : `${width}px`,
@@ -21,29 +21,26 @@
                 }"
                 @click="($event) => $event.stopPropagation()"
         >
-            <div :class="getTitleBox">
+            <div :class="getHeaderBox"  v-if="'header' in $scopedSlots  || title">
                 <slot name="header">
-                    <div :class="getTitleHeader">{{ title }}</div>
+                    <div :class="getTitleHeader">
+                        {{ title }}
+                    </div>
                 </slot>
-                <div :class="getTitleControllers">
-                    <span>-</span>
-                    <span
-                            @click="removeModal"
-                    >
-                        X
-                    </span>
-                </div>
             </div>
-            <slot>
-            </slot>
-            <slot name="footer">
-                <div :class="getFooter">
-                   <div>
-                       <Button type="danger">关 闭</Button>
-                       <Button type="success">确 认</Button>
-                   </div>
-                </div>
-            </slot>
+            <div v-if="!controller" :class="getTitleController">
+                <slot name="controller">
+                    <span @click="removeModal">X</span>
+                </slot>
+            </div>
+            <div :class="getContent">
+                <slot></slot>
+            </div>
+            <div v-if="'footer' in $scopedSlots || type" :class="getFooter">
+                <slot name="footer">
+                    <Button :type="type" @click="removeModal">关 闭</Button>
+                </slot>
+            </div>
         </div>
     </div>
 </template>
@@ -70,6 +67,18 @@
             cancel: {
                 type: Boolean
             },
+            controller: {
+                type: Boolean
+            },
+            draggable: {
+                type: Boolean
+            },
+            type: {
+                type: String,
+                validator(value){
+                    return ['success', 'warning', 'danger'].includes(value)
+                }
+            },
             title: {
                 type: String,
                 default() {
@@ -77,27 +86,27 @@
                 }
             },
             width: {
-                type: Number,
+                type: String,
                 default() {
-                    return 500
+                    return '300'
                 }
             },
             height: {
-                type: Number,
+                type: String,
                 default() {
-                    return 400
+                    return '150'
                 }
             },
             top: {
-                type: Number,
+                type: String,
                 default() {
-                    return NaN
+                    return ''
                 }
             },
             left: {
-                type: Number,
+                type: String,
                 default() {
-                    return NaN
+                    return ''
                 }
             },
             value: {
@@ -106,7 +115,7 @@
         },
         data() {
             return {
-                visiable: this.value
+                visible: this.value
             }
         },
         model:{
@@ -114,8 +123,11 @@
         },
         methods:{
           removeModal() {
-              this.visiable = false
+              this.visible = false
           }
+        },
+        mounted(){
+            console.log()
         },
         computed: {
             getFooter() {
@@ -124,19 +136,26 @@
                     [prefix + 'modal-box-footer']: true,
                 })
             },
-            getTitleControllers() {
+            getContent() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames({
-                    [prefix + 'modal-box-title-controllers']: true,
+                    [prefix + 'modal-box-content']: true,
+                })
+            },
+
+            getTitleController() {
+                const prefix = this.prefix ? this.prefix + '-' : ''
+                return classNames({
+                    [prefix + 'modal-box-controller']: true,
                 })
             },
             getTitleHeader() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames({
-                    [prefix + 'modal-box-title-header']: true,
+                    [prefix + 'modal-box-title-header']: true
                 })
             },
-            getTitleBox() {
+            getHeaderBox() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames({
                     [prefix + 'modal-box-title']: true,
@@ -158,11 +177,11 @@
             }
         },
         watch:{
-            value(v){
-                this.visiable = v
+            value(value){
+                this.visible = value
             },
-            visiable(v){
-                this.$emit('change', this.visiable)
+            visible(value){
+                this.$emit('change', value)
             }
         }
     }
@@ -187,44 +206,52 @@
             background: #fff;
             border-radius: addPX($df-radius);
             box-sizing: border-box;
-            padding-bottom: addPX($lg-height);
             border: 1px solid $lineColor;
             box-shadow: 1px 1px 5px $shadowCr;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            flex-direction: column;
             &-title{
+                width: 100%;
                 position: relative;
-                height: addPX($df-height + $sm-padding*2 + 1);
+                height: addPX($df-height);
                 line-height: addPX($df-height);
+                text-align: center;
                 font-size: addPX($lg-fs);
                 border-bottom: 1px solid $lineColor;
+                justify-items: flex-start;
                 &-header{
-                    padding:addPX($sm-padding) addPX($df-padding);
                     position: absolute;
+                    padding:addPX($sm-padding) addPX($df-padding);
                     width: 100%;
                     height: 100%;
                     text-align: center;
-                    font-weight: bold;
-                    letter-spacing: addPX($df-letterSp);
+                    display: flex;
+                    align-items: center;
+                    letter-spacing: addPX($sm-letterSp);
                     border-radius: addPX($df-radius) addPX($df-radius) 0 0;
                     box-sizing: border-box;
                     left: 0;
                     right: 0;
                 }
-                &-controllers{
-                    position: absolute;
-                    height: 100%;
-                    display: flex;
-                    text-align: center;
-                    right: addPX($df-padding);
-                }
+            }
+            &-controller{
+                position: absolute;
+                display: flex;
+                text-align: center;
+                right: addPX($lg-padding);
+                top: addPX($sm-padding);
+            }
+            &-content{
+                flex: 1;
             }
             &-footer{
-                height: addPX($lg-height);
                 width: 100%;
-                position: absolute;
-                bottom: 0;
-                left: 0;
+                height: addPX($df-height);
                 display: flex;
                 justify-content: flex-end;
+                align-items: center;
                 & button{
                     margin-right: addPX($lg-padding);
                 }
