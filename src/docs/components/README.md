@@ -1,7 +1,15 @@
+#### 说明
+---
+组件名称后带有星标(*)的组件，均为未完成组件，api调整的可能性远高于其他组件，请谨慎使用。
+
+#### 下载
+---
+    npm i -D choas-vue
+    cnpm i -D choas-vue
+    yarn add -D choas-vue
+
 #### 使用
 ---
-
-```js
     import Vue from 'vue'
     import App from './App.vue'
     import ChoasUI from './lib'
@@ -11,10 +19,7 @@
       render: h => h(App),
     }).$mount('#app')
 
-```
-
 ####  示例
-
 ::: demo
 ```html
 <template>

@@ -1,8 +1,8 @@
 <template>
-    <button :class="buttonClass" @click="clickHandle">
-        <span :class="iconClass"><slot name="left"></slot></span>
+    <button :class="buttonClass" @click="clickHandle" :title="placeholder">
+        <span v-if="'left' in $scopedSlots" :class="iconClass"><slot name="left"></slot></span>
         <span :class="btnContentClass"><slot>button</slot></span>
-        <span :class="iconClass"><slot name="right"></slot></span>
+        <span v-if="'right' in $scopedSlots" :class="iconClass"><slot name="right"></slot></span>
     </button>
 </template>
 
@@ -45,7 +45,13 @@
                 default(){
                     return 'default'
                 }
-            }
+            },
+            placeholder: {
+                type: String,
+                default(){
+                    return ''
+                }
+            },
         },
         data() {
             return {

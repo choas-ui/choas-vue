@@ -10,7 +10,7 @@
 ```html
     <template>
         <Button @click="isShow = true">showModal</Button>
-         <Modal v-model="isShow"></Modal>
+        <Modal v-model="isShow"></Modal>
     </template>
     <script>
         export default {
@@ -153,6 +153,32 @@ mask控制弹窗有无遮罩
 ```
 :::
 
+#### 标题 Title
+---
+::: demo
+``` html
+    <template>
+        <Button @click="isShow = true">showModal</Button>
+        <Modal
+            mask
+            cancel
+            v-model="isShow"
+            title="弹层头部"
+            >
+            </Modal>
+    </template>
+    <script>
+    export default {
+        data(){
+            return {
+                isShow: false
+            }
+        }
+    }
+    </script>
+```
+:::
+
 #### 类型 type
 ---
 提供type用来快速生成提醒弹框。
@@ -276,3 +302,37 @@ mask控制弹窗有无遮罩
 ```
 :::
 
+#### 属性列表 props
+---
+|属性|值|类型|默认值|说明|
+|:-:|:---:|---|---|:---|
+|v-modal|无|Boolean|false|是否显示弹窗|
+|mask|truthy falsy | Boolean|false |是否显示遮罩|
+|cancel|truthy falsy | Boolean|false |有遮罩时点击遮罩是否能关闭弹窗|
+|slot|'header' 'controller' 'footer'|String|无|是否显示header与footer及替换controller的内容|
+|controller|truthy falsy | Boolean |false |是否显示关闭图标|
+|title|无| String | 无 |单一文字title组件|
+|class-name|无|String|''|组件最外层添加一个新的类名|
+|prefix|无|String|无|是否在该组件所有类前加前缀|
+|draggable|truthy falsy|Boolean|false|是否可以拖拽弹框|
+|||||
+
+#### 问答 QAQ
+---
+<h5>
+    <ul>
+        <li><b>Q:</b></li>
+        <li><b>A:</b></li>
+    </ul>
+</h5>
+
+#### 归类 Answer
+---
+<h5>
+    <ul>
+        <li><b>Q:</b> header 、footer 的默认样式。</li>
+        <li><b>A:</b> 尽可能少的提供样式，因此header默认文字居中，footer默认组件整体居右。</li>
+        <li><b>Q:</b> 注意controller与header、footer的区别。</li>
+        <li><b>A:</b> 为避免因无法关闭弹窗的问题，controller默认显示,而header与footer默认关闭。</li>
+    </ul>
+</h5>  

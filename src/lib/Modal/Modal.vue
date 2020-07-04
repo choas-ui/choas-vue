@@ -42,7 +42,7 @@
             </div>
             <div v-if="'footer' in $scopedSlots || type" :class="getFooter">
                 <slot name="footer">
-                    <Button :type="type" @click="removeModal">关 闭</Button>
+                    <Button :type="type" @click="removeModal">确&nbsp;&nbsp;认</Button>
                 </slot>
             </div>
         </div>
@@ -131,8 +131,9 @@
                 this.visible = false
             },
             dragStart($event) {
+                $event.stopPropagation()
                 let dragFlag = true
-                const draggedObj = !this.mask? this.$refs.modalBox:this.$refs.modalWrap
+                const draggedObj = this.mask? this.$refs.modalBox:this.$refs.modalWrap
                 const x = $event.clientX
                 const y = $event.clientY
                 const left = draggedObj.offsetLeft
@@ -201,6 +202,7 @@
             getModalWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames({
+                    [this.className]: true,
                     [prefix + 'modal-wrap']: true,
                     [prefix + 'modal-wrap-mask']: this.mask,
                     [prefix + 'mask']: this.mask,
