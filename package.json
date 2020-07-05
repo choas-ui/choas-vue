@@ -28,7 +28,6 @@
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.0",
     "style-loader": "^1.2.1",
-    "vue-router": "^3.3.4",
     "vue-template-compiler": "^2.6.11",
     "vuepress": "^1.5.2",
     "vuepress-plugin-demo-container": "^0.1.0"
