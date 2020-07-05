@@ -66,6 +66,9 @@
                         [`${prefix}btn-block`]: this.block,
                     },
                     {
+                        [`not-allowed-cursor`]: this.type === 'disabled'
+                    },
+                    {
                         [`${prefix}btn-primary`]: this.type === 'primary' || !(this.type),
                         [`${prefix}btn-success`]: this.type === 'success',
                         [`${prefix}btn-warning`]: this.type === 'warning',
@@ -115,11 +118,13 @@
     @import "../scss/variable";
     @import "../scss/functions";
     .btn{
+        background: #fff;
         cursor: pointer;
         margin: 0;
         padding: 0;
         border: none;
         outline: none;
+        color: #666;
         &-block{
             display: block;
             width: 100%;
@@ -158,7 +163,6 @@
         &-disabled{
             background: $disabled;
             color: $btnFtCr;
-            cursor: not-allowed;
         }
         &-ghost{
             background: none;

@@ -5,7 +5,7 @@ import _ from 'lodash'
 Icon.install = function (Vue) {
     Vue.component(Icon.name, Icon);
 };
-Icon.createIcon = (type, setting) => {
+Icon.importSrc = (type, setting) => {
     // type  'iconFont' 'iconClass' 'svg'
     const OHead = document.querySelector ? document.querySelector('header') : document.getElementsByTagName('head')[0]
     let resultObj = null

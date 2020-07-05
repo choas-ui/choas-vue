@@ -22,6 +22,10 @@ function registerComponentsList() {
                     path: getPath('Modal')
                 },
                 {
+                    name: 'Tree',
+                    path: getPath('Tree')
+                },
+                {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
                 }
@@ -56,31 +60,41 @@ module.exports = {
                             title: '独立组件',
                             children: [
                                 [
-                                    '/components/common/icon', '图标* Icon'
+                                    '/components/common/button', '按钮 Button'
                                 ],
                                 [
-                                    '/components/common/button', '按钮 Button'
+                                    '/components/common/icon', '图标 Icon'
                                 ],
                                 [
                                     '/components/common/input', '输入框* Input'
                                 ],
                                 [
-                                    '/components/common/select', '选择器* Select'
+                                    '/components/common/modal', '弹层 Modal'
                                 ],
                                 [
-                                    '/components/common/modal', '弹层 Modal'
+                                    '/components/common/prompt', '提醒* Prompt'
+                                ],
+                                [
+                                    '/components/common/select', '下拉框* Select'
+                                ],
+                                [
+                                    '/components/common/table', '表格* Table'
+                                ],
+                                [
+                                    '/components/common/tag', '标签* Tag'
                                 ],
                                 [
                                     '/components/common/tree', '树形* Tree'
                                 ],
-                                [
-                                    '/components/common/table', '表格* Table'
-                                ]
+
                             ]
                         },
                         {
                             title: '复合组件',
                             children: [
+                                [
+                                    '/components/complex/cascade', '级联* Cascade'
+                                ],
                                 [
                                     '/components/complex/treeModal', '树形弹框* TreeModal'
                                 ],
@@ -88,7 +102,7 @@ module.exports = {
                                     '/components/complex/selectTree', '树形选择器* SelectTree'
                                 ],
                                 [
-                                    '/components/complex/cascade', '级联* Cascade'
+                                    '/components/complex/selectTree', '穿梭框* Shuttle'
                                 ],
                             ]
                         }

@@ -1,10 +1,14 @@
 import TreeModal from './TreeModal'
 import Modal from './Modal'
 import Button from './Button'
+import Icon from './Icon'
+import Tree from './Tree'
 
 const components = [
+    Icon,
     Button,
     Modal,
+    Tree,
     TreeModal
 ];
 

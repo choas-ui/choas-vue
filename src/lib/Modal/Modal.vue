@@ -34,7 +34,11 @@
             </div>
             <div v-if="!controller" :class="getTitleController">
                 <slot name="controller">
-                    <span @click="removeModal">X</span>
+                    <Icon type="svg"
+                          icon-name="choas-close"
+                          width="30"
+                          height="30"
+                          @click="removeModal" />
                 </slot>
             </div>
             <div :class="getContent">
@@ -201,12 +205,14 @@
             },
             getModalWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames({
-                    [this.className]: true,
-                    [prefix + 'modal-wrap']: true,
-                    [prefix + 'modal-wrap-mask']: this.mask,
-                    [prefix + 'mask']: this.mask,
-                })
+                return classNames(
+                    this.className,
+                    {
+                        [prefix + 'modal-wrap']: true,
+                        [prefix + 'modal-wrap-mask']: this.mask,
+                        [prefix + 'mask']: this.mask,
+                    }
+                    )
             }
         },
         watch: {

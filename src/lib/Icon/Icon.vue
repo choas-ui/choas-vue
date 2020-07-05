@@ -1,11 +1,17 @@
 <template>
-    <span :class="getWrapClass" :style="getWrapStyle">
+    <span :class="getWrapClass"
+          :style="getWrapStyle"
+          @click="clickHandle"
+          @mouseenter="turnColor"
+          @mouseleave="turnColor"
+          :title="placeholder"
+    >
         <template v-if="type === 'ft'">
             <template v-if="iconName">
-                <i :style="getFTStyle" :class="iconName" />
+                <i :class="iconName" />
             </template>
             <template v-else>
-                <i :style="getFTStyle" :class="icon">{{iconContent}}</i>
+                <i :class="icon">{{iconContent}}</i>
             </template>
         </template>
         <template v-if="type === 'svg'">
@@ -16,7 +22,7 @@
                  version="1.1"
                  aria-hidden="true"
                  xmlns="http://www.w3.org/2000/svg">
-                <path :fill="color" :d="svgLib.default[iconName]" />
+                <path v-for="(d,i) in svgLib.default[iconName]" :key="d+iconName+i" :fill="cl" :d="d" />
             </svg>
             <svg v-else aria-hidden="true">
                 <use :[xlinkHref]="`#${iconName}`"></use>
@@ -61,25 +67,43 @@
                     return ''
                 }
             },
+            activeColor: {
+                type: String || Array,
+                default() {
+                    return ''
+                }
+            },
             width: {
                 type: String,
                 default() {
-                    return '18'
+                    return '16'
                 }
             },
             height: {
                 type: String,
                 default() {
-                    return '18'
+                    return '16'
                 }
             },
             fontSize: {
                 type: String,
                 default() {
-                    return '18'
+                    return '16'
                 }
             },
             src: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            className: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            placeholder: {
                 type: String,
                 default() {
                     return ''
@@ -89,30 +113,42 @@
         data() {
             return {
                 xlinkHref: "xlink:href",
-                svgLib
+                svgLib,
+                cl: this.color
             }
         },
         mounted() {
+            console.log()
         },
         computed: {
-            getFTStyle() {
-                return {
-                    fontSize: this.fontSize + 'px',
-                    color: this.color
-                }
-            },
             getWrapStyle() {
                 return {
                     width: this.width + 'px',
                     height: this.height + 'px',
                     lineHeight: this.height + 'px',
+                    fontSize: this.fontSize + 'px',
+                    color: this.cl
                 }
             },
             getWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames({
-                    [`${prefix}icon-wrap`]: true,
-                })
+                return classNames(
+                   this.className,
+                    {
+                        "pointer-cursor": this.$listeners.click,
+                    },
+                    {
+                        [`${prefix}icon-wrap`]: true,
+                    }
+                )
+            }
+        },
+        methods: {
+            clickHandle(){
+                this.$listeners.click && this.$emit('click')
+            },
+            turnColor(){
+                this.cl = this.$listeners.click && this.cl === this.color? this.activeColor: this.color
             }
         }
     }
@@ -122,17 +158,19 @@
     @import "../scss/size";
     @import "../scss/normal-bg";
     @import "../scss/variable";
+    @import "../scss/comm-class";
     .icon {
         &-wrap {
             display: inline-block;
             overflow: hidden;
+            vertical-align: middle;
             > i, svg, img {
+                box-sizing: border-box;
                 display: inline-block;
                 width: 100%;
                 height: 100%;
                 text-align: center;
                 font-style: normal;
-                vertical-align: middle;
             }
         }
     }
