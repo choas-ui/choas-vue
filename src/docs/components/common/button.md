@@ -1,6 +1,6 @@
 ### 按钮 Button
 ---
-响应用户点击操作
+<small>响应用户点击操作</small>
 
 #### 大小 size
 ---
@@ -17,7 +17,7 @@
 
 #### 块 block
 ---
-该属性将button转化为block
+<small>将button转化为block</small>
 
 ::: demo
 ``` html
@@ -34,8 +34,6 @@
 #### 类型 type 
 ---
 
-
-
 ::: demo
 ``` html
     <template>
@@ -51,7 +49,7 @@
 
 #### 插槽 slot
 ---
-在按钮前提供两个插槽,推荐图标
+<small>在按钮前提供两个插槽,推荐图标</small>
 
 |键|值|类型|位置|
 |-|-|-|-|
@@ -70,7 +68,7 @@
 
 #### 类 class-name
 ---
-在组件外层容器上添加一个类，优先级会导致某些样式不生效，参考CSS优先级提权。
+<small>在组件外层容器上添加一个类，优先级会导致某些样式不生效，参考CSS优先级提权。</small>
 
 ::: demo
 ``` html
@@ -88,7 +86,8 @@
 
 #### 覆盖类 prefix
 ---
-覆盖组件的所有类名，重写定义组件的样式
+<small>覆盖组件的所有类名，重写定义组件的样式。</small>
+
 ::: demo
 ``` html
     <template>
@@ -108,7 +107,7 @@
 
 #### 提示 placeholder
 ---
-覆盖组件的所有类名，重写定义组件的样式
+
 ::: demo
 ``` html
     <template>
@@ -117,7 +116,7 @@
 ```
 :::
 
-#### 回调 click
+#### 点击 click
 ---
 ::: demo
 ``` html
@@ -142,7 +141,7 @@
 |:-:|:---:|---|---|:---|
 |block|truthy falsy|Boolean|false|是否将按钮转化为块|
 |size|'small' 'default' 'large'| String | 'default'|按钮内边距|
-|type|'primary''success''warning''danger'……| String| 'primary'|按钮样式|
+|type|'primary''success''warning'<br/>'danger''disabled''ghost'| String| 'primary'|按钮样式|
 |slot|'left' 'right'| String | 无 |插入左|右图标插槽|
 |class-name|无|String|''|组件最外层添加一个新的类名|
 |prefix|无|String|无|是否在该组件所有类前加前缀|
@@ -152,19 +151,19 @@
 
 #### 问答 QAQ
 ---
-<h5>
+<small>
     <ul>
         <li><b>Q:</b> 圆形按钮？</li>
         <li><b>A:</b> 暂未提供圆形按钮。</li>
         <li><b>Q:</b> 有ButtonGroup的组件吗？</li>
         <li><b>A:</b> 有计划，但不是最优先。</li>
     </ul>
-</h5>
+</small>
 
 #### 归类 Answer
 ---
-<h5>
+<small>
     <ul>
         <li><b>Q:</b></li>
     </ul>
-</h5>
+</small>

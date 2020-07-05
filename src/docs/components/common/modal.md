@@ -220,8 +220,7 @@ mask控制弹窗有无遮罩
 :::
 
 
-#### 宽度 width
-#### 高度 height
+#### 宽与高 width&height
 ---
 ::: demo
 ``` html
@@ -248,8 +247,7 @@ mask控制弹窗有无遮罩
 
 
 
-#### 顶距 top
-#### 左边距 left
+#### 顶与左 top&left
 ---
 ::: demo
 ``` html

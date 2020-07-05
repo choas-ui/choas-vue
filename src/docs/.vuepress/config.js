@@ -10,6 +10,10 @@ function registerComponentsList() {
         {
             components: [
                 {
+                    name: 'Icon',
+                    path: getPath('Icon')
+                },
+                {
                     name: 'Button',
                     path: getPath('Button')
                 },

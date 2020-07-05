@@ -1,5 +1,5 @@
 
-<img src="../.vuepress/public/leader.jpg"/>
+<img src="/assets/img/logs/leader.jpg"/>
 
 <style>
     img{
