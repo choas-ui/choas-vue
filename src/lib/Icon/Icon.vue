@@ -118,7 +118,6 @@
             }
         },
         mounted() {
-            console.log()
         },
         computed: {
             getWrapStyle() {

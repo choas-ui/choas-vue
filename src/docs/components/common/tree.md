@@ -1,7 +1,127 @@
-#### 树形
+#### 树形组件
 ---
-使用双向绑定的树
+  <small>
+    层次分明的可选择控件。
+  </small>
 
+#### 数据 listData
+---
+   <small>
+     数据结构为对象（字典）数组（列表）交替。
+   </small> 
+
+:::demo
+```html
+    <template>
+        <Tree
+            line
+            :list-data="listData"
+        >
+        </Tree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:{
+                key: '颜色',
+                value: '0',
+                children:[
+                    {
+                        key: '冷色',
+                        value: '0-0',
+                    },
+                    {
+                        key: '暖色',
+                        value: '0-1',
+                        children:[
+                            {
+                                key: '红色',
+                                value: '0-1-0',
+                            },
+                            {
+                                key: '蓝色',
+                                value: '0-1-1',
+                                children: [
+                                     {
+                                        key: '深蓝',
+                                        value: '0-1-1-0',
+                                     },
+                                ],
+                            },
+                        ]
+                    },
+                ]
+            },
+            selectData:[],
+        }
+    }
+}
+</script>
+```
+:::
+
+#### 数据关联 reflectKey
+---
+   <small>
+     用于指定映射键、值关联。
+   </small> 
+
+:::demo
+```html
+    <template>
+        <Tree
+            :list-data="listData"
+            :reflectKey="{
+                key: 'name',
+                value: 'id'
+            }"
+        >
+        </Tree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:{
+                id: '014557484S',
+                name: '特殊事务部',
+                children:[
+                    {
+                        id: '014557484S-1',
+                        name: '后勤',
+                    },
+                    {
+                        id: '014557484S-2',
+                        name: '业务部',
+                        children:[
+                            {
+                                id: '014557484S-2-1',
+                                name: '一组',
+                            },
+                            {
+                                id: '014557484S-2-2',
+                                name: '二组',
+                                children: [
+                                     {
+                                        id: '014557484S-2-2-0017',
+                                        name: '谢广坤',
+                                     },
+                                ],
+                            },
+                        ]
+                    },
+                ]
+            },
+            selectData:[],
+        }
+    }
+}
+</script>
+```
+:::
+
+完成后删除示例↓↓↓↓↓
 :::demo
 ```html
     <template>
@@ -19,10 +139,11 @@
             <Icon
                 slot="file-icon"
                 type="svg"
-                icon-name="choas-file-lists"/>
+                icon-name="choas-file-icon"/>
             <Icon
                 slot="tail"
                 type="svg"
+                color="red"
                 icon-name="choas-square-add"
             />
         </Tree>
@@ -45,8 +166,18 @@ export default {
                         children:[
                             {
                                 title: '0-1-0',
+                                value: '0-1-0',
+                            },
+                            {
+                                title: '0-1-1',
                                 value: '0-1-1',
-                            }
+                                children: [
+                                     {
+                                        title: '0-1-1-0',
+                                        value: '0-1-1-0',
+                                     },
+                                ],
+                            },
                         ]
                     },
                 ]
@@ -59,10 +190,6 @@ export default {
 ```
 :::
 
-#### 树形数据
----
-#### 选中数据
----
 选中数据双向绑定
 
 #### 默认展开
