@@ -76,19 +76,19 @@
             width: {
                 type: String,
                 default() {
-                    return '16'
+                    return '18'
                 }
             },
             height: {
                 type: String,
                 default() {
-                    return '16'
+                    return '18'
                 }
             },
             fontSize: {
                 type: String,
                 default() {
-                    return '16'
+                    return '18'
                 }
             },
             src: {
@@ -160,6 +160,10 @@
     @import "../scss/variable";
     @import "../scss/comm-class";
     .icon {
+        *{
+            box-sizing: border-box;
+            overflow:hidden;
+        }
         &-wrap {
             display: inline-block;
             overflow: hidden;

@@ -15,6 +15,17 @@
   </small>   
 :::
 
+:::tip 开始
+  <p class="logs-version-item">
+    <span>2020-07-02</span>
+    <b>v 0.1.0</b>
+  </p>
+  
+  <small>
+     <p>算了，我来造轮子吧。</p>
+  </small>   
+:::
+
 <style>
     .logs-version-item{
         display: flex;

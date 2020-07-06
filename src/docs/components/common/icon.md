@@ -21,7 +21,7 @@
       </ul>
   </small>
   <small>
-    默认图标宽高均为24px,行高也为24px。
+    默认图标宽高均为18px,行高也为18px。
   </small>
 
 :::demo

@@ -1,7 +1,23 @@
 <template>
   <div id="app">
     <template>
-      <Button class-name="usr-btn-class"></Button>
+      <Tree
+              fileIcon
+              line
+              :list-data="listData"
+              :selectData="selectData"
+      >
+        <Icon
+                slot="icon-mark"
+                type="svg"
+                icon-name="choas-square-add"
+        />
+        <Icon
+                slot="tail"
+                type="svg"
+                icon-name="choas-square-add"
+        />
+      </Tree>
     </template>
   </div>
 </template>
@@ -11,6 +27,31 @@
 export default {
   name: 'App',
   components: {
+  },
+  data(){
+    return {
+      listData:{
+        title: '0',
+        value: '0',
+        children:[
+          {
+            title: '0-0',
+            value: '0-0',
+          },
+          {
+            title: '0-1',
+            value: '0-1',
+            children:[
+              {
+                title: '0-1-0',
+                value: '0-1-1',
+              }
+            ]
+          },
+        ]
+      },
+      selectData:[],
+    }
   },
   methods: {
     clickHandle(){

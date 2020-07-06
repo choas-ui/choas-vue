@@ -1,11 +1,61 @@
 #### 树形
 ---
 使用双向绑定的树
+
 :::demo
 ```html
     <template>
-        <Tree />
+        <Tree
+            fileIcon
+            line
+            :list-data="listData"
+            :selectData="selectData"
+        >
+            <Icon
+                slot="icon-mark"
+                type="svg"
+                icon-name="choas-square-add"
+            />
+            <Icon
+                slot="file-icon"
+                type="svg"
+                icon-name="choas-file-lists"/>
+            <Icon
+                slot="tail"
+                type="svg"
+                icon-name="choas-square-add"
+            />
+        </Tree>
     </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:{
+                title: '0',
+                value: '0',
+                children:[
+                    {
+                        title: '0-0',
+                        value: '0-0',
+                    },
+                    {
+                        title: '0-1',
+                        value: '0-1',
+                        children:[
+                            {
+                                title: '0-1-0',
+                                value: '0-1-1',
+                            }
+                        ]
+                    },
+                ]
+            },
+            selectData:[],
+        }
+    }
+}
+</script>
 ```
 :::
 
@@ -13,16 +63,21 @@
 ---
 #### 选中数据
 ---
+选中数据双向绑定
+
 #### 默认展开
 ---
 #### 返回
 ---
 #### 图标
 ---
+#### 连接线 line
+---
 #### 旋转参数
 ---
 #### 搜索
 ---
+所有标签打开，内容标红
 #### 新增
 ---
 #### 属性列表 props
