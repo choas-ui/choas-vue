@@ -339,19 +339,30 @@
                                 color: this.markColor,
                             }
                         }, [
-                            content.slice(0, index + 1)
+                            content.slice(0, index + this.searchStr.length)
                         ])
                     )
-                }
-                childrenVnode.push(
-                    h(
-                        'span',
-                        {},
-                        [
-                            content.slice(index + 1,)
-                        ]
+                    childrenVnode.push(
+                        h(
+                            'span',
+                            {},
+                            [
+                                content.slice(index+this.searchStr.length + 1,)
+                            ]
+                        )
                     )
-                )
+                }else{
+                    childrenVnode.push(
+                        h(
+                            'span',
+                            {},
+                            [
+                                content
+                            ]
+                        )
+                    )
+                }
+
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',

@@ -24,16 +24,17 @@
         </div>
         <div class="tree-box-wrap">
             <div class="tree-box">
-                <Tree fileIcon
+                <Tree
                       line
+                      v-model="selectData"
                       :list-data="listData"
                       :reflect-key="reflectKey"
-                      v-model="selectData"
                       :search-str="searchStr"
                 ></Tree>
             </div>
             <div class="selected-box">
                 {{selectData}}
+              bug   单选模式下有子节点的项不可选
             </div>
         </div>
       <slot slot="footer">
