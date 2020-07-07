@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[29],{371:function(n,e,t){"use strict";t.r(e);t(66);var c={name:"Tree"},a=t(25),i=Object(a.a)(c,(function(){var n=this.$createElement;return(this._self._c||n)("div",[this._v("\n    tree\n")])}),[],!1,null,"a9dce19c",null).exports;i.install=function(n){n.component(i.name,i)};e.default=i}}]);
