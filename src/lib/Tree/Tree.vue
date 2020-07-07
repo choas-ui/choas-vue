@@ -78,9 +78,6 @@
             this.copyListData = _.cloneDeep(this.listData)
         },
         methods: {},
-        model: {
-            event: 'titleSelected'
-        },
         watch: {
             searchStr(v) {
                 // 筛选
@@ -156,12 +153,6 @@
                             click: () => {
                                 this.copyListData = {..._.set(this.copyListData, selfPath ? selfPath + '.expand' : 'expand', !data.expand)}
                             }
-                        },
-                        nativeOn: {
-                            click: (e) => {
-                                this.$emit('click')
-                                e.stopPropagation()
-                            }
                         }
                     }, this.$slots['icon-mark'])
                 }
@@ -176,12 +167,6 @@
                     on: {
                         click: () => {
                             this.copyListData = {..._.set(this.copyListData, selfPath ? selfPath + '.expand' : 'expand', !data.expand)}
-                        }
-                    },
-                    nativeOn: {
-                        click: (e) => {
-                            this.$emit('click')
-                            e.stopPropagation()
                         }
                     }
                 })
@@ -347,7 +332,7 @@
                             'span',
                             {},
                             [
-                                content.slice(index+this.searchStr.length + 1,)
+                                content.slice(index+this.searchStr.length,)
                             ]
                         )
                     )
@@ -380,7 +365,9 @@
                     ],
                     on: {
                         click: () => {
-                            this.$emit('titleSelected', [this.itemKey])
+                            if(!this.multiple && !data.disable && !(data.children || []).length){
+                                this.$emit('input', data)
+                            }
                         }
                     }
                 }, [
@@ -408,17 +395,7 @@
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
                             },
-                            on: {
-                                titleSelected: (v) => {
-                                    this.$emit('titleSelected', v)
-                                }
-                            },
-                            nativeOn: {
-                                click: (e) => {
-                                    this.$emit('titleSelected', [this.itemKey + '-' + index])
-                                    e.stopPropagation()
-                                }
-                            }
+                            on: this.$listeners
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {

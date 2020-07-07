@@ -78,9 +78,9 @@
             }
         },
         mounted() {
-            console.log(this.listData)
         },
-        methods: {}
+        methods: {
+        }
     }
 </script>
 
