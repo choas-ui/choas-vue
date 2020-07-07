@@ -1,71 +1,79 @@
 <template>
-  <div id="app">
-    <template>
-      <Tree
-              fileIcon
-              line
-              :list-data="listData"
-              :selectData="selectData"
-      >
-        <Icon
-                slot="icon-mark"
-                type="svg"
-                icon-name="choas-square-add"
-        />
-        <Icon
-                slot="tail"
-                type="svg"
-                icon-name="choas-square-add"
-        />
-      </Tree>
-    </template>
-  </div>
+    <div id="app">
+        <p>{{ selectData }}</p>
+        <input type="text" v-model="searchStr">
+        <template>
+            <Tree
+                    fileIcon
+                    line
+                    :list-data="listData"
+                    v-model="selectData"
+                    :search-str="searchStr"
+            >
+            </Tree>
+        </template>
+    </div>
 </template>
 
 <script>
 
-export default {
-  name: 'App',
-  components: {
-  },
-  data(){
-    return {
-      listData:{
-        title: '0',
-        value: '0',
-        children:[
-          {
-            title: '0-0',
-            value: '0-0',
-          },
-          {
-            title: '0-1',
-            value: '0-1',
-            children:[
-              {
-                title: '0-1-0',
-                value: '0-1-1',
-              }
-            ]
-          },
-        ]
-      },
-      selectData:[],
+    export default {
+        name: 'App',
+        components: {},
+        data() {
+            return {
+                listData: {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children: [
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children: [
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '蓝色',
+                                    value: '0-1-1',
+                                    children: [
+                                        {
+                                            key: '深蓝',
+                                            value: '0-1-1-0',
+                                        },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                },
+                selectData: [1],
+                searchStr: ''
+            }
+        },
+        methods: {
+            clickHandle() {
+                console.log(123)
+            }
+        },
+        mounted() {
+        }
     }
-  },
-  methods: {
-    clickHandle(){
-      console.log(123)
-    }
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-  body{
-    margin: 0;
-  }
-  button.usr-btn-class{
-    background: red;
-  }
+    body {
+        margin: 0;
+    }
+
+    button.usr-btn-class {
+        background: red;
+    }
 </style>

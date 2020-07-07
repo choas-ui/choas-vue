@@ -5,7 +5,7 @@
             :style="{
                 width: mask? '100vw' : `${width}px`,
                 height: mask? '100vh' : `${height}px`,
-                top: mask? 0 : top? `${top}px`: `calc(40vh - ${height/2}px)`,
+                top: mask? 0 : top? `${top}px`: `calc(50vh - ${height/2}px)`,
                 left: mask? 0 : top? `${left}px`: `calc(50vw - ${width/2}px)`,
             }"
             @click="() =>  !(mask && cancel)|| removeModal()"
@@ -18,7 +18,7 @@
                 :style="{
                     width: `${width}px`,
                     height: `${height}px`,
-                    top: !mask? 0 : top? `${top}px`: `calc(40vh - ${height/2}px)`,
+                    top: !mask? 0 : top? `${top}px`: `calc(50vh - ${height/2}px)`,
                     left: !mask? 0 : left? `${left}px`: `calc(50vw - ${width/2}px)`,
                 }"
                 @click="($event) => $event.stopPropagation()"
@@ -38,6 +38,7 @@
                           icon-name="choas-close"
                           width="30"
                           height="30"
+                          :color="controllerColor"
                           @click="removeModal" />
                 </slot>
             </div>
@@ -78,6 +79,12 @@
             },
             controller: {
                 type: Boolean
+            },
+            controllerColor: {
+                type: String,
+                default(){
+                    return ''
+                }
             },
             draggable: {
                 type: Boolean
@@ -136,6 +143,9 @@
             },
             dragStart($event) {
                 $event.stopPropagation()
+                if($event.button){
+                    return
+                }
                 let dragFlag = true
                 const draggedObj = this.mask? this.$refs.modalBox:this.$refs.modalWrap
                 const x = $event.clientX
@@ -258,7 +268,7 @@
             &-title {
                 width: 100%;
                 position: relative;
-                height: addPX($df-height);
+                min-height: addPX($df-height);
                 line-height: addPX($df-height);
                 text-align: center;
                 font-size: addPX($lg-fs);
@@ -295,7 +305,7 @@
 
             &-footer {
                 width: 100%;
-                height: addPX($df-height);
+                min-height: addPX($df-height);
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;

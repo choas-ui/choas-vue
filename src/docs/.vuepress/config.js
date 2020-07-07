@@ -83,7 +83,7 @@ module.exports = {
                                     '/components/common/tag', '标签* Tag'
                                 ],
                                 [
-                                    '/components/common/tree', '树形* Tree'
+                                    '/components/common/tree', '树形 Tree'
                                 ],
 
                             ]
