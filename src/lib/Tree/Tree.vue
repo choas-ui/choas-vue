@@ -244,7 +244,6 @@
                                     }
                                 },
                                 [
-                                    h('span')
                                 ]
                             ))
                         } else if (i >= this.lineStartLv) {
@@ -366,7 +365,7 @@
                     on: {
                         click: () => {
                             if(!this.multiple && !data.disable && !(data.children || []).length){
-                                this.$emit('input', data)
+                                this.$emit('input', [data])
                             }
                         }
                     }
@@ -499,7 +498,7 @@
     ul {
         padding: 0;
         margin: 0;
-        font-style: addPX($sm-fs);
+        font-size: addPX($lg-fs);
 
         li {
             list-style: none;
@@ -542,14 +541,12 @@
             &:hover {
                 background: $info;
                 color: #fff;
-                font-weight: bold;
             }
         }
 
         &-title-wrap.active {
             background: $info;
             color: #fff;
-            font-weight: bold;
         }
 
         &-icon-mark-box {
@@ -564,7 +561,7 @@
                 display: inline-block;
                 width: 1px;
                 height: 100%;
-                border-right: 1px dotted #888;
+                border-right: 1px solid #c2c2c2;
             }
         }
 
@@ -584,7 +581,7 @@
                 display: flex;
                 height: 1px;
                 width: 100%;
-                border-bottom: 1px dotted #888;
+                border-bottom: 1px solid #c2c2c2;
             }
         }
     }

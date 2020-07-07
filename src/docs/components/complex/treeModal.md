@@ -4,7 +4,9 @@
 ::: demo
 ```html
     <template>
+        <Button @click="isModalShow = true">打开</Button>
         <TreeModal :list-data="listData"
+            :isModalShow="isModalShow"
             :reflectKey="{
                 key: 'name',
                 value: 'id'
@@ -16,6 +18,7 @@
         props: {},
         data(){
             return {
+                isModalShow:false,
                 listData:{
                     id: '014557484S',
                     name: '特殊事务部',

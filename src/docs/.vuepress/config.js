@@ -26,6 +26,10 @@ function registerComponentsList() {
                     path: getPath('Tree')
                 },
                 {
+                    name: 'Cascade',
+                    path: getPath('Cascade')
+                },
+                {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
                 }
