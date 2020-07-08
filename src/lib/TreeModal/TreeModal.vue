@@ -223,11 +223,9 @@
             height: addPX($sm-height);
             text-align: right;
             line-height: addPX($sm-height);
-            color: #fff;
             font-size: addPX($df-fs);
             text-indent: addPX($df-fs * 2);
             letter-spacing: addPX($df-letterSp);
-            background: $info;
             padding-right: addPX($lg-padding);
             box-sizing: border-box;
         }

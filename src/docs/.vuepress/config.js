@@ -108,6 +108,14 @@ module.exports = {
                                     '/components/complex/selectTree', '穿梭框* Shuttle'
                                 ],
                             ]
+                        },
+                        {
+                            title: '特异组件',
+                            children: [
+                                [
+                                    '/components/custom/InputModal', 'input树形弹窗* InputModal'
+                                ],
+                            ]
                         }
                     ]
                 }
