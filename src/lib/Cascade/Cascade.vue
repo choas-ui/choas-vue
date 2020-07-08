@@ -26,7 +26,7 @@
     @import '../scss/size';
     @import '../scss/functions';
     input{
-        width: 100px;
+        width: 120px;
         border: 1px solid $lineColor;
         height: addPX($sxx-height);
         padding-left: addPX($sm-padding);

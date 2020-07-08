@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="isShow"
+    <Modal v-model="isModalShow"
            :width="width"
            :height="height"
            :mask="mask"
@@ -9,7 +9,7 @@
     >
         <slot slot="header">
             <div class="modal-header">
-                树形弹框
+                {{title}}
             </div>
         </slot>
 
@@ -20,7 +20,10 @@
                     <input type="text" v-model="searchStr" placeholder="搜索"> <Button @click="isCascadeShow = !isCascadeShow">新增</Button>
                 </div>
                 <div class="cascade-box">
-                    <Cascade  v-if="isCascadeShow" />
+                    <div v-if="isCascadeShow" style="width: 100%;display: flex; justify-content: space-between">
+                        <Cascade />
+                        <Button>保存</Button>
+                    </div>
                 </div>
                 <div class="content-box">
                     <div>
@@ -100,6 +103,12 @@
                     return '600'
                 }
             },
+            title:{
+                type:String,
+                default(){
+                    return ''
+                }
+            },
             controllerColor:{
                 type:String,
                 default(){
@@ -128,22 +137,37 @@
         data() {
             return {
                 isCascadeShow: false,
-                selectData: [],
+                isModalShow: this.isShow,
+                selectData: this.value,
                 searchStr: ''
             }
         },
         mounted() {
         },
+        computed:{
+          getX(){
+              return this.isShow
+          }
+        },
         methods: {
             confirmHandle(){
-                this.$emit('toggleShow')
+                this.$emit('toggleShow', false)
                 this.$emit('input', this.selectData)
             },
             cancelHandle(){
-                this.$emit('toggleShow')
+                this.$emit('toggleShow', false)
+                this.selectData = this.value
             }
         },
         watch:{
+            isShow(v){
+                this.isModalShow =  v
+            },
+            isModalShow(v){
+                if(!v){
+                    this.$emit('toggleShow', false)
+                }
+            }
         }
     }
 </script>
@@ -172,7 +196,7 @@
         padding: addPX($lg-padding) addPX($lg-padding) 0 addPX($lg-padding);
         box-sizing: border-box;
         .tree-box {
-            flex: 1;
+            flex: 3;
             box-sizing: border-box;
             display: flex;
             flex-wrap: wrap;
@@ -224,11 +248,11 @@
                 flex: 1;
                 box-sizing: border-box;
                 overflow-y: auto;
+                display: flex;
             }
-
         }
         .selected-box{
-            flex: 1;
+            flex: 2;
             word-break: break-all;
             display: flex;
             flex-wrap: wrap;

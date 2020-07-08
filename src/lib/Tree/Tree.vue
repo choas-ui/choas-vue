@@ -68,10 +68,14 @@
                 }
             }
         },
+        model:{
+            props: 'value',
+            event: 'change'
+        },
         data() {
             return {
                 copyListData: {},
-                copySelectedData: _.cloneDeep(this.value),
+                copySelectedData: {},
             }
         },
         mounted() {
@@ -346,7 +350,6 @@
                         )
                     )
                 }
-
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',
@@ -358,6 +361,9 @@
                     class: [
                         ...classNames(
                             {
+                              'active': data[this.reflectKey['value']] === _.get(this.$attrs.value, '0.'+this.reflectKey['value'], '')
+                            },
+                            {
                                 [prefix + 'tree-title-wrap']: true
                             }
                         ).split(' ')
@@ -365,10 +371,12 @@
                     on: {
                         click: () => {
                             if(!this.multiple && !data.disable && !(data.children || []).length){
-                                this.$emit('input', [data])
+                                this.value = [data]
+                                this.$emit('change', this.value)
                             }
                         }
-                    }
+                    },
+
                 }, [
                     childrenVnode
                 ])
@@ -383,6 +391,9 @@
                 return data.expand && children.map((item, index) => {
                     return h('Tree',
                         {
+                            attrs: {
+                                ...this.$attrs
+                            },
                             props: {
                                 ...obj,
                                 'line-start-lv': this.lineStartLv + 1,

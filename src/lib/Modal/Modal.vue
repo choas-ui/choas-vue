@@ -1,6 +1,6 @@
 <template>
     <div
-            v-if='visible'
+            v-if='value'
             :class="getModalWrapClass"
             :style="{
                 width: mask? '100vw' : `${width}px`,
@@ -141,12 +141,9 @@
                 visible: this.value,
             }
         },
-        model: {
-            event: 'change'
-        },
         methods: {
             removeModal() {
-                this.visible = false
+                this.$emit('input', false)
             },
             dragStart($event) {
                 $event.stopPropagation()
@@ -233,9 +230,6 @@
             }
         },
         watch: {
-            value(value) {
-                this.visible = value
-            },
             visible(value) {
                 this.$emit('change', value)
             }
@@ -308,6 +302,7 @@
 
             &-content {
                 flex: 1;
+                min-height: 100px;
             }
 
             &-footer {
