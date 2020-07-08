@@ -15,6 +15,7 @@
            placeholder="请选择机构"
            title="请选择机构"
            button-txt="请选择机构"
+           mask
     />
     <script>
         export default {

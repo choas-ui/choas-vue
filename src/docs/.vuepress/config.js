@@ -30,9 +30,14 @@ function registerComponentsList() {
                     path: getPath('Cascade')
                 },
                 {
+                    name: 'CascadeItem',
+                    path: path.resolve(process.cwd(), `src/lib/Cascade/CascadeItem`)
+                },
+                {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
-                },{
+                },
+                {
                     name: 'Selection',
                     path: getPath('Selection')
                 },

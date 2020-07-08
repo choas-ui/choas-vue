@@ -1,12 +1,10 @@
 <template>
-    <div :class="getSelectWrapClass"
-         @mouseleave="leaveHandle"
-    >
+    <div :class="getSelectWrapClass">
         <label>
             <input type="text"
                    placeholder="请选择"
                    ref="input"
-                   @focus="clearTimeHandle"
+                   @focus="isDropUlShow = true"
                    :value="getSelectedTitle"
             />
             <Icon type="svg"
@@ -21,27 +19,21 @@
                   @click="iconClick($event)"
             />
         </label>
-        <ul v-show="isDropUlShow" ref="dropUl" @mouseenter="clearTimeHandle" @mouseleave="leaveHandle">
-            <template v-if="listData.length">
-                <li v-for="item of listData" :key="item[reflectKey['value']]"
-                    :class="item[reflectKey['value']] === getSelectedValue ? 'active': ''"
-                    @click="()=>changeHandle([item])"
-                >
-                    {{item[reflectKey['key']]}}
-                </li>
-            </template>
-            <li v-else>
-                暂无数据
-            </li>
-        </ul>
+        <div v-if="isDropUlShow" class="collapse-box" style="width: 610px">
+            <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" />
+        </div>
     </div>
 </template>
 
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
+    import CascadeItem from "./CascadeItem";
     export default {
-        name: 'Selection',
+        name: 'Cascade',
+        comments:{
+            CascadeItem
+        },
         props:{
             listData:{
                 type: Object,
@@ -68,15 +60,19 @@
         },
         data() {
             return {
-                isDropUlShow: false
+                isDropUlShow: false,
+                copyData: []
             };
+        },
+        mounted() {
+            this.copyData = [_.clone(this.listData)]
         },
         computed:{
             getSelectWrapClass(){
                 const prefix =  this.prefix? this.prefix + '-': ''
                 return classNames(
                     {
-                        [prefix+ 'select-wrap']: true
+                        [prefix+ 'cascade-wrap']: true
                     }
                 )
             },
@@ -90,27 +86,37 @@
         updated() {
             const oUl = this.$refs.dropUl
             if(oUl){
+                // 出现位置判断
                 // console.dir(this.$refs.dropUl)
                 // console.dir(this.$refs.dropUl.getBoundingClientRect())
             }
         },
         methods: {
-            clearTimeHandle(){
-                clearTimeout(this.timer)
-                this.isDropUlShow= true
-            },
-            changeHandle(v){
-                this.$refs.input.focus()
-                this.$emit('input', v)
-            },
-            leaveHandle(){
-                this.timer= setTimeout(()=>{
-                    this.isDropUlShow= false
-                },180)
-            },
             iconClick(e){
                 e.preventDefault()
                 this.isDropUlShow = !this.isDropUlShow
+            },
+            change(newValue){
+                const path = newValue.slice(2).split('-').join('.children.').split('.')
+                const reversePath = [...path].reverse()
+                // 获取自身序号
+                const [firstPath, ...parentPathReverse] = reversePath
+                // 获取父元素路径
+                const parentPath = [...parentPathReverse].reverse().join('.')
+                // 获取父元素值
+                const parentValue =parentPath!==''? _.get(this.copyData, parentPath,{}): this.copyData
+                // 获取自身值
+                const selfValue =  _.get(this.copyData, path,{})
+                // 获取自身序数
+                const selfIndex = parseInt(firstPath, 10)
+                // 关闭所有同级
+                parentValue.forEach((item,index)=>{
+                    if(index !== selfIndex){
+                        parentValue.splice(index,1,{...item, isOpen: false})
+                    }
+                })
+                // 打开自身
+                parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
             }
         }
     }
@@ -121,11 +127,12 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .select-wrap{
+    .cascade-wrap{
         display: flex;
         height: addPX($sm-height);
         position: relative;
         width: 100%;
+        background: #fff;
         >label{
             display: block;
             flex: 1;
@@ -135,43 +142,22 @@
                 box-sizing: border-box;
                 border: 1px solid $lineColor;
                 border-radius:  addPX($sm-radius);
-                padding:0 0 0 addPX($sm-padding);
                 &:focus {
                     outline: none;
                     border: 1px solid $primary;
                 }
             }
         }
-        ul{
+        .collapse-box{
             position: absolute;
-            left: 0;
-            box-sizing: border-box;
-            top: addPX($sm-height + $sm-padding);
             width: 100%;
-            max-height: 300px;
-            border: 1px solid $lineColor;
-            box-sizing: border-box;
-            margin: 0;
-            z-index: 999;
+            min-height: 200px;
             background: #fff;
-            padding: addPX($sm-padding) 0;
-            text-align: left;
-            >li{
-                list-style: none;
-                height: addPX($sxx-height);
-                line-height: addPX($sxx-height);
-                cursor: pointer;
-                box-sizing: border-box;
-                padding-left: addPX($lg-padding);
-                &:hover{
-                    background: $info;
-                    color: #fff;
-                }
-                .active{
-                    background: $info;
-                    color: #fff;
-                }
-            }
+            border: 1px solid #ccc;
+            top: addPX($df-height);
+            box-shadow: 1px 1px 3px $shadowCr;
+            border-radius: addPX($sm-radius);
+            z-index: 999;
         }
     }
 </style>
