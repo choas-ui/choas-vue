@@ -6,7 +6,7 @@
 ----
 :::demo
 ```html
-    <input/>
+    <InputTreeModal />
 ```
 :::  
 

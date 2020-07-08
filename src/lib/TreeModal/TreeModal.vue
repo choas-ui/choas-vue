@@ -1,10 +1,11 @@
 <template>
-    <Modal v-model="isModalShow"
-           width="800"
-           height="600"
-           mask
-           draggable
-           controllerColor="#fff"
+    <Modal v-model="isShow"
+           :width="width"
+           :height="height"
+           :mask="mask"
+           :draggable="draggable"
+           :controllerColor="controllerColor"
+           :activeColor="activeColor"
     >
         <slot slot="header">
             <div class="modal-header">
@@ -16,7 +17,7 @@
             <div class="tree-box">
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
-                    <input type="text" v-model="searchStr" placeholder="搜索"> <Button>新增</Button>
+                    <input type="text" v-model="searchStr" placeholder="搜索"> <Button @click="isCascadeShow = !isCascadeShow">新增</Button>
                 </div>
                 <div class="cascade-box">
                     <Cascade  v-if="isCascadeShow" />
@@ -57,16 +58,14 @@
         </div>
         <slot slot="footer">
             <div class="modal-footer">
-                <Button size="large" type="danger">取&nbsp;&nbsp;消</Button>
-                <Button size="large">确&nbsp;&nbsp;认</Button>
+                <Button size="large" type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</Button>
+                <Button size="large" @click="confirmHandle">确&nbsp;&nbsp;认</Button>
             </div>
         </slot>
     </Modal>
 </template>
 
 <script>
-
-
     export default {
         name: 'TreeModal',
         components: {},
@@ -86,13 +85,48 @@
                     }
                 }
             },
-            isModalShow:{
+            isShow:{
                 type: Boolean
+            },
+            width:{
+                type:String,
+                default(){
+                    return '800'
+                }
+            },
+            height:{
+                type:String,
+                default(){
+                    return '600'
+                }
+            },
+            controllerColor:{
+                type:String,
+                default(){
+                    return ''
+                }
+            },
+            activeColor:{
+                type:String,
+                default(){
+                    return ''
+                }
+            },
+            mask:{
+                type: Boolean
+            },
+            draggable:{
+                type: Boolean
+            },
+            value: {
+                type: Array,
+                default(){
+                    return []
+                }
             }
         },
         data() {
             return {
-                isAddSelectShow: true,
                 isCascadeShow: false,
                 selectData: [],
                 searchStr: ''
@@ -100,7 +134,17 @@
         },
         mounted() {
         },
-        methods: {}
+        methods: {
+            confirmHandle(){
+                this.$emit('toggleShow')
+                this.$emit('input', this.selectData)
+            },
+            cancelHandle(){
+                this.$emit('toggleShow')
+            }
+        },
+        watch:{
+        }
     }
 </script>
 
@@ -117,6 +161,10 @@
         font-size: 18px;
         font-weight: bold;
     }
+    .modal-footer{
+        height: addPX($lg-height*1.4);
+        line-height: addPX($lg-height*1.4);
+    }
 
     .tree-box-wrap {
         height: 100%;
@@ -124,7 +172,6 @@
         padding: addPX($lg-padding) addPX($lg-padding) 0 addPX($lg-padding);
         box-sizing: border-box;
         .tree-box {
-            border-top: 1px solid $lineColor;
             flex: 1;
             box-sizing: border-box;
             display: flex;
@@ -183,7 +230,6 @@
         .selected-box{
             flex: 1;
             word-break: break-all;
-            border-top: 1px solid $lineColor;
             display: flex;
             flex-wrap: wrap;
             box-sizing: border-box;
@@ -223,7 +269,6 @@
             height: addPX($sm-height);
             text-align: right;
             line-height: addPX($sm-height);
-            font-size: addPX($df-fs);
             text-indent: addPX($df-fs * 2);
             letter-spacing: addPX($df-letterSp);
             padding-right: addPX($lg-padding);

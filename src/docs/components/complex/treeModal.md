@@ -4,9 +4,18 @@
 ::: demo
 ```html
     <template>
-        <Button @click="isModalShow = true">打开</Button>
+        <p>选中的值: {{selectedData}}</p>   
+        <Button @click="isModalShow = !isModalShow">打开</Button>
         <TreeModal :list-data="listData"
-            :isModalShow="isModalShow"
+            width="800"
+            height="600"
+            :isShow="isModalShow"
+            @toggleShow="isModalShow = !isModalShow"
+            v-model="selectedData"
+            mask
+            draggable
+            controllerColor="#fff"
+            activeColor="#fff"
             :reflectKey="{
                 key: 'name',
                 value: 'id'
@@ -19,6 +28,7 @@
         data(){
             return {
                 isModalShow:false,
+                selectedData:[],
                 listData:{
                     id: '014557484S',
                     name: '特殊事务部',
@@ -27,6 +37,12 @@
                         {
                             id: '014557484S-1',
                             name: '后勤',
+                            children: [
+                                {
+                                    id: '014557484S-1-0017',
+                                    name: '尼古拉斯.赵',
+                                }
+                            ],
                         },
                         {
                             id: '014557484S-2',
@@ -54,7 +70,7 @@
                 },
 
             }           
-        },
+        }
     }
     </script>
 ```

@@ -39,6 +39,7 @@
                           width="30"
                           height="30"
                           :color="controllerColor"
+                          :activeColor="activeColor"
                           @click="removeModal" />
                 </slot>
             </div>
@@ -81,6 +82,12 @@
                 type: Boolean
             },
             controllerColor: {
+                type: String,
+                default(){
+                    return ''
+                }
+            },
+            activeColor: {
                 type: String,
                 default(){
                     return ''

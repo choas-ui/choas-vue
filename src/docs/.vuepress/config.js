@@ -32,6 +32,13 @@ function registerComponentsList() {
                 {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
+                },
+
+
+
+                {
+                    name: 'InputTreeModal',
+                    path: getPath('InputTreeModal')
                 }
             ]
         }
@@ -113,7 +120,7 @@ module.exports = {
                             title: '特异组件',
                             children: [
                                 [
-                                    '/components/custom/InputModal', 'input树形弹窗* InputModal'
+                                    '/components/custom/inputTreeModal', 'input树形弹窗* InputTreeModal'
                                 ],
                             ]
                         }
@@ -124,11 +131,11 @@ module.exports = {
                 {
                     title: '迭代日志',
                     children: [
-                        ['/logs/version', '版本信息'],
+                        ['/logs/version', '日志'],
                         {
                             title: 'BUG',
                             children: [
-                                ['/logs/bug/bug','总览'],
+                                ['/logs/bug/bug','Bug'],
                                 ['/logs/bug/20200704', '20200704']
                             ]
                         }
