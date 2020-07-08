@@ -132,7 +132,7 @@
         },
         data() {
             return {
-                isModalShow: false,
+                isModalShow: true,
                 selectedData: this.value,
             }
         },

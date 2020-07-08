@@ -32,6 +32,9 @@ function registerComponentsList() {
                 {
                     name: 'TreeModal',
                     path: getPath('TreeModal')
+                },{
+                    name: 'Selection',
+                    path: getPath('Selection')
                 },
 
 
@@ -85,7 +88,7 @@ module.exports = {
                                     '/components/common/prompt', '提醒* Prompt'
                                 ],
                                 [
-                                    '/components/common/select', '下拉框* Select'
+                                    '/components/common/selection', '下拉框* Selection'
                                 ],
                                 [
                                     '/components/common/table', '表格* Table'

@@ -143,8 +143,8 @@
             }
         },
         methods: {
-            clickHandle(){
-                this.$listeners.click && this.$emit('click')
+            clickHandle(e){
+                this.$listeners.click && this.$emit('click', e)
             },
             turnColor(){
                 this.cl = this.$listeners.click && this.cl === this.color? this.activeColor: this.color

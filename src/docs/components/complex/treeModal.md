@@ -33,10 +33,11 @@
                 isModalShow: true,
                 title:'机构',
                 selectedData:[
-{
-                                    id: '014557484S-1-0017',
-                                    name: '尼古拉斯.赵',
-                                }],
+                    {
+                        id: '014557484S-1-0017',
+                        name: '尼古拉斯.赵',
+                    }
+                ],
                 listData:{
                     id: '014557484S',
                     name: '特殊事务部',
@@ -45,7 +46,6 @@
                         {
                             id: '014557484S-1',
                             name: '后勤',
-                            expand: true,
                             children: [
                                 {
                                     id: '014557484S-1-0017',
@@ -54,50 +54,6 @@
                             ],
                         },
                         {
-                            id: '014557484S-2',
-                            name: '业务部',
-                            expand: true,
-                            children:[
-                                {
-                                    id: '014557484S-2-1',
-                                    name: '一组',
-                                },
-                                {
-                                    id: '014557484S-2-2',
-                                    name: '二组',
-                                    expand: true,
-                                    children: [
-                                         {
-                                            id: '014557484S-2-2-0017',
-                                            name: '谢广坤',
-                                         },
-                                    ],
-                                },
-                            ]
-                        },
-{
-                            id: '014557484S-2',
-                            name: '业务部',
-                            expand: true,
-                            children:[
-                                {
-                                    id: '014557484S-2-1',
-                                    name: '一组',
-                                },
-                                {
-                                    id: '014557484S-2-2',
-                                    name: '二组',
-                                    expand: true,
-                                    children: [
-                                         {
-                                            id: '014557484S-2-2-0017',
-                                            name: '谢广坤',
-                                         },
-                                    ],
-                                },
-                            ]
-                        },
-{
                             id: '014557484S-2',
                             name: '业务部',
                             expand: true,

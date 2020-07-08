@@ -17,13 +17,13 @@
             <div class="tree-box">
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
-                    <input type="text" v-model="searchStr" placeholder="搜索"> <Button @click="isCascadeShow = !isCascadeShow">新增</Button>
+                    <input type="text" v-model="searchStr" placeholder="搜索">
+                    <Button @click="isCascadeShow = true">新增</Button>
+                    <Button v-if="isCascadeShow">保存</Button>
+                    <Button v-if="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
                 </div>
                 <div class="cascade-box">
-                    <div v-if="isCascadeShow" style="width: 100%;display: flex; justify-content: space-between">
-                        <Cascade />
-                        <Button>保存</Button>
-                    </div>
+                    <Cascade v-if="isCascadeShow" :list-data="listData" :reflectKey="reflectKey"/>
                 </div>
                 <div class="content-box">
                     <div>
@@ -136,7 +136,7 @@
         },
         data() {
             return {
-                isCascadeShow: false,
+                isCascadeShow: true,
                 isModalShow: this.isShow,
                 selectData: this.value,
                 searchStr: ''
@@ -224,7 +224,7 @@
                 input {
                     width: 60%;
                     border: 1px solid $lineColor;
-                    height: addPX($sxx-height);
+                    height: addPX($sm-height);
                     border-radius:  0 addPX($df-radius) 0 addPX($df-radius) ;
                     padding-left: addPX($sm-padding);
                     &:focus {
@@ -236,7 +236,6 @@
             .cascade-box{
                 padding: addPX($lg-padding)  addPX($lg-padding) 0  0;
                 display: flex;
-                height: addPX($sm-height);
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;

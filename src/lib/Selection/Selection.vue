@@ -44,9 +44,9 @@
         name: 'Selection',
         props:{
             listData:{
-                type: Object,
+                type: Array,
                 default(){
-                    return {}
+                    return []
                 }
             },
             value:{
@@ -125,7 +125,6 @@
         display: flex;
         height: addPX($sm-height);
         position: relative;
-        width: 100%;
         >label{
             display: block;
             flex: 1;
