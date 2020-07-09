@@ -15,7 +15,11 @@
         </template>
         <template v-else>
           <div class="input-like-wrap">
-              <div class="input-like" @click="isModalShow = true">
+              <div class="input-like"
+                   @click="isModalShow = true"
+                   :style="{
+                       width: buttonTxt?'70%': '95%',
+                   }">
                   <template v-if="selectedData.length">
                       <span
                               v-for="(item, index) of selectedData"
@@ -165,9 +169,9 @@
     .input-like-wrap{
         display: flex;
         align-items: center;
+        justify-content: center;
         .input-like{
-            width: 70%;
-            margin-right: addPX($lg-padding);
+            margin:0 addPX($lg-padding);
         }
     }
     .input-like {
@@ -182,7 +186,6 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         cursor: pointer;
-
         .tag-span {
             height: 28px;
             line-height: 28px;
