@@ -18,12 +18,22 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
-                    <Button v-if="!isCascadeShow" @click="isCascadeShow = true">新增</Button>
-                    <Button v-if="isCascadeShow" @click="addTreeListHandle">保存</Button>
-                    <Button v-if="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
+                    <template v-if="addTreeList">
+                        <Button v-show="!isCascadeShow" @click="isCascadeShow = true">新增</Button>
+                        <Button v-show="isCascadeShow" @click="addTreeListHandle">保存</Button>
+                        <Button v-show="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
+                    </template>
                 </div>
-                <div class="cascade-box">
-                    <Cascade v-model="cascadeData" v-if="isCascadeShow" :list-data="list_data" :reflectKey="reflectKey" :placeholder="title"/>
+                <div v-if="addTreeList"
+                     class="cascade-box"
+                >
+                    <Cascade v-model="cascadeData"
+                             v-if="isCascadeShow"
+                             :list-data="list_data"
+                             :reflectKey="reflectKey"
+                             :placeholder="title"
+                             :conditionProps="conditionProps"
+                    />
                 </div>
                 <div class="content-box">
                     <div>
@@ -74,6 +84,13 @@
         name: 'TreeModal',
         components: {},
         props: {
+            // 收束条件
+            conditionProps:{
+                type:String,
+                default(){
+                    return 'node'
+                }
+            },
             listData: {
                 type: Object,
                 default() {
@@ -107,7 +124,7 @@
             addTreeList:{
                 type:Function,
                 default(){
-                    return new Promise(resolve=>resolve({}))
+                    return null
                 }
             },
             title:{
@@ -167,14 +184,9 @@
                 this.addTreeList().then(res=>{
                     if(res.code===200){
                         this.$set(this,'list_data', res.code)
-                        this.$emit(this,'getListData', res.code)
+                        this.$listeners['getListData'] && this.$emit(this,'getListData', {})
                         this.isCascadeShow = false
                     }else{
-                        try{
-                            this.$emit(this,'getListData', {})
-                        }catch (e) {
-                            console.log(e)
-                        }
                         alert('添加失败')
                     }
                 })

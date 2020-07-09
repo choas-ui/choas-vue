@@ -6,7 +6,7 @@
               <span
                       v-for="(item, index) of selectedData"
                       :key="index + item[reflectKey['value']]"
-                      :class="multiple ? 'tag-span' : 'content-span'"
+                      :class="multiple+1 ? 'tag-span' : 'content-span'"
               >
                 {{ item[[reflectKey['key']]] }}
               </span>
@@ -24,7 +24,7 @@
                       <span
                               v-for="(item, index) of selectedData"
                               :key="index + item[reflectKey['value']]"
-                              :class="multiple ? 'tag-span' : 'content-span'"
+                              :class="multiple+1 ? 'tag-span' : 'content-span'"
                       >
                           {{ item[[reflectKey['key']]] }}
                       </span>
@@ -44,6 +44,7 @@
                    :controllerColor="controllerColor"
                    :activeColor="activeColor"
                    :reflectKey="reflectKey"
+                   :conditionProps="conditionProps"
 
                    :isShow="isModalShow"
                    @toggleShow="v => this.isModalShow= v"
@@ -57,6 +58,12 @@
     export default {
         name: 'InputTreeModal',
         props: {
+            conditionProps:{
+                type:String,
+                default(){
+                    return 'node'
+                }
+            },
             width: {
                 type: String,
                 default() {
@@ -136,7 +143,7 @@
             addTreeList: {
                 type:Function,
                 default(){
-                    return new Promise(resolve=>resolve({}))
+                    return null
                 }
             },
         },
@@ -178,8 +185,8 @@
         width: 100%;
         border: 1px solid #D9D9D9;
         border-radius: 4px;
-        line-height: 36px;
-        min-height: 36px;
+        line-height: 34px;
+        min-height: 34px;
         padding-left: 10px;
         display: flex;
         align-items: center;

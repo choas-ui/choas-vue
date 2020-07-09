@@ -31,7 +31,7 @@
                  top: '-5px',
                   right: '-5px'
             }"  width="40" height="40" type="svg" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
-            <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" />
+            <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" :conditionProps="conditionProps" />
         </div>
     </div>
 </template>
@@ -78,6 +78,12 @@
                 type:String,
                 default(){
                     return '请要新增到的机构'
+                }
+            },
+            conditionProps:{
+                type:String,
+                default(){
+                    return 'node'
                 }
             }
         },

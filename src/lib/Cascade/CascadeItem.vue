@@ -2,10 +2,12 @@
     <ul class="cascade-item-wrap">
         <li v-for="(item,index) of listData"
             :key="index"
+            v-if="item[conditionProps]"
         >
             <div @click="($event)=>{setValue(level+'-'+index, item)}">
                     <span>
                         {{item[reflectKey['key']]}}
+
                     </span>
                 <Icon style="position:absolute;right: 5px" v-if="item.children" type="svg" icon-name="choas-arrow-right" />
             </div>
@@ -17,6 +19,7 @@
                                  left: 150+'px'
                              }"
                          :selected-items="selectedItems"
+                         :conditionProps="conditionProps"
                          :reflect-key="reflectKey"
                          :level="level+'-'+index"
                          :lv="lv+1"
@@ -55,6 +58,12 @@
                 default(){
                     return '0'
                 }
+            },
+            conditionProps:{
+                type:String,
+                default(){
+                    return 'node'
+                }
             }
         },
         data(){
@@ -86,10 +95,10 @@
         left: addPX($sm-height);
         max-height: 300px;
         margin: 0;
+        padding: 0;
         width: 150px;
         z-index: 999;
         background: #fff;
-        padding: addPX($sm-padding) 0;
         text-align: left;
         border-radius: addPX($sm-radius);
         box-shadow: 1px 1px 4px $maskBg;
@@ -101,6 +110,7 @@
             box-sizing: border-box;
             padding: 0 addPX($df-padding);
             display: flex;
+            font-size: addPX($lg-fs);
             &:hover{
                 background: $info;
             }
