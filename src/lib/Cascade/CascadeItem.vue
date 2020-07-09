@@ -1,31 +1,32 @@
 <template>
     <ul class="cascade-item-wrap">
-        <li v-for="(item,index) of listData"
-            :key="index"
-            v-if="item[conditionProps]"
-        >
-            <div @click="($event)=>{setValue(level+'-'+index, item)}">
+        <template v-for="(item,index) of listData">
+            <li v-if="item[conditionProps]"
+                :key="index"
+            >
+                <div @click="($event)=>{setValue(level+'-'+index, item)}">
                     <span>
                         {{item[reflectKey['key']]}}
 
                     </span>
-                <Icon style="position:absolute;right: 5px" v-if="item.children" type="svg" icon-name="choas-arrow-right" />
-            </div>
-            <CascadeItem v-if="item.isOpen && item.children"
-                         :list-data="item.children || []"
-                         :style="{
+                    <Icon style="position:absolute;right: 5px" v-if="item.children" type="svg" icon-name="choas-arrow-right" />
+                </div>
+                <CascadeItem v-if="item.isOpen && item.children"
+                             :list-data="item.children || []"
+                             :style="{
                                  position: 'absolute',
                                  top: 30*index + 'px',
                                  left: 150+'px'
                              }"
-                         :selected-items="selectedItems"
-                         :conditionProps="conditionProps"
-                         :reflect-key="reflectKey"
-                         :level="level+'-'+index"
-                         :lv="lv+1"
-                         @change="change"
-            />
-        </li>
+                             :selected-items="selectedItems"
+                             :conditionProps="conditionProps"
+                             :reflect-key="reflectKey"
+                             :level="level+'-'+index"
+                             :lv="lv+1"
+                             @change="change"
+                />
+            </li>
+        </template>
     </ul>
 </template>
 
