@@ -7,7 +7,7 @@
 ----
   <ul>
      <li>v-model <span>实现双向绑定。</span></li>
-     <li>reflect-key <span>键值对应。</span></li>
+     <li>reflect-key <span>键值映射。</span></li>
      <li>can-be-edited <span>模式切换。</span></li>
      <li>title <span>标题更换。</span></li>
   </ul>

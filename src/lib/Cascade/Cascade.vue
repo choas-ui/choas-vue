@@ -176,14 +176,14 @@
                 // 打开自身
                 parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
                 // 动态调整宽度
-                this.floorX = path.filter(item=>item!=='children').length+1
+                this.floorX = path.filter(item=>item!=='children' && item[this.conditionProps]).length+1
                 let pathStr = path.join('.')
                 this.floorY=0
                 let count=0
                 // 动态调整高度
                 do {
                     const children = _.get(this.copyData,pathStr+'.children',[])
-                    this.floorY=this.floorY + (children.length ? children.length-1: 0)
+                    this.floorY=this.floorY + (children.length && item[this.conditionProps] ? children.length-1: 0)
                     count+=2;
                     pathStr=path.slice(0,path.length-count).join('.')
                 }while (pathStr)
