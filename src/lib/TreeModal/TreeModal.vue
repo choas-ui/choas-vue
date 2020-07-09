@@ -167,7 +167,7 @@
                 isModalShow: this.isShow,
                 selectData: this.value,
                 searchStr: '',
-                list_data:[],
+                list_data: {},
                 cascadeData:[]
             }
         },

@@ -7,20 +7,21 @@
         <p>选中的值: {{selectedData}}</p>   
         <Button @click="isModalShow = !isModalShow">打开</Button>
         <TreeModal :list-data="listData"
-            width="800"
-            height="600"
-            :isShow="isModalShow"
-            @toggleShow="v => isModalShow= v"
             :title="title"
             v-model="selectedData"
-            mask
-            draggable
-            controllerColor="#fff"
-            activeColor="#fff"
+            :isShow="isModalShow"
+            @toggleShow="v => isModalShow= v"
             :reflectKey="{
                 key: 'name',
                 value: 'id'
             }"
+            width="800"
+            height="600"
+
+            mask
+            draggable
+            controllerColor="#fff"
+            activeColor="#fff"
             ></TreeModal>
     </template>
     <script>
