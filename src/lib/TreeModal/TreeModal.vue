@@ -31,7 +31,7 @@
                              v-if="isCascadeShow"
                              :list-data="list_data"
                              :reflectKey="reflectKey"
-                             :placeholder="title"
+                             :placeholder="placeholder"
                              :conditionProps="conditionProps"
                     />
                 </div>
@@ -125,6 +125,12 @@
                 type:Function
             },
             title:{
+                type:String,
+                default(){
+                    return ''
+                }
+            },
+            placeholder:{
                 type:String,
                 default(){
                     return ''

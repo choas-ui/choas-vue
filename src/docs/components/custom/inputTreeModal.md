@@ -1,20 +1,25 @@
 ### 输入树形弹框
 ---
   <p>用以实现一个显示框与树形弹窗的互动。</p>
-  <p>button-text</p>
+  <p>复合Tree,Cascade,Modal,Input,Icon组件,以上组件的大多数属性均可在本组件中使用。</p>
   
-#### 基本使用
+#### 基础用法
 ----
+  <ul>
+     <li>v-model <span>实现双向绑定。</span></li>
+     <li>reflect-key <span>键值对应。</span></li>
+     <li>can-be-edited <span>模式切换。</span></li>
+     <li>title <span>标题更换。</span></li>
+  </ul>
+
 :::demo
 ```html
     <InputTreeModal
            :list-data="listData"
            v-model="selectedData"
-           :canBeEdited="canBeEdited"
-           :reflectKey="reflectKey"
-           placeholder="请选择机构"
+           :can-be-edited="canBeEdited"
+           :reflect-key="reflectKey"
            title="请选择机构"
-           mask
     />
     <script>
         export default {
@@ -101,159 +106,32 @@
                     },
                 }
             },
-            methods:{
-                 addTreeList(){
-                    return  new Promise(resolve => {
-                        console.log(123)
-                        resolve({})
-                    })
-                 },
-                 getListData(v){
-                    console.log(v)
-                 },
-            } 
         }
     </script>
 ```
 :::
 
-#### 双向绑定 selectedData
-----
-  <p>直接返回一个选定的值，不再需要传入路径。</p>
-  
-:::demo
-```html
-    <p>{{selectedData}}</p>
-    <InputTreeModal
-           :list-data="listData"
-           v-model="selectedData"
-           :canBeEdited="canBeEdited"
-           :reflectKey="reflectKey"
-           placeholder="请选择机构"
-           title="请选择机构"
-           mask
-           :addTreeList="addTreeList"
-           @getListData="getListData"
-    />
-    <script>
-        export default {
-            data(){
-                return{
-                    canBeEdited: true,
-                    selectedData: [
-                        {
-                            id: '014557484S-2-2-0017',
-                            name: '谢广坤',
-                        }
-                    ],
-                    reflectKey: {
-                        key: 'name',
-                        value: 'id'
-                    },
-                    listData: {
-                        id: '014557484S',
-                        name: '特殊事务部',
-                        expand: true,
-                        children: [
-                            {
-                                id: '014557484S-0',
-                                name: '指挥部',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-0-007',
-                                        name: '谢永强',
-                                    },
-                                    {
-                                        id: '014557484S-0-008',
-                                        name: '谢大脚',
-                                    },
-                                ],
-                            },
-                            {
-                                id: '014557484S-1',
-                                name: '后勤',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-1-0017',
-                                        name: '尼古拉斯.赵',
-                                    },
-                                    {
-                                        id: '014557484S-1-0019',
-                                        name: '王常规',
-                                    },
-                                    
-                                ],
-                            },
-                            {
-                                id: '014557484S-2',
-                                name: '业务部',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-2-1',
-                                        name: '一组',
-                                    },
-                                    {
-                                        id: '014557484S-2-2',
-                                        name: '二组',
-                                        expand: true,
-                                        children: [
-                                            {
-                                                id: '014557484S-2-2-0017',
-                                                name: '谢广坤',
-                                            },
-                                            {
-                                                id: '014557484S-2-2-0018',
-                                                name: '王小蒙',
-                                            },
-{
-                                                id: '014557484S-2-2-0018',
-                                                name: '刘能',
-                                            },
-                                        ],
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                }
-            },
-            methods:{
-                 addTreeList(){
-                    return  new Promise(resolve => {
-                        console.log(123)
-                        resolve({})
-                    })
-                 },
-                 getListData(v){
-                    console.log(v)
-                 },
-            } 
-        }
-    </script>
-```
-:::
-
-
-#### 收束条件 conditionProps
+#### 新增树形节点 addTreeList
 ---
-  <p>用户不可选，不可见不满足条件的该项。</p>
-
-----
+  <ul>
+     <li><p>condition-props 用户不可选，不可见不满足条件的该项。</p></li>
+     <li><p>add-tree-list 以 <span style="color:red">传递属性</span> 的形式传入一个返回promise的请求函数。</p></li>
+     <li><p>placeholder 新增树形节点的提示。</p></li>
+     <li><p>getListData 获取返回树形节点。</p></li>
+  </ul>
+  
 :::demo
 ```html
     <InputTreeModal
-           :canBeEdited="canBeEdited"
+           :can-be-edited="canBeEdited"
            :list-data="listData"
-           :reflectKey="reflectKey"
+           :reflect-key="reflectKey"
            v-model="selectedData"
-           placeholder="请选择机构"
            title="请选择机构"
-           conditionProps="type"
-           mask
-           :addTreeList="addTreeList"
+
+           placeholder="请选择机构节点"
+           condition-props="type"
+           :add-tree-list="addTreeList"
            @getListData="getListData"
     />
     <script>
@@ -362,134 +240,12 @@
 ```
 :::
 
-#### 修改树形 addTreeList
----
-  <p>以属性的形式传入一个返回promise的请求函数。</p>
-  <p>如果需要返回值，可以使用getListData获取。</p>
-
-----
-:::demo
-```html
-    <InputTreeModal
-           :canBeEdited="canBeEdited"
-           :list-data="listData"
-           :reflectKey="reflectKey"
-           v-model="selectedData"
-           placeholder="请选择机构"
-           title="请选择机构"
-           mask
-           :addTreeList="addTreeList"
-           @getListData="getListData"
-    />
-    <script>
-        export default {
-            data(){
-                return{
-                    canBeEdited: true,
-                    selectedData: [
-                        {
-                            id: '014557484S-2-2-0017',
-                            name: '谢广坤',
-                        }
-                    ],
-                    reflectKey: {
-                        key: 'name',
-                        value: 'id'
-                    },
-                    listData: {
-                        id: '014557484S',
-                        name: '特殊事务部',
-                        expand: true,
-                        children: [
-                            {
-                                id: '014557484S-0',
-                                name: '指挥部',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-0-007',
-                                        name: '谢永强',
-                                    },
-                                    {
-                                        id: '014557484S-0-008',
-                                        name: '谢大脚',
-                                    },
-                                ],
-                            },
-                            {
-                                id: '014557484S-1',
-                                name: '后勤',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-1-0017',
-                                        name: '尼古拉斯.赵',
-                                    },
-                                    {
-                                        id: '014557484S-1-0019',
-                                        name: '王常规',
-                                    },
-                                    
-                                ],
-                            },
-                            {
-                                id: '014557484S-2',
-                                name: '业务部',
-                                expand: true,
-                                children: [
-                                    {
-                                        id: '014557484S-2-1',
-                                        name: '一组',
-                                    },
-                                    {
-                                        id: '014557484S-2-2',
-                                        name: '二组',
-                                        expand: true,
-                                        children: [
-                                            {
-                                                id: '014557484S-2-2-0017',
-                                                name: '谢广坤',
-                                            },
-                                            {
-                                                id: '014557484S-2-2-0018',
-                                                name: '王小蒙',
-                                            },
-{
-                                                id: '014557484S-2-2-0018',
-                                                name: '刘能',
-                                            },
-                                        ],
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                }
-            },
-            methods:{
-                 addTreeList(){
-                    return  new Promise(resolve => {
-                        console.log(123)
-                        resolve({})
-                    })
-                 },
-                 getListData(v){
-                    console.log(v)
-                 },
-            } 
-        }
-    </script>
-```
-::: 
-
-  
 #### 按钮文字 buttonTxt
 ---
-  <p>选择按钮互动。</p>
-  <p>显示框不再直接控制弹窗，交由按钮控制弹窗。</p>
+  <ul>
+     <li><p>button-txt 改为按钮互动,显示框不再直接控制弹窗，交由按钮控制弹窗</p></li>
+  </ul>
 
-#### 基本使用
-----
 :::demo
 ```html
     <InputTreeModal
@@ -497,12 +253,14 @@
            :list-data="listData"
            :reflectKey="reflectKey"
            v-model="selectedData"
-           placeholder="请选择机构"
            title="请选择机构"
-           mask
-           button-txt="请选择机构"
+
+           placeholder="请选择机构"
            :addTreeList="addTreeList"
            @getListData="getListData"
+
+           button-txt="选择机构"
+           mask
     />
     <script>
         export default {

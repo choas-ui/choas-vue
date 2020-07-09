@@ -16,7 +16,7 @@
         <template v-else>
           <div class="input-like-wrap">
               <div class="input-like"
-                   @click="isModalShow = true"
+                   @click="inputClick"
                    :style="{
                        width: buttonTxt?'70%': '95%',
                    }">
@@ -45,10 +45,10 @@
                    :activeColor="activeColor"
                    :reflectKey="reflectKey"
                    :conditionProps="conditionProps"
-
+                   :title="title"
                    :isShow="isModalShow"
                    @toggleShow="v => this.isModalShow= v"
-                   :title="title"
+                   :placeholder="placeholder"
                    v-model="selectedData"
                    :addTreeList="addTreeList"
         ></TreeModal>
@@ -151,14 +151,22 @@
             }
         },
         mounted(){
-            this.selectedData=this.value
+        },
+        methods:{
+            inputClick(){
+                if(!this.buttonTxt){
+                    this.isModalShow = true
+                }
+            }
         },
         watch: {
             selectedData:{
                 handler(v){
+                    this.selectedData=this.value
                     this.$emit('input', v)
                 },
-                deep: true
+                deep: true,
+                immediate: true
             }
         }
     }
