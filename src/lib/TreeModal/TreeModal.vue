@@ -122,10 +122,7 @@
                 }
             },
             addTreeList:{
-                type:Function,
-                default(){
-                    return null
-                }
+                type:Function
             },
             title:{
                 type:String,

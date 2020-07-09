@@ -405,7 +405,12 @@
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
                             },
-                            on: this.$listeners
+                            on: this.$listeners,
+                            nativeOn:{
+                                onmousewheel(e){
+                                    e.stopPropagation()
+                                }
+                            }
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {

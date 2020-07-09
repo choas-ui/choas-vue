@@ -101,10 +101,6 @@
                         ["icon-mark"]: true
                     },
                 )
-            },
-            ppp(){
-                console.log(this.$slots.default)
-                return this.$slots.default
             }
         },
         mounted() {
