@@ -1,8 +1,33 @@
 ### 版本信息
 ---
+
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-05  <b>至</b>  2020-07-09</span>
+    <span>2020-07-09</span>
+    <b>v 0.1.10</b>
+  </p>
+  
+  <ol>
+     <li>修改 <b>cascade</b> 组件bug。</li>
+     <li>完善文档。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-08</span>
+    <b>v 0.1.8</b>
+  </p>
+  
+  <ol>
+     <li>新增 <b>InputTreeModal</b> 组件。</li>
+     <li>完善文档。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-05  <b>至</b>  2020-07-07</span>
     <b>v 0.1.8</b>
   </p>
   
