@@ -173,7 +173,6 @@
         },
         mounted() {
             this.list_data=_.cloneDeep(this.listData)
-            console.log(this.cascadeData)
         },
         methods: {
             confirmHandle(){

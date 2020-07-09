@@ -167,12 +167,6 @@
                     })
                 }
                 fClose(parentValue, selfIndex)
-                // parentValue.forEach((item,index)=>{
-                //     if(index !== selfIndex){
-                //         parentValue.splice(index,1,{...item, isOpen: false})
-                //     }
-                // })
-                // console.log(parentValue)
                 // 打开自身
                 parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
                 // 动态调整宽度

@@ -60,7 +60,6 @@
         },
         methods: {
             clickHandle() {
-                console.log(123)
             }
         },
         mounted() {

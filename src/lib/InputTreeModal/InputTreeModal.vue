@@ -161,7 +161,6 @@
                 }
             },
             getListData(v){
-                console.log(v)
                 this.$emit('getListData', v)
             }
         },
