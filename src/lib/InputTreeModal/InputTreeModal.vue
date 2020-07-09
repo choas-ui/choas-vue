@@ -151,6 +151,7 @@
             }
         },
         mounted(){
+            this.selectedData=this.value
         },
         methods:{
             inputClick(){
@@ -162,7 +163,6 @@
         watch: {
             selectedData:{
                 handler(v){
-                    this.selectedData=this.value
                     this.$emit('input', v)
                 },
                 deep: true,
