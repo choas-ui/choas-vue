@@ -19,11 +19,11 @@
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
                     <Button v-if="!isCascadeShow" @click="isCascadeShow = true">新增</Button>
-                    <Button v-if="isCascadeShow" @click="addTreeList">保存</Button>
+                    <Button v-if="isCascadeShow" @click="addTreeListHandle">保存</Button>
                     <Button v-if="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
                 </div>
                 <div class="cascade-box">
-                    <Cascade v-model="cascadeData" v-if="isCascadeShow" :list-data="listData" :reflectKey="reflectKey" :placeholder="title"/>
+                    <Cascade v-model="cascadeData" v-if="isCascadeShow" :list-data="list_data" :reflectKey="reflectKey" :placeholder="title"/>
                 </div>
                 <div class="content-box">
                     <div>
@@ -31,7 +31,7 @@
                                 line
                                 file-icon
                                 v-model="selectData"
-                                :list-data="listData"
+                                :list-data="list_data"
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
                         ></Tree>
@@ -69,6 +69,7 @@
 </template>
 
 <script>
+    import _ from 'lodash'
     export default {
         name: 'TreeModal',
         components: {},
@@ -101,6 +102,12 @@
                 type:String,
                 default(){
                     return '600'
+                }
+            },
+            addTreeList:{
+                type:Function,
+                default(){
+                    return new Promise(resolve=>resolve({}))
                 }
             },
             title:{
@@ -140,15 +147,12 @@
                 isModalShow: this.isShow,
                 selectData: this.value,
                 searchStr: '',
+                list_data:[],
                 cascadeData:[]
             }
         },
         mounted() {
-        },
-        computed:{
-          getX(){
-              return this.isShow
-          }
+            this.list_data=_.cloneDeep(this.listData)
         },
         methods: {
             confirmHandle(){
@@ -159,8 +163,21 @@
                 this.$emit('toggleShow', false)
                 this.selectData = this.value
             },
-            addTreeList(){
-                this.$emit('addTreeList', this.cascadeData[this.cascadeData.length-1])
+            addTreeListHandle(){
+                this.addTreeList().then(res=>{
+                    if(res.code===200){
+                        this.$set(this,'list_data', res.code)
+                        this.$emit(this,'getListData', res.code)
+                        this.isCascadeShow = false
+                    }else{
+                        try{
+                            this.$emit(this,'getListData', {})
+                        }catch (e) {
+                            alert('添加失败')
+                        }
+
+                    }
+                })
             }
         },
         watch:{
@@ -168,9 +185,13 @@
                 this.isModalShow =  v
             },
             isModalShow(v){
+
                 if(!v){
                     this.$emit('toggleShow', false)
                 }
+            },
+            isCascadeShow(){
+                this.$set(this,'cascadeData', [])
             }
         }
     }
@@ -229,8 +250,9 @@
                     width: 60%;
                     border: 1px solid $lineColor;
                     height: addPX($sm-height);
-                    border-radius:  0 addPX($df-radius) 0 addPX($df-radius) ;
-                    padding-left: addPX($sm-padding);
+                    box-sizing: border-box;
+                    border-radius:  addPX($df-radius) ;
+                    padding-left: addPX($lg-padding);
                     &:focus {
                         outline: none;
                         border: 1px solid $primary;

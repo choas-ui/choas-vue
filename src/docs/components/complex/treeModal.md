@@ -21,7 +21,6 @@
                 key: 'name',
                 value: 'id'
             }"
-            @addTree="addTree"
             ></TreeModal>
     </template>
     <script>
@@ -79,11 +78,6 @@
                 },
 
             }           
-        },
-        methods:{
-             addTree(v){
-                this.$emit('addTree', v) 
-            }
         }
     }
     </script>

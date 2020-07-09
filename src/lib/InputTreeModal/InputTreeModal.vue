@@ -15,7 +15,7 @@
         </template>
         <template v-else>
           <div class="input-like-wrap">
-              <div class="input-like" @click="buttonTxt ? ()=>  this.isModalShow = !isModalShow: null">
+              <div class="input-like" @click="isModalShow = true">
                   <template v-if="selectedData.length">
                       <span
                               v-for="(item, index) of selectedData"
@@ -45,7 +45,7 @@
                    @toggleShow="v => this.isModalShow= v"
                    :title="title"
                    v-model="selectedData"
-                   @addTreeList="addTreeList"
+                   :addTreeList="addTreeList"
         ></TreeModal>
     </span>
 </template>
@@ -129,21 +129,28 @@
                     return []
                 }
             },
+            addTreeList: {
+                type:Function,
+                default(){
+                    return new Promise(resolve=>resolve({}))
+                }
+            },
         },
         data() {
             return {
-                isModalShow: true,
+                isModalShow: false,
                 selectedData: this.value,
             }
         },
-        methods: {
-            addTreeList(v) {
-                this.$emit('addTreeList', v)
-            }
+        mounted(){
+            this.selectedData=this.value
         },
         watch: {
-            selectData(v) {
-                this.$emit('input', v)
+            selectedData:{
+                handler(v){
+                    this.$emit('input', v)
+                },
+                deep: true
             }
         }
     }

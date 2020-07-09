@@ -85,7 +85,6 @@
         top: addPX($sm-height);
         left: addPX($sm-height);
         max-height: 300px;
-        border: 1px solid $lineColor;
         margin: 0;
         width: 150px;
         z-index: 999;

@@ -145,12 +145,28 @@
                 const selfValue =  _.get(this.copyData, path,{})
                 // 获取自身序数
                 const selfIndex = parseInt(firstPath, 10)
-                // 关闭所有同级
-                parentValue.forEach((item,index)=>{
-                    if(index !== selfIndex){
-                        parentValue.splice(index,1,{...item, isOpen: false})
-                    }
-                })
+                // 关闭所有同级及子集目录
+                const fClose=(data,selfIndex)=>{
+                    data.forEach((item,index)=>{
+                        if(selfIndex!==null){
+                            if(index !== selfIndex){
+                                data.splice(index,1,{...item, isOpen: false})
+                            }
+                        }else{
+                            data.splice(index,1,{...item, isOpen: false})
+                        }
+                        if((item.children || []).length){
+                            fClose(item.children, null)
+                        }
+                    })
+                }
+                fClose(parentValue, selfIndex)
+                // parentValue.forEach((item,index)=>{
+                //     if(index !== selfIndex){
+                //         parentValue.splice(index,1,{...item, isOpen: false})
+                //     }
+                // })
+                // console.log(parentValue)
                 // 打开自身
                 parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
                 // 动态调整宽度
@@ -206,6 +222,7 @@
             > input {
                 height: 100%;
                 width: 100%;
+                padding-left: addPX($lg-padding);
                 box-sizing: border-box;
                 border: 1px solid $lineColor;
                 border-radius:  addPX($sm-radius);
