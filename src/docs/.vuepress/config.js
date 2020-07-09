@@ -149,6 +149,12 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            '/project':[
+                {
+                    title: '迭代日志',
+                    children: []
+                }
             ]
         }
     },
