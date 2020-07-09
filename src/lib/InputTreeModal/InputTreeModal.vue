@@ -50,7 +50,8 @@
                    @toggleShow="v => this.isModalShow= v"
                    :placeholder="placeholder"
                    v-model="selectedData"
-                   :addTreeList="addTreeList"
+                   :add-tree-list="addTreeList"
+                   @getListData="getListData"
         ></TreeModal>
     </span>
 </template>
@@ -158,6 +159,10 @@
                 if(!this.buttonTxt){
                     this.isModalShow = true
                 }
+            },
+            getListData(v){
+                console.log(v)
+                this.$emit('getListData', v)
             }
         },
         watch: {

@@ -226,10 +226,11 @@
             },
             methods:{
                  addTreeList(){
-                    return  new Promise(resolve => {
-                        console.log(123)
-                        resolve({})
-                    })
+                    return  {
+                        fn:()=>{},
+                        args:{},
+                        key: 'pkId'
+                    }
                  },
                  getListData(v){
                     console.log(v)
@@ -350,7 +351,6 @@
             methods:{
                  addTreeList(){
                     return  new Promise(resolve => {
-                        console.log(123)
                         resolve({})
                     })
                  },
