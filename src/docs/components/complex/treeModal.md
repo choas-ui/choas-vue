@@ -30,7 +30,7 @@
         props: {},
         data(){
             return {
-                isModalShow: true,
+                isModalShow: false,
                 title:'机构',
                 selectedData:[
                     {

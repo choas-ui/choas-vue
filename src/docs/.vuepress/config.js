@@ -64,6 +64,7 @@ module.exports = {
             {text: '首页', link: '/'},
             {text: '组件', link: '/components/'},
             {text: '日志', link: '/logs/'},
+            {text: '工程', link: '/project/'},
             {text: 'issues', link: 'https://github.com/faliye/choas-vue/issues'},
             {text: 'GitHub', link: 'https://github.com/faliye/choas-vue'}
         ],
@@ -136,10 +137,12 @@ module.exports = {
                 }
             ],
             '/logs':[
+                ['/logs/', '概述'],
                 {
                     title: '迭代日志',
                     children: [
                         ['/logs/version', '日志'],
+                        ['/logs/plans', '计划'],
                         {
                             title: 'BUG',
                             children: [
@@ -152,7 +155,7 @@ module.exports = {
             ],
             '/project':[
                 {
-                    title: '迭代日志',
+                    title: '工程*',
                     children: []
                 }
             ]
