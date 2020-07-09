@@ -1,13 +1,22 @@
-import TreeModal from './TreeModal'
-import Modal from './Modal'
 import Button from './Button'
+import Cascade from './Cascade'
 import Icon from './Icon'
+import InputTreeModal from './InputTreeModal'
+import Modal from './Modal'
+import Selection from './Selection'
 import Tree from './Tree'
+import TreeModal from './TreeModal'
+
+
+
 
 const components = [
-    Icon,
     Button,
+    Cascade,
+    Icon,
+    InputTreeModal,
     Modal,
+    Selection,
     Tree,
     TreeModal
 ];
