@@ -101,7 +101,6 @@
             box-sizing: border-box;
             padding: 0 addPX($df-padding);
             display: flex;
-            font-weight: bold;
             &:hover{
                 background: $info;
             }

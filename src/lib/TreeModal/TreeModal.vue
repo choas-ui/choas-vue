@@ -173,9 +173,9 @@
                         try{
                             this.$emit(this,'getListData', {})
                         }catch (e) {
-                            alert('添加失败')
+                            console.log(e)
                         }
-
+                        alert('添加失败')
                     }
                 })
             }

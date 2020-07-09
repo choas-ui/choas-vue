@@ -181,11 +181,11 @@
                     count+=2;
                     pathStr=path.slice(0,path.length-count).join('.')
                 }while (pathStr)
-
+                const p =_.get(this.copyData,path.splice(0,path.length-2).join('.'),{})
                 const findIndex =  this.result.findIndex((res)=>{
-                    const p =_.get(this.copyData,path.splice(0,path.length-2).join('.'),{})
                     return res[this.reflectKey['value']] === p[this.reflectKey['value']]
                 })
+
                 if(findIndex>-1){
                     this.result.splice(findIndex+1,this.result.length)
                 }
