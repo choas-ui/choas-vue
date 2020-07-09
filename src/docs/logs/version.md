@@ -4,6 +4,18 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-09</span>
+    <b>v 0.1.11</b>
+  </p>
+  
+  <ol>
+     <li>修改 <b>TreeModal</b> 组件bug。</li>
+     <li>完善文档。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-09</span>
     <b>v 0.1.10</b>
   </p>
   
