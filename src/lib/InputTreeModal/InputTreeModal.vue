@@ -45,7 +45,7 @@
                    @toggleShow="v => this.isModalShow= v"
                    :title="title"
                    v-model="selectedData"
-                   @addTree="addTree"
+                   @addTreeList="addTreeList"
         ></TreeModal>
     </span>
 </template>
@@ -137,8 +137,8 @@
             }
         },
         methods: {
-            addTree(v) {
-                this.$emit('addTree', v)
+            addTreeList(v) {
+                this.$emit('addTreeList', v)
             }
         },
         watch: {

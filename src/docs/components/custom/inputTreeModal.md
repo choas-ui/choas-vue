@@ -16,6 +16,7 @@
            title="请选择机构"
            button-txt="请选择机构"
            mask
+           @addTreeList="addTreeList"
     />
     <script>
         export default {
@@ -38,13 +39,34 @@
                         expand: true,
                         children: [
                             {
+                                id: '014557484S-0',
+                                name: '指挥部',
+                                expand: true,
+                                children: [
+                                    {
+                                        id: '014557484S-0-007',
+                                        name: '谢永强',
+                                    },
+                                    {
+                                        id: '014557484S-0-008',
+                                        name: '谢大脚',
+                                    },
+                                ],
+                            },
+                            {
                                 id: '014557484S-1',
                                 name: '后勤',
+                                expand: true,
                                 children: [
                                     {
                                         id: '014557484S-1-0017',
                                         name: '尼古拉斯.赵',
-                                    }
+                                    },
+                                    {
+                                        id: '014557484S-1-0019',
+                                        name: '王常规',
+                                    },
+                                    
                                 ],
                             },
                             {
@@ -65,6 +87,14 @@
                                                 id: '014557484S-2-2-0017',
                                                 name: '谢广坤',
                                             },
+                                            {
+                                                id: '014557484S-2-2-0018',
+                                                name: '王小蒙',
+                                            },
+{
+                                                id: '014557484S-2-2-0018',
+                                                name: '刘能',
+                                            },
                                         ],
                                     },
                                 ]
@@ -72,7 +102,10 @@
                         ]
                     },
                 }
-            }
+            },
+            methods:{
+                 addTreeList(v){console.log(v)}
+            } 
         }
     </script>
 ```

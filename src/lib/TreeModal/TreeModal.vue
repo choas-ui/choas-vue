@@ -18,12 +18,12 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
-                    <Button @click="isCascadeShow = true">新增</Button>
-                    <Button v-if="isCascadeShow">保存</Button>
+                    <Button v-if="!isCascadeShow" @click="isCascadeShow = true">新增</Button>
+                    <Button v-if="isCascadeShow" @click="addTreeList">保存</Button>
                     <Button v-if="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
                 </div>
                 <div class="cascade-box">
-                    <Cascade v-if="isCascadeShow" :list-data="listData" :reflectKey="reflectKey"/>
+                    <Cascade v-model="cascadeData" v-if="isCascadeShow" :list-data="listData" :reflectKey="reflectKey" :placeholder="title"/>
                 </div>
                 <div class="content-box">
                     <div>
@@ -136,10 +136,11 @@
         },
         data() {
             return {
-                isCascadeShow: true,
+                isCascadeShow: false,
                 isModalShow: this.isShow,
                 selectData: this.value,
-                searchStr: ''
+                searchStr: '',
+                cascadeData:[]
             }
         },
         mounted() {
@@ -157,6 +158,9 @@
             cancelHandle(){
                 this.$emit('toggleShow', false)
                 this.selectData = this.value
+            },
+            addTreeList(){
+                this.$emit('addTreeList', this.cascadeData[this.cascadeData.length-1])
             }
         },
         watch:{
@@ -242,7 +246,7 @@
                 text-align: center;
             }
             .content-box{
-                padding: addPX($lg-padding);
+                margin: addPX($lg-padding* 1.5) 0;
                 width: 100%;
                 flex: 1;
                 box-sizing: border-box;

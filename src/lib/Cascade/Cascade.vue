@@ -2,7 +2,7 @@
     <div :class="getSelectWrapClass">
         <label>
             <input type="text"
-                   placeholder="请选择"
+                   :placeholder="placeholder"
                    ref="input"
                    @focus="isDropUlShow = true"
                    :value="getSelectedTitle"
@@ -19,7 +19,18 @@
                   @click="iconClick($event)"
             />
         </label>
-        <div v-if="isDropUlShow" class="collapse-box" style="width: 610px">
+        <div v-if="isDropUlShow"
+             class="collapse-box"
+             :style="{
+                width: 60+ 150* floorX +'px',
+                height: 60+ 40* floorY +'px'
+             }"
+        >
+            <Icon :style="{
+                position: 'absolute',
+                 top: '-5px',
+                  right: '-5px'
+            }"  width="40" height="40" type="svg" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
             <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" />
         </div>
     </div>
@@ -41,6 +52,12 @@
                     return {}
                 }
             },
+            cascadeData:{
+                type:Array,
+                default(){
+                    return []
+                }
+            },
             value:{
                 type: Array,
                 default(){
@@ -56,12 +73,21 @@
                         value: 'value'
                     }
                 }
+            },
+            placeholder:{
+                type:String,
+                default(){
+                    return '请要新增到的机构'
+                }
             }
         },
         data() {
             return {
                 isDropUlShow: false,
-                copyData: []
+                copyData: [],
+                floorX:1,
+                floorY:1,
+                result: []
             };
         },
         mounted() {
@@ -76,11 +102,10 @@
                     }
                 )
             },
-            getSelectedValue(){
-                return _.get(this.value,'0.'+[this.reflectKey['value']], '')
-            },
             getSelectedTitle(){
-                return _.get(this.value,'0.'+[this.reflectKey['key']], '')
+                return this.value.reduce((a,b)=>{
+                    return a=b[this.reflectKey['key']] + (a? ' / '+a: '')
+                },'')
             }
         },
         updated() {
@@ -94,9 +119,20 @@
         methods: {
             iconClick(e){
                 e.preventDefault()
+                this.floorX=1
+                this.floorY=1
                 this.isDropUlShow = !this.isDropUlShow
+                const f=(data)=>{
+                    data.forEach((item,index)=>{
+                        this.$set(data, index, {...item, isOpen: false})
+                        if((item.children ||[]).length){
+                            f(item.children)
+                        }
+                    })
+                }
+                f(this.copyData)
             },
-            change(newValue){
+            change(newValue,item){
                 const path = newValue.slice(2).split('-').join('.children.').split('.')
                 const reversePath = [...path].reverse()
                 // 获取自身序号
@@ -117,6 +153,37 @@
                 })
                 // 打开自身
                 parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
+                // 动态调整宽度
+                this.floorX = path.filter(item=>item!=='children').length+1
+                let pathStr = path.join('.')
+                this.floorY=0
+                let count=0
+                // 动态调整高度
+                do {
+                    const children = _.get(this.copyData,pathStr+'.children',[])
+                    this.floorY=this.floorY + (children.length ? children.length-1: 0)
+                    count+=2;
+                    pathStr=path.slice(0,path.length-count).join('.')
+                }while (pathStr)
+
+                const findIndex =  this.result.findIndex((res)=>{
+                    const p =_.get(this.copyData,path.splice(0,path.length-2).join('.'),{})
+                    return res[this.reflectKey['value']] === p[this.reflectKey['value']]
+                })
+                if(findIndex>-1){
+                    this.result.splice(findIndex+1,this.result.length)
+                }
+                const key=this.reflectKey['key']
+                const value=this.reflectKey['value']
+                this.result.push({[key]: item[key],[value]: item[value]})
+            }
+        },
+        watch:{
+            result:{
+                handler(v){
+                    this.$emit('input', v)
+                },
+                deep: true
             }
         }
     }
@@ -150,14 +217,12 @@
         }
         .collapse-box{
             position: absolute;
-            width: 100%;
-            min-height: 200px;
+            top: addPX($df-height);
+            z-index: 999;
             background: #fff;
             border: 1px solid #ccc;
-            top: addPX($df-height);
             box-shadow: 1px 1px 3px $shadowCr;
             border-radius: addPX($sm-radius);
-            z-index: 999;
         }
     }
 </style>

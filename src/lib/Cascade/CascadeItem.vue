@@ -1,7 +1,9 @@
 <template>
     <ul class="cascade-item-wrap">
-        <li v-for="(item,index) of listData" :key="index">
-            <div @click="($event)=>{setValue(level+'-'+index)}">
+        <li v-for="(item,index) of listData"
+            :key="index"
+        >
+            <div @click="($event)=>{setValue(level+'-'+index, item)}">
                     <span>
                         {{item[reflectKey['key']]}}
                     </span>
@@ -11,7 +13,7 @@
                          :list-data="item.children || []"
                          :style="{
                                  position: 'absolute',
-                                 top: '0',
+                                 top: 30*index + 'px',
                                  left: 150+'px'
                              }"
                          :selected-items="selectedItems"
@@ -55,14 +57,19 @@
                 }
             }
         },
+        data(){
+          return{
+              color: '#000'
+          }
+        },
         methods:{
-            setValue(newValue, $event){
+            setValue(newValue, item){
                 // 本身出发事件
-                this.$emit('change', newValue, $event)
+                this.$emit('change', newValue, item)
             },
-            change(newValue, $event){
+            change(newValue, item){
                 // 递归出发事件
-                this.$emit('change', newValue, $event)
+                this.$emit('change', newValue, item)
             }
         }
     }
@@ -75,8 +82,8 @@
     .cascade-item-wrap{
         position: absolute;
         box-sizing: border-box;
-        top: addPX($sm-padding);
-        left: addPX($sxx-padding);
+        top: addPX($sm-height);
+        left: addPX($sm-height);
         max-height: 300px;
         border: 1px solid $lineColor;
         margin: 0;
@@ -96,9 +103,11 @@
             padding: 0 addPX($df-padding);
             display: flex;
             font-weight: bold;
-            display: flex;
             &:hover{
                 background: $info;
+            }
+            &:not(:last-of-type){
+                border-bottom: 1px solid $lineColor;
             }
             >div{
                 display: flex;
