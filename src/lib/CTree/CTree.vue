@@ -293,25 +293,12 @@
             }
             // 文件图标
             const createTailsIcon = () => {
-                if (!this.$slots['tails']) {
+                if (!this.$slots['tail']) {
                     return null
                 }
-                return this.$slots['tails'].map(item=>{
-                    const {tag, propsData, listeners, children} = item.componentOptions || {}
-                    const _listeners = {}
-                    Object.keys(listeners || {}).forEach(key=>{
-                        _listeners[key]=(e)=> {
-                            return listeners[key].call(this, data, e)
-                        }
-                    })
-                    return h(tag, {
-                        props: {
-                            ...propsData
-                        },
-                        on:_listeners,
-                        children
-                    },)
-                })
+                if (this.$slots['tail']) {
+                    return h('span', this.$slots['tail'])
+                }
             }
             // 标题
             const createTitle = (data) => {
@@ -405,63 +392,17 @@
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                if(key==='tails'){
-                                    console.log(this.$slots[key])
-                                    return h(
-                                        'span',
-                                        {
-                                            props:{
-                                                slot: 'tails'
-                                            },
-                                            slot: 'tails',
-                                            data:{
-                                                slot: 'tails'
-
-                                            }
+                                const {tag} = this.$slots[key][0].componentOptions
+                                return h(
+                                    tag,
+                                    {
+                                        props: {
+                                            ...this.$slots[key][0].componentOptions.propsData
                                         },
-                                        [
-                                        ...this.$slots[key].map(item=>{
-                                            const {tag, propsData, listeners, children} = item.componentOptions || {}
-                                            const _listeners = {}
-                                            Object.keys(listeners || {}).forEach(key=>{
-                                                _listeners[key]=(e)=> {
-                                                    return listeners[key].call(this, data, e)
-                                                }
-                                            })
-                                            return h(tag, {
-                                                props: {
-                                                    ...propsData
-                                                },
-                                                on:_listeners,
-                                                children
-                                            })
-                                        })
-                                    ])
-                                }else{
-                                    const {tag, propsData, listeners, children} = this.$slots[key][0].componentOptions || {}
-                                    const _listeners = {a: ''}
-                                    Object.keys(listeners || {}).forEach(key=>{
-                                        _listeners[key]=(e)=> {
-                                            return listeners[key].call(this, data, e)
-                                        }
-                                    })
-                                    if(tag){
-                                        return h(
-                                            tag,
-                                            {
-                                                props: {
-                                                    ...propsData
-                                                },
-                                                on:listeners,
-                                                children
-                                            }
-                                        )
-                                    }else {
-                                        return false
+                                        ...this.$slots[key][0].data
                                     }
-                                }
-
-                            }).filter(Boolean)
+                                )
+                            })
                         ]
                     )
                 }
@@ -525,8 +466,10 @@
                                                     ]
                                                 ),
                                                 h(
-                                                    'div',
-                                                    {},
+                                                    'span',
+                                                    {
+                                                        slot: 'tails'
+                                                    },
                                                     [
                                                         createTailsIcon(item),
                                                     ]
