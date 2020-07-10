@@ -23,36 +23,42 @@
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            }
+            listData:[
+                 {
+                      key: '颜色',
+                      value: '0',
+                      expand: true,
+                      children:[
+                          {
+                              key: '冷色',
+                              value: '0-0',
+                              expand: true,
+                          },
+                          {
+                              key: '暖色',
+                              value: '0-1',
+                              expand: true,
+                              children:[
+                                  {
+                                      key: '红色',
+                                      value: '0-1-0',
+                                  },
+                                  {
+                                      key: '橙色',
+                                      value: '0-1-1',
+                                      expand: true,
+                                      children: [
+                                           {
+                                              key: '橙红',
+                                              value: '0-1-1-0',
+                                           },
+                                      ],
+                                  },
+                              ]
+                          },
+                      ]
+                 }
+            ]
         }
     }
 }
@@ -79,40 +85,42 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                        expand: true,
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                expand: true,
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            }
+            listData:[
+                 {
+                      key: '颜色',
+                      value: '0',
+                      expand: true,
+                      children:[
+                          {
+                              key: '冷色',
+                              value: '0-0',
+                              expand: true,
+                          },
+                          {
+                              key: '暖色',
+                              value: '0-1',
+                              expand: true,
+                              children:[
+                                  {
+                                      key: '红色',
+                                      value: '0-1-0',
+                                  },
+                                  {
+                                      key: '橙色',
+                                      value: '0-1-1',
+                                      expand: true,
+                                      children: [
+                                           {
+                                              key: '橙红',
+                                              value: '0-1-1-0',
+                                           },
+                                      ],
+                                  },
+                              ]
+                          },
+                      ]
+                 }
+            ]
         }
     }
 }
@@ -143,39 +151,42 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                expand: true,
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                 {
+                      key: '颜色',
+                      value: '0',
+                      expand: true,
+                      children:[
+                          {
+                              key: '冷色',
+                              value: '0-0',
+                              expand: true,
+                          },
+                          {
+                              key: '暖色',
+                              value: '0-1',
+                              expand: true,
+                              children:[
+                                  {
+                                      key: '红色',
+                                      value: '0-1-0',
+                                  },
+                                  {
+                                      key: '橙色',
+                                      value: '0-1-1',
+                                      expand: true,
+                                      children: [
+                                           {
+                                              key: '橙红',
+                                              value: '0-1-1-0',
+                                           },
+                                      ],
+                                  },
+                              ]
+                          },
+                      ]
+                 }
+            ],
             selectData:[],
         }
     }
@@ -206,39 +217,41 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                id: '014557484S',
-                name: '特殊事务部',
-                expand: true,
-                children:[
-                    {
-                        id: '014557484S-1',
-                        name: '后勤',
-                    },
-                    {
-                        id: '014557484S-2',
-                        name: '业务部',
-                        expand: true,
-                        children:[
-                            {
-                                id: '014557484S-2-1',
-                                name: '一组',
-                            },
-                            {
-                                id: '014557484S-2-2',
-                                name: '二组',
-                                expand: true,
-                                children: [
-                                     {
-                                        id: '014557484S-2-2-0017',
-                                        name: '谢广坤',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                {
+                    id: '014557484S',
+                    name: '特殊事务部',
+                    expand: true,
+                    children:[
+                        {
+                            id: '014557484S-1',
+                            name: '后勤',
+                        },
+                        {
+                            id: '014557484S-2',
+                            name: '业务部',
+                            expand: true,
+                            children:[
+                                {
+                                    id: '014557484S-2-1',
+                                    name: '一组',
+                                },
+                                {
+                                    id: '014557484S-2-2',
+                                    name: '二组',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            id: '014557484S-2-2-0017',
+                                            name: '谢广坤',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
         }
     }
@@ -267,39 +280,41 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                expand: true,
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
         }
     }
@@ -330,39 +345,41 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                expand: true,
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                 {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
         }
     }
@@ -389,39 +406,41 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                expand: true,
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
         }
     }
@@ -453,38 +472,40 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                key: '颜色',
-                value: '0',
-                expand: true,
-                children:[
-                    {
-                        key: '冷色',
-                        value: '0-0',
-                    },
-                    {
-                        key: '暖色',
-                        value: '0-1',
-                        expand: true,
-                        children:[
-                            {
-                                key: '红色',
-                                value: '0-1-0',
-                            },
-                            {
-                                key: '橙色',
-                                value: '0-1-1',
-                                children: [
-                                     {
-                                        key: '橙红',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
             searchStr:'',
         }
@@ -527,36 +548,38 @@ export default {
 export default {
     data(){
         return {
-            listData:{
-                title: '0',
-                value: '0',
-                children:[
-                    {
-                        title: '0-0',
-                        value: '0-0',
-                    },
-                    {
-                        title: '0-1',
-                        value: '0-1',
-                        children:[
-                            {
-                                title: '0-1-0',
-                                value: '0-1-0',
-                            },
-                            {
-                                title: '0-1-1',
-                                value: '0-1-1',
-                                children: [
-                                     {
-                                        title: '0-1-1-0',
-                                        value: '0-1-1-0',
-                                     },
-                                ],
-                            },
-                        ]
-                    },
-                ]
-            },
+            listData:[
+                 {
+                    title: '0',
+                    value: '0',
+                    children:[
+                        {
+                            title: '0-0',
+                            value: '0-0',
+                        },
+                        {
+                            title: '0-1',
+                            value: '0-1',
+                            children:[
+                                {
+                                    title: '0-1-0',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    title: '0-1-1',
+                                    value: '0-1-1',
+                                    children: [
+                                         {
+                                            title: '0-1-1-0',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             selectData:[],
         }
     }

@@ -83,17 +83,10 @@
         name: 'TreeModal',
         components: {},
         props: {
-            // 收束条件
-            conditionProps:{
-                type:String,
-                default(){
-                    return 'node'
-                }
-            },
             listData: {
-                type: Object,
+                type: Array,
                 default() {
-                    return {}
+                    return []
                 }
             },
             reflectKey: {
@@ -158,7 +151,14 @@
                 default(){
                     return []
                 }
-            }
+            },
+            // 收束条件
+            conditionProps:{
+                type:String,
+                default(){
+                    return 'node'
+                }
+            },
         },
         data() {
             return {

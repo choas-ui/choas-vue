@@ -41,9 +41,9 @@
                 }
             },
             listData: {
-                type: Object,
+                type: Array,
                 default() {
-                    return {}
+                    return []
                 }
             },
             reflectKey: {
@@ -87,37 +87,25 @@
                 // 筛选
                 const key = this.reflectKey['key']
                 const filterTree = (data) => {
-                    data.expand = true
-                    if (!(data.children || []).length) {
-                        delete data.children
-
-                        if (data[key].indexOf(v) < 0) {
-                            data = undefined
-                        }
-                    } else {
-                        data.children = [
-                            ...data.children.map(item => filterTree(item)).filter(Boolean)
-                        ]
-                        if (!(data.children || []).length) {
-                            delete data.children
-                        }
-                        if (!(data.children || []).length) {
-                            delete data.children
-
-                            if (data[key].indexOf(v) < 0) {
-                                data = undefined
-                            }
-                        }
-                    }
+                   data.forEach((item, index)=>{
+                       if(item.children){
+                           filterTree(item.children)
+                       }
+                       if(item[key].indexOf(v)>-1 || (item.children||[]).some(item=>item.expand)){
+                           this.$set(item,'expand', true)
+                       }else{
+                           this.$set(item,'expand', false)
+                       }
+                   })
                     return data
                 }
                 let res = null
                 if (v) {
-                    res = filterTree(_.cloneDeep(this.listData))
+                    res = filterTree(_.cloneDeep(this.listData)).filter(item=>item.expand)
                 } else {
                     res = _.cloneDeep(this.listData)
                 }
-                this.copyListData = {...res ? res : {}}
+                this.$set(this,'copyListData', res)
             }
         },
         render(h) {
@@ -140,10 +128,10 @@
             } else {
                 selfPath = ''
             }
-            const data = path ? _.get(this.copyListData, selfPath, {}) : this.copyListData
+            const data = path ? _.get(this.copyListData, selfPath, []) : this.copyListData
 
             // 展开图标
-            const createIconMark = () => {
+            const createIconMark = (data) => {
                 if (!(data.children || []).length) {
                     return null
                 }
@@ -155,7 +143,7 @@
                         },
                         on: {
                             click: () => {
-                                this.copyListData = {..._.set(this.copyListData, selfPath ? selfPath + '.expand' : 'expand', !data.expand)}
+                                this.$set(data, 'expand', !data.expand)
                             }
                         }
                     }, this.$slots['icon-mark'])
@@ -170,13 +158,13 @@
                     },
                     on: {
                         click: () => {
-                            this.copyListData = {..._.set(this.copyListData, selfPath ? selfPath + '.expand' : 'expand', !data.expand)}
+                            this.$set(data, 'expand', !data.expand)
                         }
                     }
                 })
             }
             // 树形连线
-            const createLine = () => {
+            const createLine = (data) => {
                 if (!this.lineStartLv) {
                     return []
                 }
@@ -283,7 +271,7 @@
                 return eleArr
             }
             // 文件图标
-            const createFileIcon = () => {
+            const createFileIcon = (data) => {
                 if (!this.fileIcon && !this.$slots['file-icon']) {
                     return null
                 }
@@ -307,7 +295,7 @@
                 })
             }
             // 文件图标
-            const createTailIcon = () => {
+            const createTailIcon = (data) => {
                 if (!this.$slots['tail']) {
                     return null
                 }
@@ -316,7 +304,7 @@
                 }
             }
             // 标题
-            const createTitle = () => {
+            const createTitle = (data) => {
                 const content = data[this.reflectKey['key']] || ''
                 const index = this.searchStr ? content.indexOf(this.searchStr) : -1
                 const childrenVnode = []
@@ -382,13 +370,13 @@
                 ])
             }
             // 递归树形图标
-            const createTree = () => {
+            const createTree = (data) => {
                 const obj = Object.keys(this.$props).map(key => {
                     return {
                         [key]: this.$props[key]
                     }
                 })
-                return data.expand && children.map((item, index) => {
+                if(data.expand){
                     return h('Tree',
                         {
                             attrs: {
@@ -396,10 +384,8 @@
                             },
                             props: {
                                 ...obj,
-                                'line-start-lv': this.lineStartLv + 1,
-                                key: index,
-                                itemKey: this.itemKey + '-' + index,
-                                'listData': this.copyListData,
+                                lineStartLv: this.lineStartLv + 1,
+                                listData: data.children,
                                 line: this.line,
                                 fileIcon: this.fileIcon,
                                 reflectKey: this.reflectKey,
@@ -422,78 +408,81 @@
                             })
                         ]
                     )
-                })
+                }
+                return null
             }
-            if (!Object.keys(this.copyListData).length) {
+            if (!this.copyListData.length) {
                 return null
             }
             return h(
                 'ul',
                 {},
                 [
-                    h(
-                        'li',
-                        {
-                            class: [
-                                ...classNames({
-                                    [prefix + 'tree-li']: true
-                                }).split(' ')
-                            ],
-                        },
-                        [
-                            h(
-                                'div',
-                                {
-                                    class: []
-                                },
-                                [
-                                    h(
-                                        'div',
-                                        {
-                                            style: {
-                                                height: markIconHeight * 1.5 + 'px'
-                                            }
-                                        },
-                                        [...createLine()]
-                                    ),
-                                    h(
-                                        'div',
-                                        {
-                                            style: {
-                                                display: 'flex',
-                                                flex: 1,
-                                            }
-                                        },
-                                        [
-                                            h(
-                                                'div',
-                                                {
-                                                    style: {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        flex: 1
+                    (data).map(item=>{
+                        return h(
+                            'li',
+                            {
+                                class: [
+                                    ...classNames({
+                                        [prefix + 'tree-li']: true
+                                    }).split(' ')
+                                ],
+                            },
+                            [
+                                h(
+                                    'div',
+                                    {
+                                        class: []
+                                    },
+                                    [
+                                        h(
+                                            'div',
+                                            {
+                                                style: {
+                                                    height: markIconHeight * 1.5 + 'px'
+                                                }
+                                            },
+                                            [...createLine(item)]
+                                        ),
+                                        h(
+                                            'div',
+                                            {
+                                                style: {
+                                                    display: 'flex',
+                                                    flex: 1,
+                                                }
+                                            },
+                                            [
+                                                h(
+                                                    'div',
+                                                    {
+                                                        style: {
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            flex: 1
+                                                        },
                                                     },
-                                                },
-                                                [
-                                                    createIconMark(),
-                                                    createFileIcon(),
-                                                    createTitle()
-                                                ]
-                                            ),
-                                            h(
-                                                'div',
-                                                {},
-                                                [
-                                                    createTailIcon(),
-                                                ]
-                                            )
-                                        ]
-                                    ),
-                                ]
-                            ),
-                            createTree()
-                        ]
-                    )
+                                                    [
+                                                        createIconMark(item),
+                                                        createFileIcon(item),
+                                                        createTitle(item)
+                                                    ]
+                                                ),
+                                                h(
+                                                    'div',
+                                                    {},
+                                                    [
+                                                        createTailIcon(item),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                    ]
+                                ),
+                                createTree(item)
+                            ]
+                        )
+                    })
                 ]
             )
         }

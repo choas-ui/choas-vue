@@ -129,10 +129,10 @@
                 }
             },
             listData: {
-                type: Object,
+                type: Array,
                 required: true,
                 default() {
-                    return {}
+                    return []
                 }
             },
             value: {

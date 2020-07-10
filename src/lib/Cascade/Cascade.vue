@@ -30,7 +30,14 @@
                  top: '-5px',
                   right: '-5px'
             }"  width="40" height="40" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
-            <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" :conditionProps="conditionProps" />
+            <template v-for="item in copyData">
+                <CascadeItem
+                        :item-data="item"
+                        :reflect-key="reflectKey"
+                        @change="change"
+                        :lv="0" :conditionProps="conditionProps" />
+            </template>
+
         </div>
     </div>
 </template>
@@ -46,9 +53,9 @@
         },
         props:{
             listData:{
-                type: Object,
+                type: Array,
                 default(){
-                    return {}
+                    return []
                 }
             },
             cascadeData:{
@@ -96,7 +103,11 @@
             };
         },
         mounted() {
-            this.copyData = [_.clone(this.listData)]
+            this.copyData = this.addInfo(_.clone(this.listData), '0')
+            this.copyData.forEach((item, index)=>{
+                this.$set(this.copyData, index, {...item, isOpen: true})
+
+            })
         },
         computed:{
             getSelectWrapClass(){
@@ -122,6 +133,20 @@
             }
         },
         methods: {
+            addInfo(data, parentId){
+                data.forEach((item, index)=>{
+                    if(!item[this.conditionProps]){
+                        data[index] = undefined
+                    }
+                    item.parentId=parentId;
+                    item.id=parentId+'-'+index;
+                    if((item.children || []).length){
+                        this.addInfo(item.children,item.id)
+                        item.children=item.children.filter(Boolean)
+                    }
+                })
+                return data
+            },
             iconClick(e){
                 e.preventDefault()
                 this.floorX=1
@@ -135,24 +160,23 @@
                         }
                     })
                 }
-                f(this.copyData)
+                if(!this.isDropUlShow){
+                    f(this.copyData)
+                }
             },
-            change(newValue,item){
-                const path = newValue.slice(2).split('-').join('.children.').split('.')
-                const reversePath = [...path].reverse()
-                // 获取自身序号
-                const [firstPath, ...parentPathReverse] = reversePath
-                // 获取父元素路径
-                const parentPath = [...parentPathReverse].reverse().join('.')
+            change(item){
+                const path = item.id.slice(2).split('-').join('.children.').split('.')
+                const parentPath = item.parentId.slice(2).split('-').join('.children.').split('.')
                 // 获取父元素值
-                const parentValue =parentPath!==''? _.get(this.copyData, parentPath,{}): this.copyData
+                const parentValue =parentPath !== ''? _.get(this.copyData, parentPath,{}): this.copyData
+
                 // 获取自身值
-                const selfValue =  _.get(this.copyData, path,{})
+                const selfValue =  item
                 // 获取自身序数
-                const selfIndex = parseInt(firstPath, 10)
+                const selfIndex = parseInt(item.id.slice(item.id.length-1), 10)
                 // 关闭所有同级及子集目录
                 const fClose=(data,selfIndex)=>{
-                    data.forEach((item,index)=>{
+                    (data || []).forEach((item,index)=>{
                         if(selfIndex!==null){
                             if(index !== selfIndex){
                                 data.splice(index,1,{...item, isOpen: false})
@@ -165,9 +189,9 @@
                         }
                     })
                 }
-                fClose(parentValue, selfIndex)
+                fClose(parentValue.children, selfIndex)
                 // 打开自身
-                parentValue.splice(selfIndex,1,{...selfValue, isOpen: !selfValue.isOpen})
+                this.$set(item, 'isOpen', true)
                 // 动态调整宽度
                 this.floorX = path.filter(item=>item!=='children').length+1
                 let pathStr = path.join('.')
@@ -182,9 +206,11 @@
                 }while (pathStr)
                 const p =_.get(this.copyData,path.splice(0,path.length-2).join('.'),{})
                 const findIndex =  this.result.findIndex((res)=>{
+                    if(!p[this.reflectKey['value']]){
+                        return 0
+                    }
                     return res[this.reflectKey['value']] === p[this.reflectKey['value']]
                 })
-
                 if(findIndex>-1){
                     this.result.splice(findIndex+1,this.result.length)
                 }

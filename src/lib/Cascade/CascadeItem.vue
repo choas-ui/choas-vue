@@ -1,32 +1,31 @@
 <template>
     <ul class="cascade-item-wrap">
-        <template v-for="(item,index) of listData">
-            <li v-if="item[conditionProps]"
-                :key="index"
-            >
-                <div @click="($event)=>{setValue(level+'-'+index, item)}">
+        <li>
+            <div @click="($event)=>{setValue(itemData)}">
                     <span>
-                        {{item[reflectKey['key']]}}
-
+                        {{itemData[reflectKey['key']]}}
                     </span>
-                    <Icon style="position:absolute;right: 5px" v-if="item.children" type="svg" icon-name="choas-arrow-right" />
-                </div>
-                <CascadeItem v-if="item.isOpen && item.children"
-                             :list-data="item.children || []"
+                <Icon v-if="itemData.children.length"
+                      icon-name="choas-arrow-right"
+                      style="position:absolute;right: 5px"
+                />
+            </div>
+            <template  v-if="itemData.isOpen">
+                <CascadeItem v-for="(item, index) in itemData.children"
+                             :item-data="item"
                              :style="{
-                                 position: 'absolute',
-                                 top: 30*index + 'px',
-                                 left: 150+'px'
-                             }"
+                                     position: 'absolute',
+                                     top:30*index + 'px',
+                                     left: 150+'px'
+                                 }"
                              :selected-items="selectedItems"
                              :conditionProps="conditionProps"
                              :reflect-key="reflectKey"
-                             :level="level+'-'+index"
-                             :lv="lv+1"
                              @change="change"
                 />
-            </li>
-        </template>
+            </template>
+
+        </li>
     </ul>
 </template>
 
@@ -34,10 +33,10 @@
     export default {
         name: 'CascadeItem',
         props:{
-            listData:{
-                type: Array,
+            itemData:{
+                type: Object,
                 default(){
-                    return []
+                    return {}
                 }
             },
             lv:{
@@ -73,13 +72,13 @@
           }
         },
         methods:{
-            setValue(newValue, item){
+            setValue(item){
                 // 本身出发事件
-                this.$emit('change', newValue, item)
+                this.$emit('change', item)
             },
-            change(newValue, item){
+            change(item){
                 // 递归出发事件
-                this.$emit('change', newValue, item)
+                this.$emit('change', item)
             }
         }
     }
@@ -101,9 +100,7 @@
         z-index: 999;
         background: #fff;
         text-align: left;
-        border-radius: addPX($sm-radius);
-        box-shadow: 1px 1px 4px $maskBg;
-        >li{
+        &>li{
             list-style: none;
             height: addPX($sm-height);
             line-height: addPX($sm-height);
@@ -112,6 +109,8 @@
             padding: 0 addPX($df-padding);
             display: flex;
             font-size: addPX($lg-fs);
+            border-radius: addPX($sm-radius);
+            box-shadow: 1px 1px 4px $maskBg;
             &:hover{
                 background: $info;
             }
