@@ -7,8 +7,7 @@
                    @focus="isDropUlShow = true"
                    :value="getSelectedTitle"
             />
-            <Icon type="svg"
-                  icon-name="choas-arrow-down"
+            <Icon con-name="choas-arrow-down"
                   :style="{
                        position: 'absolute',
                        right: '10px',
@@ -30,7 +29,7 @@
                 position: 'absolute',
                  top: '-5px',
                   right: '-5px'
-            }"  width="40" height="40" type="svg" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
+            }"  width="40" height="40" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
             <CascadeItem :list-data="copyData" :reflect-key="reflectKey" @change="change" :lv="0" :conditionProps="conditionProps" />
         </div>
     </div>

@@ -4,6 +4,17 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-09</span>
+    <b>v 0.1.12</b>
+  </p>
+  
+  <ol>
+     <li>移除 Icon 组件上的type属性。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-09</span>
     <b>v 0.1.11</b>
   </p>
   

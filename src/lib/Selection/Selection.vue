@@ -9,8 +9,7 @@
                    @focus="clearTimeHandle"
                    :value="getSelectedTitle"
             />
-            <Icon type="svg"
-                  icon-name="choas-arrow-down"
+            <Icon icon-name="choas-arrow-down"
                   :style="{
                        position: 'absolute',
                        right: '10px',

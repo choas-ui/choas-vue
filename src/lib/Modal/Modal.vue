@@ -34,8 +34,7 @@
             </div>
             <div v-if="!controller" :class="getTitleController">
                 <slot name="controller">
-                    <Icon type="svg"
-                          icon-name="choas-close"
+                    <Icon icon-name="choas-close"
                           width="30"
                           height="30"
                           :color="controllerColor"

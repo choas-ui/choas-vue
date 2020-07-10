@@ -57,8 +57,7 @@
                       :key="item[reflectKey['value']]"
                    >
                        <b>{{item[reflectKey['key']]}}</b>
-                       <Icon type="svg"
-                             icon-name="choas-close"
+                       <Icon icon-name="choas-close"
                              color="#fff"
                              height="30"
                              width="30"

@@ -19,7 +19,7 @@
                 </template>
                 <span :class="getMarkIconClass">
                     <slot name="icon-mark">
-                        <Icon type="svg" icon-name="choas-fill-arrow-right"/>
+                        <Icon icon-name="choas-fill-arrow-right"/>
                     </slot>
                 </span>
                 <slot v-if="'file-icon' in $scopedSlots" name="file-icon">

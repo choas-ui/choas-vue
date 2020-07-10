@@ -15,9 +15,9 @@
 ---
   <small>
     <ul>
-      <li>ft 字体图标</li>
-      <li>svg 字体图标</li>
-      <li>img 字体图标</li>
+      <li>fontClass 字体图标</li>
+      <li>iconName  svg字体图标</li>
+      <li>src 图片图标</li>
       </ul>
   </small>
   <small>
@@ -28,17 +28,14 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-clipboard"
+        font-class="fa fa-clipboard"
         color="#666"
     />
     <Icon
-        type="svg"
         iconName="choas-close"
         color="red"
     />
     <Icon
-        type="img"
         src="/assets/img/iconExp/snowman.jpg"
     />
 </template>
@@ -55,21 +52,18 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-wpexplorer"
+        font-class="fa fa-wpexplorer"
         width="40"
         height="40"
         color="#666"
     />
     <Icon
-        type="svg"
         iconName="choas-forbid"
         width="40"
         height="40"
         color="red"
     />
     <Icon
-        type="img"
         width="80"
         height="80"
         src="/assets/img/iconExp/earth.jpg"
@@ -88,15 +82,13 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-bicycle"
+        font-class="fa fa-bicycle"
         width="110"
         height="80"
         font-size="80"
         color="#c3ff0d"
     />
     <Icon
-        type="svg"
         iconName="choas-more"
         width="80"
         height="80"
@@ -115,24 +107,21 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-chrome"
+        font-class="fa fa-chrome"
         color="green"
         width="40"
         height="40"
         font-size="30"
     />
     <Icon
-        type="ft"
-        iconName="fa fa-medkit"
+        font-class="fa fa-medkit"
         color="red"
         width="40"
         height="40"
         font-size="30"
     />
     <Icon
-        type="ft"
-        iconName="fa fa-telegram"
+        font-class="fa fa-telegram"
         color="#ff3677"
         width="40"
         height="40"
@@ -152,7 +141,6 @@
 ```html
 <template>
     <Icon
-        type="img"
         width="80"
         height="80"
         src="/assets/img/iconExp/tl.jpg"
@@ -171,8 +159,7 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-spotify"
+        font-class="fa fa-spotify"
         color="#23b320"
         width="40"
         height="40"
@@ -192,8 +179,7 @@
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-yelp"
+        font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"
         width="40"
@@ -201,8 +187,7 @@
         font-size="30"
     />
     <Icon
-        type="ft"
-        iconName="fa fa-yelp"
+        font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"
         width="40"
@@ -233,8 +218,7 @@ export default {
 ```html
 <template>
     <Icon
-        type="ft"
-        iconName="fa fa-yelp"
+        font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"
         width="40"
@@ -297,12 +281,12 @@ export default {
 ---
   |名称|值|类型|默认值|说明|
   |:-:|:---:|---|---|:---|
-  |type|'ft' 'svg' 'img'|String|无|指定图标渲染类型|
   |width|无| String | '16'|图标宽|
   |height|无| String | '16'|图标高|
+  |fontClass|无| String | 无|提供字体图标名称|
   |iconName|无| String | 无|提供图标名称|
-  |fontSize|无| String| '16'|控制字体图标大小|
   |src|无| String | 无 |图片图标路径|
+  |fontSize|无| String| '16'|控制字体图标大小|
   |color|无| String | 无 |字体及svg图标的颜色|
   |activeColor|无| String | 无 |字体及svg图标的激活颜色,仅在绑定事件后触发|
   |class-name|无|String|''|组件最外层添加一个新的类名|

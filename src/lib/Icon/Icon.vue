@@ -6,15 +6,10 @@
           @mouseleave="turnColor"
           :title="placeholder"
     >
-        <template v-if="type === 'ft'">
-            <template v-if="iconName">
-                <i :class="iconName" />
-            </template>
-            <template v-else>
-                <i :class="icon">{{iconContent}}</i>
-            </template>
+        <template v-if="fontClass || iconContent">
+            <i :class="fontClass">{{iconContent}}</i>
         </template>
-        <template v-if="type === 'svg'">
+        <template v-if="iconName">
             <svg v-if="Object.keys(svgLib.default).includes(iconName)"
                  :width="width+'px'"
                  :height="height+'px'"
@@ -28,7 +23,7 @@
                 <use :[xlinkHref]="`#${iconName}`"></use>
             </svg>
         </template>
-        <template v-if="type==='img'">
+        <template v-if="src">
             <img :src="src"/>
         </template>
     </span>
@@ -92,6 +87,12 @@
                 }
             },
             src: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            fontClass: {
                 type: String,
                 default() {
                     return ''
