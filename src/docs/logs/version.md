@@ -4,6 +4,28 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-10</span>
+    <b>v 0.1.14</b>
+  </p>
+  
+  <ol>
+     <li>修复 InputTreeModal 搜索bug</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.13</b>
+  </p>
+  
+  <ol>
+     <li>Tree TreeModal cascade InputTreeModal 传入列表改为数组</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
     <b>v 0.1.12</b>
   </p>
   
