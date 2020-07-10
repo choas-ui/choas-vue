@@ -184,17 +184,22 @@
             },
             addTreeListHandle(){
                 const {fn, args,key}= this.addTreeList()
-                fn({...args,[key]: this.cascadeData[0][this.reflectKey['value']]}).then(res=>{
-                    if(res.code===200){
-                        this.$set(this,'list_data', res.data)
-                        if(this.$listeners['getListData']){
-                            this.$emit('getListData',  res.data)
+                const value = this.cascadeData[0][this.reflectKey['value']]
+                if(value){
+                    fn({...args,[key]: value}).then(res=>{
+                        if(res.code===200){
+                            this.$set(this,'list_data', res.data)
+                            if(this.$listeners['getListData']){
+                                this.$emit('getListData',  res.data)
+                            }
+                            this.isCascadeShow = false
+                        }else{
+                            alert('添加失败')
                         }
-                        this.isCascadeShow = false
-                    }else{
-                        alert('添加失败')
-                    }
-                })
+                    })
+                }else{
+                    alert('请选定节点')
+                }
             }
         },
         watch:{
