@@ -1,6 +1,5 @@
 import CIcon from './CIcon'
 import _ from 'lodash'
-import CTreeModal from "../CTreeModal/CTreeModal";
 
 // 支持按需引用
 CIcon.install = function (Vue) {
