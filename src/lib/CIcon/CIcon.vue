@@ -33,7 +33,7 @@
     import classNames from 'classnames'
 
     export default {
-        name: 'Icon',
+        name: 'CIcon',
         props: {
             iconName: {
                 type: String,

@@ -40,7 +40,7 @@
     import classNames from 'classnames'
     import _ from 'lodash'
     export default {
-        name: 'Selection',
+        name: 'CSelection',
         props:{
             listData:{
                 type: Array,

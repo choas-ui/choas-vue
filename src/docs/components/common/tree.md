@@ -1,8 +1,6 @@
 #### 树形组件
 ---
-  <small>
-    层次分明的可选择控件。
-  </small>
+层次分明的可选择控件。
 
 #### 数据 listData
 ---
@@ -69,9 +67,7 @@ export default {
 
 #### 展开 expand
 ---
-   <small>
-     数据中的expand控制默认展开。
-   </small> 
+  数据中的expand控制默认展开。
 
 :::demo
 ```html
@@ -131,11 +127,10 @@ export default {
 
 #### 双向绑定 v-model  (未完成，目前不返回值)
 ---
-   <small>
-     <p>双向绑定的数据。</p>
-     <p>返回的数据格式与初始值一致。</p>
-     <p>返回的值与reflectKey相关。</p>
-   </small> 
+  <p>双向绑定的数据。</p>
+  <p>返回的数据格式与初始值一致。</p>
+  <p>返回的值与reflectKey相关。</p>
+
    
 :::demo
 ```html
@@ -198,9 +193,8 @@ export default {
 
 #### 数据关联 reflectKey
 ---
-   <small>
-     用于指定映射键、值关联。
-   </small> 
+  用于指定映射键、值关联。
+
 
 :::demo
 ```html
@@ -263,9 +257,7 @@ export default {
 
 #### 显示连线 line
 ---
-   <small>
-     显示数据间的层级连线。
-   </small> 
+  显示数据间的层级连线。
    
 :::demo
 ```html
@@ -326,11 +318,9 @@ export default {
 
 #### 类型图标 fileIcon
 ---
-   <small>
-     <p>作为属性出现的fileIcon会显示默认图标。</p>
-     <p>作为插槽出现的file-icon会替换默认图标。</p>
-     <p>目前不支持多种Icon。</p>
-   </small> 
+  <p>作为属性出现的fileIcon会显示默认图标。</p>
+  <p>作为插槽出现的file-icon会替换默认图标。</p>
+  <p>目前不支持多种Icon。</p>
    
 :::demo
 ```html
@@ -397,9 +387,10 @@ export default {
             :list-data="listData"
             v-model="selectData"
         >
-            <Icon
+            <CIcon
                 slot="file-icon"
-                icon-name="choas-lists"/>
+                icon-name="choas-lists"
+            />
         </CTree>
     </template>
 <script>
@@ -443,7 +434,7 @@ export default {
             ],
             selectData:[],
         }
-    }
+    },
 }
 </script>
 ```
@@ -451,10 +442,8 @@ export default {
 
 #### 搜索 searchStr
 ---
-   <small>
-     <p>可搜索的tree。</p>
-     <p>给定markColor标注搜索到的字体颜色。</p>
-   </small> 
+  <p>可搜索的tree。</p>
+  <p>给定markColor标注搜索到的字体颜色。</p>
    
 :::demo
 ```html
@@ -515,17 +504,18 @@ export default {
 ```
 :::
 
+#### 后置操作按钮组 tail
+---
+  <p>后置操作按钮组。</p>
+  <p>返回当前行数据及event。</p>
 
-
-完成后删除示例↓↓↓↓↓
 :::demo
 ```html
     <template>
         <CTree
             fileIcon
-            line
             :list-data="listData"
-            :selectData="selectData"
+            v-model="selectData"
         >
             <CIcon
                 slot="icon-mark"
@@ -534,11 +524,18 @@ export default {
             <CIcon
                 slot="file-icon"
                 icon-name="choas-file-icon"/>
-            <CIcon
-                slot="tail"
-                color="red"
-                icon-name="choas-square-add"
-            />
+            <template slot="tails">
+                <CIcon
+                    color="red"
+                    icon-name="choas-square-add"
+                    @click="logs"
+                />
+                <CIcon
+                    color="red"
+                    icon-name="choas-delete"
+                    @click="logs"
+                />
+            </template>
         </CTree>
     </template>
 <script>
@@ -546,28 +543,30 @@ export default {
     data(){
         return {
             listData:[
-                 {
-                    title: '0',
+                {
+                    key: '颜色',
                     value: '0',
+                    expand: true,
                     children:[
                         {
-                            title: '0-0',
+                            key: '冷色',
                             value: '0-0',
                         },
                         {
-                            title: '0-1',
+                            key: '暖色',
                             value: '0-1',
+                            expand: true,
                             children:[
                                 {
-                                    title: '0-1-0',
+                                    key: '红色',
                                     value: '0-1-0',
                                 },
                                 {
-                                    title: '0-1-1',
+                                    key: '橙色',
                                     value: '0-1-1',
                                     children: [
                                          {
-                                            title: '0-1-1-0',
+                                            key: '橙红',
                                             value: '0-1-1-0',
                                          },
                                     ],
@@ -578,8 +577,12 @@ export default {
                 }
             ],
             selectData:[],
+            searchStr:'',
         }
-    }
+    },
+    methods:{
+        logs(a,b,c){console.log(a,b,c)}
+    },
 }
 </script>
 ```

@@ -1,10 +1,9 @@
-<!--suppress JSAnnotator -->
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
 
     export default {
-        name: 'Tree',
+        name: 'CTree',
         function: true,
         props: {
             prefix: {
@@ -293,13 +292,26 @@
                 })
             }
             // 文件图标
-            const createTailIcon = () => {
-                if (!this.$slots['tail']) {
+            const createTailsIcon = () => {
+                if (!this.$slots['tails']) {
                     return null
                 }
-                if (this.$slots['tail']) {
-                    return h('div', this.$slots['tail'])
-                }
+                return this.$slots['tails'].map(item=>{
+                    const {tag, propsData, listeners, children} = item.componentOptions || {}
+                    const _listeners = {}
+                    Object.keys(listeners || {}).forEach(key=>{
+                        _listeners[key]=(e)=> {
+                            return listeners[key].call(this, data, e)
+                        }
+                    })
+                    return h(tag, {
+                        props: {
+                            ...propsData
+                        },
+                        on:_listeners,
+                        children
+                    },)
+                })
             }
             // 标题
             const createTitle = (data) => {
@@ -393,17 +405,63 @@
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                const {tag} = this.$slots[key][0].componentOptions
-                                return h(
-                                    tag,
-                                    {
-                                        props: {
-                                            ...this.$slots[key][0].componentOptions.propsData
+                                if(key==='tails'){
+                                    console.log(this.$slots[key])
+                                    return h(
+                                        'span',
+                                        {
+                                            props:{
+                                                slot: 'tails'
+                                            },
+                                            slot: 'tails',
+                                            data:{
+                                                slot: 'tails'
+
+                                            }
                                         },
-                                        ...this.$slots[key][0].data
+                                        [
+                                        ...this.$slots[key].map(item=>{
+                                            const {tag, propsData, listeners, children} = item.componentOptions || {}
+                                            const _listeners = {}
+                                            Object.keys(listeners || {}).forEach(key=>{
+                                                _listeners[key]=(e)=> {
+                                                    return listeners[key].call(this, data, e)
+                                                }
+                                            })
+                                            return h(tag, {
+                                                props: {
+                                                    ...propsData
+                                                },
+                                                on:_listeners,
+                                                children
+                                            })
+                                        })
+                                    ])
+                                }else{
+                                    const {tag, propsData, listeners, children} = this.$slots[key][0].componentOptions || {}
+                                    const _listeners = {a: ''}
+                                    Object.keys(listeners || {}).forEach(key=>{
+                                        _listeners[key]=(e)=> {
+                                            return listeners[key].call(this, data, e)
+                                        }
+                                    })
+                                    if(tag){
+                                        return h(
+                                            tag,
+                                            {
+                                                props: {
+                                                    ...propsData
+                                                },
+                                                on:listeners,
+                                                children
+                                            }
+                                        )
+                                    }else {
+                                        return false
                                     }
-                                )
-                            })
+                                }
+
+                            }).filter(Boolean)
                         ]
                     )
                 }
@@ -463,14 +521,14 @@
                                                     [
                                                         createIconMark(item),
                                                         createFileIcon(item),
-                                                        createTitle(item)
+                                                        createTitle(item),
                                                     ]
                                                 ),
                                                 h(
                                                     'div',
                                                     {},
                                                     [
-                                                        createTailIcon(item),
+                                                        createTailsIcon(item),
                                                     ]
                                                 )
                                             ]

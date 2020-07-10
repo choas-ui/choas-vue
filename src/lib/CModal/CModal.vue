@@ -57,7 +57,7 @@
     import classNames from 'classnames'
 
     export default {
-        name: 'Modal',
+        name: 'CModal',
         props: {
             prefix: {
                 type: String,

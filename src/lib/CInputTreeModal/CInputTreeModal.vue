@@ -58,7 +58,7 @@
 </template>
 <script>
     export default {
-        name: 'InputTreeModal',
+        name: 'CInputTreeModal',
         props: {
             conditionProps:{
                 type:String,

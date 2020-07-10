@@ -80,7 +80,7 @@
 <script>
     import _ from 'lodash'
     export default {
-        name: 'TreeModal',
+        name: 'CTreeModal',
         components: {},
         props: {
             listData: {

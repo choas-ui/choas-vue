@@ -48,7 +48,7 @@
     import _ from 'lodash'
     import CascadeItem from "./CCascadeItem";
     export default {
-        name: 'Cascade',
+        name: 'CCascade',
         comments:{
             CascadeItem
         },

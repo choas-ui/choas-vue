@@ -9,7 +9,7 @@
 <script>
     import classNames from 'classnames'
     export default {
-        name: 'Button',
+        name: 'CButton',
         props:{
             prefix: {
                 type: String,

@@ -32,7 +32,7 @@
 
 <script>
     export default {
-        name: 'CascadeItem',
+        name: 'CCascadeItem',
         props:{
             itemData:{
                 type: Object,
