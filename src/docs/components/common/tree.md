@@ -6,9 +6,10 @@
 
 #### 数据 listData
 ---
-   <small>
-     数据结构应为对象（字典）数组（列表）交替。
-   </small> 
+  <ul>
+    <li>listData 数组。</li>
+    <li>expand 默认展开。</li>
+  </ul>
 
 :::demo
 ```html
