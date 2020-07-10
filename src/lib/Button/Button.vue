@@ -125,6 +125,7 @@
         border: none;
         outline: none;
         color: #666;
+        line-height: normal;
         &-block{
             display: block;
             width: 100%;

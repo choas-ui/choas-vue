@@ -27,7 +27,7 @@
         export default {
             data(){
                 return{
-                    canBeEdited: true,
+                    canBeEdited: false,
                     selectedData: [
                         {
                             id: '014557484S-2-2-0017',

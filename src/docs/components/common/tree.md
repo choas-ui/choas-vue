@@ -399,7 +399,6 @@ export default {
         >
             <Icon
                 slot="file-icon"
-                type="svg"
                 icon-name="choas-lists"/>
         </Tree>
     </template>
@@ -530,16 +529,13 @@ export default {
         >
             <Icon
                 slot="icon-mark"
-                type="svg"
                 icon-name="choas-square-add"
             />
             <Icon
                 slot="file-icon"
-                type="svg"
                 icon-name="choas-file-icon"/>
             <Icon
                 slot="tail"
-                type="svg"
                 color="red"
                 icon-name="choas-square-add"
             />

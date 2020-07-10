@@ -1,7 +1,7 @@
 <template>
     <span>
         <template v-if="!canBeEdited">
-          <div class="input-like">
+          <div class="input-like input-like-unedited">
             <template v-if="selectedData.length">
               <span
                       v-for="(item, index) of selectedData"
@@ -202,6 +202,9 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         cursor: pointer;
+        &-unedited{
+            border: none;
+        }
         .tag-span {
             height: 28px;
             line-height: 28px;

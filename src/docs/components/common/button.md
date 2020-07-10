@@ -75,7 +75,6 @@
         <Button>
             <Icon
                 slot="left"
-                type="svg"
                 color="#fff"
                 iconName="choas-search"
              />
@@ -84,7 +83,6 @@
         <Button>
             <Icon
                 slot="right"
-                type="svg"
                 color="#fff"
                 iconName="choas-delete"
              />
