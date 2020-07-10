@@ -237,7 +237,8 @@
                     return  {
                         fn:()=>new Promise(resolve => resolve({code:200})),
                         args:{},
-                        key: 'pkId'
+                        key: 'pkId',
+                        value: 'value',
                     }
                  },
                  getListData(v){

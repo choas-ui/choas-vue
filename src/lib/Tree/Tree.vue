@@ -87,7 +87,7 @@
                 // 筛选
                 const key = this.reflectKey['key']
                 const filterTree = (data) => {
-                   data.forEach((item, index)=>{
+                   data.forEach((item)=>{
                        if(item.children){
                            filterTree(item.children)
                        }
@@ -115,13 +115,6 @@
                 _.result(this.$slots, "'icon-mark'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
             const prefix = this.prefix ? `${this.prefix}-` : ''
             let path = this.itemKey.slice(2).split('-').join('.children.')
-            let childrenPath = ''
-            if (path) {
-                childrenPath = 'children.' + path + '.children'
-            } else {
-                childrenPath = 'children'
-            }
-            const children = _.get(this.copyListData, childrenPath, [])
             let selfPath = ''
             if (path) {
                 selfPath = 'children.' + path
@@ -164,7 +157,7 @@
                 })
             }
             // 树形连线
-            const createLine = (data) => {
+            const createLine = () => {
                 if (!this.lineStartLv) {
                     return []
                 }
@@ -295,7 +288,7 @@
                 })
             }
             // 文件图标
-            const createTailIcon = (data) => {
+            const createTailIcon = () => {
                 if (!this.$slots['tail']) {
                     return null
                 }
@@ -442,7 +435,7 @@
                                                     height: markIconHeight * 1.5 + 'px'
                                                 }
                                             },
-                                            [...createLine(item)]
+                                            [...createLine()]
                                         ),
                                         h(
                                             'div',

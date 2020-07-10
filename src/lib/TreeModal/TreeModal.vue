@@ -19,7 +19,7 @@
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
                     <template v-if="addTreeList">
-                        <Button v-show="!isCascadeShow" @click="isCascadeShow = true">新增</Button>
+                        <Button v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</Button>
                         <Button v-show="isCascadeShow" @click="addTreeListHandle">保存</Button>
                         <Button v-show="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
                     </template>
@@ -183,10 +183,10 @@
                 this.selectData = this.value
             },
             addTreeListHandle(){
-                const {fn, args,key}= this.addTreeList()
-                const value = this.cascadeData[0][this.reflectKey['value']]
+                const {fn, args,key, value}= this.addTreeList()
+                const node = this.cascadeData[0][this.reflectKey['value']]
                 if(value){
-                    fn({...args,[key]: value}).then(res=>{
+                    fn({...args,[key]: node, [value]: this.searchStr}).then(res=>{
                         if(res.code===200){
                             this.$set(this,'list_data', res.data)
                             if(this.$listeners['getListData']){
