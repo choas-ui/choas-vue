@@ -1,8 +1,8 @@
-import Selection from './Selection'
+import CSelection from './Selection'
 
 // 支持按需引用
-Selection.install = function (Vue) {
-    Vue.component(Selection.name, Selection);
+CSelection.install = function (Vue) {
+    Vue.component(CSelection.name, CSelection);
 };
 
-export default Selection;
+export default CSelection;

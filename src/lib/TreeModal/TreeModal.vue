@@ -221,6 +221,13 @@
                 if(!v){
                     this.list_data=_.cloneDeep(this.listData)
                 }
+            },
+            listData:{
+                handler(v){
+                    this.$set(this, 'list_data', _.cloneDeep(v))
+                },
+                deep: true,
+                immediate: true
             }
         }
     }

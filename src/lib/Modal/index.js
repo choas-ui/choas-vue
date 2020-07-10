@@ -1,8 +1,8 @@
-import Modal from './Modal'
+import CModal from './Modal'
 
 // 支持按需引用
-Modal.install = function (Vue) {
-    Vue.component(Modal.name, Modal);
+CModal.install = function (Vue) {
+    Vue.component(CModal.name, CModal);
 };
 
-export default Modal;
+export default CModal;

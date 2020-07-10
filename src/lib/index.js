@@ -1,24 +1,24 @@
-import Button from './Button'
-import Cascade from './Cascade'
-import Icon from './Icon'
-import InputTreeModal from './InputTreeModal'
-import Modal from './Modal'
-import Selection from './Selection'
-import Tree from './Tree'
-import TreeModal from './TreeModal'
+import CButton from './Button'
+import CCascade from './Cascade'
+import CIcon from './Icon'
+import CInputTreeModal from './InputTreeModal'
+import CModal from './Modal'
+import CSelection from './Selection'
+import CTree from './Tree'
+import CTreeModal from './TreeModal'
 
 
 
 
 const components = [
-    Button,
-    Cascade,
-    Icon,
-    InputTreeModal,
-    Modal,
-    Selection,
-    Tree,
-    TreeModal
+    CButton,
+    CCascade,
+    CIcon,
+    CInputTreeModal,
+    CModal,
+    CSelection,
+    CTree,
+    CTreeModal
 ];
 
 const install = function (Vue) {
@@ -32,5 +32,12 @@ if (typeof window.Vue !== "undefined" && window.Vue) {
 
 export default {
     install,
-    TreeModal
+    CButton,
+    CCascade,
+    CIcon,
+    CInputTreeModal,
+    CModal,
+    CSelection,
+    CTree,
+    CTreeModal
 }

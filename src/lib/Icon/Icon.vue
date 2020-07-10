@@ -35,15 +35,6 @@
     export default {
         name: 'Icon',
         props: {
-            type: {
-                type: String,
-                validator(value) {
-                    return !value || ['svg', 'ft', 'img'].includes(value)
-                },
-                default() {
-                    return ''
-                }
-            },
             iconName: {
                 type: String,
                 default() {

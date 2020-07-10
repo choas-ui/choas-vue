@@ -30,8 +30,9 @@
                  top: '-5px',
                   right: '-5px'
             }"  width="40" height="40" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
-            <template v-for="item in copyData">
+            <template v-for="(item,index) in copyData">
                 <CascadeItem
+                        :key="index"
                         :item-data="item"
                         :reflect-key="reflectKey"
                         @change="change"
@@ -169,9 +170,6 @@
                 const parentPath = item.parentId.slice(2).split('-').join('.children.').split('.')
                 // 获取父元素值
                 const parentValue =parentPath !== ''? _.get(this.copyData, parentPath,{}): this.copyData
-
-                // 获取自身值
-                const selfValue =  item
                 // 获取自身序数
                 const selfIndex = parseInt(item.id.slice(item.id.length-1), 10)
                 // 关闭所有同级及子集目录
@@ -225,6 +223,17 @@
                     this.$emit('input', v)
                 },
                 deep: true
+            },
+            listData:{
+                handler(v){
+                    this.copyData = this.addInfo(_.clone(v), '0')
+                    this.copyData.forEach((item, index)=>{
+                        this.$set(this.copyData, index, {...item, isOpen: true})
+
+                    })
+                },
+                deep: true,
+                immediate: true
             }
         }
     }

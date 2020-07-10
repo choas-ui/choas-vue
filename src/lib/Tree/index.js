@@ -1,8 +1,8 @@
-import Tree from './Tree'
+import CTree from './Tree'
 
 // 支持按需引用
-Tree.install = function (Vue) {
-    Vue.component(Tree.name, Tree);
+CTree.install = function (Vue) {
+    Vue.component(CTree.name, CTree);
 };
 
-export default Tree;
+export default CTree;

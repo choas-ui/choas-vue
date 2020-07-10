@@ -1,11 +1,11 @@
-import Icon from './Icon'
+import CIcon from './Icon'
 import _ from 'lodash'
 
 // 支持按需引用
-Icon.install = function (Vue) {
-    Vue.component(Icon.name, Icon);
+CIcon.install = function (Vue) {
+    Vue.component(CIcon.name, CIcon);
 };
-Icon.importSrc = (type, setting) => {
+CIcon.importSrc = (type, setting) => {
     // type  'iconFont' 'iconClass' 'svg'
     const OHead = document.querySelector ? document.querySelector('header') : document.getElementsByTagName('head')[0]
     let resultObj = null
@@ -51,4 +51,4 @@ Icon.importSrc = (type, setting) => {
     resultObj && OHead.append(resultObj)
 }
 
-export default Icon;
+export default CIcon;

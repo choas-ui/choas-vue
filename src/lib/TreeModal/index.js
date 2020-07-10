@@ -1,8 +1,8 @@
-import TreeModal from './TreeModal'
+import CTreeModal from './TreeModal'
 
 // 支持按需引用
-TreeModal.install = function (Vue) {
-    Vue.component(TreeModal.name, TreeModal);
+CTreeModal.install = function (Vue) {
+    Vue.component(CTreeModal.name, CTreeModal);
 };
 
-export default TreeModal;
+export default CTreeModal;

@@ -4,6 +4,17 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-10</span>
+    <b>v 0.1.15</b>
+  </p>
+  
+  <ol>
+     <li>修复bug</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
     <b>v 0.1.14</b>
   </p>
   

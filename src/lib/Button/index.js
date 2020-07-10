@@ -1,8 +1,8 @@
-import Button from './Button'
+import CButton from './Button'
 
 // 支持按需引用
-Button.install = function (Vue) {
-    Vue.component(Button.name, Button);
+CButton.install = function (Vue) {
+    Vue.component(CButton.name, CButton);
 };
 
-export default Button;
+export default CButton;

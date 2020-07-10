@@ -12,6 +12,7 @@
             </div>
             <template  v-if="itemData.isOpen">
                 <CascadeItem v-for="(item, index) in itemData.children"
+                             :key="index"
                              :item-data="item"
                              :style="{
                                      position: 'absolute',

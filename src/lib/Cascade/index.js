@@ -1,12 +1,12 @@
-import Cascade from './Cascade'
+import CButton from './Cascade'
 import CacscadeItem from './CascadeItem'
 
 // 支持按需引用
-Cascade.install = function (Vue) {
-    Vue.component(Cascade.name, Cascade);
+CButton.install = function (Vue) {
+    Vue.component(CButton.name, CButton);
 };
 CacscadeItem.install = function (Vue) {
     Vue.component(CacscadeItem.name, CacscadeItem);
 };
 
-export default Cascade;
+export default CButton;

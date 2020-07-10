@@ -106,6 +106,13 @@
                     res = _.cloneDeep(this.listData)
                 }
                 this.$set(this,'copyListData', res)
+            },
+            listData:{
+                handler(v){
+                    this.copyListData = _.cloneDeep(v)
+                },
+                deep: true,
+                immediate: true
             }
         },
         render(h) {

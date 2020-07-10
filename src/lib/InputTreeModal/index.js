@@ -1,8 +1,8 @@
-import InputTreeModal from './InputTreeModal'
+import CInputTreeModal from './InputTreeModal'
 
 // 支持按需引用
-InputTreeModal.install = function (Vue) {
-    Vue.component(InputTreeModal.name, InputTreeModal);
+CInputTreeModal.install = function (Vue) {
+    Vue.component(CInputTreeModal.name, CInputTreeModal);
 };
 
-export default InputTreeModal;
+export default CInputTreeModal;
