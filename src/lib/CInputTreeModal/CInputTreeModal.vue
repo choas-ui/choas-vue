@@ -33,7 +33,7 @@
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
-              <Button v-if="buttonTxt" @click="isModalShow = !isModalShow" size="large">{{buttonTxt}}</Button>
+              <CButton v-if="buttonTxt" @click="isModalShow = !isModalShow" size="large">{{buttonTxt}}</CButton>
           </div>
         </template>
         <CTreeModal :list-data="listData"
