@@ -127,7 +127,7 @@
 :::demo
 ```html
     <template>
-        <InputTreeModal
+        <CInputTreeModal
                :can-be-edited="canBeEdited"
                :list-data="listData"
                :reflect-key="reflectKey"
@@ -259,7 +259,7 @@
 :::demo
 ```html
     <template>
-        <InputTreeModal
+        <CInputTreeModal
                :canBeEdited="canBeEdited"
                :list-data="listData"
                :reflectKey="reflectKey"

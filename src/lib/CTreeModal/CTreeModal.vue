@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="isModalShow"
+    <CModal v-model="isModalShow"
            :width="width"
            :height="height"
            :mask="mask"
@@ -19,15 +19,15 @@
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
                     <template v-if="addTreeList">
-                        <Button v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</Button>
-                        <Button v-show="isCascadeShow" @click="addTreeListHandle">保存</Button>
-                        <Button v-show="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</Button>
+                        <CButton v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</CButton>
+                        <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
+                        <CButton v-show="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</CButton>
                     </template>
                 </div>
                 <div v-if="addTreeList"
                      class="cascade-box"
                 >
-                    <Cascade v-model="cascadeData"
+                    <CCascade v-model="cascadeData"
                              v-if="isCascadeShow"
                              :list-data="list_data"
                              :reflectKey="reflectKey"
@@ -37,14 +37,14 @@
                 </div>
                 <div class="content-box">
                     <div>
-                        <Tree
+                        <CTree
                                 :line="line"
                                 file-icon
                                 v-model="selectData"
                                 :list-data="list_data"
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
-                        ></Tree>
+                        ></CTree>
                     </div>
                 </div>
             </div>
@@ -57,24 +57,24 @@
                       :key="item[reflectKey['value']]"
                    >
                        <b>{{item[reflectKey['key']]}}</b>
-                       <Icon icon-name="choas-close"
+                       <CIcon icon-name="choas-close"
                              color="#fff"
                              height="30"
                              width="30"
                              active-color="#ff5e5c"
                              @click="selectData = []"
-                       ></Icon>
+                       ></CIcon>
                    </p>
                </div>
             </div>
         </div>
         <slot slot="footer">
             <div class="modal-footer">
-                <Button size="large" type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</Button>
-                <Button size="large" @click="confirmHandle">确&nbsp;&nbsp;认</Button>
+                <CButton size="large" type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</CButton>
+                <CButton size="large" @click="confirmHandle">确&nbsp;&nbsp;认</CButton>
             </div>
         </slot>
-    </Modal>
+    </CModal>
 </template>
 
 <script>

@@ -150,7 +150,6 @@
                 }
                 return h('CIcon', {
                     props: {
-                        type: 'svg',
                         'icon-name': "choas-fill-arrow-right",
                     },
                     style: {
@@ -282,9 +281,8 @@
                         [this.$slots['file-icon']]
                     )
                 }
-                return h('Icon', {
+                return h('CIcon', {
                     props: {
-                        type: 'svg',
                         'icon-name': "choas-file-icon",
                     },
                     attrs: {
