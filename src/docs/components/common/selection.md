@@ -6,7 +6,7 @@
     <template>
         <p>{{selectedValue}}</p>   
         <div>
-            <Selection :list-data="listData" v-model="selectedValue" />
+            <CSelection :list-data="listData" v-model="selectedValue" />
         </div>   
     </template>
     <script>

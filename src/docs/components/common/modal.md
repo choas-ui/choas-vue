@@ -15,8 +15,8 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal v-model="isShow"></Modal>
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal v-model="isShow"></CModal>
     </template>
     <script>
         export default {
@@ -39,12 +39,12 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             mask
             v-model="isShow"
             >
-        </Modal>
+        </CModal>
     </template>
     <script>
         export default {
@@ -67,8 +67,8 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             mask
             cancel
             v-model="isShow"
@@ -76,7 +76,7 @@
                 <div class="usr-content">
                     该配置下点击遮罩可以关闭弹窗
                 </div>
-            </Modal>
+            </CModal>
     </template>
     <script>
         export default {
@@ -110,8 +110,8 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             mask
             cancel
             controller
@@ -120,7 +120,7 @@
                 <div class="usr-content">
                     如果没有cancel,该弹窗无法关闭。
                 </div>
-            </Modal>
+            </CModal>
     </template>
     <script>
     export default {
@@ -146,15 +146,15 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             mask
             cancel
             v-model="isShow"
             >
                 <div slot="header">header</div>
                 <div slot="footer">footer</div>
-            </Modal>
+            </CModal>
     </template>
     <script>
     export default {
@@ -177,14 +177,14 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             mask
             cancel
             v-model="isShow"
             title="弹层头部"
             >
-            </Modal>
+            </CModal>
     </template>
     <script>
     export default {
@@ -207,24 +207,24 @@
 :::demo
 ```html
     <template>
-        <Button type='success' @click="isShow = true">success</Button>
-        <Button type='warning' @click="isShow1 = true">warning</Button>
-        <Button type='danger' @click="isShow2 = true">danger</Button>
-        <Modal
+        <CButton type='success' @click="isShow = true">success</CButton>
+        <CButton type='warning' @click="isShow1 = true">warning</CButton>
+        <CButton type='danger' @click="isShow2 = true">danger</CButton>
+        <CModal
             v-model="isShow"
             type='success'
             >
-        </Modal>
-        <Modal
+        </CModal>
+        <CModal
             v-model="isShow1"
             type='warning'
             >
-        </Modal>
-        <Modal
+        </CModal>
+        <CModal
             v-model="isShow2"
             type='danger'
             >
-        </Modal>
+        </CModal>
     </template>
     <script>
     export default {
@@ -250,13 +250,13 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             v-model="isShow"
             width='800'
             height='600'
             >
-        </Modal>
+        </CModal>
     </template>
     <script>
     export default {
@@ -281,13 +281,13 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             v-model="isShow"
             top='200'
             left='200'
             >
-        </Modal>
+        </CModal>
     </template>
     <script>
     export default {
@@ -310,8 +310,8 @@
 :::demo
 ```html
     <template>
-        <Button @click="isShow = true">showModal</Button>
-        <Modal
+        <CButton @click="isShow = true">showModal</CButton>
+        <CModal
             v-model="isShow"
             width='200'
             height='200'
@@ -319,7 +319,7 @@
             left='200'
             draggable
             >
-        </Modal>
+        </CModal>
     </template>
     <script>
     export default {

@@ -34,7 +34,7 @@
             </div>
             <div v-if="!controller" :class="getTitleController">
                 <slot name="controller">
-                    <Icon icon-name="choas-close"
+                    <CIcon icon-name="choas-close"
                           width="30"
                           height="30"
                           :color="controllerColor"
@@ -47,7 +47,7 @@
             </div>
             <div v-if="'footer' in $scopedSlots || type" :class="getFooter">
                 <slot name="footer">
-                    <Button :type="type" @click="removeModal">确&nbsp;&nbsp;认</Button>
+                    <CButton :type="type" @click="removeModal">确&nbsp;&nbsp;认</CButton>
                 </slot>
             </div>
         </div>

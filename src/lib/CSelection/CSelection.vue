@@ -9,7 +9,7 @@
                    @focus="clearTimeHandle"
                    :value="getSelectedTitle"
             />
-            <Icon icon-name="choas-arrow-down"
+            <CIcon icon-name="choas-arrow-down"
                   :style="{
                        position: 'absolute',
                        right: '10px',

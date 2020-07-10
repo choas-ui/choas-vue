@@ -36,7 +36,7 @@
               <Button v-if="buttonTxt" @click="isModalShow = !isModalShow" size="large">{{buttonTxt}}</Button>
           </div>
         </template>
-        <TreeModal :list-data="listData"
+        <CTreeModal :list-data="listData"
                    :width="width"
                    :height="height"
                    :mask="mask"
@@ -53,7 +53,7 @@
                    v-model="selectedData"
                    :add-tree-list="addTreeList"
                    @getListData="getListData"
-        ></TreeModal>
+        ></CTreeModal>
     </span>
 </template>
 <script>

@@ -14,11 +14,11 @@
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -76,11 +76,11 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -141,12 +141,12 @@ export default {
 ```html
     <template>
         <p>{{ selectData }}</p>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
             v-model="selectData"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -205,14 +205,14 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             :list-data="listData"
             :reflectKey="{
                 key: 'name',
                 value: 'id'
             }"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -270,12 +270,12 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             line
             :list-data="listData"
             v-model="selectData"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -335,12 +335,12 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
             v-model="selectData"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -392,7 +392,7 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
             v-model="selectData"
@@ -400,7 +400,7 @@ export default {
             <Icon
                 slot="file-icon"
                 icon-name="choas-lists"/>
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -460,13 +460,13 @@ export default {
 ```html
     <template>
         <input v-model="searchStr"/>
-        <Tree
+        <CTree
             fileIcon
             :list-data="listData"
             v-model="selectData"
             :search-str="searchStr"
         >
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {
@@ -521,25 +521,25 @@ export default {
 :::demo
 ```html
     <template>
-        <Tree
+        <CTree
             fileIcon
             line
             :list-data="listData"
             :selectData="selectData"
         >
-            <Icon
+            <CIcon
                 slot="icon-mark"
                 icon-name="choas-square-add"
             />
-            <Icon
+            <CIcon
                 slot="file-icon"
                 icon-name="choas-file-icon"/>
-            <Icon
+            <CIcon
                 slot="tail"
                 color="red"
                 icon-name="choas-square-add"
             />
-        </Tree>
+        </CTree>
     </template>
 <script>
 export default {

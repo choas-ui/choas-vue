@@ -10,43 +10,43 @@ function registerComponentsList() {
         {
             components: [
                 {
-                    name: 'Icon',
-                    path: getPath('Icon')
+                    name: 'CIcon',
+                    path: getPath('CIcon')
                 },
                 {
-                    name: 'Button',
-                    path: getPath('Button')
+                    name: 'CButton',
+                    path: getPath('CButton')
                 },
                 {
-                    name: 'Modal',
-                    path: getPath('Modal')
+                    name: 'CModal',
+                    path: getPath('CModal')
                 },
                 {
-                    name: 'Tree',
-                    path: getPath('Tree')
+                    name: 'CTree',
+                    path: getPath('CTree')
                 },
                 {
-                    name: 'Cascade',
-                    path: getPath('Cascade')
+                    name: 'CCascade',
+                    path: getPath('CCascade')
                 },
                 {
-                    name: 'CascadeItem',
-                    path: path.resolve(process.cwd(), `src/lib/Cascade/CascadeItem`)
+                    name: 'CCascadeItem',
+                    path: path.resolve(process.cwd(), `src/lib/CCascade/CCascadeItem`)
                 },
                 {
-                    name: 'TreeModal',
-                    path: getPath('TreeModal')
+                    name: 'CTreeModal',
+                    path: getPath('CTreeModal')
                 },
                 {
-                    name: 'Selection',
-                    path: getPath('Selection')
+                    name: 'CSelection',
+                    path: getPath('CSelection')
                 },
 
 
 
                 {
-                    name: 'InputTreeModal',
-                    path: getPath('InputTreeModal')
+                    name: 'CInputTreeModal',
+                    path: getPath('CInputTreeModal')
                 }
             ]
         }

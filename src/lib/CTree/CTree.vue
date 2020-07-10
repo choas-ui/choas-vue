@@ -148,7 +148,7 @@
                         }
                     }, this.$slots['icon-mark'])
                 }
-                return h('Icon', {
+                return h('CIcon', {
                     props: {
                         type: 'svg',
                         'icon-name': "choas-fill-arrow-right",
@@ -377,7 +377,7 @@
                     }
                 })
                 if(data.expand){
-                    return h('Tree',
+                    return h('CTree',
                         {
                             attrs: {
                                 ...this.$attrs

@@ -15,7 +15,7 @@
 :::demo
 ```html
     <template>
-        <InputTreeModal
+        <CInputTreeModal
                :list-data="listData"
                v-model="selectedData"
                :can-be-edited="canBeEdited"

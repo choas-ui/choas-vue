@@ -13,10 +13,10 @@
 :::demo
 ```html
         <template>
-        <Button :size="'small'">small</Button>
-        <Button :size="'default'">default</Button>
-        <Button></Button>
-        <Button :size="'large'">large</Button>
+        <CButton :size="'small'">small</CButton>
+        <CButton :size="'default'">default</CButton>
+        <CButton></CButton>
+        <CButton :size="'large'">large</CButton>
     </template>
 ```
 :::
@@ -29,12 +29,12 @@
 
 :::demo
 ```html
-        <template>
-        <Button :size="'small'" block>small</Button>
-        <br/>
-        <Button type="success" :size="'default'" block>default</Button>
-        <br/>
-        <Button type="danger" :size="'large'" block>large</Button>
+    <template>
+      <CButton :size="'small'" block>small</CButton>
+      <br/>
+      <CButton type="success" :size="'default'" block>default</CButton>
+      <br/>
+      <CButton type="danger" :size="'large'" block>large</CButton>
     </template> 
 ```
 :::
@@ -48,12 +48,12 @@
 :::demo
 ```html
     <template>
-        <Button :type="'primary'">primary</Button>
-        <Button :type="'success'">success</Button>
-        <Button :type="'warning'">warning</Button>
-        <Button type="danger">danger</Button>
-        <Button type="disabled">disabled</Button>
-        <Button type="ghost">ghost</Button>
+        <CButton :type="'primary'">primary</CButton>
+        <CButton :type="'success'">success</CButton>
+        <CButton :type="'warning'">warning</CButton>
+        <CButton type="danger">danger</CButton>
+        <CButton type="disabled">disabled</CButton>
+        <CButton type="ghost">ghost</CButton>
     </template> 
 ```
 :::
@@ -72,22 +72,22 @@
 :::demo
 ```html
     <template>
-        <Button>
-            <Icon
+        <CButton>
+            <CIcon
                 slot="left"
                 color="#fff"
                 iconName="choas-search"
              />
             搜 索
-        </Button>
-        <Button>
-            <Icon
+        </CButton>
+        <CButton>
+            <CIcon
                 slot="right"
                 color="#fff"
                 iconName="choas-delete"
              />
             删 除
-        </Button>
+        </CButton>
     </template>
 ```
 :::
@@ -101,7 +101,7 @@
 :::demo
 ```html
     <template>
-        <Button class-name="usr-btn-class"></Button>
+        <CButton class-name="usr-btn-class"></CButton>
     </template>
     
     <style>
@@ -121,7 +121,7 @@
 :::demo
 ```html
     <template>
-        <Button prefix="usr"></Button>
+        <CButton prefix="usr"></CButton>
     </template>
     <style>
       .usr-btn-primary{
@@ -146,7 +146,7 @@
 :::demo
 ```html
     <template>
-        <Button placeholder="按钮被禁用" type="disabled"></Button>
+        <CButton placeholder="按钮被禁用" type="disabled"></CButton>
     </template>
 ```
 :::
@@ -160,7 +160,7 @@
 :::demo
 ```html
     <template>
-        <Button @click="clickHandle"></Button>
+        <CButton @click="clickHandle"></CButton>
     </template>
     <script>
     export default {

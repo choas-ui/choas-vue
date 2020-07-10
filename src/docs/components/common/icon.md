@@ -27,15 +27,15 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-clipboard"
         color="#666"
     />
-    <Icon
+    <CIcon
         iconName="choas-close"
         color="red"
     />
-    <Icon
+    <CIcon
         src="/assets/img/iconExp/snowman.jpg"
     />
 </template>
@@ -51,19 +51,19 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-wpexplorer"
         width="40"
         height="40"
         color="#666"
     />
-    <Icon
+    <CIcon
         iconName="choas-forbid"
         width="40"
         height="40"
         color="red"
     />
-    <Icon
+    <CIcon
         width="80"
         height="80"
         src="/assets/img/iconExp/earth.jpg"
@@ -81,14 +81,14 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-bicycle"
         width="110"
         height="80"
         font-size="80"
         color="#c3ff0d"
     />
-    <Icon
+    <CIcon
         iconName="choas-more"
         width="80"
         height="80"
@@ -106,21 +106,21 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-chrome"
         color="green"
         width="40"
         height="40"
         font-size="30"
     />
-    <Icon
+    <CIcon
         font-class="fa fa-medkit"
         color="red"
         width="40"
         height="40"
         font-size="30"
     />
-    <Icon
+    <CIcon
         font-class="fa fa-telegram"
         color="#ff3677"
         width="40"
@@ -140,7 +140,7 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         width="80"
         height="80"
         src="/assets/img/iconExp/tl.jpg"
@@ -158,7 +158,7 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-spotify"
         color="#23b320"
         width="40"
@@ -178,7 +178,7 @@
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"
@@ -186,7 +186,7 @@
         height="40"
         font-size="30"
     />
-    <Icon
+    <CIcon
         font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"
@@ -217,7 +217,7 @@ export default {
 :::demo
 ```html
 <template>
-    <Icon
+    <CIcon
         font-class="fa fa-yelp"
         color="#ff3677"
         activeColor="green"

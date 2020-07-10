@@ -2,16 +2,16 @@
     <ul class="cascade-item-wrap">
         <li>
             <div @click="($event)=>{setValue(itemData)}">
-                    <span>
-                        {{itemData[reflectKey['key']]}}
-                    </span>
-                <Icon v-if="itemData.children.length"
+                <span>
+                    {{itemData[reflectKey['key']]}}
+                </span>
+                <CIcon v-if="itemData.children.length"
                       icon-name="choas-arrow-right"
                       style="position:absolute;right: 5px"
                 />
             </div>
             <template  v-if="itemData.isOpen">
-                <CascadeItem v-for="(item, index) in itemData.children"
+                <CCascadeItem v-for="(item, index) in itemData.children"
                              :key="index"
                              :item-data="item"
                              :style="{

@@ -5,8 +5,8 @@
 ```html
     <template>
         <p>选中的值: {{selectedData}}</p>   
-        <Button @click="isModalShow = !isModalShow">打开</Button>
-        <TreeModal :list-data="listData"
+        <CButton @click="isModalShow = !isModalShow">打开</CButton>
+        <CTreeModal :list-data="listData"
             :title="title"
             v-model="selectedData"
             :isShow="isModalShow"
@@ -22,7 +22,7 @@
             draggable
             controllerColor="#fff"
             activeColor="#fff"
-            ></TreeModal>
+            ></CTreeModal>
     </template>
     <script>
     export default {

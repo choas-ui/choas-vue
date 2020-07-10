@@ -7,7 +7,7 @@
                    @focus="isDropUlShow = true"
                    :value="getSelectedTitle"
             />
-            <Icon con-name="choas-arrow-down"
+            <CIcon con-name="choas-arrow-down"
                   :style="{
                        position: 'absolute',
                        right: '10px',
@@ -25,13 +25,13 @@
                 height: 60+ 40* floorY +'px'
              }"
         >
-            <Icon :style="{
+            <CIcon :style="{
                 position: 'absolute',
                  top: '-5px',
                   right: '-5px'
             }"  width="40" height="40" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c" />
             <template v-for="(item,index) in copyData">
-                <CascadeItem
+                <CCascadeItem
                         :key="index"
                         :item-data="item"
                         :reflect-key="reflectKey"
@@ -46,7 +46,7 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
-    import CascadeItem from "./CascadeItem";
+    import CascadeItem from "./CCascadeItem";
     export default {
         name: 'Cascade',
         comments:{

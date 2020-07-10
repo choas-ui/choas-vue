@@ -1,10 +1,10 @@
-import CIcon from './Icon'
+import CIcon from './CIcon'
 import _ from 'lodash'
-import CTreeModal from "../TreeModal/TreeModal";
+import CTreeModal from "../CTreeModal/CTreeModal";
 
 // 支持按需引用
 CIcon.install = function (Vue) {
-    Vue.component('C'+CIcon.name, CIcon);
+    Vue.component(CIcon.name, CIcon);
 };
 CIcon.importSrc = (type, setting) => {
     // type  'iconFont' 'iconClass' 'svg'
