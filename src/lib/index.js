@@ -23,7 +23,7 @@ const components = [
 
 const install = function (Vue) {
     if (install.installed) return;
-    components.map(component => Vue.component('C'+component.name, component));
+    components.map(component => Vue.component(component.name, component));
 };
 
 if (typeof window.Vue !== "undefined" && window.Vue) {

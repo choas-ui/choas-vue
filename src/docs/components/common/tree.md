@@ -523,7 +523,7 @@ export default {
             />
             <CIcon
                 slot="file-icon"
-                icon-name="choas-file-icon"/>
+                icon-name="choas-lists"/>
             <template slot="tails">
                 <CIcon
                     color="red"
