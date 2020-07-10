@@ -40,6 +40,7 @@
                    :width="width"
                    :height="height"
                    :mask="mask"
+                   :line="line"
                    :draggable="draggable"
                    :controllerColor="controllerColor"
                    :activeColor="activeColor"
@@ -78,6 +79,9 @@
                 }
             },
             mask: {
+                type: Boolean
+            },
+            line: {
                 type: Boolean
             },
             canBeEdited: {

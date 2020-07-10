@@ -38,7 +38,7 @@
                 <div class="content-box">
                     <div>
                         <Tree
-                                line
+                                :line="line"
                                 file-icon
                                 v-model="selectData"
                                 :list-data="list_data"
@@ -97,6 +97,9 @@
                         value: 'value'
                     }
                 }
+            },
+            line:{
+                type: Boolean
             },
             isShow:{
                 type: Boolean
