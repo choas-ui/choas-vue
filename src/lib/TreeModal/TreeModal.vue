@@ -207,13 +207,17 @@
                 this.isModalShow =  v
             },
             isModalShow(v){
-
                 if(!v){
                     this.$emit('toggleShow', false)
                 }
             },
             isCascadeShow(){
                 this.$set(this,'cascadeData', [])
+            },
+            searchStr(v){
+                if(!v){
+                    this.list_data=_.cloneDeep(this.listData)
+                }
             }
         }
     }
