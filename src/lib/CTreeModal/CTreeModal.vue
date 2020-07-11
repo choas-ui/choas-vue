@@ -179,7 +179,7 @@
                 this.selectData = this.value
             },
             addTreeListHandle(){
-                this.$emit('getListData', {pId: this.cascadeData[0][this.reflectKey['value']],value: this.searchStr })
+                this.$emit('addTreeNode', {pId: this.cascadeData[0][this.reflectKey['value']],value: this.searchStr })
             },
             addBtnCancelHandle(){
                 this.isCascadeShow = false

@@ -50,7 +50,7 @@
                    :isShow="isModalShow"
                    @toggleShow="v => this.isModalShow= v"
                    :placeholder="placeholder"
-                   @getListData="getListData"
+                   @addTreeNode="addTreeNode"
         ></CTreeModal>
     </span>
 </template>
@@ -159,8 +159,8 @@
                     this.isModalShow = true
                 }
             },
-            getListData(v){
-                this.$emit('getListData', v)
+            addTreeNode(v){
+                this.$emit('addTreeNode', v)
             }
         },
         watch: {

@@ -8,7 +8,7 @@
 
             placeholder="请选择机构节点"
             condition-props="type"
-            @getListData="getListData"
+            @addTreeNode="addTreeNode"
     />
 </template>
 
@@ -108,7 +108,7 @@
             }
         },
         methods:{
-            getListData(v){
+            addTreeNode(v){
                 console.log(v)
             },
         },

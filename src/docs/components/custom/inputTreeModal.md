@@ -115,10 +115,10 @@
 ```
 :::
 
-#### 新增树形节点 getListData
+#### 新增树形节点 addTreeNode
 ---
   <ul>
-     <li><p>getListData 新增树形节点。</p></li>
+     <li><p>addTreeNode 新增树形节点。</p></li>
      <li><p>condition-props 用户不可选，不可见不满足条件的该项。</p></li>
      <li><p>placeholder 新增树形节点的提示。</p></li>
   </ul>
@@ -135,7 +135,7 @@
     
                placeholder="请选择机构节点"
                condition-props="type"
-               @getListData="getListData"
+               @addTreeNode="addTreeNode"
         />
     </template>
     <script>
@@ -231,7 +231,7 @@
                 }
             },
             methods:{
-                 getListData(v){
+                 addTreeNode(v){
                     console.log(v)
                  },
             } 
