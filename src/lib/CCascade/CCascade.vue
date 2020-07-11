@@ -146,7 +146,7 @@
             },
             iconClick(e) {
                 e.preventDefault()
-                this.floorX = this.listData.length
+                this.floorX = 1
                 this.floorY = 1
                 this.isDropUlShow = !this.isDropUlShow
                 if (!this.isDropUlShow) {
