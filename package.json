@@ -51,14 +51,14 @@
     "last 2 versions",
     "not dead"
   ],
-  "author": "faliye",
+  "author": "choas-ui",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/faliye/choas-vue/issues"
+    "url": "https://github.com/choas-ui/choas-vue/issues"
   },
-  "homepage": "https://github.com/faliye/choas-vue#readme",
+  "homepage": "https://github.com/choas-ui/choas-vue#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/faliye/choas-vue.git"
+    "url": "git+https://github.com/choas-ui/choas-vue.git"
   }
 }
