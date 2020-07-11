@@ -37,8 +37,8 @@
             >
                 <div v-if="copyData.length"
                      :style="{
-                                width: 80+ 150* floorX +'px',
-                                height: 60+ 40* floorY +'px',
+                                width: 80+ (150* floorX) +'px',
+                                height: 60+ (40* floorY) +'px',
                                 }"
                 >
                     <CCascadeItem
