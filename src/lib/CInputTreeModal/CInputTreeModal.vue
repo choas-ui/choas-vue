@@ -1,7 +1,7 @@
 <template>
     <span>
         <template v-if="!canBeEdited">
-          <div class="input-like input-like-unedited">
+          <div class="input-like input-like-unedited" >
             <template v-if="selectedData.length">
               <span
                       v-for="(item, index) of selectedData"
@@ -204,6 +204,7 @@
         cursor: pointer;
         &-unedited{
             border: none;
+            cursor: not-allowed;
         }
         .tag-span {
             height: 28px;
