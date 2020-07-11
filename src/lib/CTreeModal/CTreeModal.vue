@@ -170,6 +170,7 @@
         mounted() {
             this.list_data = _.cloneDeep(this.listData)
             this.cascadeList = _.cloneDeep(this.listData)
+            console.log(this.selectData)
         },
         methods: {
             confirmHandle() {
