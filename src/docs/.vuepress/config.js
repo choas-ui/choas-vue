@@ -31,7 +31,7 @@ function registerComponentsList() {
                 },
                 {
                     name: 'CCascadeItem',
-                    path: path.resolve(process.cwd(), `src/lib/CCascade/CCascadeItem`)
+                    path: path.resolve(process.cwd(), `src/lib/CCascadeItem/CCascadeItem`)
                 },
                 {
                     name: 'CTreeModal',

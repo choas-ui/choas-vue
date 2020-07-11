@@ -1,11 +1,11 @@
 <template>
     <CModal v-model="isModalShow"
-           :width="width"
-           :height="height"
-           :mask="mask"
-           :draggable="draggable"
-           :controllerColor="controllerColor"
-           :activeColor="activeColor"
+            :width="width"
+            :height="height"
+            :mask="mask"
+            :draggable="draggable"
+            :controllerColor="controllerColor"
+            :activeColor="activeColor"
     >
         <slot slot="header">
             <div class="modal-header">
@@ -17,8 +17,8 @@
             <div class="tree-box">
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
-                    <input type="text" v-model="searchStr" placeholder="搜索">
-                    <CButton v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</CButton>
+                    <input type="text" v-model="searchStr" :placeholder="noticeTxt">
+                    <CButton v-show="!isCascadeShow" @click="isCascadeShow = true">新增</CButton>
                     <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
                     <CButton v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
                 </div>
@@ -46,20 +46,20 @@
                 <div class="footer-box">
                     已选{{selectData.length? 1 : 0}}项
                 </div>
-               <div class="selected-content">
-                   <p v-for="item of selectData"
-                      :key="item[reflectKey['value']]"
-                   >
-                       <b>{{item[reflectKey['key']]}}</b>
-                       <CIcon icon-name="choas-close"
-                             color="#fff"
-                             height="30"
-                             width="30"
-                             active-color="#ff5e5c"
-                             @click="selectData = []"
-                       ></CIcon>
-                   </p>
-               </div>
+                <div class="selected-content">
+                    <p v-for="item of selectData"
+                       :key="item[reflectKey['value']]"
+                    >
+                        <b>{{item[reflectKey['key']]}}</b>
+                        <CIcon icon-name="choas-close"
+                               color="#fff"
+                               height="30"
+                               width="30"
+                               active-color="#ff5e5c"
+                               @click="selectData = []"
+                        ></CIcon>
+                    </p>
+                </div>
             </div>
         </div>
         <slot slot="footer">
@@ -73,6 +73,7 @@
 
 <script>
     import _ from 'lodash'
+
     export default {
         name: 'CTreeModal',
         components: {},
@@ -92,64 +93,64 @@
                     }
                 }
             },
-            line:{
+            line: {
                 type: Boolean
             },
-            isShow:{
+            isShow: {
                 type: Boolean
             },
-            width:{
-                type:String,
-                default(){
+            width: {
+                type: String,
+                default() {
                     return '800'
                 }
             },
-            height:{
-                type:String,
-                default(){
+            height: {
+                type: String,
+                default() {
                     return '600'
                 }
             },
-            title:{
-                type:String,
-                default(){
+            title: {
+                type: String,
+                default() {
                     return ''
                 }
             },
-            placeholder:{
-                type:String,
-                default(){
+            placeholder: {
+                type: String,
+                default() {
                     return ''
                 }
             },
-            controllerColor:{
-                type:String,
-                default(){
+            controllerColor: {
+                type: String,
+                default() {
                     return ''
                 }
             },
-            activeColor:{
-                type:String,
-                default(){
+            activeColor: {
+                type: String,
+                default() {
                     return ''
                 }
             },
-            mask:{
+            mask: {
                 type: Boolean
             },
-            draggable:{
+            draggable: {
                 type: Boolean
             },
             value: {
                 type: Array,
-                default(){
+                default() {
                     return []
                 }
             },
             // 收束条件
-            conditionProps:{
-                type:String,
-                default(){
+            conditionProps: {
+                type: String,
+                default() {
                     return 'node'
                 }
             },
@@ -161,51 +162,58 @@
                 selectData: this.value,
                 searchStr: '',
                 list_data: [],
-                cascadeData:[],
-                cascadeList:[]
+                cascadeData: [],
+                cascadeList: [],
+                noticeTxt: '搜索节点'
             }
         },
         mounted() {
-            this.list_data=_.cloneDeep(this.listData)
-            this.cascadeList=_.cloneDeep(this.listData)
+            this.list_data = _.cloneDeep(this.listData)
+            this.cascadeList = _.cloneDeep(this.listData)
         },
         methods: {
-            confirmHandle(){
+            confirmHandle() {
                 this.$emit('toggleShow', false)
                 this.$emit('input', this.selectData)
             },
-            cancelHandle(){
+            cancelHandle() {
                 this.$emit('toggleShow', false)
                 this.selectData = this.value
             },
-            addTreeListHandle(){
-                this.$emit('addTreeNode', {pId: this.cascadeData[0][this.reflectKey['value']],value: this.searchStr })
+            addTreeListHandle() {
+                this.$emit('addTreeNode', {pId: this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']], value: this.searchStr})
             },
-            addBtnCancelHandle(){
+            addBtnCancelHandle() {
                 this.isCascadeShow = false
                 this.searchStr = ''
             }
         },
-        watch:{
-            isShow(v){
-                this.isModalShow =  v
+        watch: {
+            isShow(v) {
+                this.isModalShow = v
             },
-            isModalShow(v){
-                if(!v){
+            isCascadeShow(v) {
+                if (v) {
+                    this.noticeTxt = '请输入新增节点名称'
+                } else {
+                    this.noticeTxt = '搜索节点'
+                }
+            },
+            isModalShow(v) {
+                if (!v) {
+                    this.cascadeData = []
+                    this.isCascadeShow = false
                     this.$emit('toggleShow', false)
                 }
             },
-            isCascadeShow(){
-                this.$set(this,'cascadeData', [])
-            },
-            searchStr(v){
-                if(!v){
-                    this.list_data=_.cloneDeep(this.listData)
-                    this.cascadeList=_.cloneDeep(this.listData)
+            searchStr(v) {
+                if (!v) {
+                    this.list_data = _.cloneDeep(this.listData)
+                    this.cascadeList = _.cloneDeep(this.listData)
                 }
             },
-            listData:{
-                handler(v){
+            listData: {
+                handler(v) {
                     this.$set(this, 'list_data', _.cloneDeep(v))
                     this.$set(this, 'cascadeList', _.cloneDeep(v))
                 },
@@ -229,7 +237,8 @@
         font-size: 18px;
         font-weight: bold;
     }
-    .modal-footer{
+
+    .modal-footer {
         height: addPX($lg-height*1.4);
         line-height: addPX($lg-height*1.4);
     }
@@ -239,6 +248,7 @@
         display: flex;
         padding: addPX($lg-padding) addPX($lg-padding) 0 addPX($lg-padding);
         box-sizing: border-box;
+
         .tree-box {
             flex: 3;
             box-sizing: border-box;
@@ -247,7 +257,7 @@
             flex-direction: column;
 
 
-            .title-box{
+            .title-box {
                 width: 100%;
                 height: addPX($df-height);
                 line-height: addPX($df-height);
@@ -260,33 +270,37 @@
             }
 
             .search-box-wrap {
-                padding: addPX($lg-padding)  addPX($lg-padding) 0  0;
+                padding: addPX($lg-padding) addPX($lg-padding) 0 0;
                 width: 100%;
                 box-sizing: border-box;
                 display: flex;
                 justify-content: space-between;
+
                 input {
                     width: 60%;
                     border: 1px solid $lineColor;
                     height: addPX($sm-height);
                     box-sizing: border-box;
-                    border-radius:  addPX($df-radius) ;
+                    border-radius: addPX($df-radius);
                     padding-left: addPX($lg-padding);
+
                     &:focus {
                         outline: none;
                         border: 1px solid $primary;
                     }
                 }
             }
-            .cascade-box{
-                padding: addPX($lg-padding)  addPX($lg-padding) 0  0;
+
+            .cascade-box {
+                padding: addPX($lg-padding) addPX($lg-padding) 0 0;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
                 text-align: center;
             }
-            .content-box{
+
+            .content-box {
                 margin: addPX($lg-padding* 1.5) 0;
                 width: 100%;
                 flex: 1;
@@ -295,23 +309,26 @@
                 display: flex;
             }
         }
-        .selected-box{
+
+        .selected-box {
             flex: 2;
             word-break: break-all;
             display: flex;
             flex-wrap: wrap;
             box-sizing: border-box;
             flex-direction: column;
-            &>.selected-content{
+
+            & > .selected-content {
                 width: 100%;
                 height: 100%;
                 flex: 1;
-                padding-left :addPX($lg-padding);
+                padding-left: addPX($lg-padding);
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: row;
                 border-left: 1px solid $lineColor;
-                >p{
+
+                > p {
                     width: 100%;
                     height: addPX($sm-height);
                     line-height: addPX($sm-height);
@@ -320,11 +337,13 @@
                     margin: addPX($lg-padding) 0 0 0;
                     display: flex;
                     font-size: addPX($lg-fs);
-                    >b{
+
+                    > b {
                         flex: 1;
                         text-align: center;
                     }
-                    &:hover{
+
+                    &:hover {
                         background: $info;
                         color: white;
                     }
@@ -332,6 +351,7 @@
 
             }
         }
+
         .footer-box {
             width: 100%;
             height: addPX($sm-height);

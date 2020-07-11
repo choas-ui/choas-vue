@@ -5,7 +5,7 @@
                 <span>
                     {{itemData[reflectKey['key']]}}
                 </span>
-                <CIcon v-if="itemData.children.length"
+                <CIcon v-if="(itemData.children || []).length"
                       icon-name="choas-arrow-right"
                       style="position:absolute;right: 5px"
                 />
@@ -90,10 +90,10 @@
     @import "../scss/variable";
     @import "../scss/functions";
     .cascade-item-wrap{
-        position: absolute;
-        box-sizing: border-box;
-        top: addPX($sm-height);
-        left: addPX($sm-height);
+        position: relative;
+        //box-sizing: border-box;
+        //top: addPX($sm-height);
+        //left: addPX($sm-height);
         max-height: 300px;
         margin: 0;
         padding: 0;
