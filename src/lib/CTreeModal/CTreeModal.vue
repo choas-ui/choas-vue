@@ -53,8 +53,8 @@
                         <b>{{item[reflectKey['key']]}}</b>
                         <CIcon icon-name="choas-close"
                                color="#fff"
-                               height="100%"
-                               width="30"
+                               height="40"
+                               width="40"
                                active-color="#ff5e5c"
                                :style="{
                                     lineHeight: '100%'
