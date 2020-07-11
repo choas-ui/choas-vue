@@ -336,14 +336,14 @@
                     width: 100%;
                     line-height: addPX($sm-height);
                     box-sizing: border-box;
-                    text-align: center;
+                    text-align: left;
                     margin: addPX($lg-padding) 0 0 0;
                     display: flex;
                     font-size: addPX($lg-fs);
 
                     > b {
                         flex: 1;
-                        text-align: center;
+                        text-align: left;
                     }
 
                     &:hover {
