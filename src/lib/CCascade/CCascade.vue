@@ -3,15 +3,11 @@
         <label>
             <input type="text"
                    :placeholder="placeholder"
-                   ref="input"
                    @focus="isDropUlShow = true"
                    :value="getSelectedTitle"
             />
-            <CIcon con-name="choas-arrow-down"
+            <CIcon class-name="cascade-icon" icon-name="choas-arrow-down"
                   :style="{
-                       position: 'absolute',
-                       right: '10px',
-                       top: '5px',
                        transform: isDropUlShow? 'rotate(180deg)': 'rotate(0)',
                        transition: 'all 0.3s'
                   }"
@@ -36,7 +32,8 @@
                         :item-data="item"
                         :reflect-key="reflectKey"
                         @change="change"
-                        :lv="0" :conditionProps="conditionProps" />
+                        :lv="0"
+                        :conditionProps="conditionProps" />
             </template>
 
         </div>
@@ -125,14 +122,6 @@
                 },'')
             }
         },
-        updated() {
-            const oUl = this.$refs.dropUl
-            if(oUl){
-                // 出现位置判断
-                // console.dir(this.$refs.dropUl)
-                // console.dir(this.$refs.dropUl.getBoundingClientRect())
-            }
-        },
         methods: {
             addInfo(data, parentId){
                 data.forEach((item, index)=>{
@@ -191,11 +180,15 @@
                 // 打开自身
                 this.$set(item, 'isOpen', true)
                 // 动态调整宽度
-                this.floorX = path.filter(item=>item!=='children').length+1
+                this.floorX = item.id.split('-').length
+                // 没有子集，动态调整
+                if(!(item.children || []).length){
+                    this.floorX--
+                }
+                // 动态调整高度
                 let pathStr = path.join('.')
                 this.floorY=0
                 let count=0
-                // 动态调整高度
                 do {
                     const children = _.get(this.copyData,pathStr+'.children',[])
                     this.floorY=this.floorY + (children.length ? children.length-1: 0)
@@ -203,15 +196,18 @@
                     pathStr=path.slice(0,path.length-count).join('.')
                 }while (pathStr)
                 const p =_.get(this.copyData,path.splice(0,path.length-2).join('.'),{})
+                // 筛选父级所在序号
                 const findIndex =  this.result.findIndex((res)=>{
                     if(!p[this.reflectKey['value']]){
                         return 0
                     }
                     return res[this.reflectKey['value']] === p[this.reflectKey['value']]
                 })
+                // 父级以后所有数值删除
                 if(findIndex>-1){
                     this.result.splice(findIndex+1,this.result.length)
                 }
+                // 添加结果集
                 const key=this.reflectKey['key']
                 const value=this.reflectKey['value']
                 this.result.push({[key]: item[key],[value]: item[value]})
@@ -226,11 +222,7 @@
             },
             listData:{
                 handler(v){
-                    this.copyData = this.addInfo(_.clone(v), '0')
-                    this.copyData.forEach((item, index)=>{
-                        this.$set(this.copyData, index, {...item, isOpen: true})
-
-                    })
+                    this.copyData = this.addInfo(_.cloneDeep(v), '0')
                 },
                 deep: true,
                 immediate: true
@@ -248,8 +240,9 @@
         display: flex;
         height: addPX($sm-height);
         position: relative;
-        width: 100%;
+        width: 90%;
         background: #fff;
+        padding: addPX($lg-padding) 0;
         >label{
             display: block;
             flex: 1;
@@ -265,10 +258,15 @@
                     border: 1px solid $primary;
                 }
             }
+            .cascade-icon{
+                position: absolute;
+                right: 10px;
+                top: addPX($lg-padding+5);
+            }
         }
         .collapse-box{
             position: absolute;
-            top: addPX($df-height);
+            top: addPX($df-height+$lg-padding*2);
             z-index: 999;
             background: #fff;
             border: 1px solid #ccc;

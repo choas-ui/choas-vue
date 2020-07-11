@@ -18,23 +18,17 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" placeholder="搜索">
-                    <template v-if="addTreeList">
-                        <CButton v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</CButton>
-                        <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
-                        <CButton v-show="isCascadeShow" type="danger" @click="isCascadeShow = false">取消</CButton>
-                    </template>
+                    <CButton v-show="searchStr && !isCascadeShow" @click="isCascadeShow = true">新增</CButton>
+                    <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
+                    <CButton v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
                 </div>
-                <div v-if="addTreeList"
-                     class="cascade-box"
-                >
-                    <CCascade v-model="cascadeData"
-                             v-if="isCascadeShow"
-                             :list-data="list_data"
-                             :reflectKey="reflectKey"
-                             :placeholder="placeholder"
-                             :conditionProps="conditionProps"
-                    />
-                </div>
+                <CCascade v-model="cascadeData"
+                          v-if="isCascadeShow"
+                          :list-data="cascadeList"
+                          :reflectKey="reflectKey"
+                          :placeholder="placeholder"
+                          :conditionProps="conditionProps"
+                />
                 <div class="content-box">
                     <div>
                         <CTree
@@ -116,9 +110,6 @@
                     return '600'
                 }
             },
-            addTreeList:{
-                type:Function
-            },
             title:{
                 type:String,
                 default(){
@@ -169,12 +160,14 @@
                 isModalShow: this.isShow,
                 selectData: this.value,
                 searchStr: '',
-                list_data: {},
-                cascadeData:[]
+                list_data: [],
+                cascadeData:[],
+                cascadeList:[]
             }
         },
         mounted() {
             this.list_data=_.cloneDeep(this.listData)
+            this.cascadeList=_.cloneDeep(this.listData)
         },
         methods: {
             confirmHandle(){
@@ -186,23 +179,11 @@
                 this.selectData = this.value
             },
             addTreeListHandle(){
-                const {fn, args,key, value}= this.addTreeList()
-                const node = this.cascadeData[0][this.reflectKey['value']]
-                if(value){
-                    fn({...args,[key]: node, [value]: this.searchStr}).then(res=>{
-                        if(res.code===200){
-                            this.$set(this,'list_data', res.data)
-                            if(this.$listeners['getListData']){
-                                this.$emit('getListData',  res.data)
-                            }
-                            this.isCascadeShow = false
-                        }else{
-                            alert('添加失败')
-                        }
-                    })
-                }else{
-                    alert('请选定节点')
-                }
+                this.$emit('getListData', {pId: this.cascadeData[0][this.reflectKey['value']],value: this.searchStr })
+            },
+            addBtnCancelHandle(){
+                this.isCascadeShow = false
+                this.searchStr = ''
             }
         },
         watch:{
@@ -220,6 +201,7 @@
             searchStr(v){
                 if(!v){
                     this.list_data=_.cloneDeep(this.listData)
+                    this.cascadeList=_.cloneDeep(this.listData)
                 }
             },
             listData:{

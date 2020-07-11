@@ -115,13 +115,12 @@
 ```
 :::
 
-#### 新增树形节点 addTreeList
+#### 新增树形节点 getListData
 ---
   <ul>
+     <li><p>getListData 新增树形节点。</p></li>
      <li><p>condition-props 用户不可选，不可见不满足条件的该项。</p></li>
-     <li><p>add-tree-list 以 <span style="color:red">传递属性</span> 的形式传入一个返回promise的请求函数。</p></li>
      <li><p>placeholder 新增树形节点的提示。</p></li>
-     <li><p>getListData 获取返回树形节点。</p></li>
   </ul>
   
 :::demo
@@ -136,7 +135,6 @@
     
                placeholder="请选择机构节点"
                condition-props="type"
-               :add-tree-list="addTreeList"
                @getListData="getListData"
         />
     </template>
@@ -233,14 +231,6 @@
                 }
             },
             methods:{
-                 addTreeList(){
-                    return  {
-                        fn:()=>new Promise(resolve => resolve({code:200})),
-                        args:{},
-                        key: 'pkId',
-                        value: 'value',
-                    }
-                 },
                  getListData(v){
                     console.log(v)
                  },
@@ -265,10 +255,6 @@
                :reflectKey="reflectKey"
                v-model="selectedData"
                title="请选择机构"
-    
-               placeholder="请选择机构"
-               :addTreeList="addTreeList"
-               @getListData="getListData"
     
                button-txt="选择机构"
                mask
@@ -360,17 +346,7 @@
                         }
                     ],
                 }
-            },
-            methods:{
-                 addTreeList(){
-                    return  new Promise(resolve => {
-                        resolve({})
-                    })
-                 },
-                 getListData(v){
-                    console.log(v)
-                 },
-            } 
+            }
         }
     </script>
 ```

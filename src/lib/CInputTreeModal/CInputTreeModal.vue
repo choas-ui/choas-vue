@@ -50,8 +50,6 @@
                    :isShow="isModalShow"
                    @toggleShow="v => this.isModalShow= v"
                    :placeholder="placeholder"
-                   v-model="selectedData"
-                   :add-tree-list="addTreeList"
                    @getListData="getListData"
         ></CTreeModal>
     </span>
@@ -144,10 +142,7 @@
                 default() {
                     return []
                 }
-            },
-            addTreeList: {
-                type:Function
-            },
+            }
         },
         data() {
             return {
