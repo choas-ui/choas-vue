@@ -43,11 +43,11 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
-    import CascadeItem from "./CCascadeItem";
+    import CCascadeItem from "../CCascadeItem/CCascadeItem";
     export default {
         name: 'CCascade',
         comments:{
-            CascadeItem
+            CCascadeItem
         },
         props:{
             listData:{
@@ -249,6 +249,8 @@
             > input {
                 height: 100%;
                 width: 100%;
+                height: addPX($sm-height);
+
                 padding-left: addPX($lg-padding);
                 box-sizing: border-box;
                 border: 1px solid $lineColor;

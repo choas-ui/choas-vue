@@ -85,10 +85,10 @@
     }
 </script>
 <style lang="scss" scoped>
-    @import "../scss/normal-bg";
-    @import "../scss/size";
-    @import "../scss/variable";
-    @import "../scss/functions";
+    @import "src/lib/scss/normal-bg";
+    @import "src/lib/scss/size";
+    @import "src/lib/scss/variable";
+    @import "src/lib/scss/functions";
     .cascade-item-wrap{
         position: absolute;
         box-sizing: border-box;

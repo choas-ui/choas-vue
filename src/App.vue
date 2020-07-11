@@ -1,31 +1,15 @@
 <template>
-    <div style="width: 300px">
-        <CTree
-                fileIcon
-                :list-data="listData"
-                v-model="selectData"
-        >
-            <CIcon
-                    slot="icon-mark"
-                    icon-name="choas-square-add"
-            />
-            <CIcon
-                    slot="file-icon"
-                    icon-name="choas-lists"/>
-            <template slot="tails">
-                <CIcon
-                        color="red"
-                        icon-name="choas-delete"
-                        @click="logs"
-                />
-                <CIcon
-                        color="red"
-                        icon-name="choas-square-add"
-                        @click="logs"
-                />
-            </template>
-        </CTree>
-    </div>
+    <CInputTreeModal
+            :can-be-edited="canBeEdited"
+            :list-data="listData"
+            :reflect-key="reflectKey"
+            v-model="selectedData"
+            title="请选择机构"
+
+            placeholder="请选择机构节点"
+            condition-props="type"
+            @getListData="getListData"
+    />
 </template>
 
 <script>
@@ -34,33 +18,85 @@
         name: 'App',
         components: {},
         data() {
-            return {
-                listData:[
+            return{
+                canBeEdited: true,
+                selectedData: [
                     {
-                        key: '颜色',
-                        value: '0',
+                        id: '014557484S-2-2-0017',
+                        name: '谢广坤',
+                    }
+                ],
+                reflectKey: {
+                    key: 'name',
+                    value: 'id'
+                },
+                listData: [
+                    {
+                        id: '014557484S',
+                        name: '特殊事务部',
                         expand: true,
-                        children:[
+                        type: true,
+                        children: [
                             {
-                                key: '冷色',
-                                value: '0-0',
-                            },
-                            {
-                                key: '暖色',
-                                value: '0-1',
+                                id: '014557484S-0',
+                                name: '指挥部',
                                 expand: true,
-                                children:[
+                                type: true,
+                                children: [
                                     {
-                                        key: '红色',
-                                        value: '0-1-0',
+                                        id: '014557484S-0-007',
+                                        name: '谢永强',
                                     },
                                     {
-                                        key: '橙色',
-                                        value: '0-1-1',
+                                        id: '014557484S-0-008',
+                                        name: '谢大脚',
+                                    },
+                                ],
+                            },
+                            {
+                                id: '014557484S-1',
+                                name: '后勤',
+                                expand: true,
+                                type: true,
+                                children: [
+                                    {
+                                        id: '014557484S-1-0017',
+                                        name: '尼古拉斯.赵',
+                                    },
+                                    {
+                                        id: '014557484S-1-0019',
+                                        name: '王常规',
+                                    },
+
+                                ],
+                            },
+                            {
+                                id: '014557484S-2',
+                                name: '业务部',
+                                expand: true,
+                                type: true,
+                                children: [
+                                    {
+                                        id: '014557484S-2-1',
+                                        name: '一组',
+                                    },
+                                    {
+                                        id: '014557484S-2-2',
+                                        name: '二组',
+                                        expand: true,
+                                        type: true,
                                         children: [
                                             {
-                                                key: '橙红',
-                                                value: '0-1-1-0',
+                                                id: '014557484S-2-2-0017',
+                                                name: '谢广坤',
+                                            },
+                                            {
+                                                id: '014557484S-2-2-0018',
+                                                name: '王小蒙',
+                                            },
+                                            {
+                                                id: '014557484S-2-2-0018',
+                                                name: '刘能',
                                             },
                                         ],
                                     },
@@ -69,12 +105,12 @@
                         ]
                     }
                 ],
-                selectData:[],
-                searchStr:'',
             }
         },
         methods:{
-            logs(a,b,c){console.log(a,b,c)}
+            getListData(v){
+                console.log(v)
+            },
         },
         mounted() {
         }
