@@ -1,16 +1,16 @@
 ### 弹窗
 ---
-  <small>
+  <p>
     重提醒，用来提醒或选择（多）区域，打断交互流。
-  </small>
+  </p>
 
 #### 默认
-  <small>
+  <p>
     <ul>
       <li>默认宽高为300*150，默认条件下只显示content,没有遮罩。</li>
       <li>不提供默认的header与footer。</li>
     </ul>
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -32,9 +32,9 @@
 
 #### 遮罩 mask
 ---
-  <small>
+  <p>
     mask控制弹窗有无遮罩。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -60,9 +60,9 @@
 
 #### 遮罩控制 cancel
 ---
-  <small>
+  <p>
     设置cancel，遮罩可以关闭弹层。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -102,9 +102,9 @@
 
 #### 控制图标 controller
 ---
-  <small>
+  <p>
     设置controller值，右上默认按钮消失
-  </small>
+  </p>
 
 
 :::demo
@@ -136,12 +136,10 @@
 
 #### 插槽 slot
 ---
-  <small>
-    <ul>
-      <li>提供了三个可以自由定制的插槽:header、controller、footer</li>
-      <li>不使用插槽时，弹窗的header和footer不显示</li>
-    </ul>
-  </small>
+  <ul>
+    <li>提供了三个可以自由定制的插槽:header、controller、footer</li>
+    <li>不使用插槽时，弹窗的header和footer不显示</li>
+  </ul>
 
 :::demo
 ```html
@@ -170,9 +168,9 @@
 
 #### 标题 Title
 ---
-  <small>
+  <p>
     弹框标题。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -200,9 +198,9 @@
 
 #### 类型 type
 ---
-  <small>
+  <p>
     快速生成提醒弹框。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -243,9 +241,9 @@
 
 #### 宽与高 width&height
 ---
-  <small>
+  <p>
     设计弹框的初始宽高。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -274,9 +272,9 @@
 
 #### 顶与左 top&left
 ---
-  <small>
+  <p>
     设计弹框的顶部及左边初始距离。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -303,9 +301,9 @@
 
 #### 拖动 draggable
 ---
-  <small>
+  <p>
     弹框是否可以拖动。
-  </small>
+  </p>
 
 :::demo
 ```html

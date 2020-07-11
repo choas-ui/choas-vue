@@ -1,6 +1,6 @@
 #### 树形组件
 ---
-层次分明的可选择控件。
+  <p>层次分明的可选择控件。</p>
 
 #### 数据 listData
 ---
@@ -67,7 +67,7 @@ export default {
 
 #### 展开 expand
 ---
-  数据中的expand控制默认展开。
+  <p>数据中的expand控制默认展开。</p>
 
 :::demo
 ```html
@@ -130,7 +130,6 @@ export default {
   <p>双向绑定的数据。</p>
   <p>返回的数据格式与初始值一致。</p>
   <p>返回的值与reflectKey相关。</p>
-
    
 :::demo
 ```html
@@ -193,7 +192,7 @@ export default {
 
 #### 数据关联 reflectKey
 ---
-  用于指定映射键、值关联。
+  <p>用于指定映射键、值关联。</p>
 
 
 :::demo
@@ -257,7 +256,7 @@ export default {
 
 #### 显示连线 line
 ---
-  显示数据间的层级连线。
+  <p>显示数据间的层级连线。</p>
    
 :::demo
 ```html
@@ -318,9 +317,11 @@ export default {
 
 #### 类型图标 fileIcon
 ---
-  <p>作为属性出现的fileIcon会显示默认图标。</p>
-  <p>作为插槽出现的file-icon会替换默认图标。</p>
-  <p>目前不支持多种Icon。</p>
+  <ul>
+    <li><p>作为属性出现的fileIcon会显示默认图标。</p></li>
+    <li><p>作为插槽出现的file-icon会替换默认图标。</p>
+    <li><p>目前不支持多种Icon。</p></li>
+  </ul>
    
 :::demo
 ```html
@@ -442,9 +443,11 @@ export default {
 
 #### 搜索 searchStr
 ---
-  <p>可搜索的tree。</p>
-  <p>给定markColor标注搜索到的字体颜色。</p>
-   
+  <ul>
+    <li><p>可搜索的tree。</p></li>
+    <li><p>给定markColor标注搜索到的字体颜色。</p></li>
+  </ul>
+  
 :::demo
 ```html
     <template>
@@ -506,8 +509,10 @@ export default {
 
 #### 后置操作按钮组 tail
 ---
-  <p>后置操作按钮组。</p>
-  <p>返回当前行数据及event。</p>
+  <ul>
+    <li><p>后置操作按钮组。</p></li>
+    <li><p>返回当前行数据及event。</p></li>
+  </ul>
 
 :::demo
 ```html

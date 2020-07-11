@@ -2,27 +2,23 @@
 ### 图标
 ---
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <small>
+  <p>
     示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/"> fontawesome </a> 图标库。
-  </small>
+  </p>
   <br>
-  <small>
+  <p>
     仅内置了少量的svg图标，以后会慢慢新增。
-  </small>
+  </p>
 
 
 #### 类型 type
 ---
-  <small>
-    <ul>
-      <li>fontClass 字体图标</li>
-      <li>iconName  svg字体图标</li>
-      <li>src 图片图标</li>
-      </ul>
-  </small>
-  <small>
-    默认图标宽高均为18px,行高也为18px。
-  </small>
+  <ul>
+    <li>fontClass 字体图标。</li>
+    <li>iconName  svg字体图标。</li>
+    <li>src 图片图标。</li>
+    <li>s默认图标宽高均为18px,行高也为18px。</li>
+  </ul>
 
 :::demo
 ```html
@@ -44,9 +40,9 @@
 
 #### 宽与高 width&height
 ---
-  <small>
+  <>
     设置图标的宽和高。
-  </small>
+  </>
 
 :::demo
 ```html
@@ -74,9 +70,9 @@
 
 #### 名称 iconName
 ---
-  <small>
+  <p>
     字体图标(ft)、svg图标(svg)时fontName指定图标对应名称。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -99,9 +95,9 @@
 
 #### 字体图标大小 fontSize
 ---
-  <small>
+  <p>
     仅在type为ft时生效
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -133,9 +129,9 @@
 
 #### 来源 src
 ---
-  <small>
+  <p>
     仅在type为img时生效。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -151,9 +147,9 @@
 
 #### 颜色 Color
 ---
-  <small>
+  <p>
     一般情况下的颜色。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -171,9 +167,9 @@
 
 #### 悬停颜色 activeColor
 ---
-  <small>
+  <p>
     鼠标hover变色, 仅在绑定点击事件时可以触发。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -210,9 +206,9 @@ export default {
 
 #### 点击 click
 ---
-  <small>
+  <p>
     点击事件。
-  </small>
+  </p>
 
 :::demo
 ```html
@@ -241,9 +237,9 @@ export default {
 
 #### 引入 importSrc
 ---
-  <small>
+  <p>
     某些时候你需要引入额外的资源。
-  </small>
+  </p>
 
 ```js
     // 提供importSrc 函数用于引入资源
@@ -301,17 +297,13 @@ export default {
 
 #### 问答 QAQ
 ---
-  <small>
-    <ul>
-      <li><b>Q:</b> 圆形按钮？</li>
-      <li><b>A:</b> 暂未提供圆形按钮。</li>
-    </ul>
-  </small>
+  <ul>
+    <li><b>Q:</b> 圆形按钮？</li>
+    <li><b>A:</b> 暂未提供圆形按钮。</li>
+  </ul>
 
 #### 归类 Answer
 ---
-  <small>
-    <ul>
-      <li><b>Q:</b></li>
-    </ul>
-  </small>
+  <ul>
+    <li><b>Q:</b></li>
+  </ul>
