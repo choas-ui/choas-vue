@@ -4,6 +4,17 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
+    <b>v 0.1.30</b>
+  </p>
+  
+  <ol>
+     <li>关闭级联后再次开打长度无限的问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
     <b>v 0.1.29</b>
   </p>
   
