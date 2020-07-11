@@ -581,7 +581,7 @@ export default {
         }
     },
     methods:{
-        logs(a,b,c){console.log(a,b,c)}
+        logs(item,index,event){console.log(item,index,event)}
     },
 }
 </script>
