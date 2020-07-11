@@ -170,7 +170,6 @@
         mounted() {
             this.list_data = _.cloneDeep(this.listData)
             this.cascadeList = _.cloneDeep(this.listData)
-            console.log(this.selectData)
         },
         methods: {
             confirmHandle() {
@@ -182,7 +181,8 @@
                 this.selectData = this.value
             },
             addTreeListHandle() {
-                this.$emit('addTreeNode', {pId: this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']], value: this.searchStr})
+                const pId = this.cascadeData[this.cascadeData.length-1]?this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']]: ''
+                this.$emit('addTreeNode', {pId: pId || '', value: this.searchStr})
             },
             addBtnCancelHandle() {
                 this.isCascadeShow = false
