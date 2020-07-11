@@ -4,6 +4,50 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
+    <b>v 0.1.29</b>
+  </p>
+  
+  <ol>
+     <li>关闭级联后再次开打长度无限的问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
+    <b>v 0.1.29</b>
+  </p>
+  
+  <ol>
+     <li>空值添加时的报错问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
+    <b>v 0.1.28</b>
+  </p>
+  
+  <ol>
+     <li>删除console。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
+    <b>v 0.1.27</b>
+  </p>
+  
+  <ol>
+     <li>新增列表过长时滚动。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
     <b>v 0.1.26</b>
   </p>
   
