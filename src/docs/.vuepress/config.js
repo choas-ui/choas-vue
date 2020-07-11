@@ -65,8 +65,8 @@ module.exports = {
             {text: '组件', link: '/components/'},
             {text: '日志', link: '/logs/'},
             {text: '工程', link: '/project/'},
-            {text: 'issues', link: 'https://github.com/faliye/choas-vue/issues'},
-            {text: 'GitHub', link: 'https://github.com/faliye/choas-vue'}
+            {text: 'issues', link: 'https://github.com/choas-ui/choas-vue/issues'},
+            {text: 'GitHub', link: 'https://github.com/choas-ui/choas-vue'}
         ],
         sidebarDepth: 2,
         sidebar: {
@@ -79,31 +79,31 @@ module.exports = {
                             title: '独立组件',
                             children: [
                                 [
-                                    '/components/common/button', '按钮 Button'
+                                    '/components/common/button', '按钮 CButton'
                                 ],
                                 [
-                                    '/components/common/icon', '图标 Icon'
+                                    '/components/common/icon', '图标 CIcon'
                                 ],
                                 [
-                                    '/components/common/input', '输入框* Input'
+                                    '/components/common/input', '输入框* CInput'
                                 ],
                                 [
-                                    '/components/common/modal', '弹层 Modal'
+                                    '/components/common/modal', '弹层 CModal'
                                 ],
                                 [
-                                    '/components/common/prompt', '提醒* Prompt'
+                                    '/components/common/prompt', '提醒* CPrompt'
                                 ],
                                 [
-                                    '/components/common/selection', '下拉框* Selection'
+                                    '/components/common/selection', '下拉框* CSelection'
                                 ],
                                 [
-                                    '/components/common/table', '表格* Table'
+                                    '/components/common/table', '表格* CTable'
                                 ],
                                 [
-                                    '/components/common/tag', '标签* Tag'
+                                    '/components/common/tag', '标签* CTag'
                                 ],
                                 [
-                                    '/components/common/tree', '树形 Tree'
+                                    '/components/common/tree', '树形 CTree'
                                 ],
 
                             ]
@@ -112,16 +112,16 @@ module.exports = {
                             title: '复合组件',
                             children: [
                                 [
-                                    '/components/complex/cascade', '级联* Cascade'
+                                    '/components/complex/cascade', '级联* CCascade'
                                 ],
                                 [
-                                    '/components/complex/treeModal', '树形弹框* TreeModal'
+                                    '/components/complex/treeModal', '树形弹框* CTreeModal'
                                 ],
                                 [
-                                    '/components/complex/selectTree', '树形选择器* SelectTree'
+                                    '/components/complex/selectTree', '树形选择器* CSelectTree'
                                 ],
                                 [
-                                    '/components/complex/selectTree', '穿梭框* Shuttle'
+                                    '/components/complex/selectTree', '穿梭框* CShuttle'
                                 ],
                             ]
                         },
@@ -129,7 +129,7 @@ module.exports = {
                             title: '特异组件',
                             children: [
                                 [
-                                    '/components/custom/inputTreeModal', 'input树形弹窗* InputTreeModal'
+                                    '/components/custom/inputTreeModal', 'input树形弹窗* CInputTreeModal'
                                 ],
                             ]
                         }

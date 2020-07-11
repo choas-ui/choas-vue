@@ -4,6 +4,17 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
+    <b>v 0.1.26</b>
+  </p>
+  
+  <ol>
+     <li>部分按钮异常问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
     <b>v 0.1.25</b>
   </p>
   
