@@ -4,6 +4,94 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-10</span>
+    <b>v 0.1.23</b>
+  </p>
+  
+  <ol>
+     <li>InputTreeModal 新增取消时候，Tree也一起还原。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.22</b>
+  </p>
+  
+  <ol>
+     <li>修复级联影响Tree显示问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.21</b>
+  </p>
+  
+  <ol>
+     <li>修复级联影响Tree显示问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.20</b>
+  </p>
+  
+  <ol>
+     <li>修复级联样式问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.19</b>
+  </p>
+  
+  <ol>
+     <li>修复InputTreeModal样式问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.18</b>
+  </p>
+  
+  <ol>
+     <li>修复InputTreeModal动态刷新问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.17</b>
+  </p>
+  
+  <ol>
+     <li>修复关联组件名称不一致问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
+    <b>v 0.1.16</b>
+  </p>
+  
+  <ol>
+     <li>组件重命名。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-10</span>
     <b>v 0.1.15</b>
   </p>
   
