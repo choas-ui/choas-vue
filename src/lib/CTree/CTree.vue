@@ -335,6 +335,8 @@
                         )
                     )
                 }
+                console.log(_.get(this.$attrs.value, '0.'+this.reflectKey['value'], ''))
+                console.log(data[this.reflectKey['value']])
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',

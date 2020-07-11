@@ -53,9 +53,12 @@
                         <b>{{item[reflectKey['key']]}}</b>
                         <CIcon icon-name="choas-close"
                                color="#fff"
-                               height="30"
+                               height="100%"
                                width="30"
                                active-color="#ff5e5c"
+                               :style="{
+                                    lineHeight: '100%'
+                               }"
                                @click="selectData = []"
                         ></CIcon>
                     </p>
@@ -326,12 +329,11 @@
                 padding-left: addPX($lg-padding);
                 box-sizing: border-box;
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 border-left: 1px solid $lineColor;
 
                 > p {
                     width: 100%;
-                    height: addPX($sm-height);
                     line-height: addPX($sm-height);
                     box-sizing: border-box;
                     text-align: center;
