@@ -3,7 +3,18 @@
 
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-10</span>
+    <span>2020-07-11</span>
+    <b>v 0.1.24</b>
+  </p>
+  
+  <ol>
+     <li>修复Cascade 同步更新问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
     <b>v 0.1.23</b>
   </p>
   
