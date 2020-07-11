@@ -8,6 +8,17 @@
   </p>
   
   <ol>
+     <li>优化InputTreeModal操作及样式流程。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-11</span>
+    <b>v 0.1.25</b>
+  </p>
+  
+  <ol>
      <li>InputTreeModal 移除getListData接口，新增addTreeNode。</li>
   </ol>
 :::
