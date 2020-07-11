@@ -207,6 +207,7 @@
             listData:{
                 handler(v){
                     this.$set(this, 'list_data', _.cloneDeep(v))
+                    this.$set(this, 'cascadeList', _.cloneDeep(v))
                 },
                 deep: true,
                 immediate: true
