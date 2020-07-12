@@ -4,11 +4,21 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-12</span>
-    <b>v 0.1.31</b>
+    <b>v 0.1.32</b>
   </p>
   
   <ol>
      <li>新增Tree功能</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-12</span>
+    <b>v 0.1.31</b>
+  </p>
+  
+  <ol>
      <li>重写cascade。</li>
   </ol>
 :::

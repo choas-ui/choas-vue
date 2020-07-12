@@ -65,6 +65,9 @@
                 default() {
                     return ''
                 }
+            },
+            controllers:{
+                type: Boolean,
             }
         },
         model:{
@@ -128,7 +131,6 @@
                 selfPath = ''
             }
             const data = path ? _.get(this.copyListData, selfPath, []) : this.copyListData
-
             // 展开图标
             const createIconMark = (data) => {
                 if (!(data.children || []).length) {
@@ -292,13 +294,81 @@
                 })
             }
             // 文件图标
-            const createTailsIcon = () => {
-                if (!this.$slots['tail']) {
+            const createControllersIcon = (data) => {
+                if(!this.controllers && !this.$slots['controllers']){
+                    return  null
+                }
+                if (this.$slots['controllers']) {
+                    return  this.$slots['controllers'].map((item) => {
+                        const {tag, listeners = {}} = item.componentOptions
+                        const _listeners = {}
+                        Object.keys(listeners).forEach(key=>{
+                            _listeners[key]=(e)=>{
+                                return listeners[key].call(this, data, e)
+                            }
+                        })
+                        return h(
+                            tag,
+                            {
+                                props: {
+                                    ...item.componentOptions.propsData
+                                },
+                                ...item.data,
+                                on:_listeners
+                            }
+                        )
+                    })
+                }
+                if(!this.controllers){
                     return null
                 }
-                if (this.$slots['tail']) {
-                    return h('span', this.$slots['tail'])
-                }
+                return  [
+                    h(
+                        'CIcon',
+                        {
+                            props: {
+                                color: '#333',
+                                iconName:'choas-edit',
+                            },
+                            slots: 'controllers',
+                            on:{
+                                click(){
+                                    console.log(data)
+                                }
+                            }
+                        },
+                    ),
+                    h(
+                        'CIcon',
+                        {
+                            props: {
+                                color: '#333',
+                                iconName:'choas-add',
+                            },
+                            slots: 'controllers',
+                            on:{
+                                click(){
+                                    console.log(data)
+                                }
+                            }
+                        }
+                    ),
+                    h(
+                        'CIcon',
+                        {
+                            props: {
+                                color: '#333',
+                                iconName:'choas-delete',
+                            },
+                            slots: 'controllers',
+                            on:{
+                                click(){
+                                    console.log(data)
+                                }
+                            }
+                        }
+                    )
+                ]
             }
             // 标题
             const createTitle = (data) => {
@@ -387,21 +457,45 @@
                                 fileIcon: this.fileIcon,
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
+                                controllers: this.controllers,
                             },
                             on: this.$listeners
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                const {tag} = this.$slots[key][0].componentOptions
-                                return h(
-                                    tag,
-                                    {
-                                        props: {
-                                            ...this.$slots[key][0].componentOptions.propsData
-                                        },
-                                        ...this.$slots[key][0].data
-                                    }
-                                )
+                                if(this.controllers && this.$slots['controllers']){
+                                    return this.$slots['controllers'].map(item=>{
+                                        const {tag, listeners = {}} = item.componentOptions
+                                        const _listeners = {}
+                                        Object.keys(listeners).forEach(key=>{
+                                            _listeners[key]=(e)=>{
+                                                return listeners[key].call(this, data, e)
+                                            }
+                                        })
+                                        return h(
+                                            tag,
+                                            {
+                                                props: {
+                                                    ...item.componentOptions.propsData
+                                                },
+                                                ...item.data,
+                                                on: _listeners
+                                            }
+                                        )
+                                    })
+                                }else{
+                                    const {tag} = this.$slots[key][0].componentOptions
+                                    return h(
+                                        tag,
+                                        {
+                                            props: {
+                                                ...this.$slots[key][0].componentOptions.propsData
+                                            },
+                                            ...this.$slots[key][0].data
+                                        }
+                                    )
+                                }
+
                             })
                         ]
                     )
@@ -415,7 +509,7 @@
                 'ul',
                 {},
                 [
-                    (data).map(item=>{
+                    (data).map((item)=>{
                         return h(
                             'li',
                             {
@@ -471,7 +565,7 @@
                                                         slot: 'tails'
                                                     },
                                                     [
-                                                        createTailsIcon(item),
+                                                        createControllersIcon(item),
                                                     ]
                                                 )
                                             ]

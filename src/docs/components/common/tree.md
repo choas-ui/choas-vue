@@ -507,11 +507,79 @@ export default {
 ```
 :::
 
-#### 后置操作按钮组 tail
+#### 后置操作按钮组 controllers
 ---
   <ul>
-    <li><p>后置操作按钮组。</p></li>
-    <li><p>返回当前行数据及event。</p></li>
+    <li><p>controllers 属性将呈现一组可以操作树形节点的按钮，</p></li>
+  </ul>
+
+:::demo
+```html
+    <template>
+        <CTree
+            fileIcon
+            :list-data="listData"
+            v-model="selectData"
+            controllers
+        >
+            <CIcon
+                slot="icon-mark"
+                icon-name="choas-square-add"
+            />
+            <CIcon
+                slot="file-icon"
+                icon-name="choas-lists"/>
+        </CTree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectData:[],
+            searchStr:'',
+        }
+    }
+}
+</script>
+```
+:::
+
+  <ul>
+    <li><p>你也可以自行添加一组controllers，click事件点击的数据和事件对象。</p></li>
   </ul>
 
 :::demo
@@ -529,18 +597,12 @@ export default {
             <CIcon
                 slot="file-icon"
                 icon-name="choas-lists"/>
-            <template slot="tails">
-                <CIcon
-                    color="red"
-                    icon-name="choas-square-add"
-                    @click="logs"
+            <CIcon
+ slot="controllers"
+                color="green"
+                icon-name="choas-confirm"
+                @click="logs"
                 />
-                <CIcon
-                    color="red"
-                    icon-name="choas-delete"
-                    @click="logs"
-                />
-            </template>
         </CTree>
     </template>
 <script>
@@ -586,7 +648,7 @@ export default {
         }
     },
     methods:{
-        logs(item,index,event){console.log(item,index,event)}
+        logs(item,event){console.log(item,event)}
     },
 }
 </script>
