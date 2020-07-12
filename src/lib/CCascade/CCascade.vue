@@ -143,8 +143,7 @@
         methods: {
             addInfo(data, parentId) {
                 data.forEach((item, index) => {
-                    // TODO 调试阶段这里
-                    if (item[this.conditionProps]) {
+                    if (!item[this.conditionProps]) {
                         data[index] = undefined
                     }
                     item._c_cascade_parentId = parentId;

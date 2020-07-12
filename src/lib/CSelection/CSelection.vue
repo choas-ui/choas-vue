@@ -17,7 +17,7 @@
                        transform: isDropUlShow? 'rotate(180deg)': 'rotate(0)',
                        transition: 'all 0.3s'
                   }"
-                  @click="iconClick($event)"
+                  @click.prevent="iconClick($event)"
             />
         </label>
         <ul v-show="isDropUlShow" ref="dropUl" @mouseenter="clearTimeHandle" @mouseleave="leaveHandle">
@@ -107,8 +107,7 @@
                     this.isDropUlShow= false
                 },180)
             },
-            iconClick(e){
-                e.preventDefault()
+            iconClick(){
                 this.isDropUlShow = !this.isDropUlShow
             }
         }
@@ -143,7 +142,6 @@
         ul{
             position: absolute;
             left: 0;
-            box-sizing: border-box;
             top: addPX($sm-height + $sm-padding);
             width: 100%;
             max-height: 300px;
