@@ -1,59 +1,65 @@
 <template>
-    <div :class="getSelectWrapClass">
+    <div :class="getSelectWrapClass" ref="cascade">
         <label>
             <input type="text"
+                   ref="inputBox"
                    :placeholder="placeholder"
-                   @focus="isDropUlShow = true"
+                   @focus="focusHandle"
                    :value="getSelectedTitle"
             />
             <CIcon class-name="cascade-icon"
                    icon-name="choas-arrow-down"
                    :style="{
-                       transform: isDropUlShow? 'rotate(180deg)': 'rotate(0)',
-                       transition: 'all 0.3s'
+                       transform: selectedArr.length? 'rotate(180deg)': 'rotate(0)',
+                       transition: 'all 0.5s'
                   }"
-                   @click="iconClick($event)"
+                   @click.prevent="iconClick($event)"
             />
         </label>
-        <div v-if="isDropUlShow"
-             class="collapse-box"
+        <div v-if="(selectedArr[0] || []).length && isDropUlShow">
+            <template v-for="(selectedItem, index) in selectedArr">
+                <ul :class="{
+                    'cascade-drop-box': true,
+                }"
+                    :key="index"
+                    :style="{
+                        left: 151* index +'px',
+                        top: $refs.cascade.clientHeight+'px',
+                    }"
+                >
+                    <li v-for="(item, i) in selectedItem" :key="i" @click="addSelectedDataHandle(item)">
+                        <p :class="{
+                        'cascade-item-p': true,
+                        active: result.some(res=>res[reflectKey['value']]===item[reflectKey['value']])
+                    }"
+                           :title="item[reflectKey['key']]"
+                           :style="{
+                           cursor: (item.children || []).length? 'pointer': 'normal'
+                       }"
+                        >
+                            {{item[reflectKey['key']]}}
+                        </p>
+                        <CIcon v-if="(item.children || []).length"
+                               ref="cascadeIcon"
+                               icon-name="choas-arrow-right"
+                               :color="result.some(res=>res[reflectKey['value']]===item[reflectKey['value']])?'#fff':''"
+                               :style="{
+                                position:'absolute',
+                                right: 0,
+                                top: '6px'
+                           }"
+                        />
+                    </li>
+                </ul>
+            </template>
+        </div>
+        <div v-if="!(selectedArr[0] || []).length && isDropUlShow"
+             class="no-data-box"
              :style="{
-            minWidth: '100%',
-            height: '400%',
-            overflowX:'visible',
+                top: $refs.cascade.clientHeight+'px',
              }"
         >
-            <CIcon :style="{
-                position: 'absolute',
-                 top: '-5px',
-                  right: '-5px'
-            }" width="40" height="40" icon-name="choas-close" @click="iconClick" active-color="#ff5e5c"/>
-            <div :style="{
-                height: '100%',
-                overflowY:'auto',
-                overflowX:'visible',
-                position: 'relative',
-             }"
-            >
-                <div v-if="copyData.length"
-                     :style="{
-                                width: (80+ (150* floorX)) +'px',
-                                height: (60+ (40* floorY)) +'px',
-                                }"
-                >
-                    <CCascadeItem
-                            v-for="(item,index) in copyData"
-                            :key="index"
-                            :item-data="item"
-                            :reflect-key="reflectKey"
-                            @change="change"
-                            :lv="0"
-                            :conditionProps="conditionProps"/>
-                </div>
-                <div v-else>
-                    暂无数据
-                </div>
-            </div>
+            暂无数据
         </div>
     </div>
 </template>
@@ -61,13 +67,10 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
-    import CCascadeItem from "../CCascadeItem/CCascadeItem";
 
     export default {
         name: 'CCascade',
-        components: {
-            CCascadeItem
-        },
+        components: {},
         props: {
             listData: {
                 type: Array,
@@ -108,12 +111,20 @@
             return {
                 isDropUlShow: false,
                 copyData: [],
-                floorX: 1,
-                floorY: 1,
+                selectedArr: [],
                 result: []
             };
         },
-        mounted() {},
+        mounted() {
+            this.$nextTick(()=>{
+                document.addEventListener('click',({target})=>{
+                    if(this.$refs.cascade && !this.$refs.cascade.contains(target)){
+                        this.isDropUlShow=false
+                        this.selectedArr=[]
+                    }
+                })
+            })
+        },
         computed: {
             getSelectWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
@@ -124,15 +135,16 @@
                 )
             },
             getSelectedTitle() {
-                return this.value.reduce((a, b) => {
-                    return a = b[this.reflectKey['key']] + (a ? ' / ' + a : '')
+                return [...this.result].reverse().reduce((a, b) => {
+                    return b[this.reflectKey['key']] + (a ? ' / ' + a : '')
                 }, '')
             }
         },
         methods: {
             addInfo(data, parentId) {
                 data.forEach((item, index) => {
-                    if (!item[this.conditionProps]) {
+                    // TODO 调试阶段这里
+                    if (item[this.conditionProps]) {
                         data[index] = undefined
                     }
                     item._c_cascade_parentId = parentId;
@@ -144,16 +156,22 @@
                 })
                 return data
             },
-            iconClick(e) {
-                e.preventDefault()
-                this.floorX = 1
-                this.floorY = 1
-                this.isDropUlShow = !this.isDropUlShow
-                if (!this.isDropUlShow) {
-                    this.operateCopyData(this.copyData)
+            iconClick() {
+                if (this.selectedArr.length) {
+                    this.selectedArr = []
+                    this.isDropUlShow=false
+                } else {
+                    this.selectedArr.push(this.copyData)
+                    this.isDropUlShow=true
                 }
             },
-            operateCopyData(data){
+            focusHandle() {
+                if(!this.selectedArr.length){
+                    this.selectedArr.push(this.copyData)
+                }
+                this.isDropUlShow = true
+            },
+            operateCopyData(data) {
                 data.forEach((item, index) => {
                     this.$set(data, index, {...item, isOpen: false})
                     if ((item.children || []).length) {
@@ -161,62 +179,14 @@
                     }
                 })
             },
-            change(item) {
-                const path = item._c_cascade_id.slice(2).split('-').join('.children.').split('.')
-                const parentPath = item._c_cascade_parentId.slice(2).split('-').join('.children.').split('.')
-                // 获取父元素值
-                const parentValue = parentPath !== '' ? _.get(this.copyData, parentPath, {}) : this.copyData
-                // 获取自身序数
-                const selfIndex = parseInt(item._c_cascade_id.slice(item._c_cascade_id.length - 1), 10)
-                // 关闭所有同级及子集目录
-                const fClose = (data, selfIndex) => {
-                    (data || []).forEach((item, index) => {
-                        if (selfIndex !== null) {
-                            if (index !== selfIndex) {
-                                data.splice(index, 1, {...item, isOpen: false})
-                            }
-                        } else {
-                            data.splice(index, 1, {...item, isOpen: false})
-                        }
-                        if ((item.children || []).length) {
-                            fClose(item.children, null)
-                        }
-                    })
+            addSelectedDataHandle(data) {
+                const index = data._c_cascade_parentId.split('-').length
+                this.selectedArr.splice(index, this.selectedArr.length)
+                if ((data.children || []).length) {
+                    this.selectedArr.push([...data.children])
                 }
-                fClose(parentValue.children, selfIndex)
-                // 打开自身
-                this.$set(item, 'isOpen', true)
-                // 动态调整宽度
-                this.floorX = item._c_cascade_id.split('-').length
-                // 没有子集，动态调整
-                if (!(item.children || []).length) {
-                    this.floorX--
-                }
-                // 动态调整高度
-                let pathStr = path.join('.')
-                this.floorY = this.listData.length
-                let count = 0
-                do {
-                    const children = _.get(this.copyData, pathStr + '.children', [])
-                    this.floorY = this.floorY + (children.length ? children.length - 1 : 0)
-                    count += 2;
-                    pathStr = path.slice(0, path.length - count).join('.')
-                } while (pathStr)
-                const p = _.get(this.copyData, path.splice(0, path.length - 2).join('.'), {})
-                // 筛选父级所在序号 父级以后所有数值删除
-                let findIndex = 0
-                if (Object.keys(p).length) {
-                    findIndex = this.result.findIndex((res) => {
-                        return res[this.reflectKey['value']] === p[this.reflectKey['value']]
-                    })
-                    this.result.splice(findIndex + 1, this.result.length)
-                } else {
-                    this.result.splice(findIndex, this.result.length)
-                }
-                // 添加结果集
-                const key = this.reflectKey['key']
-                const value = this.reflectKey['value']
-                this.result.push({[key]: item[key], [value]: item[value]})
+                this.result.splice(index - 1, this.result.length)
+                this.result.push(data)
             }
         },
         watch: {
@@ -224,12 +194,13 @@
                 handler(v) {
                     this.$emit('input', v)
                 },
-                deep: true
+                deep: true,
+                immediate: true
             },
             listData: {
                 handler(v) {
-                    this.floorY = v.length
                     this.copyData = this.addInfo(_.clone(v), '0').filter(Boolean)
+                    this.copyData = this.addInfo(this.copyData, '0')
                     this.copyData.forEach((item, index) => {
                         this.$set(this.copyData, index, {...item, isOpen: true})
                     })
@@ -280,16 +251,79 @@
             }
         }
 
-        .collapse-box {
+        .cascade-drop-box {
             position: absolute;
-            top: addPX($df-height+$lg-padding*2);
-            z-index: 999;
-            background: #fff;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            padding: addPX($lg-padding*2);
-            box-shadow: 1px 1px 3px $shadowCr;
+            width: 150px;
+            padding: 0;
+            margin: 0;
+            border: 1px solid $lineColor;
             border-radius: addPX($sm-radius);
+            background: #fff;
+            max-height: addPX($lg-height*5);
+            overflow-y: auto;
+
+            & > li {
+                height: addPX($sm-height);
+                list-style: none;
+                width: 100%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                position: relative;
+                box-sizing: border-box;
+                align-items: center;
+
+                &:first-of-type {
+                    border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
+                }
+
+                &:last-of-type {
+                    border-radius: 0 0 addPX($sm-radius) addPX($sm-radius);
+                }
+
+                &:only-of-type {
+                    border-radius: addPX($sm-radius);
+                }
+
+                > .cascade-item-p {
+                    margin: 0;
+                    height: addPX($sm-height);
+                    line-height: addPX($sm-height);
+                    font-size: addPX($lg-fs);
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    padding: 0 addPX($df-padding);
+
+                    &:hover {
+                        background: $info;
+                        color: #fff;
+                    }
+
+                    &.active {
+                        background: $info;
+                        color: #fff;
+                    }
+                }
+
+                > span {
+                    position: absolute;
+                    right: 0;
+                }
+            }
+        }
+
+        .no-data-box {
+            width: 150px;
+            height: 100px;
+            box-sizing: border-box;
+            border: 1px solid $lineColor;
+            position: absolute;
+            border-radius: addPX($sm-radius);
+            text-align: center;
+            background: #fff;
+            line-height: 100px;
+            z-index: 999;
         }
     }
 </style>

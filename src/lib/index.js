@@ -1,6 +1,5 @@
 import CButton from './CButton'
 import CCascade from './CCascade'
-import CCascadeItem from './CCascadeItem'
 import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
@@ -14,7 +13,6 @@ import CTreeModal from './CTreeModal'
 const components = [
     CButton,
     CCascade,
-    CCascadeItem,
     CIcon,
     CInputTreeModal,
     CModal,

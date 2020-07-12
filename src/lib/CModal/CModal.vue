@@ -21,7 +21,6 @@
                     top: !mask? 0 : top? `${top}px`: `calc(50vh - ${height/2}px)`,
                     left: !mask? 0 : left? `${left}px`: `calc(50vw - ${width/2}px)`,
                 }"
-                @click="($event) => $event.stopPropagation()"
                 ref="modalBox"
                 @mousedown="mask && dragStart($event)"
         >
@@ -145,7 +144,6 @@
                 this.$emit('input', false)
             },
             dragStart($event) {
-                $event.stopPropagation()
                 if($event.button){
                     return
                 }

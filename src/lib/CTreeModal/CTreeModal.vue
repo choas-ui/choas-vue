@@ -6,6 +6,7 @@
             :draggable="draggable"
             :controllerColor="controllerColor"
             :activeColor="activeColor"
+            ref="treeModal"
     >
         <slot slot="header">
             <div class="modal-header">
@@ -18,7 +19,7 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" :placeholder="noticeTxt">
-                    <CButton v-show="!isCascadeShow" @click="isCascadeShow = true">新增</CButton>
+                    <CButton v-show="!isCascadeShow" @click="openCascade">新增</CButton>
                     <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
                     <CButton v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
                 </div>
@@ -175,6 +176,9 @@
             this.cascadeList = _.cloneDeep(this.listData)
         },
         methods: {
+            openCascade(){
+                this.isCascadeShow = true
+            },
             confirmHandle() {
                 this.$emit('toggleShow', false)
                 this.$emit('input', this.selectData)
