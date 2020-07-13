@@ -1,8 +1,53 @@
 ### 版本信息
 ---
+
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-12</span>
+    <span>2020-07-13</span>
+    <b>v 0.1.36</b>
+  </p>
+  
+  <ol>
+     <li>cascade 下拉框样式。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.36</b>
+  </p>
+  
+  <ol>
+     <li>Tree 文档说明。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.35</b>
+  </p>
+  
+  <ol>
+     <li>InputTreeModal 值的刷新问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.34</b>
+  </p>
+  
+  <ol>
+     <li>InputTreeModal 值的刷新问题。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
     <b>v 0.1.33</b>
   </p>
   
@@ -13,7 +58,7 @@
 
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-12</span>
+    <span>2020-07-13</span>
     <b>v 0.1.33</b>
   </p>
   
