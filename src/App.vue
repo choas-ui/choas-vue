@@ -66,6 +66,9 @@
             logs(item,event){console.log(item,event)}
         },
         mounted() {
+        },
+        updated() {
+            console.log(123)
         }
     }
 </script>

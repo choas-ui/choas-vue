@@ -163,7 +163,10 @@
                  addTreeNode(v){
                     console.log(v)
                  },
-            } 
+            },
+updated(){
+console.log(123)
+}
         }
     </script>
 ```
