@@ -319,13 +319,14 @@
                 }
                 if (this.$slots['controllers']) {
                     return  this.$slots['controllers'].map((item) => {
-                        const {tag, listeners = {}, propsData} = item.componentOptions
+                        const {tag, listeners = {}, propsData} = item.componentOptions || {}
                         const _listeners = {}
                         Object.keys(listeners).forEach(key=>{
                             _listeners[key]=(e)=>{
                                 return listeners[key].call(this, data, e)
                             }
                         })
+                        if(tag)
                         return h(
                             tag,
                             {
@@ -337,7 +338,8 @@
                                 on:_listeners
                             }
                         )
-                    })
+                        return null
+                    }).filter(Boolean)
                 }
                 if(!this.controllers){
                     return null
@@ -482,42 +484,37 @@
                             },
                             on: this.$listeners
                         },
+                        /* 重新带入插槽 */
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                if(this.$slots['controllers']&& this.$slots['controllers'].length){
-                                    console.log(this.$slots['controllers'])
-                                    return this.$slots['controllers'].map(item=>{
-                                        const {tag, listeners = {}, propsData} = item.componentOptions
-                                        const _listeners = {}
-                                        Object.keys(listeners).forEach(key=>{
-                                            _listeners[key]=(e)=>{
-                                                return listeners[key].call(this, data, e)
-                                            }
-                                        })
+                                const {tag} = this.$slots[key][0].componentOptions || {}
+                                if(key ==='controllers'){
+                                    return this.$slots[key].map(item=>{
+                                        const {tag, listeners = {}, propsData} = item.componentOptions || {}
+                                        if(tag)
                                         return h(
                                             tag,
                                             {
                                                 props: {
-                                                    ...propsData
+                                                    ...propsData,
                                                 },
-                                                ...item.data,
                                                 slot: 'controllers',
-                                                on: _listeners
+                                                ...item.data,
+                                                on: listeners
                                             }
                                         )
-                                    })
-                                }else{
-                                    const {tag} = this.$slots[key][0].componentOptions
-                                    return h(
-                                        tag,
-                                        {
-                                            props: {
-                                                ...this.$slots[key][0].componentOptions.propsData
-                                            },
-                                            ...this.$slots[key][0].data
-                                        }
-                                    )
+                                        return  null
+                                    }).filter(Boolean)
                                 }
+                                return h(
+                                    tag,
+                                    {
+                                        props: {
+                                            ...this.$slots[key][0].componentOptions.propsData
+                                        },
+                                        ...this.$slots[key][0].data
+                                    }
+                                )
 
                             })
                         ]

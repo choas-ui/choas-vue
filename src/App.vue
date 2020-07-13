@@ -5,15 +5,15 @@
             line
             :list-data="listData"
             v-model="selectData"
-            controllers
     >
-        <CIcon
-                slot="mark-icon"
-                icon-name="choas-square-add"
+        <CIcon slot="controllers"
+               con-name="choas-confirm"
+               @click="logs"
         />
-        <CIcon
-                slot="file-icon"
-                icon-name="choas-lists"/>
+        <CIcon slot="controllers"
+               icon-name="choas-min"
+               @click="logs"
+        />
     </CTree>
 </template>
 

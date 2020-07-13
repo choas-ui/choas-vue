@@ -1,5 +1,27 @@
 ### 版本信息
 ---
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-12</span>
+    <b>v 0.1.33</b>
+  </p>
+  
+  <ol>
+     <li>Tree 新增controllers选项。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-12</span>
+    <b>v 0.1.33</b>
+  </p>
+  
+  <ol>
+     <li>InputTreeModal 选中项不更新问题。</li>
+     <li>cascade 样式受到影响问题。</li>
+  </ol>
+:::
 
 :::tip 版本信息
   <p class="logs-version-item">

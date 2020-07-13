@@ -639,9 +639,10 @@ export default {
 ```
 :::
   <ul>
-    <li><p>你也可以自行添加一组controllers，click事件点击的数据和事件对象。</p></li>
+    <li><p>自行添加一组controllers，click事件点击的数据和事件对象。</p></li>
   </ul>
-
+  <p>统一放置在一个template 插槽中。</p>
+  
 :::demo
 ```html
     <template>
@@ -656,12 +657,83 @@ export default {
             <CIcon
                 slot="file-icon"
                 icon-name="choas-lists"/>
-            <CIcon
- slot="controllers"
-                color="green"
-                icon-name="choas-confirm"
-                @click="logs"
+            <template slot="controllers">
+                <CIcon icon-name="choas-lists"
+                       @click="logs"
                 />
+                <CIcon icon-name="choas-lists"
+                       @click="logs"
+                />
+            </template>
+        </CTree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectData:[],
+            searchStr:'',
+        }
+    },
+    methods:{
+        logs(item,event){console.log(item,event)}
+    },
+}
+</script>
+```
+:::
+  <p>单个名为controllers的插槽。</p>
+  
+:::demo
+```html
+    <template>
+        <CTree
+            :list-data="listData"
+            v-model="selectData"
+        >
+            <CIcon slot="icon-mark"
+                   icon-name="choas-square-add"
+            />
+            <CIcon slot="file-icon"
+                   icon-name="choas-lists"/>
+            <CIcon slot="controllers"
+                   con-name="choas-confirm"
+                   @click="logs"
+            />
         </CTree>
     </template>
 <script>
