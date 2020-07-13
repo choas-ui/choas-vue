@@ -91,32 +91,7 @@
         mounted() {
             this.copyListData = _.cloneDeep(this.listData)
         },
-        methods: {},
         watch: {
-            searchStr(v) {
-                // 筛选
-                const key = this.reflectKey['key']
-                const filterTree = (data) => {
-                   data.forEach((item)=>{
-                       if(item.children){
-                           filterTree(item.children)
-                       }
-                       if(item[key].indexOf(v)>-1 || (item.children||[]).some(item=>item.expand)){
-                           this.$set(item,'expand', true)
-                       }else{
-                           this.$set(item,'expand', false)
-                       }
-                   })
-                    return data
-                }
-                let res = null
-                if (v) {
-                    res = filterTree(_.cloneDeep(this.listData)).filter(item=>item.expand)
-                } else {
-                    res = _.cloneDeep(this.listData)
-                }
-                this.$set(this,'copyListData', res)
-            },
             listData:{
                 handler(v){
                     this.copyListData = _.cloneDeep(v)
@@ -131,13 +106,6 @@
             const markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
             const prefix = this.prefix ? `${this.prefix}-` : ''
-            // let path = ''
-            // let selfPath = ''
-            // if (path) {
-            //     selfPath = 'children.' + path
-            // } else {
-            //     selfPath = ''
-            // }
             // 展开图标
             const createIconMark = (data) => {
                 if (!(data.children || []).length) {

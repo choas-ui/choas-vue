@@ -194,6 +194,23 @@
             addBtnCancelHandle() {
                 this.isCascadeShow = false
                 this.searchStr = ''
+            },
+            filterData(data,v){
+                let key = this.reflectKey['key']
+                for (let i = 0; i <data.length ; i++) {
+                    let item = data[i]
+                    if((item.children || []).length){
+                        this.filterData(item.children, v)
+                    }
+                    if(!(item.children || []).length){
+                        delete item.children
+                        if(item[key].indexOf(v)<0){
+                            data.splice(i,1)
+                            i--
+                        }
+                    }
+                }
+                return data
             }
         },
         watch: {
@@ -218,6 +235,9 @@
                 if (!v) {
                     this.list_data = _.cloneDeep(this.listData)
                     this.cascadeList = _.cloneDeep(this.listData)
+                }else{
+                    const data =  _.cloneDeep(this.listData)
+                    this.list_data =this.filterData(data, v)
                 }
             },
             listData: {
@@ -227,7 +247,7 @@
                 },
                 deep: true,
                 immediate: true
-            }
+            },
         }
     }
 </script>
