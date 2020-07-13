@@ -54,8 +54,8 @@
                         <b>{{item[reflectKey['key']]}}</b>
                         <CIcon icon-name="choas-close"
                                color="#fff"
-                               height="40"
-                               width="40"
+                               height="30"
+                               width="30"
                                active-color="#ff5e5c"
                                :style="{
                                     lineHeight: '100%'
@@ -344,6 +344,7 @@
                     margin: addPX($lg-padding) 0 0 0;
                     display: flex;
                     font-size: addPX($lg-fs);
+                    align-items: center;
 
                     > b {
                         flex: 1;
