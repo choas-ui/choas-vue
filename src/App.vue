@@ -1,24 +1,19 @@
 <template>
     <CTree
-            fileIcon
+            :file-icon-fix-margin-left="6"
+            :mark-icon-fix-margin-left="6"
             line
             :list-data="listData"
             v-model="selectData"
+            controllers
     >
         <CIcon
-                slot="icon-mark"
+                slot="mark-icon"
                 icon-name="choas-square-add"
         />
         <CIcon
                 slot="file-icon"
                 icon-name="choas-lists"/>
-       <template                    slot="controllers"
-       >
-           <CIcon
-                   icon-name="choas-lists"
-                   @click="logs"
-           />
-       </template>
     </CTree>
 </template>
 

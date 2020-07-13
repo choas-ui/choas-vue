@@ -224,6 +224,7 @@
         width: 90%;
         background: #fff;
         padding: addPX($lg-padding) 0;
+        box-sizing: content-box;
 
         > label {
             display: block;

@@ -18,7 +18,7 @@
               <div class="input-like"
                    @click="inputClick"
                    :style="{
-                       width: buttonTxt?'70%': '95%',
+                       width: buttonTxt?'70%': '100%',
                    }">
                   <template v-if="selectedData.length">
                       <span
@@ -171,7 +171,14 @@
                 },
                 deep: true,
                 immediate: true
-            }
+            },
+            value:{
+                handler(v){
+                    this.selectedData =  v
+                },
+                deep: true,
+                immediate: true
+            },
         }
     }
 </script>
@@ -186,43 +193,40 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        .input-like{
-            margin:0 addPX($lg-padding);
-        }
-    }
-    .input-like {
-        width: 100%;
-        border: 1px solid #D9D9D9;
-        border-radius: 4px;
-        line-height: 34px;
-        min-height: 34px;
-        padding-left: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        cursor: pointer;
-        &-unedited{
-            border: none;
-            cursor: not-allowed;
-        }
-        .tag-span {
-            height: 28px;
-            line-height: 28px;
-            display: inline-block;
-            margin-right: 5px;
-            padding: 0 10px;
-            background: #ccc;
+        .input-like {
+            width: 100%;
+            border: 1px solid #D9D9D9;
             border-radius: 4px;
-            color: #fff;
-        }
+            line-height: 34px;
+            min-height: 34px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            cursor: pointer;
+            &-unedited{
+                border: none;
+                cursor: not-allowed;
+            }
+            .tag-span {
+                height: 28px;
+                line-height: 28px;
+                display: inline-block;
+                margin-right: 5px;
+                padding: 0 10px;
+                background: #ccc;
+                border-radius: 4px;
+                color: #fff;
+            }
 
-        .content-span {
-            color: #666;
-        }
+            .content-span {
+                color: #666;
+            }
 
-        .placeholder-span {
-            color: #ccc;
+            .placeholder-span {
+                color: #ccc;
+            }
         }
     }
 </style>

@@ -53,9 +53,19 @@
             multiple: {
                 type: Boolean
             },
-            // 是否显示文件图标
-            fileIcon: {
-                type: Boolean
+            // 展开图标左间距
+            markIconFixMarginLeft:{
+                type: Number,
+                default(){
+                    return 0
+                }
+            },
+            // 文件标识图标左间距
+            fileIconFixMargin:{
+              type: Number,
+              default(){
+                  return 0
+              }
             },
             // 是否显示尾部控制
             controllers:{
@@ -116,10 +126,10 @@
             }
         },
         render(h) {
-            const markIconWidth = _.get(this.$slots, "icon-mark.0.propsData.width", 0) ||
-                _.result(this.$slots, "'icon-mark'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
-            const markIconHeight = _.get(this.$slots, "icon-mark.0.propsData.height", 0) ||
-                _.result(this.$slots, "'icon-mark'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
+            const markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
+            const markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
             const prefix = this.prefix ? `${this.prefix}-` : ''
             // let path = ''
             // let selfPath = ''
@@ -133,25 +143,31 @@
                 if (!(data.children || []).length) {
                     return null
                 }
-                if (this.$slots['icon-mark']) {
+                const className =classNames({
+                    [`${prefix}tree-mark-icon`]: true
+                }).split(' ')
+                if (this.$slots['mark-icon']) {
                     return h('span', {
-                        class: [],
+                        class: className,
                         style: {
-                            transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : ''
+                            transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : '',
+                            marginLeft: this.lineStartLv? `${this.markIconFixMarginLeft}px`: '0'
                         },
                         on: {
                             click: () => {
                                 this.$set(data, 'expand', !data.expand)
                             }
                         }
-                    }, this.$slots['icon-mark'])
+                    }, this.$slots['mark-icon'])
                 }
                 return h('CIcon', {
                     props: {
                         'icon-name': "choas-fill-arrow-right",
                     },
+                    class: className,
                     style: {
-                        transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : 'rotate(0)'
+                        transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : 'rotate(0)',
+                        marginLeft: this.lineStartLv? `${this.markIconFixMarginLeft}px`: '0'
                     },
                     on: {
                         click: () => {
@@ -206,7 +222,7 @@
                                     ).split(' ')
                                 ],
                                 style: {
-                                    width: (markIconWidth / 2) + markIconWidth-2 + 'px',
+                                    width: (markIconWidth / 2) + markIconWidth + 'px',
                                 }
                             },
                             [
@@ -229,7 +245,8 @@
                                         ).split(' ')
                                     ],
                                     style: {
-                                        width: (markIconWidth / 2) + markIconWidth * 1.5 - 1 + 'px',
+                                        // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
+                                        width: (markIconWidth*2)+(this.markIconFixMarginLeft-1) + 'px',
                                     }
                                 },
                                 [
@@ -269,19 +286,16 @@
             }
             // 文件图标
             const createFileIcon = () => {
-                if (!this.fileIcon && !this.$slots['file-icon']) {
-                    return null
-                }
                 if (this.$slots['file-icon']) {
                     return h(
                         'span',
                         {
-                            slots: 'file-icon',
+                            slot: 'file-icon',
                             attrs: {
 
                             },
                             style: {
-                                margin: '0 6px'
+                                margin: `0 ${this.fileIconFixMargin}px`
                             }
                         },
                         [this.$slots['file-icon']]
@@ -319,6 +333,7 @@
                                     ...propsData
                                 },
                                 ...item.data,
+                                slot: 'controllers',
                                 on:_listeners
                             }
                         )
@@ -335,10 +350,10 @@
                                 color: '#333',
                                 iconName:'choas-edit',
                             },
-                            slots: 'controllers',
+                            slot: 'controllers',
                             on:{
                                 click(){
-                                    console.log(data)
+                                    console.log(data, 'default-controllers')
                                 }
                             }
                         },
@@ -350,10 +365,10 @@
                                 color: '#333',
                                 iconName:'choas-add',
                             },
-                            slots: 'controllers',
+                            slot: 'controllers',
                             on:{
                                 click(){
-                                    console.log(data)
+                                    console.log(data, 'default-controllers')
                                 }
                             }
                         }
@@ -365,10 +380,10 @@
                                 color: '#333',
                                 iconName:'choas-delete',
                             },
-                            slots: 'controllers',
+                            slot: 'controllers',
                             on:{
                                 click(){
-                                    console.log(data)
+                                    console.log(data, 'default-controllers')
                                 }
                             }
                         }
@@ -459,16 +474,18 @@
                                 lineStartLv: this.lineStartLv + 1,
                                 listData: data.children,
                                 line: this.line,
-                                fileIcon: this.fileIcon,
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
                                 controllers: this.controllers,
+                                fileIconFixMargin: this.fileIconFixMargin,
+                                markIconFixMarginLeft: this.markIconFixMarginLeft,
                             },
                             on: this.$listeners
                         },
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                if(this.controllers && this.$slots['controllers']){
+                                if(this.$slots['controllers']&& this.$slots['controllers'].length){
+                                    console.log(this.$slots['controllers'])
                                     return this.$slots['controllers'].map(item=>{
                                         const {tag, listeners = {}, propsData} = item.componentOptions
                                         const _listeners = {}
@@ -484,6 +501,7 @@
                                                     ...propsData
                                                 },
                                                 ...item.data,
+                                                slot: 'controllers',
                                                 on: _listeners
                                             }
                                         )
@@ -647,7 +665,7 @@
             color: #fff;
         }
 
-        &-icon-mark-box {
+        &-mark-icon-box {
             display: inline-block;
         }
 

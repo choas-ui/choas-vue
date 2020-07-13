@@ -13,7 +13,6 @@
 ```html
     <template>
         <CTree
-            fileIcon
             :list-data="listData"
         >
         </CTree>
@@ -73,7 +72,6 @@ export default {
 ```html
     <template>
         <CTree
-            fileIcon
             :list-data="listData"
         >
         </CTree>
@@ -136,7 +134,6 @@ export default {
     <template>
         <p>{{ selectData }}</p>
         <CTree
-            fileIcon
             :list-data="listData"
             v-model="selectData"
         >
@@ -193,7 +190,6 @@ export default {
 #### 数据关联 reflectKey
 ---
   <p>用于指定映射键、值关联。</p>
-
 
 :::demo
 ```html
@@ -315,20 +311,20 @@ export default {
 ```
 :::
 
-#### 类型图标 fileIcon
+#### 展开图标 mark-icon
 ---
   <ul>
-    <li><p>作为属性出现的fileIcon会显示默认图标。</p></li>
-    <li><p>作为插槽出现的file-icon会替换默认图标。</p>
-    <li><p>目前不支持多种Icon。</p></li>
+    <li><p>默认为实心三角形。</p>
+    <li><p>你可以使用mark-icon插槽替换。</p></li>
+    <li><p>margin-icon-fix-margin-left 能让你小幅调整左侧的距离。</p></li>
   </ul>
    
 :::demo
 ```html
     <template>
         <CTree
-            fileIcon
             :list-data="listData"
+            :file-icon-fix-margin="6"
             v-model="selectData"
         >
         </CTree>
@@ -380,13 +376,80 @@ export default {
 ```
 :::
 
+#### 类型图标 fileIcon
+---
+  <ul>
+    <li><p>作为插槽出现的file-icon会替换默认图标。</p>
+    <li><p>file-icon-fix-margin 能让你小幅调整两侧间距。</p></li>
+    <li><p>目前不支持多种Icon。</p></li>
+  </ul>
+   
 :::demo
 ```html
     <template>
         <CTree
-            fileIcon
+            :list-data="listData"
+            :file-icon-fix-margin="6"
+            v-model="selectData"
+        >
+        </CTree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                 {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectData:[],
+        }
+    }
+}
+</script>
+```
+:::
+
+<p>file-icon-fix-margin 间距为20。</p>
+ 
+:::demo
+```html
+    <template>
+        <CTree
             :list-data="listData"
             v-model="selectData"
+            :file-icon-fix-margin-left="20"
         >
             <CIcon
                 slot="file-icon"
@@ -453,7 +516,6 @@ export default {
     <template>
         <input v-model="searchStr"/>
         <CTree
-            fileIcon
             :list-data="listData"
             v-model="selectData"
             :search-str="searchStr"
@@ -517,13 +579,12 @@ export default {
 ```html
     <template>
         <CTree
-            fileIcon
             :list-data="listData"
             v-model="selectData"
             controllers
         >
             <CIcon
-                slot="icon-mark"
+                slot="mark-icon"
                 icon-name="choas-square-add"
             />
             <CIcon
@@ -577,7 +638,6 @@ export default {
 </script>
 ```
 :::
-
   <ul>
     <li><p>你也可以自行添加一组controllers，click事件点击的数据和事件对象。</p></li>
   </ul>
@@ -586,7 +646,6 @@ export default {
 ```html
     <template>
         <CTree
-            fileIcon
             :list-data="listData"
             v-model="selectData"
         >
