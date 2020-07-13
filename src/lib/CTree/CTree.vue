@@ -27,12 +27,6 @@
                     return 'red'
                 }
             },
-            searchStr: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
             className: {
                 type: String,
                 default() {
@@ -45,19 +39,19 @@
                     return ''
                 }
             },
-            // 显示连线
-            line: {
-                type: Boolean
-            },
-            multiple: {
-                type: Boolean
-            },
             // 内部标线层级
             lineStartLv: {
                 type: Number,
                 default() {
                     return 0
                 }
+            },
+            // 显示连线
+            line: {
+                type: Boolean
+            },
+            multiple: {
+                type: Boolean
             },
             // 是否显示文件图标
             fileIcon: {
@@ -66,6 +60,12 @@
             // 是否显示尾部控制
             controllers:{
                 type: Boolean,
+            },
+            searchStr: {
+                type: String,
+                default() {
+                    return ''
+                }
             },
         },
         model:{
