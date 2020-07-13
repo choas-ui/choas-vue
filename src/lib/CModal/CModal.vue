@@ -11,6 +11,7 @@
             @click="() =>  !(mask && cancel)|| removeModal()"
             ref="modalWrap"
             @mousedown="!mask && dragStart($event)"
+            @keydown.esc="removeModal"
     >
 
         <div
@@ -23,6 +24,7 @@
                 }"
                 ref="modalBox"
                 @mousedown="mask && dragStart($event)"
+                @keydown.esc="removeModal"
         >
             <div :class="getHeaderBox" v-if="'header' in $scopedSlots  || title">
                 <slot name="header">
