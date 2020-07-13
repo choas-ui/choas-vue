@@ -117,7 +117,7 @@
         },
         mounted() {
             this.$nextTick(()=>{
-                document.addEventListener('click',({target})=>{
+                this.$parent.$el.addEventListener('click',({target})=>{
                     if(this.$refs.cascade && !this.$refs.cascade.contains(target)){
                         this.isDropUlShow=false
                         this.selectedArr=[]

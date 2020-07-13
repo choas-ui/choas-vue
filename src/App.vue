@@ -69,6 +69,7 @@
         },
         updated() {
             console.log(123)
+            this.listData=[]
         }
     }
 </script>

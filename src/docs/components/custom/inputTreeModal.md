@@ -19,7 +19,7 @@
     <template>
         <CInputTreeModal
                :list-data="listData"
-               v-model="selectedData"
+               v-model="selectedData.a"
                :can-be-edited="canBeEdited"
                :reflect-key="reflectKey"
                title="请选择机构"
@@ -31,12 +31,13 @@
             data(){
                 return{
                     canBeEdited: true,
-                    selectedData: [
-                        {
+                    selectedData: {
+                        a: [
+{
                             id: '014557484S-2-2-0017',
                             name: '谢广坤',
-                        }
-                    ],
+                        }]
+},
                     reflectKey: {
                         key: 'name',
                         value: 'id'
