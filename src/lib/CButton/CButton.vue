@@ -40,7 +40,7 @@
                 type: String,
                 validator: function (value) {
                     // 这个值必须匹配下列字符串中的一个
-                    return !value || ['default' ,'large' , 'small'].indexOf(value) !== -1
+                    return !value || ['llarge', 'large', 'default', 'small', 'ssmall'].indexOf(value) !== -1
                 },
                 default(){
                     return 'default'
@@ -77,14 +77,18 @@
                         [`${prefix}btn-ghost`]: this.type === 'ghost'
                     },
                     {
+                        [`${prefix}btn-llg`]: this.size === 'llarge',
                         [`${prefix}btn-lg`]: this.size === 'large',
                         [`${prefix}btn-df`]: this.size === 'default' || !(this.size),
                         [`${prefix}btn-sm`]: this.size === 'small',
+                        [`${prefix}btn-ssm`]: this.size === 'ssmall',
                     },
                     {
+                        [`${prefix}llg-radius`]: this.size === 'llarge',
                         [`${prefix}lg-radius`]: this.size === 'large',
                         [`${prefix}df-radius`]: this.size === 'default' || !(this.size),
                         [`${prefix}sm-radius`]: this.size === 'small',
+                        [`${prefix}ssm-radius`]: this.size === 'ssmall',
                     },
                     {
                         [`${prefix}btn`]: true,
@@ -130,20 +134,40 @@
             display: block;
             width: 100%;
         }
+        &-llg{
+            height: addPX($llg-height);
+            line-height: addPX($llg-height);
+            padding: 0 addPX($llg-padding);
+            border-radius: addPX($llg-radius);
+            font-size: addPX($llg-fs);
+        }
         &-lg{
-            padding: addPX($sm-padding) addPX($lg-padding);
-            border-radius: addPX($sm-radius);
+            height: addPX($lg-height);
+            line-height: addPX($lg-height);
+            padding: 0 addPX($lg-padding);
+            border-radius: addPX($lg-radius);
             font-size: addPX($lg-fs);
         }
         &-df{
-            padding: addPX($sm-padding) addPX($df-padding);
-            border-radius: addPX($sm-radius);
+            height: addPX($df-height);
+            line-height: addPX($df-height);
+            padding: 0 addPX($df-padding);
+            border-radius: addPX($df-radius);
             font-size: addPX($df-fs);
         }
         &-sm{
-            padding: addPX($sm-padding) addPX($sm-padding);
+            height: addPX($sm-height);
+            line-height: addPX($sm-height);
+            padding: 0 addPX($sm-padding);
             border-radius: addPX($sm-radius);
             font-size: addPX($sm-fs);
+        }
+        &-ssm{
+            height: addPX($ssm-height);
+            line-height: addPX($ssm-height);
+            padding: 0 addPX($ssm-padding);
+            border-radius: addPX($ssm-radius);
+            font-size: addPX($ssm-fs);
         }
         &-primary{
             background: $primary;
@@ -168,7 +192,7 @@
         &-ghost{
             background: none;
             color: $info;
-            border: 1px dashed $btnGstCr;
+            border: addPX($ssm-borderWt) dashed $btnGstCr;
             &:hover{
                 color: $btnFtCr;
                 background: $btnGstCr;

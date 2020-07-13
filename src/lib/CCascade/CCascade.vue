@@ -24,7 +24,7 @@
                     :key="index"
                     :style="{
                         left: 151* index +'px',
-                        top: $refs.cascade.clientHeight+'px',
+                        top: $refs.cascade.clientHeight+10+'px',
                     }"
                 >
                     <li v-for="(item, i) in selectedItem" :key="i" @click="addSelectedDataHandle(item)">
@@ -46,7 +46,7 @@
                                :style="{
                                 position:'absolute',
                                 right: 0,
-                                top: '6px'
+                                top: '10px'
                            }"
                         />
                     </li>
@@ -117,7 +117,7 @@
         },
         mounted() {
             this.$nextTick(()=>{
-                this.$parent.$el.addEventListener('click',({target})=>{
+                document.addEventListener('click',({target})=>{
                     if(this.$refs.cascade && !this.$refs.cascade.contains(target)){
                         this.isDropUlShow=false
                         this.selectedArr=[]
@@ -219,11 +219,11 @@
 
     .cascade-wrap {
         display: flex;
-        height: addPX($sm-height);
+        height: addPX($df-height);
         position: relative;
         width: 90%;
         background: #fff;
-        padding: addPX($lg-padding) 0;
+        padding-top: addPX($lg-padding);
         box-sizing: content-box;
 
         > label {
@@ -232,7 +232,7 @@
 
             > input {
                 width: 100%;
-                height: addPX($sm-height);
+                height: addPX($df-height);
                 padding-left: addPX($lg-padding);
                 box-sizing: border-box;
                 border: 1px solid $lineColor;
@@ -243,11 +243,10 @@
                     border: 1px solid $primary;
                 }
             }
-
             .cascade-icon {
                 position: absolute;
                 right: 10px;
-                top: addPX($lg-padding+5);
+                top: addPX($lg-padding+10);
             }
         }
 
@@ -258,13 +257,13 @@
             padding: 0;
             margin: 0;
             border: 1px solid $lineColor;
-            border-radius: addPX($sm-radius);
+            border-radius: addPX($df-radius);
             background: #fff;
             max-height: addPX($lg-height*5);
             overflow-y: auto;
 
             & > li {
-                height: addPX($sm-height);
+                height: addPX($df-height);
                 list-style: none;
                 width: 100%;
                 overflow: hidden;
@@ -288,9 +287,9 @@
 
                 > .cascade-item-p {
                     margin: 0;
-                    height: addPX($sm-height);
-                    line-height: addPX($sm-height);
-                    font-size: addPX($lg-fs);
+                    height: addPX($df-height);
+                    line-height: addPX($df-height);
+                    font-size: addPX($df-fs);
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;

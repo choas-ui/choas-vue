@@ -11,56 +11,56 @@
 
 :::demo
 ```html
-    <template>
-        <CTree
-            :list-data="listData"
-        >
-        </CTree>
-    </template>
-<script>
-export default {
+  <template>
+    <CTree
+      :list-data="listData"
+    >
+    </CTree>
+  </template>
+  <script>
+  export default {
     data(){
-        return {
-            listData:[
-                 {
-                      key: '颜色',
-                      value: '0',
-                      expand: true,
-                      children:[
-                          {
-                              key: '冷色',
-                              value: '0-0',
-                              expand: true,
-                          },
-                          {
-                              key: '暖色',
-                              value: '0-1',
-                              expand: true,
-                              children:[
-                                  {
-                                      key: '红色',
-                                      value: '0-1-0',
-                                  },
-                                  {
-                                      key: '橙色',
-                                      value: '0-1-1',
-                                      expand: true,
-                                      children: [
-                                           {
-                                              key: '橙红',
-                                              value: '0-1-1-0',
-                                           },
-                                      ],
-                                  },
-                              ]
-                          },
-                      ]
-                 }
+      return {
+        listData:[
+          {
+            key: '颜色',
+            value: '0',
+            expand: true,
+            children:[
+              {
+                key: '冷色',
+                value: '0-0',
+                expand: true,
+              },
+              {
+                key: '暖色',
+                value: '0-1',
+                expand: true,
+                children:[
+                  {
+                    key: '红色',
+                    value: '0-1-0',
+                  },
+                  {
+                    key: '橙色',
+                    value: '0-1-1',
+                    expand: true,
+                    children: [
+                      {
+                        key: '橙红',
+                        value: '0-1-1-0',
+                      },
+                    ],
+                  },
+                ]
+              },
             ]
-        }
+          }
+        ]
+      }
     }
-}
-</script>
+  }
+  </script>
 ```
 :::
 
@@ -70,56 +70,56 @@ export default {
 
 :::demo
 ```html
-    <template>
-        <CTree
-            :list-data="listData"
-        >
-        </CTree>
-    </template>
-<script>
-export default {
+  <template>
+    <CTree
+      :list-data="listData"
+    >
+    </CTree>
+  </template>
+  <script>
+  export default {
     data(){
-        return {
-            listData:[
-                 {
-                      key: '颜色',
-                      value: '0',
-                      expand: true,
-                      children:[
-                          {
-                              key: '冷色',
-                              value: '0-0',
-                              expand: true,
-                          },
-                          {
-                              key: '暖色',
-                              value: '0-1',
-                              expand: true,
-                              children:[
-                                  {
-                                      key: '红色',
-                                      value: '0-1-0',
-                                  },
-                                  {
-                                      key: '橙色',
-                                      value: '0-1-1',
-                                      expand: true,
-                                      children: [
-                                           {
-                                              key: '橙红',
-                                              value: '0-1-1-0',
-                                           },
-                                      ],
-                                  },
-                              ]
-                          },
-                      ]
-                 }
-            ]
-        }
+      return {
+          listData:[
+               {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                            expand: true,
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+               }
+          ]
+      }
     }
-}
-</script>
+  }
+  </script>
 ```
 :::
 
@@ -650,13 +650,6 @@ export default {
             :list-data="listData"
             v-model="selectData"
         >
-            <CIcon
-                slot="icon-mark"
-                icon-name="choas-square-add"
-            />
-            <CIcon
-                slot="file-icon"
-                icon-name="choas-lists"/>
             <template slot="controllers">
                 <CIcon icon-name="choas-lists"
                        @click="logs"
@@ -725,15 +718,11 @@ export default {
             :list-data="listData"
             v-model="selectData"
         >
-            <CIcon slot="icon-mark"
-                   icon-name="choas-square-add"
-            />
-            <CIcon slot="file-icon"
-                   icon-name="choas-lists"/>
-            <CIcon slot="controllers"
-                   con-name="choas-confirm"
-                   @click="logs"
-            />
+        <CIcon slot="controllers"
+               color="green"
+               icon-name="choas-confirm"
+               @click="logs"
+        />
         </CTree>
     </template>
 <script>

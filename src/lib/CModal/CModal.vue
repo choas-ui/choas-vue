@@ -36,8 +36,8 @@
             <div v-if="!controller" :class="getTitleController">
                 <slot name="controller">
                     <CIcon icon-name="choas-close"
-                          width="30"
-                          height="30"
+                          width="24"
+                          height="24"
                           :color="controllerColor"
                           :activeColor="activeColor"
                           @click="removeModal" />
@@ -272,7 +272,7 @@
                 line-height: addPX($df-height);
                 text-align: center;
                 font-size: addPX($lg-fs);
-                border-bottom: 1px solid $lineColor;
+                border-bottom: addPX($ssm-borderWt) solid $lineColor;
                 justify-items: flex-start;
 
                 &-header {
@@ -295,8 +295,8 @@
                 position: absolute;
                 display: flex;
                 text-align: center;
-                right: addPX($lg-padding);
-                top: addPX($sm-padding);
+                right: addPX($df-padding);
+                top: addPX($ssm-padding);
             }
 
             &-content {

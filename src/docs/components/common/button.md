@@ -8,12 +8,14 @@
 
 :::demo
 ```html
-        <template>
-        <CButton :size="'small'">small</CButton>
-        <CButton :size="'default'">default</CButton>
-        <CButton></CButton>
-        <CButton :size="'large'">large</CButton>
-    </template>
+  <template>
+    <CButton size="ssmall">ssmall</CButton>
+    <CButton size="small">small</CButton>
+    <CButton size="default">default</CButton>
+    <CButton></CButton>
+    <CButton size="large">large</CButton>
+    <CButton size="llarge">llarge</CButton>
+  </template>
 ```
 :::
 
@@ -23,13 +25,17 @@
 
 :::demo
 ```html
-    <template>
-      <CButton :size="'small'" block>small</CButton>
-      <br/>
-      <CButton type="success" :size="'default'" block>default</CButton>
-      <br/>
-      <CButton type="danger" :size="'large'" block>large</CButton>
-    </template> 
+  <template>
+    <CButton size="ssmall" block>ssmall</CButton>
+    <br/>
+    <CButton type="success" size="small" block>small</CButton>
+    <br/>
+    <CButton type="warning" size="default" block>default</CButton>
+    <br/>
+    <CButton type="danger" size="large" block>large</CButton>
+    <br/>
+    <CButton type="disabled" size="llarge" block>llarge</CButton>
+  </template> 
 ```
 :::
 
@@ -39,14 +45,14 @@
 
 :::demo
 ```html
-    <template>
-        <CButton :type="'primary'">primary</CButton>
-        <CButton :type="'success'">success</CButton>
-        <CButton :type="'warning'">warning</CButton>
-        <CButton type="danger">danger</CButton>
-        <CButton type="disabled">disabled</CButton>
-        <CButton type="ghost">ghost</CButton>
-    </template> 
+  <template>
+    <CButton type="primary">primary</CButton>
+    <CButton type="success">success</CButton>
+    <CButton type="warning">warning</CButton>
+    <CButton type="danger">danger</CButton>
+    <CButton type="disabled">disabled</CButton>
+    <CButton type="ghost">ghost</CButton>
+  </template> 
 ```
 :::
 
@@ -61,24 +67,24 @@
 
 :::demo
 ```html
-    <template>
-        <CButton>
-            <CIcon
-                slot="left"
-                color="#fff"
-                iconName="choas-search"
-             />
-            搜 索
-        </CButton>
-        <CButton>
-            <CIcon
-                slot="right"
-                color="#fff"
-                iconName="choas-delete"
-             />
-            删 除
-        </CButton>
-    </template>
+  <template>
+    <CButton>
+      <CIcon
+        slot="left"
+        color="#fff"
+        iconName="choas-search"
+       />
+      搜 索
+    </CButton>
+    <CButton>
+      <CIcon
+        slot="right"
+        color="#fff"
+        iconName="choas-delete"
+       />
+      删 除
+    </CButton>
+  </template>
 ```
 :::
 
@@ -90,15 +96,14 @@
 
 :::demo
 ```html
-    <template>
-        <CButton class-name="usr-btn-class"></CButton>
-    </template>
-    
-    <style>
-         .demo-content>div>button.usr-btn-class{
-          background: red;
-        }
-    </style>
+  <template>
+    <CButton class-name="usr-btn-class"></CButton>
+  </template>
+  <style>
+     .demo-content>div>button.usr-btn-class{
+      background: red;
+    }
+  </style>
 ```
 :::
 
@@ -110,14 +115,14 @@
 
 :::demo
 ```html
-    <template>
-        <CButton prefix="usr"></CButton>
-    </template>
-    <style>
-      .usr-btn-primary{
-        background: red;
-      }
-    </style>
+  <template>
+    <CButton prefix="usr"></CButton>
+  </template>
+  <style>
+    .usr-btn-primary{
+      background: red;
+    }
+  </style>
 ```
 :::
 
@@ -135,9 +140,9 @@
 
 :::demo
 ```html
-    <template>
-        <CButton placeholder="按钮被禁用" type="disabled"></CButton>
-    </template>
+  <template>
+    <CButton placeholder="按钮被禁用" type="disabled"></CButton>
+  </template>
 ```
 :::
 
@@ -149,18 +154,18 @@
 
 :::demo
 ```html
-    <template>
-        <CButton @click="clickHandle"></CButton>
-    </template>
-    <script>
-    export default {
-        methods: {
-            clickHandle(){
-                alert("Hello World!");
-            }
-        }
+  <template>
+    <CButton @click="clickHandle"></CButton>
+  </template>
+  <script>
+  export default {
+    methods: {
+      clickHandle(){
+        alert("Hello World!");
+      }
     }
-    </script>
+  }
+  </script>
 ```
 :::
 
@@ -169,7 +174,7 @@
   |属性|值|类型|默认值|说明|
   |:-:|:---:|---|---|:---|
   |block|truthy falsy|Boolean|false|是否将按钮转化为块|
-  |size|'small' 'default' 'large'| String | 'default'|按钮内边距|
+  |size|'ssmall' 'small' 'default' 'large' 'llarge'| String | 'default'|按钮内边距|
   |type|'primary''success''warning'<br/>'danger''disabled''ghost'| String| 'primary'|按钮样式|
   |slot|'left' 'right'| String | 无 |插入左/右图标插槽|
   |class-name|无|String|''|组件最外层添加一个新的类名|

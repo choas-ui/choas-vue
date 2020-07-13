@@ -1,26 +1,26 @@
 <template>
     <div :class="getSelectWrapClass"
-         @mouseleave="leaveHandle"
+         ref="selection"
     >
         <label>
             <input type="text"
                    placeholder="请选择"
                    ref="input"
-                   @focus="clearTimeHandle"
+                   @focus="showDropDown"
                    :value="getSelectedTitle"
             />
             <CIcon icon-name="choas-arrow-down"
                   :style="{
                        position: 'absolute',
                        right: '10px',
-                       top: '5px',
+                       top: '10px',
                        transform: isDropUlShow? 'rotate(180deg)': 'rotate(0)',
                        transition: 'all 0.3s'
                   }"
                   @click.prevent="iconClick($event)"
             />
         </label>
-        <ul v-show="isDropUlShow" ref="dropUl" @mouseenter="clearTimeHandle" @mouseleave="leaveHandle">
+        <ul v-show="isDropUlShow" ref="dropUl">
             <template v-if="listData.length">
                 <li v-for="item of listData" :key="item[reflectKey['value']]"
                     :class="item[reflectKey['value']] === getSelectedValue ? 'active': ''"
@@ -93,19 +93,22 @@
                 // console.dir(this.$refs.dropUl.getBoundingClientRect())
             }
         },
+        mounted() {
+            this.$nextTick(()=>{
+                document.addEventListener('click',({target})=>{
+                    if(this.$refs.selection && !this.$refs.selection.contains(target)){
+                        this.isDropUlShow=false
+                    }
+                })
+            })
+        },
         methods: {
-            clearTimeHandle(){
-                clearTimeout(this.timer)
+            showDropDown(){
                 this.isDropUlShow= true
             },
             changeHandle(v){
                 this.$refs.input.focus()
                 this.$emit('input', v)
-            },
-            leaveHandle(){
-                this.timer= setTimeout(()=>{
-                    this.isDropUlShow= false
-                },180)
             },
             iconClick(){
                 this.isDropUlShow = !this.isDropUlShow
@@ -121,7 +124,7 @@
     @import "../scss/functions";
     .select-wrap{
         display: flex;
-        height: addPX($sm-height);
+        height: addPX($df-height);
         position: relative;
         >label{
             display: block;
@@ -144,7 +147,6 @@
             left: 0;
             top: addPX($sm-height + $sm-padding);
             width: 100%;
-            max-height: 300px;
             border: 1px solid $lineColor;
             box-sizing: border-box;
             margin: 0;
@@ -152,10 +154,13 @@
             background: #fff;
             padding: addPX($sm-padding) 0;
             text-align: left;
+            max-height: addPX($lg-height*5);
+            overflow-y: auto;
             >li{
                 list-style: none;
-                height: addPX($sxx-height);
-                line-height: addPX($sxx-height);
+                height: addPX($df-height);
+                line-height: addPX($df-height);
+                font-size: addPX($df-fs);
                 cursor: pointer;
                 box-sizing: border-box;
                 padding-left: addPX($lg-padding);

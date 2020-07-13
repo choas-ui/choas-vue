@@ -24,6 +24,7 @@
                :reflect-key="reflectKey"
                title="请选择机构"
                mask
+               cancel
         />
     </template>
     <script>

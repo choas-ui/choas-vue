@@ -17,9 +17,7 @@
           <div class="input-like-wrap">
               <div class="input-like"
                    @click="inputClick"
-                   :style="{
-                       width: buttonTxt?'70%': '100%',
-                   }">
+                   :style="{}">
                   <template v-if="selectedData.length">
                       <span
                               v-for="(item, index) of selectedData"
@@ -33,7 +31,7 @@
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
-              <CButton v-if="buttonTxt" @click="isModalShow = !isModalShow" size="large">{{buttonTxt}}</CButton>
+              <CButton class-name="input-button" v-if="buttonTxt" @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
           </div>
         </template>
         <CTreeModal :list-data="listData"
@@ -193,30 +191,31 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: addPX($df-fs);
         .input-like {
-            width: 100%;
-            border: 1px solid #D9D9D9;
-            border-radius: 4px;
-            line-height: 34px;
-            min-height: 34px;
-            padding-left: 10px;
+            border: addPX($ssm-borderWt) solid #D9D9D9;
+            border-radius: addPX($sm-radius);
+            line-height: addPX($df-height);
+            min-height: addPX($df-height);
+            padding-left: addPX($sm-padding);
             display: flex;
             align-items: center;
             justify-content: flex-start;
             flex-wrap: wrap;
             cursor: pointer;
+            flex: 1;
             &-unedited{
                 border: none;
                 cursor: not-allowed;
             }
             .tag-span {
-                height: 28px;
-                line-height: 28px;
+                height: addPX($sm-height);
+                line-height: addPX($sm-height);
                 display: inline-block;
-                margin-right: 5px;
-                padding: 0 10px;
+                margin-right: addPX($ssm-margin);
+                padding: 0 addPX($sm-padding);
                 background: #ccc;
-                border-radius: 4px;
+                border-radius: addPX($sm-radius);
                 color: #fff;
             }
 
@@ -227,6 +226,9 @@
             .placeholder-span {
                 color: #ccc;
             }
+        }
+        .input-button{
+            margin-left: addPX($sm-margin);
         }
     }
 </style>

@@ -3,6 +3,7 @@
             :width="width"
             :height="height"
             :mask="mask"
+            :cancel="cancel"
             :draggable="draggable"
             :controllerColor="controllerColor"
             :activeColor="activeColor"
@@ -19,9 +20,9 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" :placeholder="noticeTxt">
-                    <CButton v-show="!isCascadeShow" @click="openCascade">新增</CButton>
-                    <CButton v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
-                    <CButton v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
+                    <CButton size="small" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
+                    <CButton size="small" v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
+                    <CButton size="small" v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
                 </div>
                 <CCascade v-model="cascadeData"
                           v-if="isCascadeShow"
@@ -54,8 +55,8 @@
                         <b>{{item[reflectKey['key']]}}</b>
                         <CIcon icon-name="choas-close"
                                color="#fff"
-                               height="30"
-                               width="30"
+                               height="24"
+                               width="24"
                                active-color="#ff5e5c"
                                :style="{
                                     lineHeight: '100%'
@@ -68,8 +69,8 @@
         </div>
         <slot slot="footer">
             <div class="modal-footer">
-                <CButton size="large" type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</CButton>
-                <CButton size="large" @click="confirmHandle">确&nbsp;&nbsp;认</CButton>
+                <CButton type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</CButton>
+                <CButton @click="confirmHandle">确&nbsp;&nbsp;认</CButton>
             </div>
         </slot>
     </CModal>
@@ -98,6 +99,9 @@
                 }
             },
             line: {
+                type: Boolean
+            },
+            cancel: {
                 type: Boolean
             },
             isShow: {
@@ -199,6 +203,7 @@
                 let key = this.reflectKey['key']
                 for (let i = 0; i <data.length ; i++) {
                     let item = data[i]
+                    item.expand= true
                     if((item.children || []).length){
                         this.filterData(item.children, v)
                     }
@@ -264,17 +269,18 @@
         color: #fff;
         font-size: 18px;
         font-weight: bold;
+        letter-spacing: addPX($sm-letterSp);
     }
 
     .modal-footer {
-        height: addPX($lg-height*1.4);
-        line-height: addPX($lg-height*1.4);
+        height: addPX($llg-height);
+        line-height: addPX(llg-height);
     }
 
     .tree-box-wrap {
         height: 100%;
         display: flex;
-        padding: addPX($lg-padding) addPX($lg-padding) 0 addPX($lg-padding);
+        padding: addPX($df-padding) addPX($df-padding) 0 addPX($df-padding);
         box-sizing: border-box;
 
         .tree-box {
@@ -307,10 +313,11 @@
                 input {
                     width: 60%;
                     border: 1px solid $lineColor;
-                    height: addPX($sm-height);
+                    height: addPX($df-height);
+                    line-height: addPX($df-height);
                     box-sizing: border-box;
                     border-radius: addPX($df-radius);
-                    padding-left: addPX($lg-padding);
+                    padding-left: addPX($df-padding);
 
                     &:focus {
                         outline: none;
@@ -354,16 +361,17 @@
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
-                border-left: 1px solid $lineColor;
+                border-left: addPX($ssm-borderWt) solid $lineColor;
 
                 > p {
                     width: 100%;
                     line-height: addPX($sm-height);
                     box-sizing: border-box;
                     text-align: left;
-                    margin: addPX($lg-padding) 0 0 0;
+                    margin-top: addPX($df-padding);
+                    padding-left:addPX($df-padding);
                     display: flex;
-                    font-size: addPX($lg-fs);
+                    font-size: addPX($df-fs);
                     align-items: center;
 
                     > b {

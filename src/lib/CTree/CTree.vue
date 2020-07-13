@@ -549,9 +549,7 @@
                                                 ),
                                                 h(
                                                     'span',
-                                                    {
-                                                        slot: 'tails'
-                                                    },
+                                                    {},
                                                     [
                                                         createControllersIcon(item),
                                                     ]
@@ -579,23 +577,19 @@
     ul {
         padding: 0;
         margin: 0;
-        font-size: addPX($lg-fs);
-
+        font-size: addPX($df-fs);
         li {
             list-style: none;
-
             & > div {
                 display: flex;
                 align-items: center;
             }
         }
     }
-
     .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;
-
             & > div {
                 width: 100%;
                 display: flex;
@@ -604,45 +598,37 @@
                     display: flex;
                 }
             }
-
             & > ul {
                 width: 100%;
             }
-
             span {
                 height: 100%;
             }
         }
-
         &-title-wrap {
             cursor: pointer;
             padding-left: addPX($sm-padding);
             flex: 1;
-
             &:hover {
                 background: $info;
                 color: #fff;
             }
         }
-
         &-title-wrap.active {
             background: $info;
             color: #fff;
         }
-
         &-mark-icon-box {
             display: inline-block;
         }
-
         &-vertical-line {
             display: inline-block;
             text-align: right;
-
             & > span {
                 display: inline-block;
-                width: 1px;
+                width: addPX($ssm-borderWt);
                 height: 100%;
-                border-right: 1px solid #c2c2c2;
+                border-right: addPX($ssm-borderWt) solid #c2c2c2;
             }
         }
 
@@ -662,7 +648,7 @@
                 display: flex;
                 height: 1px;
                 width: 100%;
-                border-bottom: 1px solid #c2c2c2;
+                border-bottom: addPX($ssm-borderWt) solid #c2c2c2;
             }
         }
     }

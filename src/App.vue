@@ -7,10 +7,6 @@
             v-model="selectData"
     >
         <CIcon slot="controllers"
-               con-name="choas-confirm"
-               @click="logs"
-        />
-        <CIcon slot="controllers"
                icon-name="choas-min"
                @click="logs"
         />
