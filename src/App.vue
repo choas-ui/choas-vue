@@ -1,6 +1,7 @@
 <template>
     <CTree
             fileIcon
+            line
             :list-data="listData"
             v-model="selectData"
     >

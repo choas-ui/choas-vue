@@ -6,39 +6,6 @@
         name: 'CTree',
         function: true,
         props: {
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            fileIcon: {
-                type: Boolean
-            },
-            line: {
-                type: Boolean
-            },
-            multiple: {
-                type: Boolean
-            },
-            lineStartLv: {
-                type: Number,
-                default() {
-                    return 0
-                }
-            },
-            itemKey: {
-                type: String,
-                default() {
-                    return '0'
-                }
-            },
             listData: {
                 type: Array,
                 default() {
@@ -66,9 +33,40 @@
                     return ''
                 }
             },
+            className: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            prefix: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            // 显示连线
+            line: {
+                type: Boolean
+            },
+            multiple: {
+                type: Boolean
+            },
+            // 内部标线层级
+            lineStartLv: {
+                type: Number,
+                default() {
+                    return 0
+                }
+            },
+            // 是否显示文件图标
+            fileIcon: {
+                type: Boolean
+            },
+            // 是否显示尾部控制
             controllers:{
                 type: Boolean,
-            }
+            },
         },
         model:{
             props: 'value',
@@ -123,14 +121,13 @@
             const markIconHeight = _.get(this.$slots, "icon-mark.0.propsData.height", 0) ||
                 _.result(this.$slots, "'icon-mark'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
             const prefix = this.prefix ? `${this.prefix}-` : ''
-            let path = this.itemKey.slice(2).split('-').join('.children.')
-            let selfPath = ''
-            if (path) {
-                selfPath = 'children.' + path
-            } else {
-                selfPath = ''
-            }
-            const data = path ? _.get(this.copyListData, selfPath, []) : this.copyListData
+            // let path = ''
+            // let selfPath = ''
+            // if (path) {
+            //     selfPath = 'children.' + path
+            // } else {
+            //     selfPath = ''
+            // }
             // 展开图标
             const createIconMark = (data) => {
                 if (!(data.children || []).length) {
@@ -209,7 +206,7 @@
                                     ).split(' ')
                                 ],
                                 style: {
-                                    width: (markIconWidth / 2) + markIconWidth + 'px',
+                                    width: (markIconWidth / 2) + markIconWidth-2 + 'px',
                                 }
                             },
                             [
@@ -271,14 +268,22 @@
                 return eleArr
             }
             // 文件图标
-            const createFileIcon = (data) => {
+            const createFileIcon = () => {
                 if (!this.fileIcon && !this.$slots['file-icon']) {
                     return null
                 }
                 if (this.$slots['file-icon']) {
                     return h(
                         'span',
-                        {},
+                        {
+                            slots: 'file-icon',
+                            attrs: {
+
+                            },
+                            style: {
+                                margin: '0 6px'
+                            }
+                        },
                         [this.$slots['file-icon']]
                     )
                 }
@@ -287,9 +292,9 @@
                         'icon-name': "choas-file-icon",
                     },
                     attrs: {
-                        style: {
-                            transform: data.expand && 'rotate(90deg)'
-                        }
+                    },
+                    style: {
+                        margin: '0 6px'
                     }
                 })
             }
@@ -300,7 +305,7 @@
                 }
                 if (this.$slots['controllers']) {
                     return  this.$slots['controllers'].map((item) => {
-                        const {tag, listeners = {}} = item.componentOptions
+                        const {tag, listeners = {}, propsData} = item.componentOptions
                         const _listeners = {}
                         Object.keys(listeners).forEach(key=>{
                             _listeners[key]=(e)=>{
@@ -311,7 +316,7 @@
                             tag,
                             {
                                 props: {
-                                    ...item.componentOptions.propsData
+                                    ...propsData
                                 },
                                 ...item.data,
                                 on:_listeners
@@ -465,7 +470,7 @@
                             ...Object.keys(this.$slots).map((key) => {
                                 if(this.controllers && this.$slots['controllers']){
                                     return this.$slots['controllers'].map(item=>{
-                                        const {tag, listeners = {}} = item.componentOptions
+                                        const {tag, listeners = {}, propsData} = item.componentOptions
                                         const _listeners = {}
                                         Object.keys(listeners).forEach(key=>{
                                             _listeners[key]=(e)=>{
@@ -476,7 +481,7 @@
                                             tag,
                                             {
                                                 props: {
-                                                    ...item.componentOptions.propsData
+                                                    ...propsData
                                                 },
                                                 ...item.data,
                                                 on: _listeners
@@ -509,7 +514,7 @@
                 'ul',
                 {},
                 [
-                    (data).map((item)=>{
+                    (this.copyListData).map((item)=>{
                         return h(
                             'li',
                             {

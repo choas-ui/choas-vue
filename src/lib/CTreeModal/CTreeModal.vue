@@ -33,8 +33,8 @@
                 <div class="content-box">
                     <div>
                         <CTree
-                                :line="line"
                                 file-icon
+                                :line="line"
                                 v-model="selectData"
                                 :list-data="list_data"
                                 :reflect-key="reflectKey"
