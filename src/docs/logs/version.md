@@ -1,5 +1,37 @@
 ### 版本信息
 ---
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.39</b>
+  </p>
+  
+  <ol>
+     <li>将cascade事件委托的绑定缩小至其父级。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.38</b>
+  </p>
+  
+  <ol>
+     <li>cascade 下拉框样式。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.37</b>
+  </p>
+  
+  <ol>
+     <li>cascade 下拉框样式被覆盖问题。</li>
+  </ol>
+:::
 
 :::tip 版本信息
   <p class="logs-version-item">
