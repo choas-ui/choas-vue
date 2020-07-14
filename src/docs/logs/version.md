@@ -11,7 +11,7 @@
      <li>InputTreeModal的显示替换为Tag组件。</li>
      <li>InputTreeModal 未传入addTreeNode节点时，不显示新增按钮。</li>
      <li>关闭TreeModal后搜索内容清空。</li>
-     <li>新增 <b>Tag</b> 组件。</li>
+     <li>新增<b>Tag</b>组件。</li>
   </ol>
 :::
 
@@ -102,7 +102,7 @@
   </p>
   
   <ol>
-     <li>Tree新增controllers选项。</li>
+     <li><b>Tree</b>新增controllers选项。</li>
   </ol>
 :::
 
@@ -138,8 +138,8 @@
   </p>
   
   <ol>
-     <li>关闭cascade 后再次开打下拉框长度无限的问题。</li>
-     <li>TreeModal 右侧选中内容长度过长的问题。</li>
+     <li>关闭cascade后再次开打下拉框长度无限的问题。</li>
+     <li>TreeModal右侧选中内容长度过长的问题。</li>
   </ol>
 :::
 
@@ -394,7 +394,7 @@
   </p>
   
   <ol>
-     <li>新增InputTreeModal组件。</li>
+     <li>新增<b>InputTreeModal</b>组件。</li>
   </ol>
 :::
 
