@@ -23,6 +23,7 @@
   
   <ol>
      <li>cascade搜索功能重写。</li>
+     <li>将cascade事件委托的恢复至 <b>document</b>。</li>
   </ol>
 :::
 
@@ -34,17 +35,6 @@
   
   <ol>
      <li>样式重定义。</li>
-     <li>cascade搜索功能逻辑外移。</li>
-  </ol>
-:::
-
-:::tip 版本信息
-  <p class="logs-version-item">
-    <span>2020-07-13</span>
-    <b>v 0.1.39</b>
-  </p>
-  
-  <ol>
      <li>将cascade事件委托的绑定缩小至其父级。</li>
   </ol>
 :::
@@ -56,7 +46,7 @@
   </p>
   
   <ol>
-     <li>cascade 下拉框样式。</li>
+     <li>cascade搜索功能逻辑外移。</li>
   </ol>
 :::
 
@@ -67,7 +57,8 @@
   </p>
   
   <ol>
-     <li>cascade 下拉框样式被覆盖问题。</li>
+     <li>cascade下拉框被覆盖问题。</li>
+     <li>cascade下拉框样式。</li>
   </ol>
 :::
 
@@ -78,18 +69,7 @@
   </p>
   
   <ol>
-     <li>cascade 下拉框样式。</li>
-  </ol>
-:::
-
-:::tip 版本信息
-  <p class="logs-version-item">
-    <span>2020-07-13</span>
-    <b>v 0.1.36</b>
-  </p>
-  
-  <ol>
-     <li>Tree 文档说明。</li>
+     <li>Tree文档说明。</li>
   </ol>
 :::
 
@@ -100,7 +80,7 @@
   </p>
   
   <ol>
-     <li>InputTreeModal 值的刷新问题。</li>
+     <li>修复InputTreeModal列表值的刷新问题。</li>
   </ol>
 :::
 
@@ -111,7 +91,7 @@
   </p>
   
   <ol>
-     <li>InputTreeModal 值的刷新问题。</li>
+     <li>修复InputTreeModal选定值的刷新问题。</li>
   </ol>
 :::
 
@@ -122,30 +102,19 @@
   </p>
   
   <ol>
-     <li>Tree 新增controllers选项。</li>
+     <li>Tree新增controllers选项。</li>
   </ol>
 :::
 
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-13</span>
-    <b>v 0.1.33</b>
-  </p>
-  
-  <ol>
-     <li>InputTreeModal 选中项不更新问题。</li>
-     <li>cascade 样式受到影响问题。</li>
-  </ol>
-:::
-
-:::tip 版本信息
-  <p class="logs-version-item">
-    <span>2020-07-12</span>
     <b>v 0.1.32</b>
   </p>
   
   <ol>
-     <li>新增Tree功能</li>
+     <li>InputTreeModal选中项不更新问题。</li>
+     <li>cascade样式受到其他库影响问题。</li>
   </ol>
 :::
 
@@ -156,9 +125,11 @@
   </p>
   
   <ol>
+     <li>新增<b>Tree</b>图标文件图标插槽。</li>
      <li>重写cascade。</li>
   </ol>
 :::
+
 
 :::tip 版本信息
   <p class="logs-version-item">
@@ -186,7 +157,7 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
-    <b>v 0.1.29</b>
+    <b>v 0.1.28</b>
   </p>
   
   <ol>
@@ -197,22 +168,11 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
-    <b>v 0.1.28</b>
-  </p>
-  
-  <ol>
-     <li>删除console。</li>
-  </ol>
-:::
-
-:::tip 版本信息
-  <p class="logs-version-item">
-    <span>2020-07-11</span>
     <b>v 0.1.27</b>
   </p>
   
   <ol>
-     <li>新增列表过长时滚动。</li>
+     <li>修复新增列表过长时滚动。</li>
   </ol>
 :::
 
@@ -223,7 +183,7 @@
   </p>
   
   <ol>
-     <li>部分按钮异常问题。</li>
+     <li>修复部分按钮异常问题。</li>
   </ol>
 :::
 
@@ -241,22 +201,12 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-11</span>
-    <b>v 0.1.25</b>
-  </p>
-  
-  <ol>
-     <li>InputTreeModal 移除getListData接口，新增addTreeNode。</li>
-  </ol>
-:::
-
-:::tip 版本信息
-  <p class="logs-version-item">
-    <span>2020-07-11</span>
     <b>v 0.1.24</b>
   </p>
   
   <ol>
-     <li>修复Cascade 同步更新问题。</li>
+     <li>InputTreeModal新增<b>addTreeNode</b>接口。</li>
+     <li>InputTreeModal移除<s>getListData</s>接口。</li>
   </ol>
 :::
 
@@ -267,7 +217,8 @@
   </p>
   
   <ol>
-     <li>InputTreeModal 新增取消时候，Tree也一起还原。</li>
+     <li>Tree还原默认列表。</li>
+     <li>InputTreeModal关闭新增窗口。</li>
   </ol>
 :::
 
@@ -278,7 +229,7 @@
   </p>
   
   <ol>
-     <li>修复级联影响Tree显示问题。</li>
+     <li>修复Cascade同步更新问题。</li>
   </ol>
 :::
 
@@ -344,7 +295,7 @@
   </p>
   
   <ol>
-     <li>组件重命名。</li>
+     <li>避免组件叠加影响， <b>所有组件</b>重命名。</li>
   </ol>
 :::
 
@@ -355,7 +306,7 @@
   </p>
   
   <ol>
-     <li>修复bug</li>
+    <li>避免组件叠加影响， <b>所有组件</b>重命名。</li>
   </ol>
 :::
 
@@ -366,7 +317,7 @@
   </p>
   
   <ol>
-     <li>修复 InputTreeModal 搜索bug</li>
+     <li>修复InputTreeModal操作问题。</li>
   </ol>
 :::
 
@@ -377,7 +328,7 @@
   </p>
   
   <ol>
-     <li>Tree TreeModal cascade InputTreeModal 传入列表改为数组</li>
+     <li>修复InputTreeModal搜索bug。</li>
   </ol>
 :::
 
@@ -388,19 +339,18 @@
   </p>
   
   <ol>
-     <li>移除 Icon 组件上的type属性。</li>
+     <li>调整Tree/TreeModal/Cascade/InputTreeModal 接口数据。</li>
   </ol>
 :::
 
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-09</span>
+    <span>2020-07-10</span>
     <b>v 0.1.11</b>
   </p>
   
   <ol>
-     <li>修改 <b>TreeModal</b> 组件bug。</li>
-     <li>完善文档。</li>
+     <li>调整Icon组件接口。</li>
   </ol>
 :::
 
@@ -411,38 +361,108 @@
   </p>
   
   <ol>
-     <li>修改 <b>cascade</b> 组件bug。</li>
-     <li>完善文档。</li>
+     <li>修改<b>TreeModal</b>组件bug。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-09</span>
+    <b>v 0.1.9</b>
+  </p>
+  
+  <ol>
+     <li>修改Cascade组件bug。</li>
   </ol>
 :::
 
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-08</span>
-    <b>v 0.1.9</b>
+    <b>v 0.1.8</b>
   </p>
   
   <ol>
-     <li>新增 <b>InputTreeModal</b> 组件。</li>
-     <li>完善文档。</li>
+     <li>修复InputTreeModal组件bug。</li>
   </ol>
 :::
 
 :::tip 版本信息
   <p class="logs-version-item">
-    <span>2020-07-05  <b>至</b>  2020-07-07</span>
-    <b>v 0.1.8</b>
+    <span>2020-07-07</span>
+    <b>v 0.1.7</b>
   </p>
   
   <ol>
-     <li>新增 <b>InputTreeModal</b> 组件。</li>
-     <li>新增 <b>级联</b> 组件。</li>
-     <li>新增 <b>树形弹窗</b> 组件。</li>
-     <li>新增 <b>树形</b> 组件。</li>
-     <li>新增 <b>弹层</b> 组件。</li>
-     <li>新增 <b>图标</b> 组件。</li>
-     <li>新增 <b>按钮</b> 组件。</li>
+     <li>新增InputTreeModal组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-06</span>
+    <b>v 0.1.6</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>Cascade</b>级联组件。</li>
      <li>完善文档。</li>
+  </ol>
+:::
+
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-05</span>
+    <b>v 0.1.5</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>TreeModal</b>树形弹窗组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-04</span>
+    <b>v 0.1.4</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>Tree</b>树形组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-03</span>
+    <b>v 0.1.3</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>Modal</b>弹层组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-02</span>
+    <b>v 0.1.2</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>Icon</b>图标组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-02</span>
+    <b>v 0.1.1</b>
+  </p>
+  
+  <ol>
+     <li>新增<b>Button</b>按钮组件。</li>
   </ol>
 :::
 
@@ -451,17 +471,24 @@
     <span>2020-07-02</span>
     <b>v 0.1.0</b>
   </p>
-  
-  <p>比较多数组件库后，我更倾向于antd-react组件库，但技术栈是vue……</p>  
-  <p>有个尴尬的问题摆在脸上，简单的组件无需定制，复杂需求无法套用，
-    集成功能的开发因为上述问题不得不妥协，烂墙抹泥的尝试又受到挫折……
-  </p>  
-  <p>算了，我来造轮子吧。</p>  
+  <ol>
+     <li>比较多数组件库后，我更倾向于antd-react组件库，但技术栈是vue……</li>
+     <li>有个尴尬的问题摆在脸上，简单的组件无需定制，复杂需求无法套用，</li>
+     <li>集成功能的开发因为上述问题不得不妥协，烂墙抹泥的尝试又受到挫折……</li>
+     <li>算了，我来造轮子吧。</li>
+     <li><b>-&nbsp;&nbsp;-&nbsp;&nbsp;!5D&nbsp;!!!</b></li>  
+  </ol>
 :::
 
 <style>
     .logs-version-item{
         display: flex;
         justify-content: space-between;
+    }
+    .logs-version-item b{
+        color: green;
+    }
+    li  b{
+        color: #b65757;
     }
 </style>  
