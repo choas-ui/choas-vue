@@ -160,14 +160,7 @@ module.exports = {
                     title: '迭代日志',
                     children: [
                         ['/logs/version', '日志'],
-                        ['/logs/plans', '计划'],
-                        {
-                            title: 'BUG',
-                            children: [
-                                ['/logs/bug/bug','Bug'],
-                                ['/logs/bug/20200704', '20200704']
-                            ]
-                        }
+                        ['/logs/plans', '计划']
                     ]
                 }
             ],
