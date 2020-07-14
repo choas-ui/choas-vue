@@ -20,7 +20,7 @@
                 <div class="footer-box"></div>
                 <div class="search-box-wrap">
                     <input type="text" v-model="searchStr" :placeholder="noticeTxt">
-                    <CButton size="small" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
+                    <CButton size="small" v-if="addTreeNode" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
                     <CButton size="small" v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
                     <CButton size="small" v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
                 </div>
@@ -162,6 +162,10 @@
                     return 'node'
                 }
             },
+            addTreeNode: {
+                type: Function,
+                default(){}
+            },
         },
         data() {
             return {
@@ -193,7 +197,8 @@
             },
             addTreeListHandle() {
                 const pId = this.cascadeData[this.cascadeData.length-1]?this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']]: ''
-                this.$emit('addTreeNode', {pId: pId || '', value: this.searchStr})
+                // this.$emit('addTreeNode', {pId: pId || '', value: this.searchStr})
+                this.addTreeNode({pId: pId || '', value: this.searchStr})
             },
             addBtnCancelHandle() {
                 this.isCascadeShow = false
@@ -234,6 +239,7 @@
                     this.cascadeData = []
                     this.isCascadeShow = false
                     this.$emit('toggleShow', false)
+                    this.searchStr = ''
                 }
             },
             searchStr(v) {

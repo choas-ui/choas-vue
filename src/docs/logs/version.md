@@ -1,5 +1,43 @@
 ### 版本信息
 ---
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.41</b>
+  </p>
+  
+  <ol>
+     <li>InputTreeModal的显示替换为Tag组件。</li>
+     <li>InputTreeModal 未传入addTreeNode节点时，不显示新增按钮。</li>
+     <li>关闭TreeModal后搜索内容清空。</li>
+     <li>新增Tag组件。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.40</b>
+  </p>
+  
+  <ol>
+     <li>cascade搜索功能重写。</li>
+  </ol>
+:::
+
+:::tip 版本信息
+  <p class="logs-version-item">
+    <span>2020-07-13</span>
+    <b>v 0.1.39</b>
+  </p>
+  
+  <ol>
+     <li>样式重定义。</li>
+     <li>cascade搜索功能逻辑外移。</li>
+  </ol>
+:::
+
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-13</span>

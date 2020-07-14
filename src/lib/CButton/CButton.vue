@@ -84,13 +84,6 @@
                         [`${prefix}btn-ssm`]: this.size === 'ssmall',
                     },
                     {
-                        [`${prefix}llg-radius`]: this.size === 'llarge',
-                        [`${prefix}lg-radius`]: this.size === 'large',
-                        [`${prefix}df-radius`]: this.size === 'default' || !(this.size),
-                        [`${prefix}sm-radius`]: this.size === 'small',
-                        [`${prefix}ssm-radius`]: this.size === 'ssmall',
-                    },
-                    {
                         [`${prefix}btn`]: true,
                     }
                 )

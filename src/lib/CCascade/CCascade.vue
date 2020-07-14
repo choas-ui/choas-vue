@@ -56,7 +56,7 @@
         <div v-if="!(selectedArr[0] || []).length && isDropUlShow"
              class="no-data-box"
              :style="{
-                top: $refs.cascade.clientHeight+'px',
+                top: $refs.cascade.clientHeight + 10 +'px',
              }"
         >
             暂无数据

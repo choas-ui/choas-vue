@@ -10,21 +10,32 @@ function registerComponentsList() {
         {
             components: [
                 {
-                    name: 'CIcon',
-                    path: getPath('CIcon')
-                },
-                {
                     name: 'CButton',
                     path: getPath('CButton')
                 },
+                {
+                    name: 'CIcon',
+                    path: getPath('CIcon')
+                },
+
                 {
                     name: 'CModal',
                     path: getPath('CModal')
                 },
                 {
+                    name: 'CSelection',
+                    path: getPath('CSelection')
+                },
+                {
+                    name: 'CTag',
+                    path: getPath('CTag')
+                },
+                {
                     name: 'CTree',
                     path: getPath('CTree')
                 },
+
+                // complex
                 {
                     name: 'CCascade',
                     path: getPath('CCascade')
@@ -33,13 +44,9 @@ function registerComponentsList() {
                     name: 'CTreeModal',
                     path: getPath('CTreeModal')
                 },
-                {
-                    name: 'CSelection',
-                    path: getPath('CSelection')
-                },
 
 
-
+                // custom
                 {
                     name: 'CInputTreeModal',
                     path: getPath('CInputTreeModal')
@@ -84,7 +91,13 @@ module.exports = {
                                     '/components/common/input', '输入框* CInput'
                                 ],
                                 [
+                                    '/components/common/message', '提醒* CMessage'
+                                ],
+                                [
                                     '/components/common/modal', '弹层 CModal'
+                                ],
+                                [
+                                    '/components/common/notification', '弹层 CNotification'
                                 ],
                                 [
                                     '/components/common/prompt', '提醒* CPrompt'
@@ -93,10 +106,16 @@ module.exports = {
                                     '/components/common/selection', '下拉框* CSelection'
                                 ],
                                 [
+                                    '/components/common/skeleton', '骨架屏* CSkeleton'
+                                ],
+                                [
                                     '/components/common/table', '表格* CTable'
                                 ],
                                 [
                                     '/components/common/tag', '标签* CTag'
+                                ],
+                                [
+                                    '/components/common/timeLine', '时间线* CTimeLine'
                                 ],
                                 [
                                     '/components/common/tree', '树形 CTree'
@@ -124,6 +143,9 @@ module.exports = {
                         {
                             title: '特异组件',
                             children: [
+                                [
+                                    '/components/custom/inputCascade', 'input级联* CInputCascade'
+                                ],
                                 [
                                     '/components/custom/inputTreeModal', 'input树形弹窗* CInputTreeModal'
                                 ],

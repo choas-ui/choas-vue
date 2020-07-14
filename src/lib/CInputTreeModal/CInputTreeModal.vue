@@ -3,13 +3,11 @@
         <template v-if="!canBeEdited">
           <div class="input-like input-like-unedited" >
             <template v-if="selectedData.length">
-              <span
-                      v-for="(item, index) of selectedData"
+                <CTag v-for="(item, index) of selectedData"
                       :key="index + item[reflectKey['value']]"
-                      :class="multiple+1 ? 'tag-span' : 'content-span'"
-              >
-                {{ item[[reflectKey['key']]] }}
-              </span>
+                >
+                    {{ item[[reflectKey['key']]] }}
+                </CTag>
             </template>
           </div>
         </template>
@@ -19,13 +17,12 @@
                    @click="inputClick"
                    :style="{}">
                   <template v-if="selectedData.length">
-                      <span
-                              v-for="(item, index) of selectedData"
-                              :key="index + item[reflectKey['value']]"
-                              :class="multiple+1 ? 'tag-span' : 'content-span'"
+                      <CTag v-for="(item, index) of selectedData"
+                            :key="index + item[reflectKey['value']]"
+                            size="small"
                       >
                           {{ item[[reflectKey['key']]] }}
-                      </span>
+                      </CTag>
                   </template>
                   <template v-else>
                       <span class="placeholder-span">{{ placeholder }}</span>
@@ -48,8 +45,8 @@
                     :title="title"
                     :isShow="isModalShow"
                     :placeholder="placeholder"
+                    :addTreeNode="$listeners.addTreeNode? addTreeNode : null"
                     @toggleShow="v => this.isModalShow= v"
-                    @addTreeNode="addTreeNode"
         ></CTreeModal>
     </span>
 </template>

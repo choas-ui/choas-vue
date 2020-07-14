@@ -33,12 +33,11 @@
                 return{
                     canBeEdited: true,
                     selectedData: {
-                        a: [
-{
+                        a: [{
                             id: '014557484S-2-2-0017',
                             name: '谢广坤',
                         }]
-},
+                    },
                     reflectKey: {
                         key: 'name',
                         value: 'id'
