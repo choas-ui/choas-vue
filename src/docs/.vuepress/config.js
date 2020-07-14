@@ -112,7 +112,7 @@ module.exports = {
                                     '/components/common/table', '表格* CTable'
                                 ],
                                 [
-                                    '/components/common/tag', '标签* CTag'
+                                    '/components/common/tag', '标签 CTag'
                                 ],
                                 [
                                     '/components/common/timeLine', '时间线* CTimeLine'

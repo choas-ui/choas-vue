@@ -11,7 +11,7 @@
      <li>InputTreeModal的显示替换为Tag组件。</li>
      <li>InputTreeModal 未传入addTreeNode节点时，不显示新增按钮。</li>
      <li>关闭TreeModal后搜索内容清空。</li>
-     <li>新增Tag组件。</li>
+     <li>新增 <b>Tag</b> 组件。</li>
   </ol>
 :::
 
@@ -419,7 +419,7 @@
 :::tip 版本信息
   <p class="logs-version-item">
     <span>2020-07-08</span>
-    <b>v 0.1.8</b>
+    <b>v 0.1.9</b>
   </p>
   
   <ol>
