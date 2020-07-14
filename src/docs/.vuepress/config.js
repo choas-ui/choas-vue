@@ -136,7 +136,10 @@ module.exports = {
                                     '/components/complex/selectTree', '树形选择器* CSelectTree'
                                 ],
                                 [
-                                    '/components/complex/selectTree', '穿梭框* CShuttle'
+                                    '/components/complex/shuttle', '穿梭框* CShuttle'
+                                ],
+                                [
+                                    '/components/complex/uploader', '上传文件* CUploader'
                                 ],
                             ]
                         },
