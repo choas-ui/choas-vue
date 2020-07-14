@@ -286,7 +286,7 @@
     .tree-box-wrap {
         height: 100%;
         display: flex;
-        padding: addPX($df-padding) addPX($df-padding) 0 addPX($df-padding);
+        padding: 0 addPX($df-padding) 0 addPX($df-padding);
         box-sizing: border-box;
 
         .tree-box {
@@ -310,7 +310,7 @@
             }
 
             .search-box-wrap {
-                padding: addPX($lg-padding) addPX($lg-padding) 0 0;
+                padding-right: addPX($lg-padding);
                 width: 100%;
                 box-sizing: border-box;
                 display: flex;
