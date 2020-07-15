@@ -5,11 +5,133 @@
   <p>
     示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/"> fontawesome </a> 图标库。
   </p>
-  <br>
-  <p>
-    仅内置了少量的svg图标，以后会慢慢新增。
-  </p>
+  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-more" width="20" height="20"/></p>
+    <p>choas-more</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-forbid" width="20" height="20"/></p>
+    <p>choas-forbid</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-close" width="20" height="20"/></p>
+    <p>choas-close</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-search" width="20" height="20"/></p>
+    <p>choas-search</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-delete" width="20" height="20"/></p>
+    <p>choas-delete</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-arrow-top" width="20" height="20"/></p>
+    <p>choas-arrow-top</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-arrow-right" width="20" height="20"/></p>
+    <p>choas-arrow-right</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-arrow-down" width="20" height="20"/></p>
+    <p>choas-arrow-down</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-arrow-left" width="20" height="20"/></p>
+    <p>choas-arrow-left</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-arrow-top" width="20" height="20"/></p>
+    <p>choas-fill-arrow-top</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-arrow-right" width="20" height="20"/></p>
+    <p>choas-fill-arrow-right</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-arrow-down" width="20" height="20"/></p>
+    <p>choas-fill-arrow-down</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-arrow-left" width="20" height="20"/></p>
+    <p>choas-fill-arrow-left</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-file-icon" width="20" height="20"/></p>
+    <p>choas-file-icon</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-square-min" width="20" height="20"/></p>
+    <p>choas-square-min</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-square-add" width="20" height="20"/></p>
+    <p>choas-square-add</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-lists" width="20" height="20"/></p>
+    <p>choas-lists</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-add" width="20" height="20"/></p>
+    <p>choas-add</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-min" width="20" height="20"/></p>
+    <p>choas-min</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-edit" width="20" height="20"/></p>
+    <p>choas-edit</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-confirm" width="20" height="20"/></p>
+    <p>choas-confirm</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-error" width="20" height="20"/></p>
+    <p>choas-error</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-download" width="20" height="20"/></p>
+    <p>choas-download</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-save" width="20" height="20"/></p>
+    <p>choas-save</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-home" width="20" height="20"/></p>
+    <p>choas-home</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-home" width="20" height="20"/></p>
+    <p>choas-fill-home</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-eye" width="20" height="20"/></p>
+    <p>choas-eye</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-close-eye" width="20" height="20"/></p>
+    <p>choas-close-eye</p>
+  </span>
 
+  
+  <style>
+    .icon-lib{
+        display: inline-block;
+        width: 130px;
+        margin-left: 10px;
+        text-align: center;
+    }
+    .icon-lib p{
+        font-size: 10px;
+        width: 100%;
+    }
+  </style>
 
 #### 类型 type
 ---
@@ -270,8 +392,6 @@ export default {
 
     Icon.importSrc(type, setting)
 ```
-
-
 
 #### 属性列表 props
 ---

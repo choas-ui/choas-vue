@@ -11,6 +11,11 @@
             </div>
         </div>
         <span v-if="!noText" :style="getSpanText">{{value}}%</span>
+        <slot name="icon">
+            <CIcon v-if="status==='complete'" icon-name="choas-confirm" :color="barConfig.completeColor" style="margin-left: 10px" />
+            <CIcon v-if="status==='stop'" icon-name="choas-forbid" :color="barConfig.stopColor" style="margin-left: 10px" />
+            <CIcon v-if="status==='error'" icon-name="choas-error" :color="barConfig.errorColor" style="margin-left: 10px" />
+        </slot>
     </div>
 </template>
 
