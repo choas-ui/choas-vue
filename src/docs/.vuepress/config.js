@@ -100,6 +100,9 @@ module.exports = {
                                     '/components/common/notification', '弹层 CNotification'
                                 ],
                                 [
+                                    '/components/common/progress', '进度条 CProgress'
+                                ],
+                                [
                                     '/components/common/prompt', '提醒* CPrompt'
                                 ],
                                 [

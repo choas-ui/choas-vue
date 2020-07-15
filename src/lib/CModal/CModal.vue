@@ -200,7 +200,7 @@
         },
         methods: {
             cancelModal($event) {
-                if(($event.target || {}).className === (this.$refs.modalWrap || {}).className && this.mask && this.cancel){
+                if((($event.target || {}).className === (this.$refs.modalWrap || {}).className )&& this.mask && this.cancel){
                     this.$emit('input', false)
                 }
             },
