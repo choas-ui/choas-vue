@@ -23,6 +23,10 @@ function registerComponentsList() {
                     path: getPath('CModal')
                 },
                 {
+                    name: 'CProgress',
+                    path: getPath('CProgress')
+                },
+                {
                     name: 'CSelection',
                     path: getPath('CSelection')
                 },
@@ -79,10 +83,13 @@ module.exports = {
                     title: '组件',
                     children:[
                         {
-                            title: '独立组件',
+                            title: '基础组件',
                             children: [
                                 [
                                     '/components/common/button', '按钮 CButton'
+                                ],
+                                [
+                                    '/components/common/confirm', '轻确认* CConfirm'
                                 ],
                                 [
                                     '/components/common/icon', '图标 CIcon'
@@ -91,19 +98,16 @@ module.exports = {
                                     '/components/common/input', '输入框* CInput'
                                 ],
                                 [
-                                    '/components/common/message', '提醒* CMessage'
+                                    '/components/common/message', '消息* CMessage'
                                 ],
                                 [
                                     '/components/common/modal', '弹层 CModal'
                                 ],
                                 [
-                                    '/components/common/notification', '弹层 CNotification'
+                                    '/components/common/notification', '提醒* CNotification'
                                 ],
                                 [
-                                    '/components/common/progress', '进度条 CProgress'
-                                ],
-                                [
-                                    '/components/common/prompt', '提醒* CPrompt'
+                                    '/components/common/progress', '进度条* CProgress'
                                 ],
                                 [
                                     '/components/common/selection', '下拉框* CSelection'

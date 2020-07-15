@@ -5,11 +5,11 @@ actionText: FBI WARNING →
 actionLink: /components/
 features:
 - title: 高效
-  details: 可选配置与插槽，满足不同场景
+  details: 尽可能多的可选配置项与插槽，效率为上。
 - title: 快速
-  details: 开箱即用
+  details: 尽可能少的必填内容，敏捷开发。
 - title: 定制
-  details: 面向不同应用场景
+  details: 尽可能丰富的定制组件，开箱即用。
 ---
 :::danger POISON
 It's not a jock.

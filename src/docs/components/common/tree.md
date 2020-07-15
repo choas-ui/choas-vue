@@ -572,7 +572,8 @@ export default {
 #### 后置操作按钮组 controllers
 ---
   <ul>
-    <li><p>controllers 属性将呈现一组可以操作树形节点的按钮，</p></li>
+    <li><p>controllers 属性将呈现一组可以操作树形节点的按钮。</p></li>
+    <li><p>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加。</p></li>
   </ul>
 
 :::demo
@@ -775,10 +776,10 @@ export default {
 ```
 :::
 
-#### 旋转参数 rotateSetting
+#### 标记切换 active-mark-icon
 ---
 
-#### 新增
+#### 多选 rotateSetting
 ---
 
 #### 属性列表 props
@@ -796,17 +797,13 @@ export default {
 
 #### 问答 QAQ
 ---
-<small>
-    <ul>
-        <li><b>Q:</b> 圆形图标？</li>
-        <li><b>A:</b> 暂未提供圆形图标。</li>
-    </ul>
-</small>
+  <ul>
+    <li><b>Q:</b> 圆形图标？</li>
+    <li><b>A:</b> 暂未提供圆形图标。</li>
+  </ul>
 
 #### 归类 Answer
 ---
-<small>
-    <ul>
-        <li><b>Q:</b></li>
-    </ul>
-</small>
+  <ul>
+    <li><b>Q:</b></li>
+  </ul>

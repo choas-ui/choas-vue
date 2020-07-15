@@ -8,7 +8,8 @@
   </p>
   
   <ol reversed>
-     <li>Modal新增<kbd>ESC</kbd>关闭功能。</li>
+     <li>新增<b>Progress</b>进度条。</li>
+     <li>Modal按下<kbd>ESC</kbd>关闭。</li>
      <li>TreeModal移除<s>addTreeNode</s>方法,新增<b>addTreeNode</b>属性。</li>
      <li>修复关闭InputTreeModal未保存值未还原问题。</li>
   </ol>
