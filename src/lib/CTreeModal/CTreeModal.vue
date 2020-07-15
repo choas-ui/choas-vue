@@ -10,16 +10,20 @@
             ref="treeModal"
     >
         <slot slot="header">
-            <div class="modal-header">
+            <div class="modal-header"
+                 :style="{
+                    background: `url('${titleImg}') left center/100% 100%`
+                 }"
+            >
                 {{title}}
             </div>
         </slot>
 
-        <div class="tree-box-wrap">
-            <div class="tree-box">
-                <div class="footer-box"></div>
+        <div :class="getWrapBoxClass">
+            <div :class="getTreeBoxClass">
+                <div :class="getTreeFootBoxClass"></div>
                 <div class="search-box-wrap">
-                    <input type="text" v-model="searchStr" :placeholder="noticeTxt">
+                    <input type="text" v-model="searchStr" :placeholder="noticeTxt" autofocus>
                     <CButton size="small" v-if="addTreeNode" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
                     <CButton size="small" v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
                     <CButton size="small" v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
@@ -45,7 +49,7 @@
                 </div>
             </div>
             <div class="selected-box">
-                <div class="footer-box">
+                <div :class="getTreeFootBoxClass">
                     已选{{selectData.length? 1 : 0}}项
                 </div>
                 <div class="selected-content">
@@ -78,6 +82,8 @@
 
 <script>
     import _ from 'lodash'
+    import classNames from 'classnames'
+    import defaultImg from './imgs/header.png'
 
     export default {
         name: 'CTreeModal',
@@ -125,6 +131,11 @@
                     return ''
                 }
             },
+            titleImg: {
+                default() {
+                    return defaultImg
+                }
+            },
             placeholder: {
                 type: String,
                 default() {
@@ -163,8 +174,19 @@
                 }
             },
             addTreeNode: {
-                type: Function,
-                default(){}
+                type: Function
+            },
+            prefix:{
+                type: String,
+                default(){
+                    return ''
+                }
+            },
+            className:{
+                type: String,
+                default(){
+                    return ''
+                }
             },
         },
         data() {
@@ -182,6 +204,33 @@
         mounted() {
             this.list_data = _.cloneDeep(this.listData)
             this.cascadeList = _.cloneDeep(this.listData)
+        },
+        computed:{
+            getTreeFootBoxClass(){
+                const prefix = this.prefix ? this.prefix + '-' : ''
+                return classNames(
+                    {
+                        [prefix + 'tree-footer-box']: true
+                    }
+                )
+            },
+            getTreeBoxClass(){
+                const prefix = this.prefix ? this.prefix + '-' : ''
+                return classNames(
+                    {
+                        [prefix + 'tree-box']: true
+                    }
+                )
+            },
+            getWrapBoxClass(){
+                const prefix = this.prefix ? this.prefix + '-' : ''
+                return classNames(
+                    this.className,
+                    {
+                        [prefix + 'tree-box-wrap']: true
+                    }
+                )
+            }
         },
         methods: {
             openCascade(){
@@ -240,6 +289,7 @@
                     this.isCascadeShow = false
                     this.$emit('toggleShow', false)
                     this.searchStr = ''
+                    this.$set(this, 'selectData', this.value)
                 }
             },
             searchStr(v) {
@@ -258,7 +308,7 @@
                 },
                 deep: true,
                 immediate: true
-            },
+            }
         }
     }
 </script>
@@ -271,7 +321,6 @@
     .modal-header {
         width: 100%;
         height: 50px;
-        background: url("./imgs/header.png") left center/100% 100%;
         color: #fff;
         font-size: 18px;
         font-weight: bold;
@@ -282,33 +331,19 @@
         height: addPX($llg-height);
         line-height: addPX(llg-height);
     }
-
-    .tree-box-wrap {
-        height: 100%;
-        display: flex;
-        padding: 0 addPX($df-padding) 0 addPX($df-padding);
-        box-sizing: border-box;
-
-        .tree-box {
+    .tree{
+        &-box-wrap {
+            height: 100%;
+            display: flex;
+            padding: 0 addPX($df-padding) 0 addPX($df-padding);
+            box-sizing: border-box;
+        }
+        &-box {
             flex: 3;
             box-sizing: border-box;
             display: flex;
             flex-wrap: wrap;
             flex-direction: column;
-
-
-            .title-box {
-                width: 100%;
-                height: addPX($df-height);
-                line-height: addPX($df-height);
-                font-size: addPX($lg-fs);
-                background: $info;
-                color: #fff;
-                text-indent: addPX($df-fs * 2);
-                letter-spacing: addPX($df-letterSp);
-                border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
-            }
-
             .search-box-wrap {
                 padding-right: addPX($lg-padding);
                 width: 100%;
@@ -331,7 +366,17 @@
                     }
                 }
             }
-
+            .title-box {
+                width: 100%;
+                height: addPX($df-height);
+                line-height: addPX($df-height);
+                font-size: addPX($lg-fs);
+                background: $info;
+                color: #fff;
+                text-indent: addPX($df-fs * 2);
+                letter-spacing: addPX($df-letterSp);
+                border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
+            }
             .cascade-box {
                 padding: addPX($lg-padding) addPX($lg-padding) 0 0;
                 display: flex;
@@ -340,7 +385,6 @@
                 flex-wrap: wrap;
                 text-align: center;
             }
-
             .content-box {
                 margin: addPX($lg-padding* 1.5) 0;
                 width: 100%;
@@ -350,51 +394,7 @@
                 display: flex;
             }
         }
-
-        .selected-box {
-            flex: 2;
-            word-break: break-all;
-            display: flex;
-            flex-wrap: wrap;
-            box-sizing: border-box;
-            flex-direction: column;
-
-            & > .selected-content {
-                width: 100%;
-                height: 100%;
-                flex: 1;
-                padding-left: addPX($lg-padding);
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: column;
-                border-left: addPX($ssm-borderWt) solid $lineColor;
-
-                > p {
-                    width: 100%;
-                    line-height: addPX($sm-height);
-                    box-sizing: border-box;
-                    text-align: left;
-                    margin-top: addPX($df-padding);
-                    padding-left:addPX($df-padding);
-                    display: flex;
-                    font-size: addPX($df-fs);
-                    align-items: center;
-
-                    > b {
-                        flex: 1;
-                        text-align: left;
-                    }
-
-                    &:hover {
-                        background: $info;
-                        color: white;
-                    }
-                }
-
-            }
-        }
-
-        .footer-box {
+        &-footer-box {
             width: 100%;
             height: addPX($sm-height);
             text-align: right;
@@ -404,5 +404,49 @@
             padding-right: addPX($lg-padding);
             box-sizing: border-box;
         }
+
     }
+    .selected-box {
+        flex: 2;
+        word-break: break-all;
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        flex-direction: column;
+
+        & > .selected-content {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            padding-left: addPX($lg-padding);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            border-left: addPX($ssm-borderWt) solid $lineColor;
+
+            > p {
+                width: 100%;
+                line-height: addPX($sm-height);
+                box-sizing: border-box;
+                text-align: left;
+                margin-top: addPX($df-padding);
+                padding-left:addPX($df-padding);
+                display: flex;
+                font-size: addPX($df-fs);
+                align-items: center;
+
+                > b {
+                    flex: 1;
+                    text-align: left;
+                }
+
+                &:hover {
+                    background: $info;
+                    color: white;
+                }
+            }
+
+        }
+    }
+
 </style>

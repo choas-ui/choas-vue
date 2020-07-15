@@ -4,6 +4,19 @@
 :::tip 版本更新
   <p class="logs-version-item">
     <span>2020-07-14</span>
+    <b>v 0.1.42</b>
+  </p>
+  
+  <ol reversed>
+     <li>Modal新增<kbd>ESC</kbd>关闭功能。</li>
+     <li>TreeModal移除<s>addTreeNode</s>方法,新增<b>addTreeNode</b>属性。</li>
+     <li>修复关闭InputTreeModal未保存值未还原问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-14</span>
     <b>v 0.1.41</b>
   </p>
   

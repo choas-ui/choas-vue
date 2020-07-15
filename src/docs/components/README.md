@@ -32,7 +32,7 @@
 ```html
 <template>
   <div id="app">
-    <Button @click="greeting"></Button>
+    <CButton @click="greeting"></CButton>
   </div>
 </template>
 <script>

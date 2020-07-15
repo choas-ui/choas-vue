@@ -15,7 +15,7 @@
           <div class="input-like-wrap">
               <div class="input-like"
                    @click="inputClick"
-                   :style="{}">
+              >
                   <template v-if="selectedData.length">
                       <CTag v-for="(item, index) of selectedData"
                             :key="index + item[reflectKey['value']]"
@@ -33,20 +33,24 @@
         </template>
         <CTreeModal :list-data="listData"
                     v-model="selectedData"
+                    :title="title"
+                    :isShow="isModalShow"
+                    @toggleShow="v => this.isModalShow= v"
+                    :conditionProps="conditionProps"
+                    :addTreeNode="$listeners.addTreeNode? addTreeNode : null"
+                    :reflectKey="reflectKey"
+
                     :width="width"
                     :height="height"
+                    :top="top"
+                    :left="left"
                     :mask="mask"
                     :line="line"
+                    :cancel="cancel"
                     :draggable="draggable"
                     :controllerColor="controllerColor"
                     :activeColor="activeColor"
-                    :reflectKey="reflectKey"
-                    :conditionProps="conditionProps"
-                    :title="title"
-                    :isShow="isModalShow"
                     :placeholder="placeholder"
-                    :addTreeNode="$listeners.addTreeNode? addTreeNode : null"
-                    @toggleShow="v => this.isModalShow= v"
         ></CTreeModal>
     </span>
 </template>
@@ -72,10 +76,25 @@
                     return '600'
                 }
             },
+            top: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            left: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
             mask: {
                 type: Boolean
             },
             line: {
+                type: Boolean
+            },
+            cancel: {
                 type: Boolean
             },
             canBeEdited: {

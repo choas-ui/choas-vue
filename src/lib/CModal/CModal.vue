@@ -8,13 +8,14 @@
                 top: mask? 0 : top? `${top}px`: `calc(50vh - ${height/2}px)`,
                 left: mask? 0 : top? `${left}px`: `calc(50vw - ${width/2}px)`,
             }"
-            @click="() =>  !(mask && cancel)|| removeModal()"
+            @click="cancelModal($event)"
             ref="modalWrap"
             @mousedown="!mask && dragStart($event)"
             @keydown.esc="removeModal"
     >
 
         <div
+                tabindex="0"
                 :class="getModalBoxClass"
                 :style="{
                     width: `${width}px`,
@@ -24,7 +25,7 @@
                 }"
                 ref="modalBox"
                 @mousedown="mask && dragStart($event)"
-                @keydown.esc="removeModal"
+
         >
             <div :class="getHeaderBox" v-if="'header' in $scopedSlots  || title">
                 <slot name="header">
@@ -40,7 +41,7 @@
                           height="24"
                           :color="controllerColor"
                           :activeColor="activeColor"
-                          @click="removeModal" />
+                          @click="removeModal($event)" />
                 </slot>
             </div>
             <div :class="getContent">
@@ -48,7 +49,7 @@
             </div>
             <div v-if="'footer' in $scopedSlots || type" :class="getFooter">
                 <slot name="footer">
-                    <CButton :type="type" @click="removeModal">确&nbsp;&nbsp;认</CButton>
+                    <CButton :type="type" @click="removeModal($event)">确&nbsp;&nbsp;认</CButton>
                 </slot>
             </div>
         </div>
@@ -141,42 +142,11 @@
                 visible: this.value,
             }
         },
-        methods: {
-            removeModal() {
-                this.$emit('input', false)
-            },
-            dragStart($event) {
-                if($event.button){
-                    return
-                }
-                let dragFlag = true
-                const draggedObj = this.mask? this.$refs.modalBox:this.$refs.modalWrap
-                const x = $event.clientX
-                const y = $event.clientY
-                const left = draggedObj.offsetLeft
-                const top = draggedObj.offsetTop
-                const handler = (e) =>{
-                    if(!dragFlag) {
-                        return
-                    }
-                    const  nl = e.clientX - x + left;
-                    const  nt = e.clientY - y + top;
-                    draggedObj.style.cursor = 'move'
-                    draggedObj.style.left = nl + 'px';
-                    draggedObj.style.top = nt + 'px';
-                }
-                draggedObj.addEventListener('mousemove', handler)
-                draggedObj.addEventListener('mouseout', () => {
-                    dragFlag = false
-                    draggedObj.style.cursor = 'default'
-                    draggedObj.removeEventListener('mousemove', handler)
-                })
-                draggedObj.addEventListener('mouseup', () => {
-                    dragFlag = false
-                    draggedObj.style.cursor = 'default'
-                    draggedObj.removeEventListener('mousemove', handler)
-                })
-            },
+        updated(){
+            const {focus} = this.$refs.modalBox || {}
+            if(focus){
+                this.$refs.modalBox.focus()
+            }
         },
         computed: {
             getFooter() {
@@ -225,8 +195,50 @@
                         [prefix + 'modal-wrap-mask']: this.mask,
                         [prefix + 'mask']: this.mask,
                     }
-                    )
+                )
             }
+        },
+        methods: {
+            cancelModal($event) {
+                if(($event.target || {}).className === (this.$refs.modalWrap || {}).className && this.mask && this.cancel){
+                    this.$emit('input', false)
+                }
+            },
+            removeModal() {
+                this.$emit('input', false)
+            },
+            dragStart($event) {
+                if($event.button){
+                    return
+                }
+                let dragFlag = true
+                const draggedObj = this.mask? this.$refs.modalBox:this.$refs.modalWrap
+                const x = $event.clientX
+                const y = $event.clientY
+                const left = draggedObj.offsetLeft
+                const top = draggedObj.offsetTop
+                const handler = (e) =>{
+                    if(!dragFlag) {
+                        return
+                    }
+                    const  nl = e.clientX - x + left;
+                    const  nt = e.clientY - y + top;
+                    draggedObj.style.cursor = 'move'
+                    draggedObj.style.left = nl + 'px';
+                    draggedObj.style.top = nt + 'px';
+                }
+                draggedObj.addEventListener('mousemove', handler)
+                draggedObj.addEventListener('mouseout', () => {
+                    dragFlag = false
+                    draggedObj.style.cursor = 'default'
+                    draggedObj.removeEventListener('mousemove', handler)
+                })
+                draggedObj.addEventListener('mouseup', () => {
+                    dragFlag = false
+                    draggedObj.style.cursor = 'default'
+                    draggedObj.removeEventListener('mousemove', handler)
+                })
+            },
         },
         watch: {
             visible(value) {
@@ -264,6 +276,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             flex-direction: column;
+            outline: none;
 
             &-title {
                 width: 100%;

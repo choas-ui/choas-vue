@@ -5,12 +5,11 @@
   </p>
 
 #### 默认
-  <p>
-    <ul>
-      <li>默认宽高为300*150，默认条件下只显示content,没有遮罩。</li>
-      <li>不提供默认的header与footer。</li>
-    </ul>
-  </p>
+---
+  <ul>
+    <li>默认宽高为300*150，默认条件下只显示content,没有遮罩。</li>
+    <li>不提供默认的header与footer。</li>
+  </ul>
 
 :::demo
 ```html
@@ -32,9 +31,9 @@
 
 #### 遮罩 mask
 ---
-  <p>
-    mask控制弹窗有无遮罩。
-  </p>
+  <ul>
+    <li>mask控制弹窗有无遮罩。</li>
+  </ul>
 
 :::demo
 ```html
@@ -60,9 +59,9 @@
 
 #### 遮罩控制 cancel
 ---
-  <p>
-    设置cancel，遮罩可以关闭弹层。
-  </p>
+  <ul>
+    <li>设置cancel，遮罩可以关闭弹层。</li>
+  </ul>
 
 :::demo
 ```html
@@ -102,9 +101,9 @@
 
 #### 控制图标 controller
 ---
-  <p>
-    设置controller值，右上默认按钮消失
-  </p>
+  <ul>
+    <li>设置controller值，右上默认按钮消失。</li>
+  </ul>
 
 
 :::demo
@@ -168,9 +167,9 @@
 
 #### 标题 Title
 ---
-  <p>
-    弹框标题。
-  </p>
+  <ul>
+    <li>弹框标题。</li>
+  </ul>
 
 :::demo
 ```html
@@ -198,9 +197,9 @@
 
 #### 类型 type
 ---
-  <p>
-    快速生成提醒弹框。
-  </p>
+  <ul>
+    <li>快速生成提醒弹框。</li>
+  </ul>
 
 :::demo
 ```html
@@ -241,9 +240,9 @@
 
 #### 宽与高 width&height
 ---
-  <p>
-    设计弹框的初始宽高。
-  </p>
+  <ul>
+    <li>设计弹框的初始宽高。</li>
+  </ul>
 
 :::demo
 ```html
@@ -272,9 +271,9 @@
 
 #### 顶与左 top&left
 ---
-  <p>
-    设计弹框的顶部及左边初始距离。
-  </p>
+  <ul>
+    <li>设计弹框的顶部及左边初始距离。</li>
+  </ul>
 
 :::demo
 ```html
@@ -301,9 +300,9 @@
 
 #### 拖动 draggable
 ---
-  <p>
-    弹框是否可以拖动。
-  </p>
+  <ul>
+    <li>弹框是否可以拖动。</li>
+  </ul>
 
 :::demo
 ```html
@@ -335,9 +334,14 @@
 ---
   |属性|值|类型|默认值|说明|
   |:-:|:---:|---|---|:---|
-  |v-modal|无|Boolean|false|是否显示弹窗|
+  |width|String| String | 350 |弹窗大小|
+  |height|String| String | 150 |弹窗宽度|
+  |top|String| String | '' |上边距|
+  |left|String| String | '' |左边距|
+  |title|无| String | 无 |单一文字title组件|
   |mask|truthy falsy | Boolean|false |是否显示遮罩|
   |cancel|truthy falsy | Boolean|false |有遮罩时点击遮罩是否能关闭弹窗|
+  |draggable|truthy falsy | Boolean|true |有遮罩时点击遮罩是否能关闭弹窗|
   |slot|'header' 'controller' 'footer'|String|无|是否显示header与footer及替换controller的内容|
   |controller|truthy falsy | Boolean |false |是否显示关闭图标|
   |title|无| String | 无 |单一文字title组件|
@@ -347,20 +351,16 @@
 
 #### 问答 QAQ
 ---
- <h5>
-    <ul>
-      <li><b>Q:</b></li>
-      <li><b>A:</b></li>
-    </ul>
- </h5>
+  <ul>
+    <li><b>Q:</b></li>
+    <li><b>A:</b></li>
+  </ul>
 
 #### 归类 Answer
 ---
-  <h5>
-    <ul>
-      <li><b>Q:</b> header 、footer 的默认样式。</li>
-      <li><b>A:</b> 尽可能少的提供样式，因此header默认文字居中，footer默认组件整体居右。</li>
-      <li><b>Q:</b> 注意controller与header、footer的区别。</li>
-      <li><b>A:</b> 为避免因无法关闭弹窗的问题，controller默认显示,而header与footer默认关闭。</li>
-    </ul>
-  </h5>  
+  <ul>
+    <li><b>Q:</b> header 、footer 的默认样式。</li>
+    <li><b>A:</b> 尽可能少的提供样式，因此header默认文字居中，footer默认组件整体居右。</li>
+    <li><b>Q:</b> 注意controller与header、footer的区别。</li>
+    <li><b>A:</b> 为避免因无法关闭弹窗的问题，controller默认显示,而header与footer默认关闭。</li>
+  </ul>

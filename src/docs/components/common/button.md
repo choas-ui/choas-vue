@@ -184,17 +184,13 @@
 
 #### 问答 QAQ
 ---
-  <small>
-    <ul>
-      <li><b>Q:</b> 圆形图标？</li>
-      <li><b>A:</b> 暂未提供圆形图标。</li>
-    </ul>
-  </small>
+  <ul>
+    <li><b>Q:</b> 圆形图标？</li>
+    <li><b>A:</b> 暂未提供圆形图标。</li>
+  </ul>
 
 #### 归类 Answer
 ---
-  <small>
-    <ul>
-      <li><b>Q:</b></li>
-    </ul>
-  </small>
+  <ul>
+    <li><b>Q:</b></li>
+  </ul>
