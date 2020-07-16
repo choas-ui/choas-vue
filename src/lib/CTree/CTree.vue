@@ -406,7 +406,7 @@
                     class: [
                         ...classNames(
                             {
-                              'active': data[this.reflectKey['value']] === _.get(this.$attrs.value, '0.'+this.reflectKey['value'], '')
+                              'active':  this.$attrs.value.findIndex(item => item[this.reflectKey['value']] === data[this.reflectKey['value']])>-1
                             },
                             {
                                 [prefix + 'tree-title-wrap']: true
@@ -415,9 +415,26 @@
                     ],
                     on: {
                         click: () => {
+                            // 单选仅能选根结点
                             if(!this.multiple && !data.disable && !(data.children || []).length){
                                 this.value = [data]
                                 this.$emit('change', this.value)
+                            }
+                            // 多选, 点击根结点
+                            if(this.multiple && !data.disable && !(data.children || []).length){
+                                const {value} = this.$attrs
+                                const index = value.findIndex(item => item[this.reflectKey['value']] === data[this.reflectKey['value']])
+                                if(index>-1){
+                                    value.splice(index,1)
+                                }else{
+                                    value.push(data)
+                                }
+                                this.value = [data]
+                                this.$emit('change', value)
+                            }
+                            // 多选, 点击父节点
+                            if(this.multiple && !data.disable && (data.children || []).length){
+
                             }
                         }
                     },
@@ -449,6 +466,7 @@
                                 controllers: this.controllers,
                                 fileIconFixMargin: this.fileIconFixMargin,
                                 markIconFixMarginLeft: this.markIconFixMarginLeft,
+                                multiple: this.multiple, // 多选
                             },
                             on: this.$listeners
                         },
