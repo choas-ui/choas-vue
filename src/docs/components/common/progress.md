@@ -157,7 +157,7 @@
             ></CProgress>
     <br/>
     <CProgress height="18"
-            :value="0"
+            :value="10"
             :barConfig="barConfig4"
             status="error"
             outside
@@ -257,5 +257,36 @@
 ```
 :::
 
-#### 不显示百分比 noText
+#### 禁用文字 noText
 ---
+ <ul>
+    <li>禁用文字。</li>
+ </ul>
+
+:::demo
+```html
+<template>
+    <CProgress height="18"
+            :value="30"
+            :barConfig="barConfig1"
+            color="#fff"
+            no-text
+            ></CProgress>
+</template>
+<script>
+    export default{
+        data(){
+            return {
+                barConfig1: {
+                    color:  ['#19B5FE', '#0ff'],
+                    deg: 45,
+                    completeColor: '#1ac756',
+                    errorColor: '#ff5e5c',
+                    stopColor: '#ffbb50',
+                }
+            }
+        }
+    } 
+</script>
+```
+:::
