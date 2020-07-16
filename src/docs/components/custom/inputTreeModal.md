@@ -19,7 +19,7 @@
     <template>
         <CInputTreeModal
                :list-data="listData"
-               v-model="selectedData.a"
+               v-model="selectedData"
                :can-be-edited="canBeEdited"
                :reflect-key="reflectKey"
                title="请选择机构"
@@ -32,12 +32,10 @@
             data(){
                 return{
                     canBeEdited: true,
-                    selectedData: {
-                        a: [{
-                            id: '014557484S-2-2-0017',
-                            name: '谢广坤',
-                        }]
-                    },
+                    selectedData:[{
+                        id: '014557484S-2-2-0017',
+                        name: '谢广坤',
+                    }],
                     reflectKey: {
                         key: 'name',
                         value: 'id'
@@ -47,11 +45,13 @@
                             id: '014557484S',
                             name: '特殊事务部',
                             expand: true,
+                            node: 1,
                             children: [
                                 {
                                     id: '014557484S-0',
                                     name: '指挥部',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-0-007',
@@ -67,6 +67,7 @@
                                     id: '014557484S-1',
                                     name: '后勤',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-1-0017',
@@ -83,10 +84,12 @@
                                     id: '014557484S-2',
                                     name: '业务部',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-2-1',
                                             name: '一组',
+                                            node: 1,
                                         },
                                         {
                                             id: '014557484S-2-2',
@@ -130,7 +133,7 @@
     <template>
         <CInputTreeModal
                :list-data="listData"
-               v-model="selectedData.a"
+               v-model="selectedData"
                :can-be-edited="canBeEdited"
                :reflect-key="reflectKey"
                title="请选择机构"
@@ -144,12 +147,10 @@
             data(){
                 return{
                     canBeEdited: true,
-                    selectedData: {
-                        a: [{
-                            id: '014557484S-2-2-0017',
-                            name: '谢广坤',
-                        }]
-                    },
+                    selectedData: [{
+                        id: '014557484S-2-2-0017',
+                        name: '谢广坤',
+                    }],
                     reflectKey: {
                         key: 'name',
                         value: 'id'
@@ -159,11 +160,13 @@
                             id: '014557484S',
                             name: '特殊事务部',
                             expand: true,
+                            node: 1,
                             children: [
                                 {
                                     id: '014557484S-0',
                                     name: '指挥部',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-0-007',
@@ -179,6 +182,7 @@
                                     id: '014557484S-1',
                                     name: '后勤',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-1-0017',
@@ -195,15 +199,18 @@
                                     id: '014557484S-2',
                                     name: '业务部',
                                     expand: true,
+                                    node: 1,
                                     children: [
                                         {
                                             id: '014557484S-2-1',
                                             name: '一组',
+                                            node: 1,
                                         },
                                         {
                                             id: '014557484S-2-2',
                                             name: '二组',
                                             expand: true,
+                                            node: 1,
                                             children: [
                                                 {
                                                     id: '014557484S-2-2-0017',

@@ -116,8 +116,8 @@
             }
         },
         methods:{
-            iconClickHandle(){
-                this.$emit('close')
+            iconClickHandle($event){
+                this.$emit('close', $event)
             }
         }
     }
@@ -129,7 +129,8 @@
     @import "../scss/variable";
     @import "../scss/functions";
     .ctag{
-        display: inline-block;
+        display: flex;
+        align-items: center;
         &-llg{
             height: addPX($llg-height);
             line-height: addPX($llg-height);

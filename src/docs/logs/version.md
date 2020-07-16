@@ -8,6 +8,7 @@
   </p>
   
   <ol reversed>
+     <li>Tag close事件返回$event。</li>
      <li>InputTreeModal 增加简单多选功能。</li>
   </ol>
 :::
@@ -242,8 +243,8 @@
   </p>
   
   <ol reversed>
-     <li>InputTreeModal新增<b>addTreeNode</b>接口。</li>
-     <li>InputTreeModal移除<s>getListData</s>接口。</li>
+     <li>InputTreeModal新增<b>addTreeNode</b>事件。</li>
+     <li>InputTreeModal移除<s>getListData</s>事件。</li>
   </ol>
 :::
 
@@ -376,7 +377,7 @@
   </p>
   
   <ol reversed>
-     <li>调整Tree/TreeModal/Cascade/InputTreeModal 接口数据。</li>
+     <li>调整Tree/TreeModal/Cascade/InputTreeModal 树形和事件。</li>
   </ol>
 :::
 
@@ -387,7 +388,7 @@
   </p>
   
   <ol reversed>
-     <li>移除Icon组件<s>type</s>接口。</li>
+     <li>移除Icon组件<s>type</s>树形。</li>
   </ol>
 :::
 

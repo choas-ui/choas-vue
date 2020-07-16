@@ -478,6 +478,101 @@
 :::
 
 
+#### 多选 multiple
+---
+  <ul>
+    <li>多选。</li>
+    <li>如果只想选子节点，需要配合conditionProps,并在节点中指明可添加节点类型，真值时不可选中。</li>
+  </ul>
+
+::: demo
+```html
+    <template>
+        <p>选中的值: {{selectedData}}</p>   
+        <CButton @click="isModalShow = !isModalShow">打开</CButton>
+        <CTreeModal
+            :list-data="listData"
+            v-model="selectedData"
+            :isShow="isModalShow"
+            @toggleShow="v => isModalShow= v"
+            :title="title"
+            :reflectKey="{
+                key: 'name',
+                value: 'id'
+            }"
+            multiple
+
+            width="800"
+            height="600"
+            mask
+            controllerColor="#fff"
+            activeColor="#fff"
+            ></CTreeModal>
+    </template>
+    <script>
+    export default {
+        name: 'SomeComponent',
+        props: {},
+        data(){
+            return {
+                isModalShow: false,
+                title:'请选择什么',
+                selectedData:[
+                    {
+                        id: '014557484S-1-0017',
+                        name: '尼古拉斯.赵',
+                    }
+                ],
+                listData:[
+                    {
+                        id: '014557484S',
+                        name: '特殊事务部',
+                        expand: true,
+                        children:[
+                            {
+                                id: '014557484S-1',
+                                name: '后勤',
+                                children: [
+                                    {
+                                        id: '014557484S-1-0017',
+                                        name: '尼古拉斯.赵',
+                                    }
+                                ],
+                            },
+                            {
+                                id: '014557484S-2',
+                                name: '业务部',
+                                expand: true,
+                                children:[
+                                    {
+                                        id: '014557484S-2-1',
+                                        name: '一组',
+                                    },
+                                    {
+                                        id: '014557484S-2-2',
+                                        name: '二组',
+                                        expand: true,
+                                        children: [
+                                             {
+                                                id: '014557484S-2-2-0017',
+                                                name: '谢广坤',
+                                             },
+                                        ],
+                                    },
+                                ]
+                            },
+                        ]
+                    }
+                ],
+
+            }           
+        }
+    }
+    </script>
+```
+:::
+
+
 #### 属性列表 props
 ---
   |属性|值|类型|默认值|说明|
@@ -487,6 +582,8 @@
   |titleImg|Object| Object | null|自定义标题背景|
   |reflectKey| Object | Object| {key: 'title', value: 'value'}|映射对象|
   |addTreeNode|Function| Function | null |显示新增按钮|
+  |multiple|Boolean| Boolean | false |是否多选|
+  |conditionProps|String| String | 'node' | 用于筛选节点中的值 |
   |class-name|无|String|''|组件最外层添加一个新的类名|
   |width|无|String|无|是否在该组件所有类前加前缀|
   |height|无|String|无|是否在该组件所有类前加前缀|

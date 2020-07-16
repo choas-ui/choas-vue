@@ -54,21 +54,21 @@
                 type: Boolean
             },
             // 展开图标左间距
-            markIconFixMarginLeft:{
+            markIconFixMarginLeft: {
                 type: Number,
-                default(){
+                default() {
                     return 0
                 }
             },
             // 文件标识图标左间距
-            fileIconFixMargin:{
-              type: Number,
-              default(){
-                  return 0
-              }
+            fileIconFixMargin: {
+                type: Number,
+                default() {
+                    return 0
+                }
             },
             // 是否显示尾部控制
-            controllers:{
+            controllers: {
                 type: Boolean,
             },
             searchStr: {
@@ -77,8 +77,14 @@
                     return ''
                 }
             },
+            conditionProps: {
+                type: String,
+                default(){
+                    return 'node'
+                }
+            }
         },
-        model:{
+        model: {
             props: 'value',
             event: 'change'
         },
@@ -92,8 +98,8 @@
             this.copyListData = _.cloneDeep(this.listData)
         },
         watch: {
-            listData:{
-                handler(v){
+            listData: {
+                handler(v) {
                     this.copyListData = _.cloneDeep(v)
                 },
                 deep: true,
@@ -106,12 +112,14 @@
             const markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
             const prefix = this.prefix ? `${this.prefix}-` : ''
+            const rfKey = this.reflectKey['key']
+            const rfValue = this.reflectKey['key']
             // 展开图标
             const createIconMark = (data) => {
                 if (!(data.children || []).length) {
                     return null
                 }
-                const className =classNames({
+                const className = classNames({
                     [`${prefix}tree-mark-icon`]: true
                 }).split(' ')
                 if (this.$slots['mark-icon']) {
@@ -119,7 +127,7 @@
                         class: className,
                         style: {
                             transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : '',
-                            marginLeft: this.lineStartLv? `${this.markIconFixMarginLeft}px`: '0'
+                            marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
                         },
                         on: {
                             click: () => {
@@ -135,7 +143,7 @@
                     class: className,
                     style: {
                         transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : 'rotate(0)',
-                        marginLeft: this.lineStartLv? `${this.markIconFixMarginLeft}px`: '0'
+                        marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
                     },
                     on: {
                         click: () => {
@@ -214,11 +222,10 @@
                                     ],
                                     style: {
                                         // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
-                                        width: (markIconWidth*2)+(this.markIconFixMarginLeft-1) + 'px',
+                                        width: (markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
                                     }
                                 },
-                                [
-                                ]
+                                []
                             ))
                         } else if (i >= this.lineStartLv) {
                             let ele = h(
@@ -259,9 +266,7 @@
                         'span',
                         {
                             slot: 'file-icon',
-                            attrs: {
-
-                            },
+                            attrs: {},
                             style: {
                                 margin: `0 ${this.fileIconFixMargin}px`
                             }
@@ -273,8 +278,7 @@
                     props: {
                         'icon-name': "choas-file-icon",
                     },
-                    attrs: {
-                    },
+                    attrs: {},
                     style: {
                         margin: '0 6px'
                     }
@@ -282,47 +286,47 @@
             }
             // 文件图标
             const createControllersIcon = (data) => {
-                if(!this.controllers && !this.$slots['controllers']){
-                    return  null
+                if (!this.controllers && !this.$slots['controllers']) {
+                    return null
                 }
                 if (this.$slots['controllers']) {
-                    return  this.$slots['controllers'].map((item) => {
+                    return this.$slots['controllers'].map((item) => {
                         const {tag, listeners = {}, propsData} = item.componentOptions || {}
                         const _listeners = {}
-                        Object.keys(listeners).forEach(key=>{
-                            _listeners[key]=(e)=>{
+                        Object.keys(listeners).forEach(key => {
+                            _listeners[key] = (e) => {
                                 return listeners[key].call(this, data, e)
                             }
                         })
-                        if(tag)
-                        return h(
-                            tag,
-                            {
-                                props: {
-                                    ...propsData
-                                },
-                                ...item.data,
-                                slot: 'controllers',
-                                on:_listeners
-                            }
-                        )
+                        if (tag)
+                            return h(
+                                tag,
+                                {
+                                    props: {
+                                        ...propsData
+                                    },
+                                    ...item.data,
+                                    slot: 'controllers',
+                                    on: _listeners
+                                }
+                            )
                         return null
                     }).filter(Boolean)
                 }
-                if(!this.controllers){
+                if (!this.controllers) {
                     return null
                 }
-                return  [
+                return [
                     h(
                         'CIcon',
                         {
                             props: {
                                 color: '#333',
-                                iconName:'choas-edit',
+                                iconName: 'choas-edit',
                             },
                             slot: 'controllers',
-                            on:{
-                                click(){
+                            on: {
+                                click() {
                                     console.log(data, 'default-controllers')
                                 }
                             }
@@ -333,11 +337,11 @@
                         {
                             props: {
                                 color: '#333',
-                                iconName:'choas-add',
+                                iconName: 'choas-add',
                             },
                             slot: 'controllers',
-                            on:{
-                                click(){
+                            on: {
+                                click() {
                                     console.log(data, 'default-controllers')
                                 }
                             }
@@ -348,11 +352,11 @@
                         {
                             props: {
                                 color: '#333',
-                                iconName:'choas-delete',
+                                iconName: 'choas-delete',
                             },
                             slot: 'controllers',
-                            on:{
-                                click(){
+                            on: {
+                                click() {
                                     console.log(data, 'default-controllers')
                                 }
                             }
@@ -362,7 +366,7 @@
             }
             // 标题
             const createTitle = (data) => {
-                const content = data[this.reflectKey['key']] || ''
+                const content = data[rfKey] || ''
                 const index = this.searchStr ? content.indexOf(this.searchStr) : -1
                 const childrenVnode = []
                 if (index > -1) {
@@ -380,11 +384,11 @@
                             'span',
                             {},
                             [
-                                content.slice(index+this.searchStr.length,)
+                                content.slice(index + this.searchStr.length,)
                             ]
                         )
                     )
-                }else{
+                } else {
                     childrenVnode.push(
                         h(
                             'span',
@@ -406,7 +410,7 @@
                     class: [
                         ...classNames(
                             {
-                              'active':  this.$attrs.value.findIndex(item => item[this.reflectKey['value']] === data[this.reflectKey['value']])>-1
+                                'active': this.$attrs.value.findIndex(item => item[rfValue] === data[rfValue]) > -1
                             },
                             {
                                 [prefix + 'tree-title-wrap']: true
@@ -416,26 +420,52 @@
                     on: {
                         click: () => {
                             // 单选仅能选根结点
-                            if(!this.multiple && !data.disable && !(data.children || []).length){
+                            if (!this.multiple && !data.disabled && !data[this.conditionProps]) {
+                                this.$set(data,'checked', true)
                                 this.value = [data]
                                 this.$emit('change', this.value)
                             }
                             // 多选, 点击根结点
-                            if(this.multiple && !data.disable && !(data.children || []).length){
+                            if (this.multiple && !data.disabled && !data[this.conditionProps]) {
                                 const {value} = this.$attrs
-                                const index = value.findIndex(item => item[this.reflectKey['value']] === data[this.reflectKey['value']])
-                                if(index>-1){
-                                    value.splice(index,1)
-                                }else{
+                                const index = value.findIndex(item => item[rfValue] === data[rfValue])
+                                if (index > -1) {
+                                    value.splice(index, 1)
+                                } else {
                                     value.push(data)
                                 }
+                                this.$set(data,'checked', true)
                                 this.value = [data]
                                 this.$emit('change', value)
                             }
                             // 多选, 点击父节点
-                            if(this.multiple && !data.disable && (data.children || []).length){
+                            if (this.multiple && !data.disabled && data[this.conditionProps]) {
+                                const getAllChildren = (data, res)=> {
+                                    (data.children || []).forEach(item=>{
+                                        getAllChildren(item,res)
+                                    })
+                                    data.checked =true
+                                    if((data.children || []).length){
+                                        data.halfChecked = false
+                                    }
+                                    if(!data[this.conditionProps]){
+                                        res.push(data)
+                                    }
+                                    return res
+                                }
+                                const flatObj = getAllChildren(data, [])
+                                let {value} = this.$attrs
+                                if(flatObj.every(item=>value.findIndex(v=> v[rfValue] === item[rfValue])>-1)){
+                                    value =  value.filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                }else{
+                                    value = value.filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                    value = value.concat(flatObj)
+                                }
+
+                                this.$emit('change', value)
 
                             }
+
                         }
                     },
 
@@ -450,7 +480,7 @@
                         [key]: this.$props[key]
                     }
                 })
-                if(data.expand){
+                if (data.expand) {
                     return h('CTree',
                         {
                             attrs: {
@@ -467,6 +497,7 @@
                                 fileIconFixMargin: this.fileIconFixMargin,
                                 markIconFixMarginLeft: this.markIconFixMarginLeft,
                                 multiple: this.multiple, // 多选
+                                conditionProps: this.conditionProps, // 多选
                             },
                             on: this.$listeners
                         },
@@ -474,22 +505,22 @@
                         [
                             ...Object.keys(this.$slots).map((key) => {
                                 const {tag} = this.$slots[key][0].componentOptions || {}
-                                if(key ==='controllers'){
-                                    return this.$slots[key].map(item=>{
+                                if (key === 'controllers') {
+                                    return this.$slots[key].map(item => {
                                         const {tag, listeners = {}, propsData} = item.componentOptions || {}
-                                        if(tag)
-                                        return h(
-                                            tag,
-                                            {
-                                                props: {
-                                                    ...propsData,
-                                                },
-                                                slot: 'controllers',
-                                                ...item.data,
-                                                on: listeners
-                                            }
-                                        )
-                                        return  null
+                                        if (tag)
+                                            return h(
+                                                tag,
+                                                {
+                                                    props: {
+                                                        ...propsData,
+                                                    },
+                                                    slot: 'controllers',
+                                                    ...item.data,
+                                                    on: listeners
+                                                }
+                                            )
+                                        return null
                                     }).filter(Boolean)
                                 }
                                 return h(
@@ -515,7 +546,7 @@
                 'ul',
                 {},
                 [
-                    (this.copyListData).map((item)=>{
+                    (this.copyListData).map((item) => {
                         return h(
                             'li',
                             {
@@ -596,18 +627,22 @@
         padding: 0;
         margin: 0;
         font-size: addPX($df-fs);
+
         li {
             list-style: none;
+
             & > div {
                 display: flex;
                 align-items: center;
             }
         }
     }
+
     .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;
+
             & > div {
                 width: 100%;
                 display: flex;
@@ -616,32 +651,39 @@
                     display: flex;
                 }
             }
+
             & > ul {
                 width: 100%;
             }
+
             span {
                 height: 100%;
             }
         }
+
         &-title-wrap {
             cursor: pointer;
             padding-left: addPX($sm-padding);
             flex: 1;
+
             &:hover {
-                background: $info;
-                color: #fff;
+                color: $primary;
             }
         }
+
         &-title-wrap.active {
-            background: $info;
-            color: #fff;
+            color: $primary;
+            font-weight: bold;
         }
+
         &-mark-icon-box {
             display: inline-block;
         }
+
         &-vertical-line {
             display: inline-block;
             text-align: right;
+
             & > span {
                 display: inline-block;
                 width: addPX($ssm-borderWt);

@@ -45,13 +45,14 @@
                                 :list-data="list_data"
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
+                                :condition-props="conditionProps"
                         ></CTree>
                     </div>
                 </div>
             </div>
             <div class="selected-box">
                 <div :class="getTreeFootBoxClass">
-                    已选{{selectData.length? 1 : 0}}项
+                    已选{{selectData.length}}项
                 </div>
                 <div class="selected-content">
                     <p v-for="item of selectData"
@@ -59,10 +60,10 @@
                     >
                         <b>{{item[reflectKey['key']]}}</b>
                         <CIcon icon-name="choas-close"
-                               color="#fff"
-                               height="24"
-                               width="24"
-                               active-color="#ff5e5c"
+                               width="20"
+                               height="20"
+                               color="#666"
+                               active-color="red"
                                :style="{
                                     lineHeight: '100%'
                                }"
@@ -198,7 +199,7 @@
             return {
                 isCascadeShow: false,
                 isModalShow: this.isShow,
-                selectData: this.value,
+                selectData: [],
                 searchStr: '',
                 list_data: [],
                 cascadeData: [],
@@ -287,6 +288,13 @@
             }
         },
         watch: {
+            value:{
+              handler(v){
+                  this.$set(this, 'selectData', v)
+              },
+              deep: true,
+              immediate: true
+            },
             isShow(v) {
                 this.isModalShow = v
             },
@@ -386,7 +394,7 @@
                 height: addPX($df-height);
                 line-height: addPX($df-height);
                 font-size: addPX($lg-fs);
-                background: $info;
+                background: $primary;
                 color: #fff;
                 text-indent: addPX($df-fs * 2);
                 letter-spacing: addPX($df-letterSp);
@@ -433,12 +441,12 @@
             width: 100%;
             height: 100%;
             flex: 1;
-            padding-left: addPX($lg-padding);
             padding-top:addPX($df-padding);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             border-left: addPX($ssm-borderWt) solid $lineColor;
+            overflow-y: auto;
 
             > p {
                 width: 100%;
@@ -450,8 +458,7 @@
                 display: flex;
                 font-size: addPX($df-fs);
                 align-items: center;
-                border-top: 1px solid $lineColor;
-                border-bottom: 1px solid $lineColor;
+                border-top: 2px solid $lineColor;
 
                 > b {
                     flex: 1;
@@ -459,8 +466,7 @@
                 }
 
                 &:hover {
-                    background: $info;
-                    color: white;
+                    color: $primary;
                 }
             }
 

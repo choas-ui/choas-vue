@@ -1,6 +1,7 @@
 #### 树形组件
 ---
   <p>层次分明的可选择控件。</p>
+  <p>conditionProps。</p>
 
 #### 数据 listData
 ---
@@ -196,6 +197,70 @@ export default {
     <template>
         <CTree
             :list-data="listData"
+            :reflectKey="{
+                key: 'name',
+                value: 'id'
+            }"
+        >
+        </CTree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    id: '014557484S',
+                    name: '特殊事务部',
+                    expand: true,
+                    children:[
+                        {
+                            id: '014557484S-1',
+                            name: '后勤',
+                        },
+                        {
+                            id: '014557484S-2',
+                            name: '业务部',
+                            expand: true,
+                            children:[
+                                {
+                                    id: '014557484S-2-1',
+                                    name: '一组',
+                                },
+                                {
+                                    id: '014557484S-2-2',
+                                    name: '二组',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            id: '014557484S-2-2-0017',
+                                            name: '谢广坤',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectData:[],
+        }
+    }
+}
+</script>
+```
+:::
+
+#### 可选节点 conditionProps
+---
+  <p>用于指定映射键、值关联。</p>
+
+:::demo
+```html
+    <template>
+        <CTree
+            :list-data="listData"
+            conditionProps="node"
             :reflectKey="{
                 key: 'name',
                 value: 'id'

@@ -1,7 +1,7 @@
 <template>
     <span>
         <template v-if="!canBeEdited">
-          <div class="input-like input-like-unedited" >
+          <div class="input-like input-like-unedited">
             <template v-if="selectedData.length">
                 <CTag v-for="(item, index) of selectedData"
                       :key="index + item[reflectKey['value']]"
@@ -16,20 +16,32 @@
               <div class="input-like"
                    @click="inputClick"
               >
-                  <template v-if="selectedData.length">
-                      <CTag v-for="(item, index) of selectedData"
-                            :key="index + item[reflectKey['value']]"
-                            size="small"
-                            style="margin-right: 10px"
-                      >
+                      <template v-if="selectedData.length && multiple">
+                          <CTag v-for="(item, index) of selectedData"
+                                :key="index + item[reflectKey['value']]"
+                                size="small"
+                                style="margin-right: 10px"
+                                @close="(e)=>removeHandle(item, e)"
+                                active-color="#ff5e5c"
+                          >
                           {{ item[[reflectKey['key']]] }}
-                      </CTag>
-                  </template>
-                  <template v-else>
+                          </CTag>
+                      </template>
+                      <template v-if="selectedData.length && !multiple">
+                          <CTag v-for="(item, index) of selectedData"
+                                :key="index + item[reflectKey['value']]"
+                                size="small"
+                                style="margin-right: 10px"
+                          >
+                          {{ item[[reflectKey['key']]] }}
+                          </CTag>
+                      </template>
+                  <template v-if="!selectedData.length">
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
-              <CButton class-name="input-button" v-if="buttonTxt" @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
+              <CButton class-name="input-button" v-if="buttonTxt"
+                       @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
           </div>
         </template>
         <CTreeModal :list-data="listData"
@@ -60,9 +72,9 @@
     export default {
         name: 'CInputTreeModal',
         props: {
-            conditionProps:{
-                type:String,
-                default(){
+            conditionProps: {
+                type: String,
+                default() {
                     return 'node'
                 }
             },
@@ -167,30 +179,36 @@
                 selectedData: this.value,
             }
         },
-        mounted(){
-            this.selectedData=this.value
+        mounted() {
+            this.selectedData = this.value
         },
-        methods:{
-            inputClick(){
-                if(!this.buttonTxt){
+        methods: {
+            inputClick() {
+                if (!this.buttonTxt) {
                     this.isModalShow = true
                 }
             },
-            addTreeNode(v){
+            addTreeNode(v) {
                 this.$emit('addTreeNode', v)
+            },
+            removeHandle(item, $event) {
+                const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']])
+                this.$set(this, 'selectedData', t)
+                $event.stopPropagation();
+                $event.preventDefault();
             }
         },
         watch: {
-            selectedData:{
-                handler(v){
+            selectedData: {
+                handler(v) {
                     this.$emit('input', v)
                 },
                 deep: true,
                 immediate: true
             },
-            value:{
-                handler(v){
-                    this.selectedData =  v
+            value: {
+                handler(v) {
+                    this.selectedData = v
                 },
                 deep: true,
                 immediate: true
@@ -205,11 +223,12 @@
     @import "../scss/variable";
     @import "../scss/functions";
 
-    .input-like-wrap{
+    .input-like-wrap {
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: addPX($df-fs);
+
         .input-like {
             border: addPX($ssm-borderWt) solid #D9D9D9;
             border-radius: addPX($sm-radius);
@@ -222,10 +241,12 @@
             flex-wrap: wrap;
             cursor: pointer;
             flex: 1;
-            &-unedited{
+
+            &-unedited {
                 border: none;
                 cursor: not-allowed;
             }
+
             .tag-span {
                 height: addPX($sm-height);
                 line-height: addPX($sm-height);
@@ -245,7 +266,8 @@
                 color: #ccc;
             }
         }
-        .input-button{
+
+        .input-button {
             margin-left: addPX($sm-margin);
         }
     }
