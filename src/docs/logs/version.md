@@ -8,7 +8,7 @@
   </p>
   
   <ol reversed>
-     <li>修复button出发其他库表单提交的问题。</li>
+     <li>修复button触发其他库表单提交的问题。</li>
   </ol>
 :::
 
