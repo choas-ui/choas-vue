@@ -39,6 +39,7 @@
                     <div>
                         <CTree
                                 file-icon
+                                :multiple="multiple"
                                 :line="line"
                                 v-model="selectData"
                                 :list-data="list_data"
@@ -65,7 +66,7 @@
                                :style="{
                                     lineHeight: '100%'
                                }"
-                               @click="selectData = []"
+                               @click="removeHandle(item)"
                         ></CIcon>
                     </p>
                 </div>
@@ -107,12 +108,10 @@
             line: {
                 type: Boolean
             },
-            cancel: {
+            multiple: {
                 type: Boolean
             },
-            isShow: {
-                type: Boolean
-            },
+
             width: {
                 type: String,
                 default() {
@@ -130,6 +129,12 @@
                 default() {
                     return ''
                 }
+            },
+            cancel: {
+                type: Boolean
+            },
+            isShow: {
+                type: Boolean
             },
             titleImg: {
                 default() {
@@ -246,7 +251,6 @@
             },
             addTreeListHandle() {
                 const pId = this.cascadeData[this.cascadeData.length-1]?this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']]: ''
-                // this.$emit('addTreeNode', {pId: pId || '', value: this.searchStr})
                 this.addTreeNode({pId: pId || '', value: this.searchStr})
             },
             addBtnCancelHandle() {
@@ -270,6 +274,16 @@
                     }
                 }
                 return data
+            },
+            removeHandle(value){
+                if(this.multiple){
+                    const index = this.selectData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']])
+                    if(index>-1){
+                        this.selectData.splice(index,1)
+                    }
+                }else{
+                    this.selectData = []
+                }
             }
         },
         watch: {
@@ -285,6 +299,7 @@
             },
             isModalShow(v) {
                 if (!v) {
+                    // 关闭清空
                     this.cascadeData = []
                     this.isCascadeShow = false
                     this.$emit('toggleShow', false)
@@ -419,6 +434,7 @@
             height: 100%;
             flex: 1;
             padding-left: addPX($lg-padding);
+            padding-top:addPX($df-padding);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -429,11 +445,13 @@
                 line-height: addPX($sm-height);
                 box-sizing: border-box;
                 text-align: left;
-                margin-top: addPX($df-padding);
+                margin:0;
                 padding-left:addPX($df-padding);
                 display: flex;
                 font-size: addPX($df-fs);
                 align-items: center;
+                border-top: 1px solid $lineColor;
+                border-bottom: 1px solid $lineColor;
 
                 > b {
                     flex: 1;

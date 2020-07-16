@@ -20,6 +20,7 @@
                       <CTag v-for="(item, index) of selectedData"
                             :key="index + item[reflectKey['value']]"
                             size="small"
+                            style="margin-right: 10px"
                       >
                           {{ item[[reflectKey['key']]] }}
                       </CTag>
@@ -39,6 +40,7 @@
                     :conditionProps="conditionProps"
                     :addTreeNode="$listeners.addTreeNode? addTreeNode : null"
                     :reflectKey="reflectKey"
+                    :multiple="multiple"
 
                     :width="width"
                     :height="height"

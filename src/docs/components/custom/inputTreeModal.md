@@ -5,7 +5,7 @@
      <li><p>复合Tree,Cascade,Modal,Input,Icon组件,以上组件的大多数属性均可在本组件中使用。</p></li>
   </ul>
   
-#### 基础用法
+#### 基础 basic
 ----
   <ul>
      <li>v-model <span>实现双向绑定。</span></li>
@@ -118,6 +118,119 @@
     </script>
 ```
 :::
+
+#### 多选 multiple
+----
+  <ul>
+     <li>multiple 多选功能。</li>
+  </ul>
+
+:::demo
+```html
+    <template>
+        <CInputTreeModal
+               :list-data="listData"
+               v-model="selectedData.a"
+               :can-be-edited="canBeEdited"
+               :reflect-key="reflectKey"
+               title="请选择机构"
+               mask
+               cancel
+               multiple
+        />
+    </template>
+    <script>
+        export default {
+            data(){
+                return{
+                    canBeEdited: true,
+                    selectedData: {
+                        a: [{
+                            id: '014557484S-2-2-0017',
+                            name: '谢广坤',
+                        }]
+                    },
+                    reflectKey: {
+                        key: 'name',
+                        value: 'id'
+                    },
+                    listData: [
+                        {
+                            id: '014557484S',
+                            name: '特殊事务部',
+                            expand: true,
+                            children: [
+                                {
+                                    id: '014557484S-0',
+                                    name: '指挥部',
+                                    expand: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-0-007',
+                                            name: '谢永强',
+                                        },
+                                        {
+                                            id: '014557484S-0-008',
+                                            name: '谢大脚',
+                                        },
+                                    ],
+                                },
+                                {
+                                    id: '014557484S-1',
+                                    name: '后勤',
+                                    expand: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-1-0017',
+                                            name: '尼古拉斯.赵',
+                                        },
+                                        {
+                                            id: '014557484S-1-0019',
+                                            name: '王常规',
+                                        },
+                                        
+                                    ],
+                                },
+                                {
+                                    id: '014557484S-2',
+                                    name: '业务部',
+                                    expand: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-2-1',
+                                            name: '一组',
+                                        },
+                                        {
+                                            id: '014557484S-2-2',
+                                            name: '二组',
+                                            expand: true,
+                                            children: [
+                                                {
+                                                    id: '014557484S-2-2-0017',
+                                                    name: '谢广坤',
+                                                },
+                                                {
+                                                    id: '014557484S-2-2-0018',
+                                                    name: '王小蒙',
+                                                },
+                                                {
+                                                    id: '014557484S-2-2-0019',
+                                                    name: '刘能',
+                                                },
+                                            ],
+                                        },
+                                    ]
+                                },
+                            ]
+                        }
+                    ],
+                }
+            },
+        }
+    </script>
+```
+:::
+
 
 #### 新增树形节点 addTreeNode
 ---

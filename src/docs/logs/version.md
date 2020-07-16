@@ -3,18 +3,29 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-14</span>
-    <b>v 0.1.43</b>
+    <span>2020-07-16</span>
+    <b>v 0.1.44</b>
   </p>
   
   <ol reversed>
-     <li>修复button触发其他库表单提交的问题。</li>
+     <li>InputTreeModal 增加简单多选功能。</li>
   </ol>
 :::
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-14</span>
+    <span>2020-07-16</span>
+    <b>v 0.1.43</b>
+  </p>
+  
+  <ol reversed>
+     <li>修复Button触发其他库表单提交的问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-15</span>
     <b>v 0.1.42</b>
   </p>
   
