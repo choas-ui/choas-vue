@@ -3,7 +3,9 @@ import CCascade from './CCascade'
 import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
+import CProgress from './CProgress'
 import CSelection from './CSelection'
+import CTag from './CTag'
 import CTree from './CTree'
 import CTreeModal from './CTreeModal'
 
@@ -16,7 +18,9 @@ const components = [
     CIcon,
     CInputTreeModal,
     CModal,
+    CProgress,
     CSelection,
+    CTag,
     CTree,
     CTreeModal
 ];

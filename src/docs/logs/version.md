@@ -8,6 +8,17 @@
   </p>
   
   <ol reversed>
+     <li>修复button出发其他库表单提交的问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-14</span>
+    <b>v 0.1.42</b>
+  </p>
+  
+  <ol reversed>
      <li>新增<b>Progress</b>进度条。</li>
      <li>Modal按下<kbd>ESC</kbd>关闭。</li>
      <li>TreeModal移除<s>addTreeNode</s>方法,新增<b>addTreeNode</b>属性。</li>

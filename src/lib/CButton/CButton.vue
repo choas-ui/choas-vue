@@ -1,5 +1,5 @@
 <template>
-    <button :class="buttonClass" @click="clickHandle" :title="placeholder">
+    <button :class="buttonClass" @click="clickHandle" :title="placeholder" type="button">
         <span v-if="'left' in $scopedSlots" :class="iconClass"><slot name="left"></slot></span>
         <span :class="btnContentClass"><slot>button</slot></span>
         <span v-if="'right' in $scopedSlots" :class="iconClass"><slot name="right"></slot></span>
