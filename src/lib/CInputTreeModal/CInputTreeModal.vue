@@ -1,15 +1,17 @@
 <template>
     <span>
         <template v-if="!canBeEdited">
-          <div class="input-like input-like-unedited">
-            <template v-if="selectedData.length">
-                <CTag v-for="(item, index) of selectedData"
-                      :key="index + item[reflectKey['value']]"
-                >
-                    {{ item[[reflectKey['key']]] }}
-                </CTag>
-            </template>
-          </div>
+            <div class="input-like-wrap">
+                <div class="input-like input-like-unedited">
+                    <template v-if="selectedData.length">
+                        <CTag v-for="(item, index) of selectedData"
+                              :key="index + item[reflectKey['value']]"
+                        >
+                            {{ item[[reflectKey['key']]] }}
+                        </CTag>
+                    </template>
+                </div>
+            </div>
         </template>
         <template v-else>
           <div class="input-like-wrap">
