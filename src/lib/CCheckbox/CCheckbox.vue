@@ -40,7 +40,7 @@
                                 display: 'inline-block',
                                 width:`${width/1 - 4}px`,
                                 height:`${width/1 - 4}px`,
-                                background: `radial-gradient(#0e7dcaee 40%, #0e7dcacc 20%, #fff)`
+                                background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
                            }"
                         ></span>
                     </template>

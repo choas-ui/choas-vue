@@ -118,7 +118,9 @@
                     height: this.height + 'px',
                     lineHeight: this.height + 'px',
                     fontSize: this.fontSize + 'px',
-                    color: this.cl
+                    color: this.cl,
+                    display:'inline-block',
+                    verticalAlign: 'middle'
                 }
             },
             getWrapClass() {

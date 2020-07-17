@@ -51,7 +51,7 @@
             bkg:{
                 type: String,
                 default(){
-                    return '#8c8c8c'
+                    return '#a5a5a5'
                 }
             },
             type: {

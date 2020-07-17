@@ -3,7 +3,19 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-16</span>
+    <span>2020-07-18</span>
+    <b>v 0.1.44</b>
+  </p>
+  
+  <ol reversed>
+     <li>调整primary和disabled对应颜色。</li>
+     <li>修复Tag在某些情况下过长的问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-17</span>
     <b>v 0.1.44</b>
   </p>
   

@@ -224,10 +224,8 @@
     @import "../scss/functions";
 
     .input-like-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: addPX($df-fs);
+        display: flex;
 
         .input-like {
             border: addPX($ssm-borderWt) solid #D9D9D9;
@@ -245,6 +243,7 @@
             &-unedited {
                 border: none;
                 cursor: not-allowed;
+                display: flex;
             }
 
             .tag-span {
