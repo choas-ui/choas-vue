@@ -17,9 +17,8 @@
                       :style="{
                         width: width +'px',
                         height: height +'px',
-                        lineHeight: height +'px',
                         cursor: item.disabled?'not-allowed':'pointer'
-                  }"
+                      }"
                 >
                     <CIcon v-if="item.checked || checkboxValue.includes(item[reflectKey['value']])" icon-name="choas-selected"
                            color="#006ab3"
@@ -39,13 +38,19 @@
                                 left: `${4/2}px`,
                                 display: 'inline-block',
                                 width:`${width/1 - 4}px`,
-                                height:`${width/1 - 4}px`,
+                                height:`${height/1 - 4}px`,
                                 background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
                            }"
                         ></span>
                     </template>
                 </span>
-                <span class="checkbox-item-title">
+                <span class="checkbox-item-title"
+                      :style="{
+                         display: 'inline-block',
+                         height:`${height}px`,
+                         lineHeight:`${height}px`,
+                      }"
+                >
                     {{item[reflectKey['value']]}}
                 </span>
             </span>
@@ -160,12 +165,14 @@
     @import "../scss/functions";
     .checkbox-wrap{
         .checkbox-item{
+            display: inline-flex;
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;
                 display: inline-block;
                 position: relative;
                 box-shadow: 0 0 10px $lineColor;
+                box-sizing: border-box;
                 vertical-align: middle;
 
                 &:hover {
@@ -173,7 +180,7 @@
                 }
             }
             &-title{
-                vertical-align: middle;
+                margin: 0 addPX($ssm-margin);
             }
         }
     }
