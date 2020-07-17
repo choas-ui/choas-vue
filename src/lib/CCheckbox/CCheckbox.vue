@@ -2,7 +2,9 @@
     <span class="checkbox-wrap">
         <label v-for="item in listData"
                :key="item[reflectKey['value']]"
-               :hidden="!useNative"
+               :style="{
+                   display: useNative?'inline':'none'
+               }"
         >
             <input type="checkbox" :value="item[reflectKey['value']]" v-model="checkboxValue">
             {{ item[reflectKey['key']] }}
