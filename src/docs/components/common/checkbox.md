@@ -1,9 +1,9 @@
 ### 复选框 checkbox
 ---
   <ul>
-    <li>多个选项。</li>
-    <li>三个状态，已选 checked，未选，半选 halfChecked。</li>
+    <li>选择集合中的多个值。</li>
     <li>CheckboxGroup CheckBoxButtonGroup。</li>
+    <li>增加select插槽， 增加halfChecked插槽。</li>
   </ul>
 
 #### 基础 basic

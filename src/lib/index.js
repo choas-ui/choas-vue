@@ -8,6 +8,7 @@ import CSelection from './CSelection'
 import CTag from './CTag'
 import CTree from './CTree'
 import CTreeModal from './CTreeModal'
+import CCheckbox from "./CCheckbox/CCheckbox";
 
 
 
@@ -15,6 +16,7 @@ import CTreeModal from './CTreeModal'
 const components = [
     CButton,
     CCascade,
+    CCheckbox,
     CIcon,
     CInputTreeModal,
     CModal,
@@ -38,6 +40,7 @@ export default {
     install,
     CButton,
     CCascade,
+    CCheckbox,
     CIcon,
     CInputTreeModal,
     CModal,
