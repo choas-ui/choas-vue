@@ -36,7 +36,7 @@
                           :conditionProps="conditionProps"
                 />
                 <div class="content-box">
-                    <div>
+                    <div v-if="list_data.length">
                         <CTree
                                 file-icon
                                 :multiple="multiple"
@@ -47,6 +47,9 @@
                                 :search-str="searchStr"
                                 :condition-props="conditionProps"
                         ></CTree>
+                    </div>
+                    <div v-else class="empty-box">
+                        当前没有可选数据
                     </div>
                 </div>
             </div>
@@ -415,6 +418,11 @@
                 box-sizing: border-box;
                 overflow-y: auto;
                 display: flex;
+                .empty-box{
+                    width: 100%;
+                    align-self: center;
+                    text-align: center;
+                }
             }
         }
         &-footer-box {
@@ -449,15 +457,14 @@
 
             > p {
                 width: 100%;
-                line-height: addPX($sm-height);
+                line-height: addPX($ssm-height);
                 box-sizing: border-box;
                 text-align: left;
-                margin:0;
+                margin: addPX($sm-margin) 0 0 0;
                 padding-left:addPX($df-padding);
                 display: flex;
                 font-size: addPX($df-fs);
                 align-items: center;
-                border-top: 2px solid $lineColor;
 
                 > b {
                     flex: 1;
