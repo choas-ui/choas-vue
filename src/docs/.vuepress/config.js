@@ -14,6 +14,14 @@ function registerComponentsList() {
                     path: getPath('CButton')
                 },
                 {
+                    name: 'CCascade',
+                    path: getPath('CCascade')
+                },
+                {
+                    name: 'CCheckbox',
+                    path: getPath('CCheckbox')
+                },
+                {
                     name: 'CIcon',
                     path: getPath('CIcon')
                 },
@@ -25,6 +33,10 @@ function registerComponentsList() {
                 {
                     name: 'CProgress',
                     path: getPath('CProgress')
+                },
+                {
+                    name: 'CRadio',
+                    path: getPath('CRadio')
                 },
                 {
                     name: 'CSelection',
@@ -40,10 +52,6 @@ function registerComponentsList() {
                 },
 
                 // complex
-                {
-                    name: 'CCascade',
-                    path: getPath('CCascade')
-                },
                 {
                     name: 'CTreeModal',
                     path: getPath('CTreeModal')
@@ -75,7 +83,7 @@ module.exports = {
             {text: 'issues', link: 'https://github.com/choas-ui/choas-vue/issues'},
             {text: 'GitHub', link: 'https://github.com/choas-ui/choas-vue'}
         ],
-        sidebarDepth: 2,
+        sidebarDepth: 4,
         sidebar: {
             '/components': [
                 ['/components/', '概述'],
@@ -93,9 +101,6 @@ module.exports = {
                                 ],
                                 [
                                     '/components/common/icon', '图标 CIcon'
-                                ],
-                                [
-                                    '/components/common/input', '输入框* CInput'
                                 ],
                                 [
                                     '/components/common/message', '消息* CMessage'
@@ -127,7 +132,21 @@ module.exports = {
                                 [
                                     '/components/common/tree', '树形 CTree'
                                 ],
+                            ]
+                        },
+                        {
+                            title: '表单',
+                            children:[
 
+                                [
+                                    '/components/common/checkbox', '复选框 CCheckbox'
+                                ],
+                                [
+                                    '/components/common/input', '输入框* CInput'
+                                ],
+                                [
+                                    '/components/common/radio', '复选框 CRadio'
+                                ],
                             ]
                         },
                         {

@@ -9,7 +9,7 @@
   
   <ol reversed>
      <li>Tag close事件返回$event。</li>
-     <li>InputTreeModal 增加简单多选功能。</li>
+     <li>InputTreeModal 增加简单多选功能,微调样式</li>
   </ol>
 :::
 

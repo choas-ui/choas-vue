@@ -59,7 +59,7 @@
                        :key="item[reflectKey['value']]"
                     >
                         <b>{{item[reflectKey['key']]}}</b>
-                        <CIcon icon-name="choas-close"
+                        <CIcon icon-name="choas-fill-close"
                                width="20"
                                height="20"
                                color="#666"
@@ -441,7 +441,6 @@
             width: 100%;
             height: 100%;
             flex: 1;
-            padding-top:addPX($df-padding);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;

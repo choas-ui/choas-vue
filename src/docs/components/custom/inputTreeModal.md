@@ -330,11 +330,13 @@
                             id: '014557484S',
                             name: '特殊事务部',
                             expand: true,
+                            node: true,
                             children: [
                                 {
                                     id: '014557484S-0',
                                     name: '指挥部',
                                     expand: true,
+                                    node: true,
                                     children: [
                                         {
                                             id: '014557484S-0-007',
@@ -350,6 +352,7 @@
                                     id: '014557484S-1',
                                     name: '后勤',
                                     expand: true,
+                                    node: true,
                                     children: [
                                         {
                                             id: '014557484S-1-0017',
@@ -366,15 +369,18 @@
                                     id: '014557484S-2',
                                     name: '业务部',
                                     expand: true,
+                                    node: true,
                                     children: [
                                         {
                                             id: '014557484S-2-1',
                                             name: '一组',
+                                            node: true,
                                         },
                                         {
                                             id: '014557484S-2-2',
                                             name: '二组',
                                             expand: true,
+                                            node: true,
                                             children: [
                                                 {
                                                     id: '014557484S-2-2-0017',
@@ -385,7 +391,7 @@
                                                     name: '王小蒙',
                                                 },
                                                 {
-                                                    id: '014557484S-2-2-0018',
+                                                    id: '014557484S-2-2-0019',
                                                     name: '刘能',
                                                 },
                                             ],

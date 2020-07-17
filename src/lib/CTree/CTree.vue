@@ -410,7 +410,7 @@
                     class: [
                         ...classNames(
                             {
-                                'active': this.$attrs.value.findIndex(item => item[rfValue] === data[rfValue]) > -1
+                                'active': (this.$attrs.value || []).findIndex(item => item[rfValue] === data[rfValue]) > -1
                             },
                             {
                                 [prefix + 'tree-title-wrap']: true
@@ -428,7 +428,7 @@
                             // 多选, 点击根结点
                             if (this.multiple && !data.disabled && !data[this.conditionProps]) {
                                 const {value} = this.$attrs
-                                const index = value.findIndex(item => item[rfValue] === data[rfValue])
+                                const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
                                 if (index > -1) {
                                     value.splice(index, 1)
                                 } else {
@@ -455,11 +455,11 @@
                                 }
                                 const flatObj = getAllChildren(data, [])
                                 let {value} = this.$attrs
-                                if(flatObj.every(item=>value.findIndex(v=> v[rfValue] === item[rfValue])>-1)){
-                                    value =  value.filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                if(flatObj.every(item=>(value || []).findIndex(v=> v[rfValue] === item[rfValue])>-1)){
+                                    value =  (value || []).filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
                                 }else{
-                                    value = value.filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                                    value = value.concat(flatObj)
+                                    value = (value || []).filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                    value = (value || []).concat(flatObj)
                                 }
 
                                 this.$emit('change', value)

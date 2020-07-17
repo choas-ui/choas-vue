@@ -3,7 +3,7 @@
 ---
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <p>
-    示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/"> fontawesome </a> 图标库。
+    示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/"> fontawesome </a> 图标库，使用时需自行添加。
   </p>
   
   <span class="icon-lib">
@@ -17,6 +17,10 @@
   <span class="icon-lib">
     <p><CIcon icon-name="choas-close" width="20" height="20"/></p>
     <p>choas-close</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-close" width="20" height="20"/></p>
+    <p>choas-fill-close</p>
   </span>
   <span class="icon-lib">
     <p><CIcon icon-name="choas-search" width="20" height="20"/></p>
