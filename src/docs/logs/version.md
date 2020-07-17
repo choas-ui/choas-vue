@@ -4,6 +4,17 @@
 :::tip 版本更新
   <p class="logs-version-item">
     <span>2020-07-17</span>
+    <b>v 0.1.48</b>
+  </p>
+  
+  <ol reversed>
+     <li>修复InputTreeModal编辑模式为false时的样式问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-17</span>
     <b>v 0.1.47</b>
   </p>
   

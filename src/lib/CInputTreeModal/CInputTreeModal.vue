@@ -6,6 +6,7 @@
                     <template v-if="selectedData.length">
                         <CTag v-for="(item, index) of selectedData"
                               :key="index + item[reflectKey['value']]"
+                              style="margin-right: 10px"
                         >
                             {{ item[[reflectKey['key']]] }}
                         </CTag>
