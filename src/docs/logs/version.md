@@ -3,8 +3,19 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-18</span>
-    <b>v 0.1.44</b>
+    <span>2020-07-17</span>
+    <b>v 0.1.46</b>
+  </p>
+  
+  <ol reversed>
+     <li>修复InputTreeModal输入时失去焦点的问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-17</span>
+    <b>v 0.1.45</b>
   </p>
   
   <ol reversed>

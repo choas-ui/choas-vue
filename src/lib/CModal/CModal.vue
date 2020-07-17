@@ -142,7 +142,8 @@
                 visible: this.value,
             }
         },
-        updated(){
+        updated(){},
+        mounted(){
             const {focus} = this.$refs.modalBox || {}
             if(focus){
                 this.$refs.modalBox.focus()
