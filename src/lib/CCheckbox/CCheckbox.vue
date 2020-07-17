@@ -34,8 +34,8 @@
                         <span v-if="item.halfChecked"
                               :style="{
                                 position: 'absolute',
-                                top: `${4/2}px`,
-                                left: `${4/2}px`,
+                                top: `${4/2-1}px`,
+                                left: `${4/2-1}px`,
                                 display: 'inline-block',
                                 width:`${width/1 - 4}px`,
                                 height:`${height/1 - 4}px`,
