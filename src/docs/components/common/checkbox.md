@@ -2,7 +2,7 @@
 ---
   <ul>
     <li>多个选项。</li>
-    <li>三个状态，已选，<未></未>选，半选。</li>
+    <li>三个状态，已选 checked，未选，半选 halfChecked。</li>
     <li>CheckboxGroup CheckBoxButtonGroup。</li>
   </ul>
 
@@ -70,7 +70,8 @@
                 listData: [
                     {
                         key: 'a',
-                        value:'a'
+                        value:'a',
+                        halfChecked: true,
                     },
                     {
                         key: 'b',

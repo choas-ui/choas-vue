@@ -8,24 +8,46 @@
             {{ item[reflectKey['key']] }}
         </label>
         <span v-if="!useNative">
-            <span class="checkbox-item"
-                  :style="{
-                    width: width +'px',
-                    height: height +'px',
-                    lineHeight: height +'px',
-                    cursor: 'pointer'
-                  }"
+            <span :class="getItemClass"
+                  v-for="item in listData"
+                  :key="item[reflectKey['value']]"
+                  @click="selectHandle(item)"
             >
-                <CIcon icon-name="choas-selected"
-                       color="#006ab3"
-                       :width="`${width/1 + 8}`"
-                       :height="`${height/1 + 8}`"
-                       :style="{
-                        position: 'absolute',
-                        top: `-${8/2}px`,
-                        left: `-${8/2}px`,
-                       }"
-                />
+                <span :class="getFakeIconClass"
+                      :style="{
+                        width: width +'px',
+                        height: height +'px',
+                        lineHeight: height +'px',
+                        cursor: item.disabled?'not-allowed':'pointer'
+                  }"
+                >
+                    <CIcon v-if="item.checked || checkboxValue.includes(item[reflectKey['value']])" icon-name="choas-selected"
+                           color="#006ab3"
+                           :width="`${width/1 + 8}`"
+                           :height="`${height/1 + 8}`"
+                           :style="{
+                            position: 'absolute',
+                            top: `-${8/2}px`,
+                            left: `-${8/2}px`,
+                           }"
+                    />
+                    <template v-else>
+                        <span v-if="item.halfChecked"
+                              :style="{
+                                position: 'absolute',
+                                top: `${4/2}px`,
+                                left: `${4/2}px`,
+                                display: 'inline-block',
+                                width:`${width/1 - 4}px`,
+                                height:`${width/1 - 4}px`,
+                                background: `radial-gradient(#0e7dcaee 40%, #0e7dcacc 20%, #fff)`
+                           }"
+                        ></span>
+                    </template>
+                </span>
+                <span class="checkbox-item-title">
+                    {{item[reflectKey['value']]}}
+                </span>
             </span>
         </span>
     </span>
@@ -33,42 +55,43 @@
 
 <script>
     import classNames from 'classnames'
+
     export default {
         name: 'CCheckbox',
-        props:{
+        props: {
             value: {
                 type: Array,
-                default(){
+                default() {
                     return []
                 }
             },
             listData: {
                 type: Array,
-                default(){
+                default() {
                     return []
                 }
             },
-            reflectKey:{
+            reflectKey: {
                 type: Object,
-                default(){
+                default() {
                     return {
                         key: 'key',
                         value: 'value'
                     }
                 }
             },
-            useNative:{
+            useNative: {
                 type: Boolean
             },
-            width:{
+            width: {
                 type: String,
-                default(){
+                default() {
                     return '18'
                 }
             },
-            height:{
+            height: {
                 type: String,
-                default(){
+                default() {
                     return '18'
                 }
             }
@@ -78,26 +101,50 @@
                 checkboxValue: []
             };
         },
-        computed:{
-            xClass(){
-                const prefix =  this.prefix? this.prefix + '-': ''
+        computed: {
+            getFakeIconClass() {
+                const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
+                    {
+                        [`${prefix}checkbox-item-fake-icon`]: true
+                    }
+                )
+            },
+            getItemClass() {
+                const prefix = this.prefix ? this.prefix + '-' : ''
+                return classNames(
+                    {
+                        [`${prefix}checkbox-item`]: true
+                    }
                 )
             }
         },
         methods: {
+            selectHandle(item){
+                if(item.disabled){
+                    return
+                }
+                const index = this.checkboxValue.findIndex(v=>v ===item[this.reflectKey['value']])
+                if(index>-1){
+                    this.checkboxValue.splice(index, 1)
+                    this.$set(item, 'checked', false)
+                }else{
+                    this.checkboxValue.push(item[this.reflectKey['value']])
+                    this.$set(item, 'checked', true)
+                    this.$set(item, 'halfChecked', false)
+                }
+            }
         },
-        watch:{
-            value:{
-                handler(v){
+        watch: {
+            value: {
+                handler(v) {
                     this.checkboxValue = v
                 },
                 deep: true,
                 immediate: true
             },
-            checkboxValue:{
-                handler(v){
-                    console.log(v)
+            checkboxValue: {
+                handler(v) {
                     this.$emit('input', v)
                 },
                 deep: true
@@ -111,14 +158,23 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .checkbox-item{
-        border: 1px solid $darkLineColor;
-        border-radius: 2px;
-        display: inline-block;
-        position: relative;
-        box-shadow: 0 0 10px $lineColor;
-        &:hover{
-            box-shadow: 0 0 10px $primary;
+    .checkbox-wrap{
+        .checkbox-item{
+            &-fake-icon {
+                border: 1px solid $darkLineColor;
+                border-radius: 2px;
+                display: inline-block;
+                position: relative;
+                box-shadow: 0 0 10px $lineColor;
+                vertical-align: middle;
+
+                &:hover {
+                    box-shadow: 0 0 10px $primary;
+                }
+            }
+            &-title{
+                vertical-align: middle;
+            }
         }
     }
 </style>
