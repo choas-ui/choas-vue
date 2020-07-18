@@ -6,7 +6,6 @@
                     <template v-if="selectedData.length">
                         <CTag v-for="(item, index) of selectedData"
                               :key="index + item[reflectKey['value']]"
-                              style="margin-right: 10px"
                         >
                             {{ item[[reflectKey['key']]] }}
                         </CTag>
@@ -23,7 +22,6 @@
                           <CTag v-for="(item, index) of selectedData"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
-                                style="margin-right: 10px"
                                 @close="(e)=>removeHandle(item, e)"
                                 active-color="#ff5e5c"
                           >
@@ -34,7 +32,6 @@
                           <CTag v-for="(item, index) of selectedData"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
-                                style="margin-right: 10px"
                           >
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
@@ -226,7 +223,6 @@
     .input-like-wrap {
         font-size: addPX($df-fs);
         display: flex;
-
         .input-like {
             border: addPX($ssm-borderWt) solid #D9D9D9;
             border-radius: addPX($sm-radius);
@@ -244,21 +240,6 @@
                 border: none;
                 cursor: not-allowed;
                 display: flex;
-            }
-
-            .tag-span {
-                height: addPX($sm-height);
-                line-height: addPX($sm-height);
-                display: inline-block;
-                margin-right: addPX($ssm-margin);
-                padding: 0 addPX($sm-padding);
-                background: #ccc;
-                border-radius: addPX($sm-radius);
-                color: #fff;
-            }
-
-            .content-span {
-                color: #666;
             }
 
             .placeholder-span {

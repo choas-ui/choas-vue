@@ -1,7 +1,7 @@
 <template>
     <span :style="getWrapStyle"
           :class="getWrapClass">
-        <span>
+        <span style="flex: 1">
             <slot></slot>
         </span>
         <CIcon v-if="$listeners.close"
@@ -111,7 +111,7 @@
                 }
                 return {
                     color: this.color,
-                    background: this.bkg
+                    background: this.bkg,
                 }
             }
         },
@@ -129,38 +129,39 @@
     @import "../scss/variable";
     @import "../scss/functions";
     .ctag{
-        display: flex;
+        display: inline-flex;
         align-items: center;
+        margin: 2px addPX($ssm-margin) 2px 0;
         &-llg{
-            height: addPX($llg-height);
+            min-height: addPX($llg-height);
             line-height: addPX($llg-height);
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($llg-radius);
             font-size: addPX($llg-fs);
         }
         &-lg{
-            height: addPX($lg-height);
+            min-height: addPX($lg-height);
             line-height: addPX($lg-height);
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($lg-radius);
             font-size: addPX($lg-fs);
         }
         &-df{
-            height: addPX($df-height);
+            min-height: addPX($df-height);
             line-height: addPX($df-height);
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($df-radius);
             font-size: addPX($df-fs);
         }
         &-sm{
-            height: addPX($sm-height);
+            min-height: addPX($sm-height);
             line-height: addPX($sm-height);
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($sm-radius);
             font-size: addPX($sm-fs);
         }
         &-ssm{
-            height: addPX($ssm-height);
+            min-height: addPX($ssm-height);
             line-height: addPX($ssm-height);
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($ssm-radius);

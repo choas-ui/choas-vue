@@ -9,6 +9,7 @@
   
   <ol reversed>
      <li>修复Checkbox的样式问题。</li>
+     <li>修复InputTreeModal内部标签过长导致的显示问题。</li>
      <li>修复InputTreeModal编辑模式为false时的样式问题。</li>
   </ol>
 :::

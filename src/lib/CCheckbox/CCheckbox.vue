@@ -1,49 +1,69 @@
 <template>
-    <span class="checkbox-wrap">
-        <label v-for="item in listData"
-               :key="item[reflectKey['value']]"
-               :style="{
+    <span>
+        <label :style="{
                    display: useNative?'inline':'none'
                }"
         >
-            <input type="checkbox" :value="item[reflectKey['value']]" v-model="checkboxValue">
-            {{ item[reflectKey['key']] }}
+            <input type="checkbox" :value="value" v-model="checkedArr" :checked="checkedArr.includes(value)">
+            {{ value }}
         </label>
-        <span v-if="!useNative">
+        <template v-if="!useNative">
             <span :class="getItemClass"
-                  v-for="item in listData"
-                  :key="item[reflectKey['value']]"
-                  @click="selectHandle(item)"
+                  :key="value"
+                  @click="selectHandle(value)"
             >
                 <span :class="getFakeIconClass"
                       :style="{
                         width: width +'px',
                         height: height +'px',
-                        cursor: item.disabled?'not-allowed':'pointer'
+                        cursor: disabled?'not-allowed':'pointer'
                       }"
                 >
-                    <CIcon v-if="item.checked || checkboxValue.includes(item[reflectKey['value']])" icon-name="choas-selected"
-                           color="#006ab3"
-                           :width="`${width/1 + 8}`"
-                           :height="`${height/1 + 8}`"
-                           :style="{
-                            position: 'absolute',
-                            top: `-${8/2}px`,
-                            left: `-${8/2}px`,
-                           }"
-                    />
+                    <template v-if="checkedArr.includes(value)">
+                        <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
+                        <CIcon v-else icon-name="choas-selected"
+                               color="#006ab3"
+                               :width="`${width/1 + 8}`"
+                               :height="`${height/1 + 8}`"
+                               :style="{
+                                    position: 'absolute',
+                                    top: `-${8/2}px`,
+                                    left: `-${8/2}px`,
+                                }"
+                        />
+
+                    </template>
                     <template v-else>
-                        <span v-if="item.halfChecked"
-                              :style="{
+                        <slot v-if="disabled"
+                              name="disabled-icon"
+                        >
+                            <span :style="{
                                 position: 'absolute',
                                 top: `${4/2-1}px`,
                                 left: `${4/2-1}px`,
                                 display: 'inline-block',
                                 width:`${width/1 - 4}px`,
                                 height:`${height/1 - 4}px`,
-                                background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
+                                background: `radial-gradient(#888 40%, #aaa 60%)`
                            }"
-                        ></span>
+                            ></span>
+                        </slot>
+                        <template v-else>
+                            <slot v-if="halfChecked"
+                                  name="half-checked-icon"
+                            >
+                                <span :style="{
+                                        position: 'absolute',
+                                        top: `${4/2-1}px`,
+                                        left: `${4/2-1}px`,
+                                        display: 'inline-block',
+                                        width:`${width/1 - 4}px`,
+                                        height:`${height/1 - 4}px`,
+                                        background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
+                                    }"
+                                ></span>
+                            </slot>
+                        </template>
                     </template>
                 </span>
                 <span class="checkbox-item-title"
@@ -53,10 +73,10 @@
                          lineHeight:`${height}px`,
                       }"
                 >
-                    {{item[reflectKey['value']]}}
+                    {{value}}
                 </span>
             </span>
-        </span>
+        </template>
     </span>
 </template>
 
@@ -66,28 +86,25 @@
     export default {
         name: 'CCheckbox',
         props: {
+            checkedData: {
+                type: Array,
+                default() {
+                    return []
+                }
+            },
             value: {
-                type: Array,
+                type: String,
                 default() {
-                    return []
-                }
-            },
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
+                    return ''
                 }
             },
             useNative: {
+                type: Boolean
+            },
+            disabled: {
+                type: Boolean
+            },
+            halfChecked: {
                 type: Boolean
             },
             width: {
@@ -101,12 +118,31 @@
                 default() {
                     return '18'
                 }
+            },
+            prefix: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            classNames: {
+                type: String,
+                default() {
+                    return ''
+                }
             }
+        },
+        model: {
+            prop: 'checkedData',
+            event: 'checkedDataChange'
         },
         data() {
             return {
-                checkboxValue: []
-            };
+                checkedArr: []
+            }
+        },
+        mounted(){
+          console.log(this.$slots)
         },
         computed: {
             getFakeIconClass() {
@@ -127,35 +163,33 @@
             }
         },
         methods: {
-            selectHandle(item){
-                if(item.disabled){
+            selectHandle(value) {
+                if (this.disabled) {
                     return
                 }
-                const index = this.checkboxValue.findIndex(v=>v ===item[this.reflectKey['value']])
-                if(index>-1){
-                    this.checkboxValue.splice(index, 1)
-                    this.$set(item, 'checked', false)
-                }else{
-                    this.checkboxValue.push(item[this.reflectKey['value']])
-                    this.$set(item, 'checked', true)
-                    this.$set(item, 'halfChecked', false)
+                const index = this.checkedArr.findIndex(v => v === value)
+                if (index > -1) {
+                    this.checkedArr.splice(index, 1)
+                } else {
+                    this.checkedArr.push(value)
                 }
             }
         },
         watch: {
-            value: {
+            checkedData: {
                 handler(v) {
-                    this.checkboxValue = v
+                    this.$set(this, 'checkedArr', v)
                 },
                 deep: true,
                 immediate: true
             },
-            checkboxValue: {
+            checkedArr: {
                 handler(v) {
-                    this.$emit('input', v)
+                    this.$set(this, 'checkedData', v)
                 },
-                deep: true
-            },
+                deep: true,
+                immediate: true
+            }
         }
     }
 </script>
@@ -165,25 +199,30 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .checkbox-wrap{
-        .checkbox-item{
-            display: inline-flex;
-            &-fake-icon {
-                border: 1px solid $darkLineColor;
-                border-radius: 2px;
-                display: inline-block;
-                position: relative;
-                box-shadow: 0 0 10px $lineColor;
-                box-sizing: border-box;
-                vertical-align: middle;
 
-                &:hover {
-                    box-shadow: 0 0 10px $primary;
-                }
+    .checkbox-item {
+        ::selection {
+            background: none;
+        }
+
+        display: inline-flex;
+
+        &-fake-icon {
+            border: 1px solid $darkLineColor;
+            border-radius: 2px;
+            display: inline-block;
+            position: relative;
+            box-shadow: 0 0 10px $lineColor;
+            box-sizing: border-box;
+            vertical-align: middle;
+
+            &:hover {
+                box-shadow: 0 0 10px $primary;
             }
-            &-title{
-                margin: 0 addPX($ssm-margin);
-            }
+        }
+
+        &-title {
+            margin: 0 addPX($ssm-margin);
         }
     }
 </style>
