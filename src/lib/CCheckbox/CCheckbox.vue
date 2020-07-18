@@ -141,9 +141,6 @@
                 checkedArr: []
             }
         },
-        mounted(){
-          console.log(this.$slots)
-        },
         computed: {
             getFakeIconClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
