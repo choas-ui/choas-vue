@@ -22,6 +22,10 @@ function registerComponentsList() {
                     path: getPath('CCheckbox')
                 },
                 {
+                    name: 'CCheckboxGroup',
+                    path: getPath('CCheckboxGroup')
+                },
+                {
                     name: 'CIcon',
                     path: getPath('CIcon')
                 },

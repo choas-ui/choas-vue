@@ -2,18 +2,27 @@
 ---
   <ul>
     <li>选择集合中的多个值。</li>
-    <li>CheckboxGroup CheckBoxButtonGroup。</li>
     <li>增加select插槽， 增加halfChecked插槽。</li>
   </ul>
 
-#### 基础 basic
+
+----
+----
+
+
+#### 复选框组 CheckBoxGroup
 ---
+  <ul>
+    <li>选择集合中的多个值。</li>
+    <li>CheckboxGroup CheckBoxButtonGroup。</li>
+    <li>增加select插槽， 增加halfChecked插槽。</li>
+  </ul>
 
 :::demo
 ```html
 <template>
     <p>{{ value }}</p>
-    <CCheckbox
+    <CCheckboxGroup
         v-model="value"
         :list-data="listData"
     />
@@ -48,16 +57,20 @@
 ```
 :::
 
+#### 插槽 slot
+---
+  <ul>
+    <li>拥有插槽则不显示默认内容。</li>
+  </ul>
 
-
-#### 
+#### 类型 type
 ---
 
 :::demo
 ```html
 <template>
     <p>{{ value }}</p>
-    <CCheckbox
+    <CCheckboxGroup
         v-model="value"
         :list-data="listData"
     />

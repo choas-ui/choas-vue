@@ -1,5 +1,7 @@
 import CButton from './CButton'
 import CCascade from './CCascade'
+import CCheckBox from "./CCheckbox";
+import CCheckboxGroup from "./CCheckboxGroup";
 import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
@@ -8,7 +10,6 @@ import CSelection from './CSelection'
 import CTag from './CTag'
 import CTree from './CTree'
 import CTreeModal from './CTreeModal'
-import CCheckbox from "./CCheckbox/CCheckbox";
 
 
 
@@ -16,7 +17,8 @@ import CCheckbox from "./CCheckbox/CCheckbox";
 const components = [
     CButton,
     CCascade,
-    CCheckbox,
+    CCheckBox,
+    CCheckboxGroup,
     CIcon,
     CInputTreeModal,
     CModal,
@@ -41,6 +43,7 @@ export default {
     CButton,
     CCascade,
     CCheckbox,
+    CCheckboxGroup,
     CIcon,
     CInputTreeModal,
     CModal,

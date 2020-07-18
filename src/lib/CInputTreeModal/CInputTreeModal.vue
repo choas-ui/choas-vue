@@ -179,11 +179,8 @@
         data() {
             return {
                 isModalShow: false,
-                selectedData: this.value,
+                selectedData: [],
             }
-        },
-        mounted() {
-            this.selectedData = this.value
         },
         methods: {
             inputClick() {
