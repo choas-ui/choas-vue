@@ -2,14 +2,12 @@
 ---
   <ul>
     <li>选择的多值集合。</li>
-    <li>增加select插槽， 增加halfChecked插槽。</li>
   </ul>
 
 #### 双向绑定 v-model
 ---
   <ul>
     <li>选择集合中的多个值。</li>
-    <li>增加select插槽， 增加halfChecked插槽。</li>
   </ul>
 
 :::demo
@@ -75,13 +73,42 @@
         disabled
         v-model="selectedData"
     />
+</template>
+<script>
+    export default {
+        data(){
+            return {
+                selectedData: ['a'],
+            }
+        }
+    }
+</script>
+```
+:::
+
+#### 半选提示 half-checked
+---
+  <ul>
+    <li>半选提示。</li>
+  </ul>
+
+:::demo
+```html
+<template>
+    <p>{{ selectedData }}</p>
     <CCheckbox
-        value="d"
+        value="half-checked"
+        half-checked
+        v-model="selectedData"
+    />
+    <CCheckbox
+        value="half-checked disabled"
+        half-checked
         disabled
         v-model="selectedData"
     />
     <CCheckbox
-        value="e"
+        value="empty"
         v-model="selectedData"
     />
 </template>
@@ -89,7 +116,7 @@
     export default {
         data(){
             return {
-                selectedData: ['a', 'b', 'e'],
+                selectedData: [],
             }
         }
     }
@@ -111,7 +138,7 @@
 <template>
     <p>{{ selectedData }}</p>
     <CCheckbox
-        value="checked"
+        value="checked-icon"
         v-model="selectedData"
     >
         <CIcon icon-name="choas-add"
@@ -143,7 +170,7 @@
         />
     </CCheckbox>
     <CCheckbox
-        value="disabled"
+        value="disabled-icon"
         disabled
         v-model="selectedData"
     >
@@ -176,7 +203,7 @@
         />
     </CCheckbox>
     <CCheckbox
-        value="half-checked"
+        value="half-checked-icon"
         half-checked
         v-model="selectedData"
     >
@@ -215,7 +242,7 @@
     export default {
         data(){
             return {
-                selectedData: ['checked'],
+                selectedData: ['checked-icon'],
             }
         }
     }

@@ -37,16 +37,16 @@
                         <slot v-if="disabled"
                               name="disabled-icon"
                         >
-                            <span :style="{
+                            <CIcon :style="{
                                 position: 'absolute',
-                                top: `${4/2-1}px`,
-                                left: `${4/2-1}px`,
+                                top: `-1px`,
+                                left: `-1px`,
                                 display: 'inline-block',
-                                width:`${width/1 - 4}px`,
-                                height:`${height/1 - 4}px`,
                                 background: `radial-gradient(#888 40%, #aaa 60%)`
                            }"
-                            ></span>
+                                   icon-name="choas-close"
+                                   color="#fff"
+                            ></CIcon>
                         </slot>
                         <template v-else>
                             <slot v-if="halfChecked"
