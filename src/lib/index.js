@@ -1,6 +1,6 @@
 import CButton from './CButton'
 import CCascade from './CCascade'
-import CCheckBox from "./CCheckbox";
+import CCheckbox from "./CCheckbox";
 import CCheckboxGroup from "./CCheckboxGroup";
 import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
@@ -17,7 +17,7 @@ import CTreeModal from './CTreeModal'
 const components = [
     CButton,
     CCascade,
-    CCheckBox,
+    CCheckbox,
     CCheckboxGroup,
     CIcon,
     CInputTreeModal,
