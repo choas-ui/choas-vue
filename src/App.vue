@@ -1,16 +1,5 @@
 <template>
-    <CTree
-            :file-icon-fix-margin-left="6"
-            :mark-icon-fix-margin-left="6"
-            line
-            :list-data="listData"
-            v-model="selectData"
-    >
-        <CIcon slot="controllers"
-               icon-name="choas-min"
-               @click="logs"
-        />
-    </CTree>
+    <CCheckbox></CCheckbox>
 </template>
 
 <script>

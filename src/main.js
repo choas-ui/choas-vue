@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import ChoasUI from './lib'
+import ChoasUI from 'choas-vue'
 Vue.config.productionTip = false
 Vue.use(ChoasUI)
 new Vue({

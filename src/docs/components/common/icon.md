@@ -2,127 +2,239 @@
 ### 图标
 ---
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <p>
-    示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/"> fontawesome </a> 图标库，使用时需自行添加。
-  </p>
+<ul>
+   <li>示例中字体图标库引用了<a href="https://fontawesome.dashgame.com/" target="_blank"> fontawesome </a>开源字体图标库，需自行添加后使用。</li>
+   <li>示例中字体矢量图标引用了<a href="https://www.iconfont.cn" target="_blank"> iconfont </a>阿里图标库。</li>
+   <li>以下图标前缀仅为区别引入，使用时请注意版权问题。</li>
+</ul>
   
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-more" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-more" width="25" height="25"/></p>
     <p>choas-more</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-forbid" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-forbid" width="25" height="25"/></p>
     <p>choas-forbid</p>
   </span>
+    <span class="icon-lib">
+      <p><CIcon icon-name="choas-fill-forbid" width="25" height="25"/></p>
+      <p>choas-fill-forbid</p>
+    </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-close" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-close" width="25" height="25"/></p>
     <p>choas-close</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-close" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-close" width="25" height="25"/></p>
     <p>choas-fill-close</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-search" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-search" width="25" height="25"/></p>
     <p>choas-search</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-delete" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-delete" width="25" height="25"/></p>
     <p>choas-delete</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-arrow-top" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-arrow-top" width="25" height="25"/></p>
     <p>choas-arrow-top</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-arrow-right" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-arrow-right" width="25" height="25"/></p>
     <p>choas-arrow-right</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-arrow-down" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-arrow-down" width="25" height="25"/></p>
     <p>choas-arrow-down</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-arrow-left" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-arrow-left" width="25" height="25"/></p>
     <p>choas-arrow-left</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-arrow-top" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-arrow-top" width="25" height="25"/></p>
     <p>choas-fill-arrow-top</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-arrow-right" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-arrow-right" width="25" height="25"/></p>
     <p>choas-fill-arrow-right</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-arrow-down" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-arrow-down" width="25" height="25"/></p>
     <p>choas-fill-arrow-down</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-arrow-left" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-arrow-left" width="25" height="25"/></p>
     <p>choas-fill-arrow-left</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-file-icon" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-file-icon" width="25" height="25"/></p>
     <p>choas-file-icon</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-square-min" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-square-min" width="25" height="25"/></p>
     <p>choas-square-min</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-square-add" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-square-add" width="25" height="25"/></p>
     <p>choas-square-add</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-lists" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-lists" width="25" height="25"/></p>
     <p>choas-lists</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-add" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-add" width="25" height="25"/></p>
     <p>choas-add</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-min" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-min" width="25" height="25"/></p>
     <p>choas-min</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-edit" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-edit" width="25" height="25"/></p>
     <p>choas-edit</p>
   </span> 
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-confirm" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-confirm" width="25" height="25"/></p>
     <p>choas-confirm</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-error" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-error" width="25" height="25"/></p>
     <p>choas-error</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-download" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-download" width="25" height="25"/></p>
     <p>choas-download</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-save" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-save" width="25" height="25"/></p>
     <p>choas-save</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-home" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-home" width="25" height="25"/></p>
     <p>choas-home</p>
   </span> 
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-fill-home" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-fill-home" width="25" height="25"/></p>
     <p>choas-fill-home</p>
   </span>
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-eye" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-eye" width="25" height="25"/></p>
     <p>choas-eye</p>
   </span> 
   <span class="icon-lib">
-    <p><CIcon icon-name="choas-close-eye" width="20" height="20"/></p>
+    <p><CIcon icon-name="choas-close-eye" width="25" height="25"/></p>
     <p>choas-close-eye</p>
   </span>
-
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-location" width="25" height="25"/></p>
+    <p>choas-location</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-location" width="25" height="25"/></p>
+    <p>choas-fill-location</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-phone" width="25" height="25"/></p>
+    <p>choas-fill-phone</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-phone" width="25" height="25"/></p>
+    <p>choas-phone</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-comments" width="25" height="25"/></p>
+    <p>choas-fill-comments</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-comments" width="25" height="25"/></p>
+    <p>choas-comments</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-setting" width="25" height="25"/></p>
+    <p>choas-setting</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-setting" width="25" height="25"/></p>
+    <p>choas-fill-setting</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-map" width="25" height="25"/></p>
+    <p>choas-map</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-scanner" width="25" height="25"/></p>
+    <p>choas-scanner</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-locked" width="25" height="25"/></p>
+    <p>choas-locked</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-male" width="25" height="25"/></p>
+    <p>choas-male</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-female" width="25" height="25"/></p>
+    <p>choas-female</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-calendar" width="25" height="25"/></p>
+    <p>choas-calendar</p>
+  </span>    
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-history" width="25" height="25"/></p>
+    <p>choas-history</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-share" width="25" height="25"/></p>
+    <p>choas-share</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-selected" width="25" height="25"/></p>
+    <p>choas-selected</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-right" width="25" height="25"/></p>
+    <p>choas-right</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-favorite" width="25" height="25"/></p>
+    <p>choas-favorate</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-favorite" width="25" height="25"/></p>
+    <p>choas-fill-favorate</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-quick-back" width="25" height="25"/></p>
+    <p>choas-quick-back</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-quick-forward" width="25" height="25"/></p>
+    <p>choas-fill-quick-forward</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-pause" width="25" height="25"/></p>
+    <p>choas-fill-pause</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-voice" width="25" height="25"/></p>
+    <p>choas-fill-voice</p>
+  </span>  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-picture" width="25" height="25"/></p>
+    <p>choas-picture</p>
+  </span> 
+  
+  
+    
+  
+  
+  
+ 
   
   <style>
     .icon-lib{
