@@ -193,7 +193,6 @@ module.exports = {
                     title: '迭代日志',
                     children: [
                         ['/logs/version', '日志'],
-                        ['/logs/plans', '计划']
                     ]
                 }
             ],

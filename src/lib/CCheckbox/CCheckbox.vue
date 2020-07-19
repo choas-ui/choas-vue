@@ -4,24 +4,30 @@
                    display: useNative?'inline':'none'
                }"
         >
-            <input type="checkbox" :value="value" v-model="checkedArr" :checked="checkedArr.includes(value)">
-            {{ value }}
+            <input type="checkbox"
+                   :disabled="getDisabled"
+                   :value="getValueTxt"
+                   v-model="checkedArr"
+                   :checked="getChecked"
+                   @click="selectHandle"
+            >
+            {{ getKey }}
         </label>
         <template v-if="!useNative">
             <span :class="getItemClass"
-                  :key="value"
-                  @click="selectHandle(value)"
+                  @click="selectHandle"
             >
                 <span :class="getFakeIconClass"
                       :style="{
                         width: width +'px',
                         height: height +'px',
-                        cursor: disabled?'not-allowed':'pointer'
+                        cursor: getDisabled?'not-allowed':'pointer'
                       }"
                 >
-                    <template v-if="checkedArr.includes(value)">
+                    <template v-if="getChecked">
                         <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
                         <CIcon v-else icon-name="choas-selected"
+                               key="selected"
                                color="#006ab3"
                                :width="`${width/1 + 8}`"
                                :height="`${height/1 + 8}`"
@@ -29,27 +35,30 @@
                                     position: 'absolute',
                                     top: `-${8/2}px`,
                                     left: `-${8/2}px`,
+                                    zIndex:10
                                 }"
                         />
 
                     </template>
                     <template v-else>
-                        <slot v-if="disabled"
+                        <slot v-if="getDisabled"
                               name="disabled-icon"
                         >
                             <CIcon :style="{
-                                position: 'absolute',
-                                top: `-1px`,
-                                left: `-1px`,
-                                display: 'inline-block',
-                                background: `radial-gradient(#888 40%, #aaa 60%)`
-                           }"
-                                   icon-name="choas-close"
-                                   color="#fff"
+                                    position: 'absolute',
+                                    top: `-1px`,
+                                    left: `-1px`,
+                                    display: 'inline-block',
+                                    background: `radial-gradient(#888 40%, #aaa 60%)`,
+                                    zIndex: 9
+                                }"
+                                key="disabled"
+                                icon-name="choas-close"
+                                color="#fff"
                             ></CIcon>
                         </slot>
                         <template v-else>
-                            <slot v-if="halfChecked"
+                            <slot v-if="getHalfChecked"
                                   name="half-checked-icon"
                             >
                                 <span :style="{
@@ -70,10 +79,10 @@
                       :style="{
                          display: 'inline-block',
                          height:`${height}px`,
-                         lineHeight:`${height}px`,
+                         lineHeight:`${Math.round(height/1.4)}px`,
                       }"
                 >
-                    {{value}}
+                    {{getKey}}
                 </span>
             </span>
         </template>
@@ -82,6 +91,7 @@
 
 <script>
     import classNames from 'classnames'
+    import _ from 'lodash'
 
     export default {
         name: 'CCheckbox',
@@ -93,7 +103,9 @@
                 }
             },
             value: {
-                type: String,
+                validate(v) {
+                    return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
+                },
                 default() {
                     return ''
                 }
@@ -106,6 +118,15 @@
             },
             halfChecked: {
                 type: Boolean
+            },
+            reflectKey: {
+                type: Object,
+                default() {
+                    return {
+                        key: 'key',
+                        value: 'value'
+                    }
+                }
             },
             width: {
                 type: String,
@@ -138,10 +159,47 @@
         },
         data() {
             return {
-                checkedArr: []
+                checkedArr: [],
+                copyValue: '',
+                isSimpleModel: true
+            }
+        },
+        mounted() {
+            this.$set(this, 'copyValue', _.cloneDeep(this.value))
+            if(!this.isSimpleModel){
+                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[this.reflectKey['value']])
+                if(index>-1){
+                    if(!this.copyValue.checked){
+                        this.checkedArr.splice(index,1)
+                    }
+                }
+                if(index<0){
+                    if(this.copyValue.checked){
+                        this.checkedArr.push(this.copyValue)
+                    }
+                }
             }
         },
         computed: {
+            getChecked() {
+                if (this.isSimpleModel) {
+                    return this.checkedArr.includes(this.copyValue)
+                } else {
+                    return this.copyValue.checked
+                }
+            },
+            getDisabled() {
+                return this.isSimpleModel ? this.disabled : this.copyValue.disabled
+            },
+            getHalfChecked() {
+                return this.isSimpleModel ? this.halfChecked : this.copyValue.halfChecked
+            },
+            getKey() {
+                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['key']]
+            },
+            getValueTxt() {
+                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['value']]
+            },
             getFakeIconClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
@@ -160,19 +218,40 @@
             }
         },
         methods: {
-            selectHandle(value) {
-                if (this.disabled) {
+            selectHandle() {
+                if (this.getDisabled) {
                     return
                 }
-                const index = this.checkedArr.findIndex(v => v === value)
-                if (index > -1) {
-                    this.checkedArr.splice(index, 1)
+                let index = -1;
+                if (this.isSimpleModel) {
+                    index = this.checkedArr.findIndex(v => v === this.copyValue)
                 } else {
-                    this.checkedArr.push(value)
+                    index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[this.reflectKey['value']])
+                }
+                if (index > -1) {
+                    if (!this.isSimpleModel) {
+                        this.$set(this.copyValue, 'checked', false)
+                    }
+                    this.checkedArr.splice(index, 1)
+                }
+                if (index < 0) {
+                    if (!this.isSimpleModel) {
+                        this.$set(this.copyValue, 'checked', true)
+                        this.$set(this.copyValue, 'halfChecked', false)
+                    }
+                    this.checkedArr.push(this.copyValue)
                 }
             }
         },
         watch: {
+            value: {
+                handler(value) {
+                    this.isSimpleModel = ['string', 'number'].includes(typeof value)
+                },
+                deep: true,
+                immediate: true
+
+            },
             checkedData: {
                 handler(v) {
                     this.$set(this, 'checkedArr', v)

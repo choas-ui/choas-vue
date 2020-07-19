@@ -2,15 +2,21 @@
 ---
   <ul>
     <li>选择的多值集合。</li>
+    <li>存在简单、数据两种模式。</li>
+    <li>简单模式中value为简单值，由属性控制组件呈现。</li>
+    <li>复杂模式中value为对象，由数据控制组件呈现。</li>
   </ul>
+
+### 简单模式
+---
 
 #### 双向绑定 v-model
 ---
   <ul>
     <li>选择集合中的多个值。</li>
   </ul>
-
-:::demo
+  
+:::demo 
 ```html
 <template>
     <p>{{ selectedData }}</p>
@@ -46,7 +52,6 @@
 </script>
 ```
 :::
-
 
 #### 禁止操作 disabled
 ---
@@ -247,5 +252,126 @@
         }
     }
 </script>
+```
+:::
+
+### 数据模式
+---
+  <ul>
+    <li>value值不再和视图直接相关。</li>
+    <li>checked为falsy的值将从选中值中移除。</li>
+    <li>checked为truthy的值将被默认选中。</li>
+  </ul>
+  
+:::demo 
+```html
+<template>
+    <p>{{ selectedData }}</p>
+    <CCheckbox
+        :value="{key: 'a', value: 'a'}"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'b', value: 'b', halfChecked: true }"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'c', value: 'c', checked: true}"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'd', value: 'd', disabled: true}"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'd', value: 'd', disabled: true, checked: true}"
+        v-model="selectedData"
+    />
+</template>
+<script>
+    export default {
+        data(){
+            return {
+                selectedData: [{key: 'a', value: 'a'}],
+            }
+        }
+    }
+</script>
+```
+:::
+
+### 键值映射 reflectKey
+---
+  <ul>
+    <li>不推荐使用reflectKey，除非不得不。</li>
+  </ul>
+  
+:::demo 
+```html
+<template>
+    <p>{{ selectedData }}</p>
+    <CCheckbox
+        :value="{key: 'a', value: 'a'}"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'b', value: 'b', halfChecked: true }"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{key: 'c', value: 'c', checked: true}"
+        v-model="selectedData"
+    />
+    <CCheckbox
+        :value="{name: 'laowang', id: '1268', checked: false}"
+        v-model="selectedData"
+        :reflect-key="{key: 'name', value: 'id'}"
+    />
+</template>
+<script>
+    export default {
+        data(){
+            return {
+                selectedData: [{key: 'a', value: 'a'}],
+            }
+        }
+    }
+</script>
+```
+:::
+
+---
+---
+### 复选框组 CheckboxGroup
+---
+  <ul>
+    <li>提供数据与插槽两种可选的模式。</li>
+    <li>数据模式可以生成快速视图。</li>
+    <li>插槽模式可以生成个性试图。</li>
+    <li>不可能一起使用，插槽优先级高。</li>
+  </ul>
+
+#### 已选数据 selectData
+---
+  <ul>
+    <li>提供简单、对象两种数据模式。</li>
+    <li>仅在数据模式下生效。</li>
+  </ul>
+
+:::demo 简单模式
+```html
+<template>
+    <CCheckboxGroup v-model="selectData" :list-data="listData"/>   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectData:['a', 'b', 'c'],
+                    listData: ['a','b','c','d']
+                }
+            }
+        }
+    </script> 
+</template>
 ```
 :::

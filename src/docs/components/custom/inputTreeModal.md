@@ -126,6 +126,7 @@
 ----
   <ul>
      <li>multiple 多选功能。</li>
+     <li>condition-props为truthy用户不可选，点击时添加其子节点，实现正选反选功能。</li>
   </ul>
 
 :::demo
@@ -242,9 +243,9 @@
 #### 新增树形节点 addTreeNode
 ---
   <ul>
-     <li><p>addTreeNode 新增树形节点。</p></li>
-     <li><p>condition-props 用户不可选，不可见不满足条件的该项。</p></li>
-     <li><p>placeholder 新增树形节点的提示。</p></li>
+     <li>addTreeNode新增树形节点。</li>
+     <li>condition-props为truthy用户不可选，不可见不满足条件的该项。</li>
+     <li>placeholder新增树形节点的提示。</li>
   </ul>
   
 :::demo

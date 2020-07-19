@@ -3,13 +3,27 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-19</span>
+    <span>2020-07-20</span>
+    <b>v 0.1.50</b>
+  </p>
+  
+  <ol reversed>
+     <li>新增<b>CheckboxGroup</b>组件。</li>
+     <li>新增Checkbox属性reflectKey。</li>
+     <li>新增Checkbox数据模式。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
+    <span>2020-07-18</span>
     <b>v 0.1.49</b>
   </p>
   
   <ol reversed>
      <li>引入部分矢量图标。</li>
      <li>修复依赖库问题。</li>
+     <li>修改主页。</li>
   </ol>
 :::
 
@@ -394,7 +408,7 @@
   </p>
   
   <ol reversed>
-     <li>避免组件叠加影响， <b>所有组件</b>重命名。</li>
+     <li>避免组件叠加影响，<b>所有组件</b>重命名。</li>
   </ol>
 :::
 
@@ -438,7 +452,7 @@
   </p>
   
   <ol reversed>
-     <li>调整Tree/TreeModal/Cascade/InputTreeModal 树形和事件。</li>
+     <li>调整Tree/TreeModal/Cascade/InputTreeModal属性和事件。</li>
   </ol>
 :::
 
@@ -449,7 +463,7 @@
   </p>
   
   <ol reversed>
-     <li>移除Icon组件<s>type</s>树形。</li>
+     <li>移除Icon组件<s>type</s>属性。</li>
   </ol>
 :::
 
@@ -460,7 +474,7 @@
   </p>
   
   <ol reversed>
-     <li>修改<b>TreeModal</b>组件bug。</li>
+     <li>修复<b>TreeModal</b>组件bug。</li>
   </ol>
 :::
 
@@ -471,7 +485,7 @@
   </p>
   
   <ol reversed>
-     <li>修改Cascade组件bug。</li>
+     <li>修复Cascade组件bug。</li>
   </ol>
 :::
 
@@ -572,7 +586,7 @@
   </p>
   <ol reversed>
      <li>比较多数组件库后，我更倾向于antd-react组件库，但技术栈是vue……</li>
-     <li>有个尴尬的问题摆在脸上，简单的组件无需定制，复杂需求无法套用，</li>
+     <li>有个尴尬的问题摆在脸上，简单的组件无需定制，复杂需求无法套用。</li>
      <li>集成功能的开发因为上述问题不得不妥协，烂墙抹泥的尝试又受到挫折……</li>
      <li>算了，我来造轮子吧。</li>
      <li><b>-&nbsp;&nbsp;-&nbsp;&nbsp;!5D&nbsp;!!!</b></li>  
