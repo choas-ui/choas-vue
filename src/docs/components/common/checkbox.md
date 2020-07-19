@@ -358,18 +358,49 @@
     <li>仅在数据模式下生效。</li>
   </ul>
 
-:::demo 简单模式
+:::demo
 ```html
 <template>
+    <p>{{ selectData }}</p>
     <CCheckboxGroup v-model="selectData" :list-data="listData"/>   
     <script>
         export default {
             data(){
                 return{
-                    selectData:['a', 'b', 'c'],
-                    listData: ['a','b','c','d']
+                    selectData:[{key: 'a', value: 'a'}],
+                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}]
                 }
-            }
+            },
+        }
+    </script> 
+</template>
+```
+:::
+
+#### 复选按钮 type
+---
+  <ul>
+    <li>值只能为button。</li>
+    <li>button-group-config， 设置ButtonGroup的样式。</li>
+  </ul>
+  
+:::demo
+```html
+<template>
+    <p>{{ selectData }}</p>
+    <CCheckboxGroup v-model="selectData"
+                    :list-data="listData"
+                    type="button"
+                    button-group-config=""
+    />   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectData:[{key: 'a', value: 'a'}],
+                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}]
+                }
+            },
         }
     </script> 
 </template>

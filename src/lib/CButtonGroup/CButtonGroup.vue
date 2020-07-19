@@ -1,0 +1,174 @@
+<template>
+    <span>
+        CButtonGroup
+    </span>
+</template>
+
+<script>
+    import classNames from 'classnames'
+    export default {
+        name: 'CButtonGroup',
+        props:{
+            block: {
+                type: Boolean
+            },
+            placeholder: {
+                type: String,
+                default(){
+                    return ''
+                }
+            },
+            prefix: {
+                type: String,
+                default(){
+                    return ''
+                }
+            },
+            className: {
+                type: String,
+                default(){
+                    return ''
+                }
+            },
+        },
+        data() {
+            return {
+                // 需要在左右加两个半圆
+            };
+        },
+        computed:{
+            buttonClass(){
+                const prefix =  this.prefix? this.prefix + '-': ''
+                return classNames(
+                    this.className,
+                    {
+                        [`${prefix}btn-block`]: this.block,
+                    },
+                    {
+                        [`not-allowed-cursor`]: this.type === 'disabled'
+                    },
+                    {
+                        [`${prefix}btn-primary`]: this.type === 'primary' || !(this.type),
+                        [`${prefix}btn-success`]: this.type === 'success',
+                        [`${prefix}btn-warning`]: this.type === 'warning',
+                        [`${prefix}btn-danger`]: this.type === 'danger',
+                        [`${prefix}btn-disabled`]: this.type === 'disabled',
+                        [`${prefix}btn-ghost`]: this.type === 'ghost'
+                    },
+                    {
+                        [`${prefix}btn-llg`]: this.size === 'llarge',
+                        [`${prefix}btn-lg`]: this.size === 'large',
+                        [`${prefix}btn-df`]: this.size === 'default' || !(this.size),
+                        [`${prefix}btn-sm`]: this.size === 'small',
+                        [`${prefix}btn-ssm`]: this.size === 'ssmall',
+                    },
+                    {
+                        [`${prefix}btn`]: true,
+                    }
+                )
+            },
+            iconClass(){
+                const prefix =  this.prefix? this.prefix + '-': ''
+                return classNames(
+                    `${prefix}btn-icon`
+                )
+            },
+            btnContentClass(){
+                const prefix =  this.prefix? this.prefix + '-': ''
+                return classNames(
+                    `${prefix}btn-content`
+                )
+            }
+        },
+        methods: {
+            clickHandle(){
+                this.$emit('click')
+            }
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    @import "../scss/normal-bg";
+    @import "../scss/size";
+    @import "../scss/variable";
+    @import "../scss/functions";
+    .btn{
+        background: #fff;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        color: #666;
+        line-height: normal;
+        &-block{
+            display: block;
+            width: 100%;
+        }
+        &-llg{
+            height: addPX($llg-height);
+            line-height: addPX($llg-height);
+            padding: 0 addPX($llg-padding);
+            border-radius: addPX($llg-radius);
+            font-size: addPX($llg-fs);
+        }
+        &-lg{
+            height: addPX($lg-height);
+            line-height: addPX($lg-height);
+            padding: 0 addPX($lg-padding);
+            border-radius: addPX($lg-radius);
+            font-size: addPX($lg-fs);
+        }
+        &-df{
+            height: addPX($df-height);
+            line-height: addPX($df-height);
+            padding: 0 addPX($df-padding);
+            border-radius: addPX($df-radius);
+            font-size: addPX($df-fs);
+        }
+        &-sm{
+            height: addPX($sm-height);
+            line-height: addPX($sm-height);
+            padding: 0 addPX($sm-padding);
+            border-radius: addPX($sm-radius);
+            font-size: addPX($sm-fs);
+        }
+        &-ssm{
+            height: addPX($ssm-height);
+            line-height: addPX($ssm-height);
+            padding: 0 addPX($ssm-padding);
+            border-radius: addPX($ssm-radius);
+            font-size: addPX($ssm-fs);
+        }
+        &-primary{
+            background: $primary;
+            color: $btnFtCr;
+        }
+        &-success{
+            background: $success;
+            color: $btnFtCr;
+        }
+        &-warning{
+            background: $warning;
+            color: $btnFtCr;
+        }
+        &-danger{
+            background: $danger;
+            color: $btnFtCr;
+        }
+        &-disabled{
+            background: $disabled;
+            color: $btnFtCr;
+        }
+        &-ghost{
+            background: none;
+            color: $info;
+            border: addPX($ssm-borderWt) dashed $btnGstCr;
+            &:hover{
+                color: $btnFtCr;
+                background: $btnGstCr;
+            }
+        }
+    }
+</style>

@@ -292,8 +292,10 @@
         },
         watch: {
             value:{
-              handler(v){
-                  this.$set(this, 'selectData', v)
+              handler(v, old){
+                  if(!_.isEqual(v, old)) {
+                      this.$set(this, 'selectData', _.cloneDeep(v))
+                  }
               },
               deep: true,
               immediate: true
@@ -328,9 +330,11 @@
                 }
             },
             listData: {
-                handler(v) {
-                    this.$set(this, 'list_data', _.cloneDeep(v))
-                    this.$set(this, 'cascadeList', _.cloneDeep(v))
+                handler(v, old) {
+                    if(!_.isEqual(v, old)) {
+                        this.$set(this, 'list_data', _.cloneDeep(v))
+                        this.$set(this, 'cascadeList', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true

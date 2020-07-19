@@ -190,20 +190,25 @@
         },
         watch: {
             result: {
-                handler(v) {
-                    this.$emit('input', v)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.$emit('input', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true
             },
             listData: {
-                handler(v) {
-                    this.copyData = this.addInfo(_.clone(v), '0').filter(Boolean)
-                    this.copyData = this.addInfo(this.copyData, '0')
-                    this.copyData.forEach((item, index) => {
-                        this.$set(this.copyData, index, {...item, isOpen: true})
-                    })
-                    this.operateCopyData(this.copyData)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.copyData = this.addInfo(_.clone(v), '0').filter(Boolean)
+                        this.copyData = this.addInfo(this.copyData, '0')
+                        this.copyData.forEach((item, index) => {
+                            this.$set(this.copyData, index, {...item, isOpen: true})
+                        })
+                        this.operateCopyData(this.copyData)
+                        this.$set(this, 'copyData',this.copyData)
+                    }
                 },
                 immediate: true
             }

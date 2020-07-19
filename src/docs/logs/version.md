@@ -9,8 +9,10 @@
   
   <ol reversed>
      <li>新增<b>CheckboxGroup</b>组件。</li>
+     <li>新增<b>ButtonGroup</b>组件。</li>
      <li>新增Checkbox属性reflectKey。</li>
      <li>新增Checkbox数据模式。</li>
+     <li>优化数据更新机制。</li>
   </ol>
 :::
 

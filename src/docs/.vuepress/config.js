@@ -14,6 +14,10 @@ function registerComponentsList() {
                     path: getPath('CButton')
                 },
                 {
+                    name: 'CButtonGroup',
+                    path: getPath('CButtonGroup')
+                },
+                {
                     name: 'CCascade',
                     path: getPath('CCascade')
                 },

@@ -99,8 +99,10 @@
         },
         watch: {
             listData: {
-                handler(v) {
-                    this.copyListData = _.cloneDeep(v)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)) {
+                        this.$set(this, 'copyListData', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true

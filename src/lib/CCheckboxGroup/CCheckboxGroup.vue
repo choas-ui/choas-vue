@@ -1,7 +1,19 @@
 <template>
     <span class="checkbox-group-wrap">
+
         <template v-if="isDataModel">
-            isDataModel
+            <template v-if="type==='button'">
+                <CButtonGroup/>
+                <CButton v-for="list in listData" :key="list[reflectKey['value']]" >{{list[reflectKey['key']]}}</CButton>
+            </template>
+            <template v-else>
+                <CCheckbox v-for="(list, index) in listData"
+                           v-model="copySelectedData"
+                           :value="list"
+                           :key="index"
+                           :reflectKey="reflectKey"
+                />
+            </template>
         </template>
         <slot v-else></slot>
     </span>
@@ -9,17 +21,18 @@
 
 <script>
     import classNames from 'classnames'
+    import _ from 'lodash'
 
     export default {
         name: 'CCheckboxGroup',
         props: {
-            value: {
+            listData: {
                 type: Array,
                 default() {
                     return []
                 }
             },
-            listData: {
+            value: {
                 type: Array,
                 default() {
                     return []
@@ -37,34 +50,23 @@
             useNative: {
                 type: Boolean
             },
-            width: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '18'
+            type: {
+                variable(value){
+                  return value ==='button'
+                },
+                default(){
+                    return ''
                 }
             }
         },
         data() {
             return {
-                checkboxValue: [],
+                copySelectedData: [],
+                midValue: [],
                 isDataModel: true
             };
         },
         computed: {
-            getFakeIconClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames(
-                    {
-                        [`${prefix}checkbox-item-fake-icon`]: true
-                    }
-                )
-            },
             getWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
@@ -76,20 +78,25 @@
         },
         methods: {
         },
+        created() {
+
+        },
         watch: {
-            $slot: {
+            value: {
                 handler(v) {
-                    this.isDataModel = !v
+                    if(!_.isEqual(v, this.copySelectedData)){
+                        this.$set(this, 'copySelectedData', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true
             },
-            selectData: {
-                handler() {
+            copySelectedData: {
+                handler(v) {
+                    this.$emit('input', v)
                 },
-                deep: true,
-                immediate: true
-            },
+                deep: true
+            }
         }
     }
 </script>

@@ -245,23 +245,26 @@
         },
         watch: {
             value: {
-                handler(value) {
-                    this.isSimpleModel = ['string', 'number'].includes(typeof value)
+                handler(v) {
+                    this.isSimpleModel = ['string', 'number'].includes(typeof v)
                 },
                 deep: true,
                 immediate: true
-
             },
             checkedData: {
-                handler(v) {
-                    this.$set(this, 'checkedArr', v)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.$set(this, 'checkedArr', v)
+                    }
                 },
                 deep: true,
                 immediate: true
             },
             checkedArr: {
-                handler(v) {
-                    this.$set(this, 'checkedData', v)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.$emit('checkedDataChange', v)
+                    }
                 },
                 deep: true,
                 immediate: true

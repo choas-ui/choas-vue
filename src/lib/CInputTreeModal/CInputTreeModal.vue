@@ -69,6 +69,7 @@
     </span>
 </template>
 <script>
+    import _ from 'lodash'
     export default {
         name: 'CInputTreeModal',
         props: {
@@ -197,15 +198,19 @@
         },
         watch: {
             selectedData: {
-                handler(v) {
-                    this.$emit('input', v)
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.$emit('input', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true
             },
             value: {
-                handler(v) {
-                    this.selectedData = v
+                handler(v, old) {
+                    if(!_.isEqual(v, old)){
+                        this.$set(this, 'selectedData', _.cloneDeep(v))
+                    }
                 },
                 deep: true,
                 immediate: true
