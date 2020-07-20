@@ -2,6 +2,7 @@
     <span :class="getWrapClass">
         <template v-if="isDataModel">
             <CButton v-for="(item,index) of listData"
+                     :key="item[reflectKey['value']]"
                      ref="btn"
                      :type="item.type"
                      :size="item.size"
@@ -150,7 +151,7 @@
                         this.$set(this, 'checkedArr', [item])
                     }
                 }
-                this.$emit('click', item.key, item, e)
+                this.$emit('click', item[this.reflectKey['value']], item, e)
             }
         },
         watch: {

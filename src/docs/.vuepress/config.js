@@ -145,15 +145,14 @@ module.exports = {
                         {
                             title: '表单',
                             children:[
-
+                                [
+                                    '/components/common/radio', '单选框 CRadio'
+                                ],
                                 [
                                     '/components/common/checkbox', '复选框 CCheckbox'
                                 ],
                                 [
                                     '/components/common/input', '输入框* CInput'
-                                ],
-                                [
-                                    '/components/common/radio', '复选框 CRadio'
                                 ],
                             ]
                         },
