@@ -3,6 +3,17 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
+    <span>2020-07-21</span>
+    <b>v 0.1.51</b>
+  </p>
+  
+  <ol reversed>
+     <li>修复checkbox不显示激活状态的问题。</li>
+  </ol>
+:::
+
+:::tip 版本更新
+  <p class="logs-version-item">
     <span>2020-07-20</span>
     <b>v 0.1.50</b>
   </p>

@@ -10,9 +10,7 @@
                          [`first-item`]: !index,
                          [`last-item`]: index === listData.length - 1
                      }"
-                     :style="{
-                         ...(item.checked? activeStyle: normalStyle),
-                     }"
+                     :style="checkedArr.findIndex(v => v[reflectKey['value']]===item[reflectKey['value']])>-1? activeStyle: normalStyle"
                      @click="($event) =>setClickKey(item, $event)"
             >
                 {{ item[reflectKey['key']] }}
