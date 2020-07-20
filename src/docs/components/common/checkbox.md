@@ -342,6 +342,7 @@
 
 ---
 ---
+
 ### 复选框组 CheckboxGroup
 ---
   <ul>
@@ -400,7 +401,7 @@
             data(){
                 return{
                     selectData:[{key: 'a', value: 'a'}],
-                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}]
+                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
                 }
             },
         }
@@ -408,3 +409,4 @@
 </template>
 ```
 :::
+

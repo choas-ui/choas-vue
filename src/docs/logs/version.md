@@ -8,7 +8,9 @@
   </p>
   
   <ol reversed>
-     <li>修复checkbox不显示激活状态的问题。</li>
+     <li>新增<b>RadioGroup</b>组件 。</li>
+     <li>新增<b>Radio</b>组件 。</li>
+     <li>修复checkbox不显示激活样式bug。</li>
   </ol>
 :::
 
@@ -37,7 +39,7 @@
   
   <ol reversed>
      <li>引入部分矢量图标。</li>
-     <li>修复依赖库问题。</li>
+     <li>修复依赖库bug。</li>
      <li>修改主页。</li>
   </ol>
 :::
@@ -50,9 +52,9 @@
   
   <ol reversed>
      <li>增加Checkbox插槽功能。</li>
-     <li>修复Checkbox的样式问题。</li>
-     <li>修复InputTreeModal内部标签过长导致的显示问题。</li>
-     <li>修复InputTreeModal编辑模式为false时的样式问题。</li>
+     <li>修复Checkbox的样式bug。</li>
+     <li>修复InputTreeModal内部标签过长导致的显示bug。</li>
+     <li>修复InputTreeModal编辑模式为false时的样式bug。</li>
   </ol>
 :::
 
@@ -63,7 +65,7 @@
   </p>
   
   <ol reversed>
-     <li>修复InputTreeModal编辑模式为false时的样式问题。</li>
+     <li>修复InputTreeModal编辑模式为false时的样式bug。</li>
   </ol>
 :::
 
@@ -74,7 +76,7 @@
   </p>
   
   <ol reversed>
-     <li>修复InputTreeModal输入时失去焦点的问题。</li>
+     <li>修复InputTreeModal输入时失去焦点bug。</li>
   </ol>
 :::
 
@@ -86,7 +88,7 @@
   
   <ol reversed>
      <li>调整primary和disabled对应颜色。</li>
-     <li>修复Tag在某些情况下过长的问题。</li>
+     <li>修复Tag在某些情况下过长bug。</li>
   </ol>
 :::
 
@@ -99,7 +101,7 @@
   <ol reversed>
      <li>新增<b>Checkbox</b>复选框。</li>
      <li>Tag close事件返回$event。</li>
-     <li>InputTreeModal 增加简单多选功能,微调样式</li>
+     <li>InputTreeModal增加简单多选功能,微调样式</li>
   </ol>
 :::
 
@@ -110,7 +112,7 @@
   </p>
   
   <ol reversed>
-     <li>修复Button触发其他库表单提交的问题。</li>
+     <li>修复Button触发其他库表单提交的bug。</li>
   </ol>
 :::
 
@@ -125,7 +127,7 @@
      <li>新增<b>Progress</b>进度条。</li>
      <li>Modal按下<kbd>ESC</kbd>关闭。</li>
      <li>TreeModal移除<s>addTreeNode</s>方法,新增<b>addTreeNode</b>属性。</li>
-     <li>修复关闭InputTreeModal未保存值未还原问题。</li>
+     <li>修复关闭InputTreeModal未保存值未还原bug。</li>
   </ol>
 :::
 
@@ -136,9 +138,9 @@
   </p>
   
   <ol reversed>
-     <li>InputTreeModal的显示替换为Tag组件。</li>
+     <li>InputTreeModal的显示组件替换为Tag组件。</li>
      <li>InputTreeModal 未传入addTreeNode节点时，不显示新增按钮。</li>
-     <li>关闭TreeModal后搜索内容清空。</li>
+     <li>修复关闭TreeModal后搜索内容不清空bug。</li>
      <li>新增<b>Tag</b>组件。</li>
   </ol>
 :::
@@ -151,7 +153,7 @@
   
   <ol reversed>
      <li>cascade搜索功能重写。</li>
-     <li>将cascade事件委托的恢复至 <b>document</b>。</li>
+     <li>将cascade事件委托的恢复至<b>document</b>。</li>
   </ol>
 :::
 
@@ -185,8 +187,8 @@
   </p>
   
   <ol reversed>
-     <li>cascade下拉框被覆盖问题。</li>
-     <li>cascade下拉框样式。</li>
+     <li>修复cascade下拉框被覆盖bug。</li>
+     <li>修复cascade下拉框样式bug。</li>
   </ol>
 :::
 
@@ -197,7 +199,7 @@
   </p>
   
   <ol reversed>
-     <li>Tree文档说明。</li>
+     <li>新增Tree文档说明。</li>
   </ol>
 :::
 
@@ -208,7 +210,7 @@
   </p>
   
   <ol reversed>
-     <li>修复InputTreeModal列表值的刷新问题。</li>
+     <li>修复InputTreeModal列表值的刷新bug。</li>
   </ol>
 :::
 
@@ -219,7 +221,7 @@
   </p>
   
   <ol reversed>
-     <li>修复InputTreeModal选定值的刷新问题。</li>
+     <li>修复InputTreeModal选定值的刷新bug。</li>
   </ol>
 :::
 
@@ -230,7 +232,7 @@
   </p>
   
   <ol reversed>
-     <li><b>Tree</b>新增controllers选项。</li>
+     <li>Tree新增<b>controllers</b>选项。</li>
   </ol>
 :::
 
@@ -241,8 +243,8 @@
   </p>
   
   <ol reversed>
-     <li>InputTreeModal选中项不更新问题。</li>
-     <li>cascade样式受到其他库影响问题。</li>
+     <li>修复InputTreeModal选中项不更新bug。</li>
+     <li>修复cascade样式受到其他库影响bug。</li>
   </ol>
 :::
 
@@ -266,8 +268,8 @@
   </p>
   
   <ol reversed>
-     <li>关闭cascade后再次开打下拉框长度无限的问题。</li>
-     <li>TreeModal右侧选中内容长度过长的问题。</li>
+     <li>修复关闭cascade后再次开打下拉框长度无限bug。</li>
+     <li>修复TreeModal右侧选中内容长度过长bug。</li>
   </ol>
 :::
 
@@ -278,7 +280,7 @@
   </p>
   
   <ol reversed>
-     <li>关闭级联后再次开打长度无限的问题。</li>
+     <li>修复关闭级联后再次开打长度无限的bug。</li>
   </ol>
 :::
 
@@ -289,7 +291,7 @@
   </p>
   
   <ol reversed>
-     <li>空值添加时的报错问题。</li>
+     <li>修复InputTreeModal添加空值时的报错bug。</li>
   </ol>
 :::
 
@@ -434,7 +436,7 @@
   </p>
   
   <ol reversed>
-    <li>避免组件叠加影响， <b>所有组件</b>重命名。</li>
+    <li>避免组件叠加影响，<b>所有组件</b>重命名。</li>
   </ol>
 :::
 
@@ -522,7 +524,7 @@
   </p>
   
   <ol reversed>
-     <li>新增<b>InputTreeModal</b>组件。</li>
+     <li>新增<b>InputTreeModal</b>树形弹框选取组件。</li>
   </ol>
 :::
 

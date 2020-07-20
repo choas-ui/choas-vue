@@ -18,7 +18,7 @@
     import classNames from 'classnames'
     import _ from "lodash"
     export default {
-        name: 'CRadio',
+        name: 'CRadioGroup',
         props:{
             selectData:{
                 type: Array,

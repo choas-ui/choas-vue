@@ -47,6 +47,10 @@ function registerComponentsList() {
                     path: getPath('CRadio')
                 },
                 {
+                    name: 'CRadioGroup',
+                    path: getPath('CRadioGroup')
+                },
+                {
                     name: 'CSelection',
                     path: getPath('CSelection')
                 },

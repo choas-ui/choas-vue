@@ -13,23 +13,22 @@
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "classnames": "^2.2.6",
-    "lodash": "^4.17.15"
-  },
-  "devDependencies": {
+    "lodash": "^4.17.15",
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
-    "choas-vue": "^0.1.49",
     "css-loader": "^3.6.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "html-loader": "^1.1.0",
-    "less-loader": "^6.2.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.0",
     "style-loader": "^1.2.1",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "devDependencies": {
+    "less-loader": "^6.2.0",
     "vuepress": "^1.5.2",
     "vuepress-plugin-demo-container": "^0.1.0"
   },

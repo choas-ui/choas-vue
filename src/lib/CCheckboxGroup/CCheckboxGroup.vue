@@ -64,9 +64,6 @@
                     return {}
                 }
             },
-            useNative: {
-                type: Boolean
-            },
             type: {
                 variable(value) {
                     return value === 'button'

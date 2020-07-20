@@ -7,6 +7,8 @@ import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
 import CProgress from './CProgress'
+import CRadio from './CRadio'
+import CRadioGroup from './CRadioGroup'
 import CSelection from './CSelection'
 import CTag from './CTag'
 import CTree from './CTree'
@@ -25,6 +27,8 @@ const components = [
     CInputTreeModal,
     CModal,
     CProgress,
+    CRadio,
+    CRadioGroup,
     CSelection,
     CTag,
     CTree,
@@ -49,6 +53,8 @@ export default {
     CIcon,
     CInputTreeModal,
     CModal,
+    CRadio,
+    CRadioGroup,
     CSelection,
     CTree,
     CTreeModal
