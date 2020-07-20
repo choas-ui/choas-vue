@@ -16,6 +16,7 @@
                            v-model="copySelectedData"
                            :value="list"
                            :key="index"
+                           :useNative="useNative"
                            :reflectKey="reflectKey"
                 />
             </template>
@@ -71,6 +72,9 @@
                 default() {
                     return ''
                 }
+            },
+            useNative:{
+                type: Boolean
             }
         },
         data() {
