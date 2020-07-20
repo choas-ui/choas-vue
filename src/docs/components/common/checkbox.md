@@ -381,7 +381,8 @@
 ---
   <ul>
     <li>值只能为button。</li>
-    <li>button-group-config， 设置ButtonGroup的样式。</li>
+    <li>normal-style,未选中样式。</li>
+    <li>active-style,选中样式。</li>
   </ul>
   
 :::demo
@@ -391,7 +392,8 @@
     <CCheckboxGroup v-model="selectData"
                     :list-data="listData"
                     type="button"
-                    button-group-config=""
+                    :normal-style="{background: '#fff', color: '#333'}"
+                    :active-style="{background: 'green'}"
     />   
     <script>
         export default {

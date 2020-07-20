@@ -47,11 +47,12 @@
         <CTreeModal :list-data="listData"
                     v-model="selectedData"
                     :title="title"
-                    :isShow="isModalShow"
+                    :is-show="isModalShow"
                     @toggleShow="v => this.isModalShow= v"
-                    :conditionProps="conditionProps"
-                    :addTreeNode="$listeners.addTreeNode? addTreeNode : null"
-                    :reflectKey="reflectKey"
+                    :condition-props="conditionProps"
+                    :cascade-condition-props="cascadeConditionProps"
+                    :add-tree-node="$listeners.addTreeNode? addTreeNode : null"
+                    :reflect-key="reflectKey"
                     :multiple="multiple"
 
                     :width="width"
@@ -74,6 +75,12 @@
         name: 'CInputTreeModal',
         props: {
             conditionProps: {
+                type: String,
+                default() {
+                    return 'node'
+                }
+            },
+            cascadeConditionProps: {
                 type: String,
                 default() {
                     return 'node'

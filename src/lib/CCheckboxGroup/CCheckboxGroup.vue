@@ -1,10 +1,15 @@
 <template>
     <span class="checkbox-group-wrap">
-
         <template v-if="isDataModel">
             <template v-if="type==='button'">
-                <CButtonGroup/>
-                <CButton v-for="list in listData" :key="list[reflectKey['value']]" >{{list[reflectKey['key']]}}</CButton>
+                <CButtonGroup :list-data="listData"
+                              v-model="copySelectedData"
+                              :reflect-key="reflectKey"
+                              :active-style="activeStyle"
+                              :normal-style="normalStyle"
+                              multiple
+                              halfChecked
+                />
             </template>
             <template v-else>
                 <CCheckbox v-for="(list, index) in listData"
@@ -47,14 +52,26 @@
                     }
                 }
             },
+            normalStyle: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
+            activeStyle: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
             useNative: {
                 type: Boolean
             },
             type: {
-                variable(value){
-                  return value ==='button'
+                variable(value) {
+                    return value === 'button'
                 },
-                default(){
+                default() {
                     return ''
                 }
             }
@@ -62,7 +79,6 @@
         data() {
             return {
                 copySelectedData: [],
-                midValue: [],
                 isDataModel: true
             };
         },
@@ -76,15 +92,10 @@
                 )
             }
         },
-        methods: {
-        },
-        created() {
-
-        },
         watch: {
             value: {
                 handler(v) {
-                    if(!_.isEqual(v, this.copySelectedData)){
+                    if (!_.isEqual(v, this.copySelectedData)) {
                         this.$set(this, 'copySelectedData', _.cloneDeep(v))
                     }
                 },
@@ -106,9 +117,11 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .checkbox-wrap{
-        .checkbox-item{
+
+    .checkbox-wrap {
+        .checkbox-item {
             display: inline-flex;
+
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;
@@ -122,7 +135,8 @@
                     box-shadow: 0 0 10px $primary;
                 }
             }
-            &-title{
+
+            &-title {
                 margin: 0 addPX($ssm-margin);
             }
         }

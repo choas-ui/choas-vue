@@ -12,6 +12,8 @@
      <li>新增<b>ButtonGroup</b>组件。</li>
      <li>新增Checkbox属性reflectKey。</li>
      <li>新增Checkbox数据模式。</li>
+     <li>Button新增活动阴影效果。</li>
+     <li>InputTreeModal中提供一个新的<b>cascade-condition-props</b>属性。</li>
      <li>优化数据更新机制。</li>
   </ol>
 :::

@@ -33,7 +33,7 @@
                           :list-data="cascadeList"
                           :reflectKey="reflectKey"
                           :placeholder="placeholder"
-                          :conditionProps="conditionProps"
+                          :conditionProps="cascadeConditionProps || conditionProps"
                 />
                 <div class="content-box">
                     <div v-if="list_data.length">
@@ -46,7 +46,7 @@
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
                                 :condition-props="conditionProps"
-                        ></CTree>
+                        />
                     </div>
                     <div v-else class="empty-box">
                         当前没有可选数据
@@ -180,6 +180,13 @@
                 type: String,
                 default() {
                     return 'node'
+                }
+            },
+            // 级联收束条件
+            cascadeConditionProps: {
+                type: String,
+                default() {
+                    return ''
                 }
             },
             addTreeNode: {

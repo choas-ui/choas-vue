@@ -1,5 +1,5 @@
 <template>
-    <button :class="buttonClass" @click="clickHandle" :title="placeholder" type="button">
+    <button :class="buttonClass" @click="clickHandle($event)" :title="placeholder" type="button">
         <span v-if="'left' in $scopedSlots" :class="iconClass"><slot name="left"></slot></span>
         <span :class="btnContentClass"><slot>button</slot></span>
         <span v-if="'right' in $scopedSlots" :class="iconClass"><slot name="right"></slot></span>
@@ -53,10 +53,6 @@
                 }
             },
         },
-        data() {
-            return {
-            };
-        },
         computed:{
             buttonClass(){
                 const prefix =  this.prefix? this.prefix + '-': ''
@@ -102,8 +98,8 @@
             }
         },
         methods: {
-            clickHandle(){
-                this.$emit('click')
+            clickHandle($event){
+                this.$emit('click',$event)
             }
         }
     }
@@ -123,6 +119,10 @@
         outline: none;
         color: #666;
         line-height: normal;
+        box-shadow: 1px 2px 4px $shadowCr;
+        &:active{
+            box-shadow: 0 0 4px $shadowCr inset;
+        }
         &-block{
             display: block;
             width: 100%;
@@ -133,6 +133,12 @@
             padding: 0 addPX($llg-padding);
             border-radius: addPX($llg-radius);
             font-size: addPX($llg-fs);
+            &.first-item{
+                border-radius: addPX($llg-height) 0 0 addPX($llg-height);
+            }
+            &.last-item{
+                border-radius: 0 addPX($llg-height)  addPX($llg-height) 0;
+            }
         }
         &-lg{
             height: addPX($lg-height);
@@ -140,6 +146,12 @@
             padding: 0 addPX($lg-padding);
             border-radius: addPX($lg-radius);
             font-size: addPX($lg-fs);
+            &.first-item{
+                border-radius: addPX($lg-height) 0 0 addPX($lg-height);
+            }
+            &.last-item{
+                border-radius: 0 addPX($lg-height)  addPX($lg-height) 0;
+            }
         }
         &-df{
             height: addPX($df-height);
@@ -147,6 +159,12 @@
             padding: 0 addPX($df-padding);
             border-radius: addPX($df-radius);
             font-size: addPX($df-fs);
+            &.first-item{
+                border-radius: addPX($df-height) 0 0 addPX($df-height);
+            }
+            &.last-item{
+                border-radius: 0 addPX($df-height)  addPX($df-height) 0;
+            }
         }
         &-sm{
             height: addPX($sm-height);
@@ -154,6 +172,12 @@
             padding: 0 addPX($sm-padding);
             border-radius: addPX($sm-radius);
             font-size: addPX($sm-fs);
+            &.first-item{
+                border-radius: addPX($sm-height) 0 0 addPX($sm-height);
+            }
+            &.last-item{
+                border-radius: 0 addPX($sm-height)  addPX($sm-height) 0;
+            }
         }
         &-ssm{
             height: addPX($ssm-height);
@@ -161,6 +185,12 @@
             padding: 0 addPX($ssm-padding);
             border-radius: addPX($ssm-radius);
             font-size: addPX($ssm-fs);
+            &.first-item{
+                border-radius: addPX($ssm-height) 0 0 addPX($ssm-height);
+            }
+            &.last-item{
+                border-radius: 0 addPX($ssm-height)  addPX($ssm-height) 0;
+            }
         }
         &-primary{
             background: $primary;

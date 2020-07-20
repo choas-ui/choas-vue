@@ -1,5 +1,5 @@
 <template>
-    <CCheckbox></CCheckbox>
+    <CButtonGroup></CButtonGroup>
 </template>
 
 <script>

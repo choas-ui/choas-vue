@@ -1,10 +1,14 @@
 ### 按钮 Button
 ---
-  <p>响应用户点击操作。</p>
+  <ul>
+    <li>响应用户点击操作。</li>
+  </ul>
 
 #### 大小 size
 ---
-  <p>控制按钮大小。</p>
+  <ul>
+    <li>控制按钮大小。</li>
+  </ul>
 
 :::demo
 ```html
@@ -21,7 +25,9 @@
 
 #### 块 block
 ---
-  <p>button转化为块。</p>
+  <ul>
+    <li>button转化为块。</li>
+  </ul>
 
 :::demo
 ```html
@@ -41,7 +47,9 @@
 
 #### 类型 type 
 ---
-  <p>提供六种基础类型。</p>
+  <ul>
+    <li>提供六种基础类型。</li>
+  </ul>
 
 :::demo
 ```html
@@ -58,7 +66,9 @@
 
 #### 插槽 slot
 ---
-  <p>在按钮前提供两个插槽,插入图标(多)或其他。</p>
+  <ul>
+    <li>在按钮前提供两个插槽,插入图标(多)或其他。</li>
+  </ul>
 
   |键|值|类型|位置|
   |-|-|-|-|
@@ -90,9 +100,9 @@
 
 #### 类 class-name
 ---
-  <p>
-    在组件外层容器上添加一个类，优先级会导致该类的某些样式不生效，参考CSS优先级提权。
-  </p>
+  <ul>
+    <li>在组件外层容器上添加一个类，优先级会导致该类的某些样式不生效，参考CSS优先级提权。</li>
+  </ul>
 
 :::demo
 ```html
@@ -109,9 +119,9 @@
 
 #### 覆盖类 prefix
 ---
-  <p>
-    覆盖组件的所有类名，重写定义组件的样式。
-  </p>
+  <ul>
+    <li>覆盖组件的所有类名，重写定义组件的样式。</li>
+  </ul>
 
 :::demo
 ```html
@@ -127,16 +137,16 @@
 :::
 
 :::danger  请注意
-  <p>
-    prefix 会覆盖该组件下几乎所有的类，过去所有的样式均不再生效。
-  </p>   
+  <ul>
+    <li>prefix 会覆盖该组件下几乎所有的类，过去所有的样式均不再生效。</li>
+  </ul>   
 :::
 
 #### 提示 placeholder
 ---
-  <small>
-    鼠标悬浮的提醒。
-  </small>
+  <ul>
+    <li>鼠标悬浮的提醒。</li>
+  </ul>
 
 :::demo
 ```html
@@ -148,9 +158,9 @@
 
 #### 点击 click
 ---
-  <p>
-    点击操作。
-  </p>
+  <ul>
+    <li>点击操作。</li>
+  </ul>
 
 :::demo
 ```html
@@ -162,6 +172,184 @@
     methods: {
       clickHandle(){
         alert("Hello World!");
+      }
+    }
+  }
+  </script>
+```
+:::
+
+---
+---
+
+### 按钮组 CButtonGroup
+---
+  <ul>
+    <li>一组按钮。</li>
+    <li>返回当前的选中的按钮值。</li>
+  </ul>
+
+#### 基本使用
+---
+
+:::demo
+```html
+  <template>
+    <p>{{selectData}}</p>
+    <CButtonGroup :list-data="listData"
+                  v-model="selectData"
+                  @click="clickHandle"
+                  :reflect-key="{key: 'btnTxt', value: 'key'}"
+    ></CButtonGroup>
+  </template>
+  <script>
+  export default {
+    data(){
+        return {
+            selectData:[
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1'
+                },
+            ],
+            listData: [
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn2',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn3',
+                }
+            ]
+        }
+    },
+    methods: {
+      clickHandle(key,data,e){
+        console.log(key,data,e)
+      }
+    }
+  }
+  </script>
+```
+:::
+
+#### 多选 multiple
+---
+  <ul>
+    <li>checked控制是否选中。</li>
+  </ul>
+
+:::demo
+```html
+  <template>
+    <p>{{selectData}}</p>
+    <CButtonGroup :list-data="listData"
+                  v-model="selectData"
+                  @click="clickHandle"
+                  multiple
+                  :reflect-key="{key: 'btnTxt', value: 'key'}"
+    ></CButtonGroup>
+  </template>
+  <script>
+  export default {
+    data(){
+        return {
+            selectData:[
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1',
+                    checked: true
+                },
+            ],
+            listData: [
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn2',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn3',
+                }
+            ]
+        }
+    },
+    methods: {
+      clickHandle(key,data,e){
+        console.log(key,data,e)
+      }
+    }
+  }
+  </script>
+```
+:::
+
+#### 高亮 activeStyle
+---
+
+:::demo
+```html
+  <template>
+    <p>{{selectData}}</p>
+    <CButtonGroup :list-data="listData"
+                  v-model="selectData"
+                  @click="clickHandle"
+                  multiple
+                  :normal-style="{background: '#fff', color: '#333'}"
+                  :active-style="{background: 'green'}"
+                  :reflect-key="{key: 'btnTxt', value: 'key'}"
+    ></CButtonGroup>
+  </template>
+  <script>
+  export default {
+    data(){
+        return {
+            selectData:[
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1',
+                    checked: true
+                },
+            ],
+            listData: [
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn1',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn2',
+                },
+                {
+                    btnTxt: '按钮',
+                    type: 'primary',
+                    key: 'btn3',
+                }
+            ]
+        }
+    },
+    methods: {
+      clickHandle(key,data,e){
+        console.log(key,data,e)
       }
     }
   }
