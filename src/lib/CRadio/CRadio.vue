@@ -7,10 +7,10 @@
                         width: width +'px',
                         height: height +'px',
                         borderRadius: height+'px',
-                        cursor: getDisabled?'not-allowed':'pointer'
+                        cursor: (isSimpleModel ? disabled : copyValue.disabled)?'not-allowed':'pointer'
                       }"
                 >
-                    <template v-if="getChecked">
+                    <template v-if="isSimpleModel ? checkedArr.includes(copyValue): copyValue.checked">
                         <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
                         <span v-else
                               :style="{
@@ -26,7 +26,7 @@
                         ></span>
                     </template>
                     <template v-else>
-                        <slot v-if="getDisabled"
+                        <slot v-if="isSimpleModel ? disabled : copyValue.disabled"
                               name="disabled-icon"
                         >
                             <CIcon :style="{
@@ -55,7 +55,7 @@
                          lineHeight:`${height}px`,
                       }"
                 >
-                    {{getKey}}
+                    {{isSimpleModel ? copyValue : copyValue[reflectKey['key']]}}
                 </span>
             </span>
 </template>
@@ -149,22 +149,6 @@
             }
         },
         computed: {
-            getChecked() {
-                if (this.isSimpleModel) {
-                    return this.checkedArr.includes(this.copyValue)
-                } else {
-                    return this.copyValue.checked
-                }
-            },
-            getDisabled() {
-                return this.isSimpleModel ? this.disabled : this.copyValue.disabled
-            },
-            getKey() {
-                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['key']]
-            },
-            getValueTxt() {
-                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['value']]
-            },
             getFakeIconClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
@@ -184,7 +168,7 @@
         },
         methods: {
             selectHandle() {
-                if (this.getDisabled) {
+                if (this.isSimpleModel ? this.disabled : this.copyValue.disabled) {
                     return
                 }
                 let index = -1;

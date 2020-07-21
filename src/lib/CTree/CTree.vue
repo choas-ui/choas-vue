@@ -280,10 +280,7 @@
                     props: {
                         'icon-name': "choas-file-icon",
                     },
-                    attrs: {},
-                    style: {
-                        margin: '0 6px'
-                    }
+                    attrs: {}
                 })
             }
             // 文件图标
@@ -408,7 +405,6 @@
                 }
                 const  checkboxData = _.cloneDeep(data)
                 delete checkboxData.children
-                console.log(checkboxData)
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',
@@ -482,12 +478,18 @@
                         'CCheckbox',
                         {
                           props:{
-                              value: data,
-                              checkedData: [data],
+                              value: checkboxData,
                               reflectKey: this.reflectKey,
                               width: '16',
-                              height: '16'
-                          }
+                              height: '16',
+                              noText: true,
+                          },
+                            attrs:{
+                                checkedData: [checkboxData],
+                            },
+                            style:{
+                                marginRight: '8px',
+                            }
                         },
                     ),
                     childrenVnode
@@ -495,11 +497,11 @@
             }
             // 递归树形图标
             const createTree = (data) => {
-                const obj = Object.keys(this.$props).map(key => {
-                    return {
-                        [key]: this.$props[key]
-                    }
-                })
+                // const obj = Object.keys(this.$props).map(key => {
+                //     return {
+                //         [key]: this.$props[key]
+                //     }
+                // })
                 if (data.expand) {
                     return h('CTree',
                         {
@@ -543,17 +545,19 @@
                                         return null
                                     }).filter(Boolean)
                                 }
-                                return h(
-                                    tag,
-                                    {
-                                        props: {
-                                            ...this.$slots[key][0].componentOptions.propsData
-                                        },
-                                        ...this.$slots[key][0].data
-                                    }
-                                )
+                                if(this.$slots[key][0].componentOptions){
+                                    return h(
+                                        tag,
+                                        {
+                                            props: {
+                                                ...this.$slots[key][0].componentOptions.propsData
+                                            },
+                                            ...this.$slots[key][0].data
+                                        }
+                                    )
+                                }
 
-                            })
+                            }).filter(Boolean)
                         ]
                     )
                 }

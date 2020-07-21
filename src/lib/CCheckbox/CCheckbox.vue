@@ -6,10 +6,10 @@
               :style="{
                 width: width +'px',
                 height: height +'px',
-                cursor: getDisabled?'not-allowed':'pointer'
+                cursor: (isSimpleModel ? disabled : copyValue.disabled)?'not-allowed':'pointer'
               }"
         >
-            <template v-if="getChecked">
+            <template v-if="isSimpleModel?checkedArr.includes(copyValue):copyValue.checked">
                 <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
                 <CIcon v-else icon-name="choas-selected"
                        key="selected"
@@ -25,7 +25,7 @@
                 />
             </template>
             <template v-else>
-                        <slot v-if="getDisabled"
+                        <slot v-if="isSimpleModel ? disabled : copyValue.disabled"
                               name="disabled-icon"
                         >
                             <CIcon :style="{
@@ -42,7 +42,7 @@
                             ></CIcon>
                         </slot>
                         <template v-else>
-                            <slot v-if="getHalfChecked"
+                            <slot v-if="isSimpleModel ? halfChecked : copyValue.halfChecked"
                                   name="half-checked-icon"
                             >
                                 <span :style="{
@@ -67,7 +67,7 @@
                     lineHeight:`${height}px`,
               }"
         >
-            {{getKey}}
+            {{isSimpleModel ? copyValue : copyValue[reflectKey['key']]}}
         </span>
     </span>
 </template>
@@ -164,25 +164,6 @@
             }
         },
         computed: {
-            getChecked() {
-                if (this.isSimpleModel) {
-                    return this.checkedArr.includes(this.copyValue)
-                } else {
-                    return this.copyValue.checked
-                }
-            },
-            getDisabled() {
-                return this.isSimpleModel ? this.disabled : this.copyValue.disabled
-            },
-            getHalfChecked() {
-                return this.isSimpleModel ? this.halfChecked : this.copyValue.halfChecked
-            },
-            getKey() {
-                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['key']]
-            },
-            getValueTxt() {
-                return this.isSimpleModel ? this.copyValue : this.copyValue[this.reflectKey['value']]
-            },
             getFakeIconClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
@@ -202,7 +183,7 @@
         },
         methods: {
             selectHandle() {
-                if (this.getDisabled) {
+                if (this.isSimpleModel ? this.disabled : this.copyValue.disabled) {
                     return
                 }
                 let index = -1;
@@ -235,8 +216,8 @@
                 immediate: true
             },
             checkedData: {
-                handler(v, old) {
-                    if(!_.isEqual(v, old)){
+                handler(v) {
+                    if(!_.isEqual(v, this.checkedArr)){
                         this.$set(this, 'checkedArr', v)
                     }
                 },
@@ -244,8 +225,8 @@
                 immediate: true
             },
             checkedArr: {
-                handler(v, old) {
-                    if(!_.isEqual(v, old)){
+                handler(v) {
+                    if(!_.isEqual(v, this.checkedData)){
                         this.$emit('checkedDataChange', v)
                     }
                 },

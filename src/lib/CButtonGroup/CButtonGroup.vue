@@ -139,8 +139,8 @@
                     this.checkedArr.splice(index, 1)
                 }
                 if (index < 0) {
+                    this.$set(item, 'checked', true)
                     if (this.multiple) {
-                        this.$set(item, 'checked', true)
                         if (this.halfChecked) {
                             this.$set(item, 'halfChecked', true)
                         }
