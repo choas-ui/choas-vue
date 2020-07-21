@@ -394,17 +394,26 @@
                     childrenVnode.push(
                         h(
                             'span',
-                            {},
+                            {
+                                style:{
+                                    display: 'inline-flex',
+                                    alignItem: 'center'
+                                }
+                            },
                             [
                                 content
                             ]
                         )
                     )
                 }
+                const  checkboxData = _.cloneDeep(data)
+                delete checkboxData.children
+                console.log(checkboxData)
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',
-                        display: 'flex',
+                        display: 'inline-flex',
+                        alignItems: 'center'
                     },
                     attrs: {
                         title: content,
@@ -463,15 +472,24 @@
                                     value = (value || []).filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
                                     value = (value || []).concat(flatObj)
                                 }
-
                                 this.$emit('change', value)
-
                             }
 
                         }
                     },
-
                 }, [
+                    h(
+                        'CCheckbox',
+                        {
+                          props:{
+                              value: data,
+                              checkedData: [data],
+                              reflectKey: this.reflectKey,
+                              width: '16',
+                              height: '16'
+                          }
+                        },
+                    ),
                     childrenVnode
                 ])
             }
@@ -489,7 +507,7 @@
                                 ...this.$attrs
                             },
                             props: {
-                                ...obj,
+                                // ...obj,
                                 lineStartLv: this.lineStartLv + 1,
                                 listData: data.children,
                                 line: this.line,
@@ -546,7 +564,6 @@
             }
             return h(
                 'ul',
-                {},
                 [
                     (this.copyListData).map((item) => {
                         return h(
@@ -665,7 +682,6 @@
 
         &-title-wrap {
             cursor: pointer;
-            padding-left: addPX($sm-padding);
             flex: 1;
 
             &:hover {

@@ -1,31 +1,30 @@
 <template>
     <span :class="getItemClass"
-      @click="selectHandle"
->
-                <span :class="getFakeIconClass"
-                      :style="{
-                        width: width +'px',
-                        height: height +'px',
-                        cursor: getDisabled?'not-allowed':'pointer'
-                      }"
-                >
-                    <template v-if="getChecked">
-                        <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
-                        <CIcon v-else icon-name="choas-selected"
-                               key="selected"
-                               color="#006ab3"
-                               :width="`${width/1 + 8}`"
-                               :height="`${height/1 + 8}`"
-                               :style="{
-                                    position: 'absolute',
-                                    top: `-${8/2}px`,
-                                    left: `-${8/2}px`,
-                                    zIndex:10
-                                }"
-                        />
-
-                    </template>
-                    <template v-else>
+          @click="selectHandle"
+    >
+        <span :class="getFakeIconClass"
+              :style="{
+                width: width +'px',
+                height: height +'px',
+                cursor: getDisabled?'not-allowed':'pointer'
+              }"
+        >
+            <template v-if="getChecked">
+                <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
+                <CIcon v-else icon-name="choas-selected"
+                       key="selected"
+                       color="#006ab3"
+                       :width="`${width/1 + 8}`"
+                       :height="`${height/1 + 8}`"
+                       :style="{
+                         position: 'absolute',
+                         top: `-${8/2}px`,
+                         left: `-${8/2}px`,
+                         zIndex:10
+                     }"
+                />
+            </template>
+            <template v-else>
                         <slot v-if="getDisabled"
                               name="disabled-icon"
                         >
@@ -59,17 +58,18 @@
                             </slot>
                         </template>
                     </template>
-                </span>
-                <span class="checkbox-item-title"
-                      :style="{
-                         display: 'inline-block',
-                         height:`${height}px`,
-                         lineHeight:`${Math.round(height/1.4)}px`,
-                      }"
-                >
-                    {{getKey}}
-                </span>
-            </span>
+        </span>
+        <span v-if="!noText"
+              class="checkbox-item-title"
+              :style="{
+                    display: 'inline-block',
+                    height:`${height}px`,
+                    lineHeight:`${height}px`,
+              }"
+        >
+            {{getKey}}
+        </span>
+    </span>
 </template>
 
 <script>
@@ -131,6 +131,9 @@
                 default() {
                     return ''
                 }
+            },
+            noText:{
+                type: Boolean
             }
         },
         model: {
@@ -265,6 +268,7 @@
         }
 
         display: inline-flex;
+        align-items: center;
 
         &-fake-icon {
             border: 1px solid $darkLineColor;

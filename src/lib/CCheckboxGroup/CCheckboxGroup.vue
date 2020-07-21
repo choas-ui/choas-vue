@@ -22,7 +22,8 @@
 
                            }) || list"
                            :key="index"
-                           :reflectKey="reflectKey"
+                           :reflect-key="reflectKey"
+                           :no-text="noText"
                 />
             </template>
         </template>
@@ -78,6 +79,9 @@
                     return ''
                 }
             },
+            noText:{
+                type: Boolean
+            }
         },
         data() {
             return {

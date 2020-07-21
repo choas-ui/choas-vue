@@ -52,7 +52,7 @@
                       :style="{
                          display: 'inline-block',
                          height:`${height}px`,
-                         lineHeight:`${Math.round(height/1.4)}px`,
+                         lineHeight:`${height}px`,
                       }"
                 >
                     {{getKey}}
@@ -82,6 +82,9 @@
                 }
             },
             disabled: {
+                type: Boolean
+            },
+            noText: {
                 type: Boolean
             },
             reflectKey: {
