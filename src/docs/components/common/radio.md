@@ -1,7 +1,7 @@
 ### 单选框 radio
 ---
 <ul>
-    <li></li>
+    <li>在一组数据中选择一个。</li>
 </ul>
 
 ### 简单模式
@@ -248,7 +248,7 @@
             data(){
                 return{
                     selectData:[
-                        {key: 'a', value: 'a', checked:  true}
+                        {key: 'a', value: 'a'}
                     ],
                     listData: [
                         {key: 'a', value: 'a'},
@@ -310,35 +310,6 @@
             data(){
                 return{
                     selectData:[{key: 'a', value: 'a', checked: true}],
-                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
-                }
-            },
-        }
-    </script> 
-</template>
-```
-:::
-
-
-#### 原生 useNative
----
-  <ul>
-    <li>使用原生。</li>
-  </ul>
-  
-:::demo
-```html
-<template>
-    <p>{{ selectData }}</p>
-    <CRadioGroup v-model="selectData"
-                    :list-data="listData"
-                    useNative
-    />   
-    <script>
-        export default {
-            data(){
-                return{
-                    selectData:[{key: 'a', value: 'a'}],
                     listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
                 }
             },

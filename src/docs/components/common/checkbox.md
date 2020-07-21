@@ -452,35 +452,6 @@
 ```
 :::
 
-
-#### 原生 useNative
----
-  <ul>
-    <li>使用原生。</li>
-  </ul>
-  
-:::demo
-```html
-<template>
-    <p>{{ selectData }}</p>
-    <CCheckboxGroup v-model="selectData"
-                    :list-data="listData"
-                    useNative
-    />   
-    <script>
-        export default {
-            data(){
-                return{
-                    selectData:[{key: 'a', value: 'a'}],
-                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
-                }
-            },
-        }
-    </script> 
-</template>
-```
-:::
-
 ### 插槽模式
 ---
 

@@ -1,22 +1,7 @@
 <template>
-    <span>
-        <label :style="{
-                   display: useNative?'inline':'none'
-               }"
-        >
-            <input type="radio"
-                   :disabled="getDisabled"
-                   :value="value"
-                   v-model="checkedArr"
-                   :checked="getChecked"
-                   @click="selectHandle"
-            >
-            {{ getKey }}
-        </label>
-        <template v-if="!useNative">
-            <span :class="getItemClass"
-                  @click="selectHandle"
-            >
+    <span :class="getItemClass"
+          @click="selectHandle"
+    >
                 <span :class="getFakeIconClass"
                       :style="{
                         width: width +'px',
@@ -73,8 +58,6 @@
                     {{getKey}}
                 </span>
             </span>
-        </template>
-    </span>
 </template>
 
 <script>
@@ -97,9 +80,6 @@
                 default() {
                     return ''
                 }
-            },
-            useNative: {
-                type: Boolean
             },
             disabled: {
                 type: Boolean
@@ -211,10 +191,10 @@
                     index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[this.reflectKey['value']])
                 }
                 if (index > -1) {
-                    if (!this.isSimpleModel) {
+                    if (!this.isSimpleModel && this.multiple) {
                         this.$set(this.copyValue, 'checked', false)
+                        this.checkedArr.splice(index, 1)
                     }
-                    this.checkedArr.splice(index, 1)
                 }
                 if (index < 0) {
                     if (!this.isSimpleModel) {
@@ -246,8 +226,8 @@
                     if (!_.isEqual(v, this.checkedData)) {
                         this.$emit('checkedDataChange', v)
                     }
-                    if(!this.isSimpleModel && typeof this.copyValue ==='object'){
-                        if(this.copyValue[this.reflectKey['value']]!==(v[0]|| {})[this.reflectKey['value']]){
+                    if (!this.isSimpleModel && typeof this.copyValue === 'object') {
+                        if (this.copyValue[this.reflectKey['value']] !== (v[0] || {})[this.reflectKey['value']]) {
                             this.$set(this.copyValue, 'checked', false)
                         }
                     }

@@ -1,22 +1,7 @@
 <template>
-    <span>
-        <label :style="{
-                   display: useNative?'inline':'none'
-               }"
-        >
-            <input type="checkbox"
-                   :disabled="getDisabled"
-                   :value="getValueTxt"
-                   v-model="checkedArr"
-                   :checked="getChecked"
-                   @click="selectHandle"
-            >
-            {{ getKey }}
-        </label>
-        <template v-if="!useNative">
-            <span :class="getItemClass"
-                  @click="selectHandle"
-            >
+    <span :class="getItemClass"
+      @click="selectHandle"
+>
                 <span :class="getFakeIconClass"
                       :style="{
                         width: width +'px',
@@ -52,9 +37,9 @@
                                     background: `radial-gradient(#888 40%, #aaa 60%)`,
                                     zIndex: 9
                                 }"
-                                key="disabled"
-                                icon-name="choas-close"
-                                color="#fff"
+                                   key="disabled"
+                                   icon-name="choas-close"
+                                   color="#fff"
                             ></CIcon>
                         </slot>
                         <template v-else>
@@ -85,8 +70,6 @@
                     {{getKey}}
                 </span>
             </span>
-        </template>
-    </span>
 </template>
 
 <script>
@@ -109,9 +92,6 @@
                 default() {
                     return ''
                 }
-            },
-            useNative: {
-                type: Boolean
             },
             disabled: {
                 type: Boolean

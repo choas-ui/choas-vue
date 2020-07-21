@@ -22,7 +22,6 @@
 
                            }) || list"
                            :key="index"
-                           :useNative="useNative"
                            :reflectKey="reflectKey"
                 />
             </template>
@@ -79,9 +78,6 @@
                     return ''
                 }
             },
-            useNative:{
-                type: Boolean
-            }
         },
         data() {
             return {
