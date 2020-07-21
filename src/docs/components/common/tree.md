@@ -12,55 +12,56 @@
 
 :::demo
 ```html
-  <template>
-    <CTree
-      :list-data="listData"
-    >
-    </CTree>
-  </template>
-  <script>
-  export default {
-    data(){
-      return {
-        listData:[
-          {
-            key: '颜色',
-            value: '0',
-            expand: true,
-            children:[
-              {
-                key: '冷色',
-                value: '0-0',
-                expand: true,
-              },
-              {
-                key: '暖色',
-                value: '0-1',
-                expand: true,
-                children:[
-                  {
-                    key: '红色',
-                    value: '0-1-0',
-                  },
-                  {
-                    key: '橙色',
-                    value: '0-1-1',
-                    expand: true,
-                    children: [
-                      {
-                        key: '橙红',
-                        value: '0-1-1-0',
-                      },
-                    ],
-                  },
-                ]
-              },
-            ]
-          }
-        ]
-      }
+    <template>
+        <p>{{selectedData}}</p>
+        <CTree :list-data="listData"
+                v-model="selectedData"
+        />
+    </template>
+    <script>
+    export default {
+        data(){
+            return {
+                listData:[
+                    {
+                      key: '颜色',
+                      value: '0',
+                      expand: true,
+                      children:[
+                        {
+                          key: '冷色',
+                          value: '0-0',
+                          expand: true,
+                        },
+                        {
+                          key: '暖色',
+                          value: '0-1',
+                          expand: true,
+                          children:[
+                            {
+                              key: '红色',
+                              value: '0-1-0',
+                            },
+                            {
+                              key: '橙色',
+                              value: '0-1-1',
+                              expand: true,
+                              children: [
+                                {
+                                  key: '橙红',
+                                  value: '0-1-1-0',
+                                },
+                              ],
+                            },
+                          ]
+                        },
+                      ]
+                    }
+                ],
+                selectedData: []
+            }
+        }
     }
-  }
   </script>
 ```
 :::
@@ -72,8 +73,10 @@
 :::demo
 ```html
   <template>
+    <p>{{selectedData}}</p>
     <CTree
       :list-data="listData"
+      v-model="selectedData"
     >
     </CTree>
   </template>
@@ -133,7 +136,7 @@
 :::demo
 ```html
     <template>
-        <p>{{ selectData }}</p>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
             v-model="selectData"
@@ -180,7 +183,7 @@ export default {
                       ]
                  }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -195,8 +198,10 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{selectedData}}</p>
         <CTree
             :list-data="listData"
+            v-model="selectedData"
             :reflectKey="{
                 key: 'name',
                 value: 'id'
@@ -258,15 +263,15 @@ export default {
 :::demo
 ```html
     <template>
-        <CTree
-            :list-data="listData"
-            conditionProps="node"
-            :reflectKey="{
-                key: 'name',
-                value: 'id'
-            }"
-        >
-        </CTree>
+        <p>{{selectedData}}</p>
+        <CTree :list-data="listData"
+                conditionProps="node"
+                v-model="selectedData"
+                :reflectKey="{
+                    key: 'name',
+                    value: 'id'
+                    }"
+        />
     </template>
 <script>
 export default {
@@ -307,7 +312,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -322,10 +327,11 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             line
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
         >
         </CTree>
     </template>
@@ -368,7 +374,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -387,10 +393,11 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
             :file-icon-fix-margin="6"
-            v-model="selectData"
+            v-model="selectedData"
         >
         </CTree>
     </template>
@@ -433,7 +440,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -446,16 +453,16 @@ export default {
   <ul>
     <li><p>作为插槽出现的file-icon会替换默认图标。</p>
     <li><p>file-icon-fix-margin 能让你小幅调整两侧间距。</p></li>
-    <li><p>目前不支持多种Icon。</p></li>
   </ul>
    
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
             :file-icon-fix-margin="6"
-            v-model="selectData"
+            v-model="selectedData"
         >
         </CTree>
     </template>
@@ -498,7 +505,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -511,9 +518,10 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
             :file-icon-fix-margin-left="20"
         >
             <CIcon
@@ -561,7 +569,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     },
 }
@@ -579,10 +587,11 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <input v-model="searchStr"/>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
             :search-str="searchStr"
         >
         </CTree>
@@ -625,7 +634,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
             searchStr:'',
         }
     }
@@ -644,9 +653,10 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
             controllers
         >
             <CIcon
@@ -696,7 +706,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
             searchStr:'',
         }
     }
@@ -712,9 +722,10 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
         >
             <template slot="controllers">
                 <CIcon icon-name="choas-lists"
@@ -764,7 +775,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
             searchStr:'',
         }
     },
@@ -780,9 +791,10 @@ export default {
 :::demo
 ```html
     <template>
+        <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
         >
         <CIcon slot="controllers"
                color="green"
@@ -829,7 +841,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
             searchStr:'',
         }
     },

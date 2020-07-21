@@ -79,7 +79,7 @@
             },
             conditionProps: {
                 type: String,
-                default(){
+                default() {
                     return 'node'
                 }
             }
@@ -99,8 +99,8 @@
         },
         watch: {
             listData: {
-                handler(v, old) {
-                    if(!_.isEqual(v, old)) {
+                handler(v) {
+                    if (!_.isEqual(v, this.copyListData)) {
                         this.$set(this, 'copyListData', _.cloneDeep(v))
                     }
                 },
@@ -109,6 +109,7 @@
             }
         },
         render(h) {
+            // TODO: 重新整理 tree的逻辑 包括 InputTreeModal上的添加逻辑  双向绑定一个已选的节点列表
             const markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
             const markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
@@ -392,7 +393,7 @@
                         h(
                             'span',
                             {
-                                style:{
+                                style: {
                                     display: 'inline-flex',
                                     alignItem: 'center'
                                 }
@@ -403,8 +404,7 @@
                         )
                     )
                 }
-                const  checkboxData = _.cloneDeep(data)
-                delete checkboxData.children
+                const checkboxData = _.cloneDeep(data)
                 return h('span', {
                     style: {
                         marginLeft: markIconWidth / 4 + 'px',
@@ -426,9 +426,14 @@
                     ],
                     on: {
                         click: () => {
+                            // TODO: 控制数据
                             // 单选仅能选根结点
                             if (!this.multiple && !data.disabled && !data[this.conditionProps]) {
-                                this.$set(data,'checked', true)
+                                if (data.checked) {
+                                    this.$set(data, 'checked', false)
+                                } else {
+                                    this.$set(data, 'checked', true)
+                                }
                                 this.value = [data]
                                 this.$emit('change', this.value)
                             }
@@ -437,36 +442,39 @@
                                 const {value} = this.$attrs
                                 const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
                                 if (index > -1) {
+                                    this.$set(data, 'checked', false)
                                     value.splice(index, 1)
                                 } else {
+                                    this.$set(data, 'checked', true)
                                     value.push(data)
                                 }
-                                this.$set(data,'checked', true)
                                 this.value = [data]
                                 this.$emit('change', value)
                             }
                             // 多选, 点击父节点
                             if (this.multiple && !data.disabled && data[this.conditionProps]) {
-                                const getAllChildren = (data, res)=> {
-                                    (data.children || []).forEach(item=>{
-                                        getAllChildren(item,res)
+                                const getAllChildren = (data, res) => {
+                                    (data.children || []).forEach(item => {
+                                        getAllChildren(item, res)
                                     })
-                                    data.checked =true
-                                    if((data.children || []).length){
+                                    data.checked = true
+                                    if ((data.children || []).length) {
                                         data.halfChecked = false
                                     }
-                                    if(!data[this.conditionProps]){
+                                    if (!data[this.conditionProps]) {
                                         res.push(data)
                                     }
                                     return res
                                 }
                                 const flatObj = getAllChildren(data, [])
                                 let {value} = this.$attrs
-                                if(flatObj.every(item=>(value || []).findIndex(v=> v[rfValue] === item[rfValue])>-1)){
-                                    value =  (value || []).filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                                }else{
-                                    value = (value || []).filter(item=> !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                if (flatObj.every(item => (value || []).findIndex(v => v[rfValue] === item[rfValue]) > -1)) {
+                                    data.checked = false
+                                    value = (value || []).filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                                } else {
+                                    value = (value || []).filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
                                     value = (value || []).concat(flatObj)
+                                    data.checked = true
                                 }
                                 this.$emit('change', value)
                             }
@@ -477,17 +485,17 @@
                     h(
                         'CCheckbox',
                         {
-                          props:{
-                              value: checkboxData,
-                              reflectKey: this.reflectKey,
-                              width: '16',
-                              height: '16',
-                              noText: true,
-                          },
-                            attrs:{
+                            props: {
+                                value: checkboxData,
+                                reflectKey: this.reflectKey,
+                                width: '16',
+                                height: '16',
+                                noText: true,
+                            },
+                            attrs: {
                                 checkedData: [checkboxData],
                             },
-                            style:{
+                            style: {
                                 marginRight: '8px',
                             }
                         },
@@ -545,7 +553,7 @@
                                         return null
                                     }).filter(Boolean)
                                 }
-                                if(this.$slots[key][0].componentOptions){
+                                if (this.$slots[key][0].componentOptions) {
                                     return h(
                                         tag,
                                         {

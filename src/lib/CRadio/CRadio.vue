@@ -7,10 +7,10 @@
                         width: width +'px',
                         height: height +'px',
                         borderRadius: height+'px',
-                        cursor: (isSimpleModel ? disabled : copyValue.disabled)?'not-allowed':'pointer'
+                        cursor: getDisabled?'not-allowed':'pointer'
                       }"
                 >
-                    <template v-if="isSimpleModel ? checkedArr.includes(copyValue): copyValue.checked">
+                    <template v-if="getChecked">
                         <slot v-if="$slots['selected-icon']" name="selected-icon"></slot>
                         <span v-else
                               :style="{
@@ -26,7 +26,7 @@
                         ></span>
                     </template>
                     <template v-else>
-                        <slot v-if="isSimpleModel ? disabled : copyValue.disabled"
+                        <slot v-if="getDisabled"
                               name="disabled-icon"
                         >
                             <CIcon :style="{
@@ -55,7 +55,7 @@
                          lineHeight:`${height}px`,
                       }"
                 >
-                    {{isSimpleModel ? copyValue : copyValue[reflectKey['key']]}}
+                    {{getKey}}
                 </span>
             </span>
 </template>
@@ -128,27 +128,42 @@
         data() {
             return {
                 checkedArr: [],
-                copyValue: '',
                 isSimpleModel: true
             }
         },
         mounted() {
-            this.$set(this, 'copyValue', _.cloneDeep(this.value))
             if (!this.isSimpleModel) {
-                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[this.reflectKey['value']])
+                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
                 if (index > -1) {
-                    if (!this.copyValue.checked) {
+                    if (!this.value.checked) {
                         this.checkedArr.splice(index, 1)
                     }
                 }
                 if (index < 0) {
-                    if (this.copyValue.checked) {
-                        this.checkedArr.push(this.copyValue)
+                    if (this.value.checked) {
+                        this.checkedArr.push(_.cloneDeep(this.value))
                     }
                 }
             }
         },
         computed: {
+            getChecked() {
+                if (this.isSimpleModel) {
+                    return this.checkedArr.includes(this.value)
+                } else {
+                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
+                }
+            },
+            getDisabled() {
+                if (this.isSimpleModel) {
+                    return this.disabled
+                } else {
+                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
+                }
+            },
+            getKey() {
+                return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
+            },
             getFakeIconClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
@@ -168,26 +183,26 @@
         },
         methods: {
             selectHandle() {
-                if (this.isSimpleModel ? this.disabled : this.copyValue.disabled) {
+                if (this.isSimpleModel ? this.disabled : this.value.disabled) {
                     return
                 }
                 let index = -1;
                 if (this.isSimpleModel) {
-                    index = this.checkedArr.findIndex(v => v === this.copyValue)
+                    index = this.checkedArr.findIndex(v => v === this.value)
                 } else {
-                    index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[this.reflectKey['value']])
+                    index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
                 }
                 if (index > -1) {
                     if (!this.isSimpleModel && this.multiple) {
-                        this.$set(this.copyValue, 'checked', false)
+                        this.$set(this.checkedArr[index], 'checked', false)
                         this.checkedArr.splice(index, 1)
                     }
                 }
                 if (index < 0) {
+                    this.$set(this, 'checkedArr', [_.cloneDeep(this.value)])
                     if (!this.isSimpleModel) {
-                        this.$set(this.copyValue, 'checked', true)
+                        this.$set(this.checkedArr[0], 'checked', true)
                     }
-                    this.$set(this, 'checkedArr', [this.copyValue])
                 }
             }
         },
@@ -212,11 +227,6 @@
                 handler(v) {
                     if (!_.isEqual(v, this.checkedData)) {
                         this.$emit('checkedDataChange', v)
-                    }
-                    if (!this.isSimpleModel && typeof this.copyValue === 'object') {
-                        if (this.copyValue[this.reflectKey['value']] !== (v[0] || {})[this.reflectKey['value']]) {
-                            this.$set(this.copyValue, 'checked', false)
-                        }
                     }
                 },
                 deep: true,

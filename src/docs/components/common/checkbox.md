@@ -282,7 +282,7 @@
         v-model="selectedData"
     />
     <CCheckbox
-        :value="{key: 'd', value: 'd', disabled: true, checked: true}"
+        :value="{key: 'e', value: 'e', disabled: true, checked: true}"
         v-model="selectedData"
     />
 </template>

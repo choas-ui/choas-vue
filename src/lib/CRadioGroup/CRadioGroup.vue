@@ -106,7 +106,7 @@
             value: {
                 handler(v) {
                     if (!_.isEqual(v, this.copySelectedData)) {
-                        this.$set(this, 'copySelectedData', _.cloneDeep(v))
+                        this.$set(this, 'copySelectedData', v)
                     }
                 },
                 deep: true,
