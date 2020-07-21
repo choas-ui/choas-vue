@@ -14,7 +14,13 @@
             <template v-else>
                 <CCheckbox v-for="(list, index) in listData"
                            v-model="copySelectedData"
-                           :value="list"
+                           :value="copySelectedData.find(v=>{
+                               if(typeof v !== 'object'){
+                                   return v === list
+                               }
+                               return v[reflectKey['value']] === list[reflectKey['value']]
+
+                           }) || list"
                            :key="index"
                            :useNative="useNative"
                            :reflectKey="reflectKey"
@@ -82,6 +88,11 @@
                 copySelectedData: [],
                 isDataModel: true
             };
+        },
+        mounted(){
+            if(Object.keys(this.$slots).length){
+                this.isDataModel =false
+            }
         },
         computed: {
             getWrapClass() {

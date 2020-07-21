@@ -1,80 +1,122 @@
 <template>
-    <span>
-        <template v-if="isUseNative">
-            <label v-for="item of listData" :key="item" :class="getRadioItemClass">
-                <input v-model="copySelectedData"
-                       type="radio"
-                       :value="item">
-                {{item}}
-            </label>
+    <span class="radio-group-wrap">
+        <template v-if="isDataModel">
+            <template v-if="type==='button'">
+                <CButtonGroup :list-data="listData"
+                              v-model="copySelectedData"
+                              :reflect-key="reflectKey"
+                              :active-style="activeStyle"
+                              :normal-style="normalStyle"
+                />
+            </template>
+            <template v-else>
+                <CRadio v-for="(list, index) in listData"
+                           v-model="copySelectedData"
+                           :value="copySelectedData.find(v=>{
+                               if(typeof v !== 'object'){
+                                   return v === list
+                               }
+                               return v[reflectKey['value']] === list[reflectKey['value']]
+
+                           }) || list"
+                           :key="index"
+                           :useNative="useNative"
+                           :reflectKey="reflectKey"
+                />
+            </template>
         </template>
-        <template v-else>
-            CRadio
-        </template>
+        <slot v-else></slot>
     </span>
 </template>
 
 <script>
     import classNames from 'classnames'
-    import _ from "lodash"
+    import _ from 'lodash'
+
     export default {
         name: 'CRadioGroup',
-        props:{
-            selectData:{
+        props: {
+            listData: {
                 type: Array,
-                default(){
+                default() {
                     return []
                 }
             },
-            listData:{
-              type: Array,
-              default(){
-                  return []
-              }
+            value: {
+                type: Array,
+                default() {
+                    return []
+                }
             },
-            isUseNative: {
+            reflectKey: {
+                type: Object,
+                default() {
+                    return {
+                        key: 'key',
+                        value: 'value'
+                    }
+                }
+            },
+            normalStyle: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
+            activeStyle: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
+            type: {
+                variable(value) {
+                    return value === 'button'
+                },
+                default() {
+                    return ''
+                }
+            },
+            useNative:{
                 type: Boolean
             }
         },
         data() {
             return {
-                copySelectedData: []
+                copySelectedData: [],
+                isDataModel: true
             };
         },
-        computed:{
-            getRadioItemClass(){
-                const prefix =  this.prefix? this.prefix + '-': ''
+        mounted(){
+          if(Object.keys(this.$slots).length){
+              this.isDataModel =false
+          }
+        },
+        computed: {
+            getWrapClass() {
+                const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
                     {
-                        [`${prefix}radio-item`]: true
+                        [`${prefix}radio-group-wrap`]: true
                     }
                 )
-            },
-            xClass(){
-                const prefix =  this.prefix? this.prefix + '-': ''
-                return classNames(
-                )
-            },
-        },
-        methods: {
+            }
         },
         watch: {
-            selectData: {
-                handler(v){
-                    if(!_.isEqual(v, this.copySelectedData)){
-                        this.$set(this, 'copySelectedData', v)
+            value: {
+                handler(v) {
+                    if (!_.isEqual(v, this.copySelectedData)) {
+                        this.$set(this, 'copySelectedData', _.cloneDeep(v))
                     }
                 },
                 deep: true,
                 immediate: true
             },
             copySelectedData: {
-                handler(v){
-                    if(!_.isEqual(v, this.selectData)){
-                        this.$set(this, 'input', v)
-                    }
+                handler(v) {
+                    this.$emit('input', v)
                 },
-                deep: true,
+                deep: true
             }
         }
     }
@@ -85,9 +127,28 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .radio-item{
-        &>input{
-            vertical-align: middle;
+
+    .radio-wrap {
+        .radio-item {
+            display: inline-flex;
+
+            &-fake-icon {
+                border: 1px solid $darkLineColor;
+                border-radius: 2px;
+                display: inline-block;
+                position: relative;
+                box-shadow: 0 0 10px $lineColor;
+                box-sizing: border-box;
+                vertical-align: middle;
+
+                &:hover {
+                    box-shadow: 0 0 10px $primary;
+                }
+            }
+
+            &-title {
+                margin: 0 addPX($ssm-margin);
+            }
         }
     }
 </style>

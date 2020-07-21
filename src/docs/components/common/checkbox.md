@@ -9,9 +9,6 @@
 
 ### 简单模式
 ---
-
-#### 双向绑定 v-model
----
   <ul>
     <li>选择集合中的多个值。</li>
   </ul>
@@ -95,6 +92,7 @@
 ---
   <ul>
     <li>半选提示。</li>
+    <li>注意该模式下，不会取消half-checked，需要自行处理绑定值。</li>
   </ul>
 
 :::demo
@@ -259,8 +257,8 @@
 ---
   <ul>
     <li>value值不再和视图直接相关。</li>
-    <li>checked为falsy的值将从选中值中移除。</li>
-    <li>checked为truthy的值将被默认选中。</li>
+    <li>自动将checked为falsy的值从选中值中移除。</li>
+    <li>自动将checked为truthy的值默认选中。</li>
   </ul>
   
 :::demo 
@@ -342,6 +340,8 @@
 
 ---
 ---
+---
+---
 
 ### 复选框组 CheckboxGroup
 ---
@@ -349,15 +349,33 @@
     <li>提供数据与插槽两种可选的模式。</li>
     <li>数据模式可以生成快速视图。</li>
     <li>插槽模式可以生成个性试图。</li>
-    <li>不可能一起使用，插槽优先级高。</li>
+    <li>不能一起使用，插槽优先级高。</li>
   </ul>
 
-#### 已选数据 selectData
+### 数据模式
 ---
   <ul>
-    <li>提供简单、对象两种数据模式。</li>
-    <li>仅在数据模式下生效。</li>
+    <li>提供简单、数据两种数据模式。</li>
   </ul>
+  
+:::demo
+```html
+<template>
+    <p>{{ selectData }}</p>
+    <CCheckboxGroup v-model="selectData" :list-data="listData"/>   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectData:['a'],
+                    listData: ['a', 'b', 'c']
+                }
+            },
+        }
+    </script> 
+</template>
+```
+:::
 
 :::demo
 ```html
@@ -368,8 +386,8 @@
         export default {
             data(){
                 return{
-                    selectData:[{key: 'a', value: 'a'}],
-                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}]
+                    selectData:[{key: 'a1', value: 'a1', checked: true}],
+                    listData: [{key: 'a1', value: 'a1'}, {key: 'b1', value: 'b1'}]
                 }
             },
         }
@@ -381,7 +399,7 @@
 #### 复选按钮 type
 ---
   <ul>
-    <li>值只能为button。</li>
+    <li>值只能为button,不与插槽模式共存。</li>
     <li>normal-style,未选中样式。</li>
     <li>active-style,选中样式。</li>
   </ul>
@@ -392,7 +410,7 @@
     <p>{{ selectData }}</p>
     <CCheckboxGroup v-model="selectData"
                     :list-data="listData"
-                    useNative
+                    type="button"
                     :normal-style="{background: '#fff', color: '#333'}"
                     :active-style="{background: 'green'}"
     />   
@@ -401,6 +419,30 @@
             data(){
                 return{
                     selectData:[{key: 'a', value: 'a'}],
+                    listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
+                }
+            },
+        }
+    </script> 
+</template>
+```
+:::
+
+:::demo
+```html
+<template>
+    <p>{{ selectData }}</p>
+    <CCheckboxGroup v-model="selectData"
+                    :list-data="listData"
+                    type="button"
+                    :normal-style="{background: '#fff', color: '#333'}"
+                    :active-style="{background: 'green'}"
+    />   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectData:[{key: 'a', value: 'a', checked: true}],
                     listData: [{key: 'a', value: 'a'}, {key: 'b', value: 'b'}, {key: 'c', value: 'c'}]
                 }
             },
@@ -439,3 +481,67 @@
 ```
 :::
 
+### 插槽模式
+---
+
+:::demo
+```html
+<template>
+    <p>{{ selectedData }}</p>
+    <CCheckboxGroup>
+         <CCheckbox
+           value="a"
+           v-model="selectedData"
+         />
+         <CCheckbox
+           value="b"
+           v-model="selectedData"
+         />
+         <CCheckbox
+           value="c"
+           v-model="selectedData"
+         />
+    </CCheckboxGroup>   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectedData:[],
+                }
+            },
+        }
+    </script> 
+</template>
+```
+:::
+
+:::demo
+```html
+<template>
+    <p>{{ selectedData }}</p>
+    <CCheckboxGroup>
+         <CCheckbox
+           :value="{key: 'a', value: 'a', checked: true}"
+           v-model="selectedData"
+         />
+         <CCheckbox
+           :value="{key: 'b', value: 'b'}"
+           v-model="selectedData"
+         />
+         <CCheckbox
+           :value="{key: 'c', value: 'c'}"
+           v-model="selectedData"
+         />
+    </CCheckboxGroup>   
+    <script>
+        export default {
+            data(){
+                return{
+                    selectedData:[],
+                }
+            },
+        }
+    </script> 
+</template>
+```
+:::
