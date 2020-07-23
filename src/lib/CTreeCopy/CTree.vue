@@ -1,9 +1,13 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
+
     export default {
         name: 'CTree',
-        function: true,
+        model: {
+            props: 'value',
+            event: 'change'
+        },
         props: {
             listData: {
                 type: Array,
@@ -89,10 +93,6 @@
                 }
             }
         },
-        model: {
-            props: 'value',
-            event: 'change'
-        },
         data() {
             return {
                 copyListData: {},
@@ -111,17 +111,12 @@
             this.markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
             this.rfKey = this.reflectKey['key'];
-            this.rfValue = this.reflectKey['key'];
-            this.$emit('change', _.cloneDeep(this.$attrs.value).map(item=>({
-                ...item,
-                checked: true
-            })))
-            this.setCheckedParentsNodeValue()
+            this.rfValue = this.reflectKey['value'];
         },
         methods: {
             // 创建关联id
-            createdId(index) {
-                return this._c_tree_parent_id ? this._c_tree_parent_id + '-' + index : index + ''
+            createdId(listDataIndex) {
+                return this._c_tree_parent_id ? this._c_tree_parent_id + '-' + listDataIndex : listDataIndex + ''
             },
             // 创建展开图标
             createIconMark(h, data) {
@@ -168,8 +163,8 @@
                 if (!this.lineStartLv) {
                     return []
                 }
-                return new Array((this.lineStartLv) * 2).fill(1).map((item, index, arr) => {
-                    if (!index) {
+                return new Array((this.lineStartLv) * 2).fill(1).map((item, lineIndex, arr) => {
+                    if (!lineIndex) {
                         // 竖线
                         return h('span',
                             {
@@ -183,7 +178,7 @@
                             },
                             [h('span', [])]
                         )
-                    } else if (index === arr.length - 1) {
+                    } else if (lineIndex === arr.length - 1) {
                         // 水平线
                         return h('span',
                             {
@@ -198,7 +193,7 @@
                             [h('span')]
                         )
                     } else {
-                        if (index % 2) {
+                        if (lineIndex % 2) {
                             // 父元素水平线
                             return h('span',
                                 {
@@ -212,7 +207,7 @@
                                     }
                                 }
                             )
-                        } else if (index >= this.lineStartLv) {
+                        } else if (lineIndex >= this.lineStartLv) {
                             // 子元素竖线
                             return h('span',
                                 {
@@ -253,21 +248,21 @@
             // 创建标题
             createTitle(h, data) {
                 const content = data[this.rfKey] || ''
-                const index = this.searchStr ? content.indexOf(this.searchStr) : -1
+                const findIndex = this.searchStr ? content.indexOf(this.searchStr) : -1
                 const childrenVnode = []
-                if (index > -1) {
+                if (findIndex > -1) {
                     childrenVnode.push(
                         h('span', {
                                 style: {
                                     color: this.markColor,
                                 }
                             },
-                            [content.slice(0, index + this.searchStr.length)]
+                            [content.slice(0, findIndex + this.searchStr.length)]
                         )
                     )
                     childrenVnode.push(
                         h('span',
-                            [content.slice(index + this.searchStr.length)]
+                            [content.slice(findIndex + this.searchStr.length)]
                         )
                     )
                 } else {
@@ -283,8 +278,7 @@
                         )
                     )
                 }
-
-                const findValue = this.$attrs.value.find(item => item[this.rfValue] === data[this.rfValue]) || data
+                const checkboxData = _.cloneDeep(data)
                 return h('span', {
                     style: {
                         marginLeft: this.markIconWidth / 4 + 'px',
@@ -299,33 +293,35 @@
                         [`${this.fixedPrefix}tree-title-wrap`]: true
                     }),
                     on: {
-                        click: () => this.clickHandle(findValue)
+                        click: () => {
+                            this.clickHandle(data)
+                        }
                     },
                 }, [
                     this.multiple && h('CCheckbox',
                         {
                             props: {
-                                value: data,
+                                value: checkboxData,
                                 reflectKey: this.reflectKey,
                                 width: '16',
                                 height: '16',
                                 noText: true,
                             },
                             attrs: {
-                                checkedData: [findValue],
+                                checkedData: [checkboxData],
                             },
                             style: {
                                 marginRight: '8px',
                             },
                             nativeOn: {
                                 click: (e) => {
-                                    this.clickHandle(findValue)
+                                    this.clickHandle(data)
                                     e.stopPropagation()
                                 }
                             }
                         },
                     ),
-                    childrenVnode
+                    childrenVnode,
                 ])
             },
             // 创建文件图标
@@ -407,16 +403,16 @@
                 ]
             },
             // 创建递归树形
-            createTree(h, data, index) {
+            createTree(h, data, listDataIndex) {
                 if (data.expand) {
                     return h('CTree',
                         {
                             attrs: {
-                                ...this.$attrs
+                                value: this.$attrs.value
                             },
                             props: {
                                 lineStartLv: this.lineStartLv + 1,
-                                _c_tree_parent_id: this.createdId(index),
+                                _c_tree_parent_id: this.createdId(listDataIndex),
                                 listData: this.listData,
                                 line: this.line,
                                 reflectKey: this.reflectKey,
@@ -427,7 +423,16 @@
                                 multiple: this.multiple, // 多选
                                 conditionProps: this.conditionProps, // 多选
                             },
-                            on: this.$listeners
+                            on: {
+                                change() {
+                                    this.clickHandle(data)
+                                }
+                            },
+                            nativeOn: {
+                                change(v) {
+                                    v.stopPropagation()
+                                }
+                            }
                         },
                         /* 重新带入插槽 */
                         [
@@ -460,6 +465,7 @@
                                         }
                                     )
                                 }
+
                             }).filter(Boolean)
                         ]
                     )
@@ -476,7 +482,7 @@
                             // 多选模式,点击尾节点向上递归父节点
                             this.$set(data, 'checked', !data.checked);
                             data.checked ? this.setCheckedParentsNodeValue() : this.setUnCheckedParentsNodeValue()
-                            res = !data.checked ? [data]: []
+                            res = [data]
                         } else {
                             // 单选模式下仅改变自身
                             this.$set(data, 'checked', !data.checked);
@@ -499,8 +505,8 @@
                         }
                     }
                 }
-                console.log(res)
-                this.$emit('change',res)
+                this.$set(this.$attrs, 'value', res)
+                this.$emit('input', res)
             },
             // 向上递归父节点
             setCheckedParentsNodeValue() {
@@ -552,7 +558,7 @@
                     this.removedAllChildren(item, res)
                 })
                 this.$set(data, 'checked', false)
-                delete data.halfChecked
+                this.$set(data, 'halfChecked', false)
                 if ((data.children || []).length) {
                     delete data.halfChecked
                 }
@@ -572,6 +578,14 @@
                 deep: true,
                 immediate: true
             },
+            copyListData: {
+                handler() {
+                    // 递归查找checked的选项，加入数组中
+                    // 判断父元素是否是checked 或者  halfChecked, 否则直接跳出
+                },
+                deep: true,
+                immediate: true
+            }
         },
         render(h) {
             const path = this._c_tree_parent_id
@@ -584,7 +598,7 @@
             }
             return h('ul',
                 [
-                    theLvListData.map((item, index) => {
+                    theLvListData.map((item, listDataIndex) => {
                         return h('li',
                             {
                                 class: classNames({
@@ -633,7 +647,7 @@
                                         ),
                                     ]
                                 ),
-                                this.createTree(h, item, index)
+                                this.createTree(h, item, listDataIndex)
                             ]
                         )
                     })
@@ -647,53 +661,67 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
+
     ul {
         padding: 0;
         margin: 0;
         font-size: addPX($df-fs);
+
         li {
             list-style: none;
+
             & > div {
                 display: flex;
                 align-items: center;
             }
         }
     }
+
     .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;
+
             & > div {
                 width: 100%;
                 display: flex;
+
                 & > div {
                     display: flex;
                 }
             }
+
             & > ul {
                 width: 100%;
             }
+
             span {
                 height: 100%;
             }
         }
+
         &-title-wrap {
             cursor: pointer;
             flex: 1;
+
             &:hover {
                 color: $primary;
             }
         }
+
         &-title-wrap.active {
             color: $primary;
             font-weight: bold;
         }
+
         &-mark-icon-box {
             display: inline-block;
         }
+
         &-vertical-line {
             display: inline-block;
             text-align: right;
+
             & > span {
                 display: inline-block;
                 width: addPX($ssm-borderWt);
@@ -701,16 +729,19 @@
                 border-right: addPX($ssm-borderWt) solid #c2c2c2;
             }
         }
+
         &-vertical-half-line {
             & > span {
                 height: 50%;
                 vertical-align: top;
             }
         }
+
         &-align-line {
             text-align: left;
             align-items: center;
             display: flex;
+
             & > span {
                 display: flex;
                 height: 1px;
@@ -720,3 +751,4 @@
         }
     }
 </style>
+
