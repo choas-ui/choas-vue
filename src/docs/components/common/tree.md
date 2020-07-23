@@ -901,6 +901,7 @@ export default {
                                     key: '橙色',
                                     value: '0-1-1',
                                     node: 1,
+                                    expand: true,
                                     children: [
                                          {
                                             key: '橙红',

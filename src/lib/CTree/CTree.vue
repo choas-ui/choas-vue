@@ -36,7 +36,7 @@
             prefix: {
                 type: String,
                 default() {
-                    return ''
+                    return '0'
                 }
             },
             // 内部标线层级
@@ -86,7 +86,7 @@
             _c_tree_parent_id: {
                 type: String,
                 default() {
-                    return ''
+                    return '0'
                 }
             }
         },
@@ -101,17 +101,25 @@
                 fixedPrefix: '',
                 markIconWidth: 18,
                 markIconHeight: 18,
+                rfKey: '',
+                rfValue: '',
             }
         },
         mounted() {
-            this.fixedPrefix = this.prefix ? `${this.prefix}-` : ''
+            this.fixedPrefix = this.prefix ? `${this.prefix}-` : '';
             this.markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
-                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18;
             this.markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
-                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
+            this.rfKey = this.reflectKey['key'];
+            this.rfValue = this.reflectKey['key'];
         },
         methods: {
-            // 展开图标
+            // 创建关联id
+            createdId(index) {
+                return this._c_tree_parent_id + '-' + index
+            },
+            // 创建展开图标
             createIconMark(h, data) {
                 if (!(data.children || []).length) {
                     return null
@@ -151,84 +159,84 @@
                     }
                 })
             },
-            // 树形连线
-            createLine: function (h) {
-                if (!this.lineStartLv) {
-                    return []
-                }
-                const eleArr = []
-                const countArr = new Array((this.lineStartLv) * 2).fill(1)
-                for (let i = 0; i < countArr.length; i++) {
-                    if (!i) {
-                        let ele = h('span',
-                            {
-                                class: classNames({
-                                    [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
-                                    [`${this.fixedPrefix}tree-vertical-line`]: this.line
-                                }),
-                                style: {
-                                    width: this.markIconWidth / 2 + 'px',
-                                }
-                            },
-                            [h('span')]
-                        )
-                        eleArr.push(ele)
-                    } else if (i === countArr.length - 1) {
-                        eleArr.push(h('span',
-                            {
-                                class: classNames({
-                                    [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
-                                    [`${this.fixedPrefix}tree-align-line`]: this.line
-                                }),
-                                style: {
-                                    width: (this.markIconWidth / 2) + this.markIconWidth + 'px',
-                                }
-                            },
-                            [h('span')]
-                        ))
-                    } else {
-                        if (i % 2) {
-                            eleArr.push(h('span',
-                                {
-                                    class: classNames({
-                                        [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
-                                        [`${this.fixedPrefix}tree-align-line`]: this.line
-                                    }),
-                                    style: {
-                                        // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
-                                        width: (this.markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
-                                    }
-                                }
-                            ))
-                        } else if (i >= this.lineStartLv) {
-                            let ele = h('span',
-                                {
-                                    class: classNames({
-                                        [`${this.fixedPrefix}tree-vertical-half-line`]: true,
-                                        [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
-                                        [`${this.fixedPrefix}tree-vertical-line`]: this.line
-                                    }),
-                                    style: {
-                                        width: '1px',
-                                    }
-                                },
-                                [h('span')]
-                            )
-                            eleArr.push(ele)
-                        }
-                    }
-
-                }
-                return eleArr
+            // 创建树形连线
+            createLine: function () {
+                return [1]
+                // if (!this.lineStartLv) {
+                //     return []
+                // }
+                // const eleArr = []
+                //
+                // const countArr = new Array((this.lineStartLv) * 2).fill(1)
+                // for (let i = 0; i < countArr.length; i++) {
+                //     if (!i) {
+                //         let ele = h('span',
+                //             {
+                //                 class: classNames({
+                //                     [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
+                //                     [`${this.fixedPrefix}tree-vertical-line`]: this.line
+                //                 }),
+                //                 style: {
+                //                     width: this.markIconWidth / 2 + 'px',
+                //                 }
+                //             },
+                //             [h('span',[]), this.markIconWidth]
+                //         )
+                //         eleArr.push(ele)
+                //     } else if (i === countArr.length - 1) {
+                //         eleArr.push(h('span',
+                //             {
+                //                 class: classNames({
+                //                     [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
+                //                     [`${this.fixedPrefix}tree-align-line`]: this.line
+                //                 }),
+                //                 style: {
+                //                     width: (this.markIconWidth / 2) + this.markIconWidth + 'px',
+                //                 }
+                //             },
+                //             [h('span')]
+                //         ))
+                //     } else {
+                //         if (i % 2) {
+                //             eleArr.push(h('span',
+                //                 {
+                //                     class: classNames({
+                //                         [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
+                //                         [`${this.fixedPrefix}tree-align-line`]: this.line
+                //                     }),
+                //                     style: {
+                //                         // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
+                //                         width: (this.markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
+                //                     }
+                //                 }
+                //             ))
+                //         } else if (i >= this.lineStartLv) {
+                //             let ele = h('span',
+                //                 {
+                //                     class: classNames({
+                //                         [`${this.fixedPrefix}tree-vertical-half-line`]: true,
+                //                         [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
+                //                         [`${this.fixedPrefix}tree-vertical-line`]: this.line
+                //                     }),
+                //                     style: {
+                //                         width: '1px',
+                //                     }
+                //                 },
+                //                 [h('span')]
+                //             )
+                //             eleArr.push(ele)
+                //         }
+                //     }
+                //
+                // }
+                // return eleArr
             },
-            // 文件图标
+            // 创建文件图标
             createFileIcon(h) {
                 if (this.$slots['file-icon']) {
-                    return h(
-                        'span',
+                    return h('span',
                         {
                             slot: 'file-icon',
-                            attrs: {},
                             style: {
                                 margin: `0 ${this.fileIconFixMargin}px`
                             }
@@ -239,15 +247,12 @@
                 return h('CIcon', {
                     props: {
                         'icon-name': "choas-file-icon",
-                    },
-                    attrs: {}
+                    }
                 })
             },
-            // 标题
+            // 创建标题
             createTitle(h, data) {
-                const rfKey = this.reflectKey['key']
-                const rfValue = this.reflectKey['key']
-                const content = data[rfKey] || ''
+                const content = data[this.rfKey] || ''
                 const index = this.searchStr ? content.indexOf(this.searchStr) : -1
                 const childrenVnode = []
                 if (index > -1) {
@@ -257,17 +262,12 @@
                                     color: this.markColor,
                                 }
                             },
-                            [
-                                content.slice(0, index + this.searchStr.length)
-                            ]
+                            [content.slice(0, index + this.searchStr.length)]
                         )
                     )
                     childrenVnode.push(
-                        h(
-                            'span',
-                            [
-                                content.slice(index + this.searchStr.length,)
-                            ]
+                        h('span',
+                            [content.slice(index + this.searchStr.length)]
                         )
                     )
                 } else {
@@ -294,7 +294,7 @@
                         title: content,
                     },
                     class: classNames({
-                        'active': (this.$attrs.value || []).findIndex(item => item[rfValue] === data[rfValue]) > -1,
+                        'active': (this.$attrs.value || []).findIndex(item => item[this.rfValue] === data[this.rfValue]) > -1,
                         [`${this.fixedPrefix}tree-title-wrap`]: true
                     }),
                     on: {
@@ -327,7 +327,7 @@
                     childrenVnode
                 ])
             },
-            // 文件图标
+            // 创建文件图标
             createControllersIcon(h, data) {
                 if (!this.controllers && !this.$slots['controllers']) {
                     return null
@@ -405,7 +405,7 @@
                     )
                 ]
             },
-            // 递归树形图标
+            // 创建递归树形
             createTree(h, data, index) {
                 if (data.expand) {
                     return h('CTree',
@@ -416,7 +416,7 @@
                             props: {
                                 lineStartLv: this.lineStartLv + 1,
                                 _c_tree_parent_id: this.createdId(index),
-                                listData: data.children,
+                                listData: this.listData,
                                 line: this.line,
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
@@ -436,8 +436,7 @@
                                     return this.$slots[key].map(item => {
                                         const {tag, listeners = {}, propsData} = item.componentOptions || {}
                                         if (tag)
-                                            return h(
-                                                tag,
+                                            return h(tag,
                                                 {
                                                     props: {
                                                         ...propsData,
@@ -451,8 +450,7 @@
                                     }).filter(Boolean)
                                 }
                                 if (this.$slots[key][0].componentOptions) {
-                                    return h(
-                                        tag,
+                                    return h(tag,
                                         {
                                             props: {
                                                 ...this.$slots[key][0].componentOptions.propsData
@@ -468,6 +466,113 @@
                 }
                 return null
             },
+            // 点击关联元素
+            clickHandle(data) {
+                let res = []
+                if (!data.disabled) {
+                    // if (this.multiple) {
+                    //     // 多选
+                    //     if (!data[this.conditionProps]) {
+                    //         // 点击末端节点 点击末端结点,向上遍历父节点，父节点添加状态值。
+                    //         const {value} = this.$attrs
+                    //         // console.log(data._c_tree_self_id)
+                    //         const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
+                    //         if (index > -1) {
+                    //             // 移除自身选取状态
+                    //             this.$set(data, 'checked', false)
+                    //             this.$set(data, 'halfChecked', false)
+                    //             // 向下移除所有子元素选取状态
+                    //             this.removeAllChildrenStatusValue(data)
+                    //             // 向上修改父元素
+                    //             value.splice(index, 1)
+                    //         } else {
+                    //             this.$set(data, 'checked', true)
+                    //             // 向下修改子元素
+                    //             // 向上修改父元素
+                    //             const selectData = _.cloneDeep(data)
+                    //             delete selectData.children
+                    //             delete selectData._c_tree_self_id
+                    //             value.push(selectData)
+                    //         }
+                    //         this.$emit('change', value)
+                    //     } else {
+                    //         // 点击非末端节点，父节点。双向遍历。
+                    //         // 获取所有子节点
+                    //         const flatObj = this.getAllChildren(data, [])
+                    //         let copyValue = _.cloneDeep(this.$attrs.value || [])
+                    //         console.log(this.$attrs.value)
+                    //         if (flatObj.every(item => copyValue.findIndex(v => v[rfValue] === item[rfValue]) > -1)) {
+                    //             data.checked = false
+                    //             copyValue = copyValue.filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                    //         } else {
+                    //             data.checked = true
+                    //             // bug  需要递归的修改子元素的属性
+                    //             copyValue = copyValue.filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                    //             copyValue = copyValue.concat(flatObj)
+                    //         }
+                    //         copyValue = copyValue.map(item => {
+                    //             delete item.children
+                    //             delete item._c_tree_self_id
+                    //             return item
+                    //         })
+                    //         this.$emit('change', copyValue)
+                    //     }
+                    // } else {
+                    //     // 单选，选择所有非收束节点
+                    //     if (!data[this.conditionProps]) {
+                    //         // 点击非收束子节点
+                    //         if (data.checked) {
+                    //             this.$set(data, 'checked', false)
+                    //             this.value = []
+                    //             this.$emit('change', this.value)
+                    //         } else {
+                    //             this.$set(data, 'checked', true)
+                    //             const selectData = _.cloneDeep(data)
+                    //             delete selectData.children
+                    //             delete selectData._c_tree_self_id
+                    //             this.value = [selectData]
+                    //             this.$emit('change', this.value)
+                    //         }
+                    //     }
+                    // }
+                    // 点击尾端结点
+                    if(!data[this.conditionProps]){
+                        if(this.multiple){
+                            // 多选模式下向上递归父节点
+                            console.log(this.listData)
+                        }else{
+                            // 单选模式下仅改变自身
+                            if(!data.checked){
+                                this.$set(data, 'checked', true)
+                                res = [data]
+                            }else{
+                                this.$set(data, 'checked', false)
+                                res = []
+                            }
+                        }
+                    }else{
+                        if(this.multiple){
+                            if(!data.checked){
+                                this.$set(data, 'checked', true);
+                                (data.children || []).forEach(item=>{
+                                    this.$set(item, 'checked', true)
+                                });
+                            }else{
+                                this.$set(data, 'checked', false);
+                                (data.children || []).forEach(item=>{
+                                    this.$set(item, 'checked', false)
+                                });
+                            }
+                        }
+                    }
+                }
+                this.$emit('change', _.cloneDeep(res).map(item => {
+                    delete item.children;
+                    delete item._c_tree_self_id;
+                    return item
+                }))
+            },
+            // 移除点击元素关联的
             removeAllChildrenStatusValue(data) {
                 (data.children || []).forEach(item => {
                     this.$set(item, 'checked', false)
@@ -476,77 +581,6 @@
                         this.removeAllChildrenStatusValue(item)
                     }
                 })
-            },
-            clickHandle(data) {
-                const rfValue = this.reflectKey['key']
-                if (!data.disabled) {
-                    if (this.multiple) {
-                        // 多选
-                        if (!data[this.conditionProps]) {
-                            // 点击末端节点 点击末端结点,向上遍历父节点，父节点添加状态值。
-                            const {value} = this.$attrs
-                            // console.log(data._c_tree_self_id)
-                            const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
-                            if (index > -1) {
-                                // 移除自身选取状态
-                                this.$set(data, 'checked', false)
-                                this.$set(data, 'halfChecked', false)
-                                // 向下移除所有子元素选取状态
-                                this.removeAllChildrenStatusValue(data)
-                                // 向上修改父元素
-                                value.splice(index, 1)
-                            } else {
-                                this.$set(data, 'checked', true)
-                                // 向下修改子元素
-                                // 向上修改父元素
-                                const selectData = _.cloneDeep(data)
-                                delete selectData.children
-                                delete selectData._c_tree_self_id
-                                value.push(selectData)
-                            }
-                            this.$emit('change', value)
-                        } else {
-                            // 点击非末端节点，父节点。双向遍历。
-                            // 获取所有子节点
-                            const flatObj = this.getAllChildren(data, [])
-                            let copyValue = _.cloneDeep(this.$attrs.value || [])
-                            if (flatObj.every(item => copyValue.findIndex(v => v[rfValue] === item[rfValue]) > -1)) {
-                                data.checked = false
-                                copyValue = copyValue.filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                            } else {
-                                data.checked = true
-                                // bug  需要递归的修改子元素的属性
-
-                                copyValue = copyValue.filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                                console.log(flatObj)
-                                copyValue = copyValue.concat(flatObj)
-                            }
-                            copyValue = copyValue.map(item => {
-                                delete item.children
-                                delete item._c_tree_self_id
-                                return item
-                            })
-                            this.$emit('change', copyValue)
-                        }
-                    } else {
-                        // 单选，选择所有非收束节点
-                        if (!data[this.conditionProps]) {
-                            // 点击非收束子节点
-                            if (data.checked) {
-                                this.$set(data, 'checked', false)
-                                this.value = []
-                                this.$emit('change', this.value)
-                            } else {
-                                this.$set(data, 'checked', true)
-                                const selectData = _.cloneDeep(data)
-                                delete selectData.children
-                                delete selectData._c_tree_self_id
-                                this.value = [selectData]
-                                this.$emit('change', this.value)
-                            }
-                        }
-                    }
-                }
             },
             getAllChildren(data, res) {
                 (data.children || []).forEach(item => {
@@ -560,15 +594,13 @@
                     res.push(data)
                 }
                 return res
-            },
-            createdId(index) {
-                return this._c_tree_parent_id === '' ? index + this._c_tree_parent_id : this._c_tree_parent_id + '-' + index
-            },
+            }
         },
         watch: {
             listData: {
                 handler(v) {
                     if (!_.isEqual(v, this.copyListData)) {
+                        console.log(v)
                         this.$set(this, 'copyListData', _.cloneDeep(v).map((item, index) => {
                             item._c_tree_self_id = this.createdId(index)
                             return item
@@ -579,7 +611,7 @@
                 immediate: true
             },
             copyListData: {
-                handler(v) {
+                handler() {
                     // 递归查找checked的选项，加入数组中
                     // 判断父元素是否是checked 或者  halfChecked, 否则直接跳出
                 },
@@ -588,26 +620,27 @@
             }
         },
         render(h) {
-            if (!this.copyListData.length) {
+            const path = this._c_tree_parent_id.split('-').join('children')
+            let theLvListData = this.copyListData || []
+            if(path){
+                theLvListData = _.get(this.copyListData, this._c_tree_parent_id.split('-').join('.children.') +'.children' , [])
+            }
+            if (!theLvListData.length) {
                 return null
             }
-            return h(
-                'ul',
+            return h('ul',
                 [
-                    (this.copyListData).map((item, index) => {
-                        return h(
-                            'li',
+                    theLvListData.map((item, index) => {
+                        return h('li',
                             {
                                 class: classNames({
                                     [`${this.fixedPrefix}tree-li`]: true
                                 }),
                             },
                             [
-                                h(
-                                    'div',
+                                h('div',
                                     [
-                                        h(
-                                            'div',
+                                        h('div',
                                             {
                                                 style: {
                                                     height: this.markIconHeight * 1.5 + 'px'
@@ -615,8 +648,7 @@
                                             },
                                             this.createLine(h)
                                         ),
-                                        h(
-                                            'div',
+                                        h('div',
                                             {
                                                 style: {
                                                     display: 'flex',
@@ -624,8 +656,7 @@
                                                 }
                                             },
                                             [
-                                                h(
-                                                    'div',
+                                                h('div',
                                                     {
                                                         style: {
                                                             display: 'flex',
@@ -639,8 +670,7 @@
                                                         this.createTitle(h, item),
                                                     ]
                                                 ),
-                                                h(
-                                                    'span',
+                                                h('span',
                                                     [
                                                         this.createControllersIcon(h, item),
                                                     ]
