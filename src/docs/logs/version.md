@@ -3,13 +3,15 @@
 
 :::tip 版本更新
   <p class="logs-version-item">
-    <span>2020-07-21</span>
+    <span>2020-07-23</span>
     <b>v 0.1.51</b>
   </p>
   
   <ol reversed>
+     <li>新增<b>Tree</b>组件中的多选框。</li>
      <li>新增<b>RadioGroup</b>组件 。</li>
      <li>新增<b>Radio</b>组件 。</li>
+     <li>修改tree选取逻辑。</li>
      <li>修复checkbox不显示激活样式bug。</li>
   </ol>
 :::
