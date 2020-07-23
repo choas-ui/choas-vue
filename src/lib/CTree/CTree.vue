@@ -98,32 +98,42 @@
             return {
                 copyListData: {},
                 copySelectedData: {},
+                fixedPrefix: '',
+                markIconWidth: 18,
+                markIconHeight: 18,
             }
+        },
+        mounted() {
+            this.fixedPrefix = this.prefix ? `${this.prefix}-` : ''
+            this.markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
+            this.markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
+                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
         },
         methods: {
             // 展开图标
             createIconMark(h, data) {
-                // TODO: 重新整理 tree的逻辑 包括 InputTreeModal上的添加逻辑  双向绑定一个已选的节点列表
-                const prefix = this.prefix ? `${this.prefix}-` : ''
                 if (!(data.children || []).length) {
                     return null
                 }
                 const className = classNames({
-                    [`${prefix}tree-mark-icon`]: true
-                }).split(' ')
+                    [`${this.fixedPrefix}tree-mark-icon`]: true
+                })
                 if (this.$slots['mark-icon']) {
                     return h('span', {
-                        class: className,
-                        style: {
-                            transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : '',
-                            marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
-                        },
-                        on: {
-                            click: () => {
-                                this.$set(data, 'expand', !data.expand)
+                            class: className,
+                            style: {
+                                transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : '',
+                                marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
+                            },
+                            on: {
+                                click: () => {
+                                    this.$set(data, 'expand', !data.expand)
+                                }
                             }
-                        }
-                    }, this.$slots['mark-icon'])
+                        },
+                        this.$slots['mark-icon']
+                    )
                 }
                 return h('CIcon', {
                     props: {
@@ -142,11 +152,7 @@
                 })
             },
             // 树形连线
-            createLine(h) {
-                // TODO: 重新整理 tree的逻辑 包括 InputTreeModal上的添加逻辑  双向绑定一个已选的节点列表
-                const markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
-                    _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
-                const prefix = this.prefix ? `${this.prefix}-` : ''
+            createLine: function (h) {
                 if (!this.lineStartLv) {
                     return []
                 }
@@ -154,96 +160,59 @@
                 const countArr = new Array((this.lineStartLv) * 2).fill(1)
                 for (let i = 0; i < countArr.length; i++) {
                     if (!i) {
-                        let ele = h(
-                            'span',
+                        let ele = h('span',
                             {
-                                class: [
-                                    ...classNames(
-                                        {
-                                            [prefix + "tree-vertical-line-hidden"]: !this.line
-                                        },
-                                        {
-                                            [prefix + "tree-vertical-line"]: this.line
-                                        }
-                                    ).split(' ')
-                                ],
+                                class: classNames({
+                                    [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
+                                    [`${this.fixedPrefix}tree-vertical-line`]: this.line
+                                }),
                                 style: {
-                                    width: markIconWidth / 2 + 'px',
+                                    width: this.markIconWidth / 2 + 'px',
                                 }
                             },
-                            [
-                                h('span'),
-                            ]
+                            [h('span')]
                         )
                         eleArr.push(ele)
                     } else if (i === countArr.length - 1) {
-                        eleArr.push(h(
-                            'span',
+                        eleArr.push(h('span',
                             {
-                                class: [
-                                    ...classNames(
-                                        {
-                                            [prefix + "tree-align-line-hidden"]: !this.line
-                                        },
-                                        {
-                                            [prefix + "tree-align-line"]: this.line
-                                        }
-                                    ).split(' ')
-                                ],
+                                class: classNames({
+                                    [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
+                                    [`${this.fixedPrefix}tree-align-line`]: this.line
+                                }),
                                 style: {
-                                    width: (markIconWidth / 2) + markIconWidth + 'px',
+                                    width: (this.markIconWidth / 2) + this.markIconWidth + 'px',
                                 }
                             },
-                            [
-                                h('span')
-                            ]
+                            [h('span')]
                         ))
                     } else {
                         if (i % 2) {
-                            eleArr.push(h(
-                                'span',
+                            eleArr.push(h('span',
                                 {
-                                    class: [
-                                        ...classNames(
-                                            {
-                                                [prefix + "tree-align-line-hidden"]: !this.line
-                                            },
-                                            {
-                                                [prefix + "tree-align-line"]: this.line
-                                            }
-                                        ).split(' ')
-                                    ],
+                                    class: classNames({
+                                        [`${this.fixedPrefix}tree-align-line-hidden`]: !this.line,
+                                        [`${this.fixedPrefix}tree-align-line`]: this.line
+                                    }),
                                     style: {
                                         // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
-                                        width: (markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
+                                        width: (this.markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
                                     }
-                                },
-                                []
+                                }
                             ))
                         } else if (i >= this.lineStartLv) {
-                            let ele = h(
-                                'span',
+                            let ele = h('span',
                                 {
-                                    class: [
-                                        ...classNames(
-                                            {
-                                                [prefix + "tree-vertical-half-line"]: true
-                                            },
-                                            {
-                                                [prefix + "tree-vertical-line-hidden"]: !this.line
-                                            },
-                                            {
-                                                [prefix + "tree-vertical-line"]: this.line
-                                            }
-                                        ).split(' ')
-                                    ],
+                                    class: classNames({
+                                        [`${this.fixedPrefix}tree-vertical-half-line`]: true,
+                                        [`${this.fixedPrefix}tree-vertical-line-hidden`]: !this.line,
+                                        [`${this.fixedPrefix}tree-vertical-line`]: this.line
+                                    }),
                                     style: {
                                         width: '1px',
                                     }
                                 },
-                                [
-                                    h('span')
-                                ]
+                                [h('span')]
                             )
                             eleArr.push(ele)
                         }
@@ -275,10 +244,7 @@
                 })
             },
             // 标题
-            createTitle(h, data){
-                const markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
-                    _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18
-                const prefix = this.prefix ? `${this.prefix}-` : ''
+            createTitle(h, data) {
                 const rfKey = this.reflectKey['key']
                 const rfValue = this.reflectKey['key']
                 const content = data[rfKey] || ''
@@ -287,17 +253,18 @@
                 if (index > -1) {
                     childrenVnode.push(
                         h('span', {
-                            style: {
-                                color: this.markColor,
-                            }
-                        }, [
-                            content.slice(0, index + this.searchStr.length)
-                        ])
+                                style: {
+                                    color: this.markColor,
+                                }
+                            },
+                            [
+                                content.slice(0, index + this.searchStr.length)
+                            ]
+                        )
                     )
                     childrenVnode.push(
                         h(
                             'span',
-                            {},
                             [
                                 content.slice(index + this.searchStr.length,)
                             ]
@@ -305,46 +272,36 @@
                     )
                 } else {
                     childrenVnode.push(
-                        h(
-                            'span',
+                        h('span',
                             {
                                 style: {
                                     display: 'inline-flex',
                                     alignItem: 'center'
                                 }
                             },
-                            [
-                                content
-                            ]
+                            [content]
                         )
                     )
                 }
                 const checkboxData = _.cloneDeep(data)
                 return h('span', {
                     style: {
-                        marginLeft: markIconWidth / 4 + 'px',
+                        marginLeft: this.markIconWidth / 4 + 'px',
                         display: 'inline-flex',
                         alignItems: 'center'
                     },
                     attrs: {
                         title: content,
                     },
-                    class: [
-                        ...classNames(
-                            {
-                                'active': (this.$attrs.value || []).findIndex(item => item[rfValue] === data[rfValue]) > -1
-                            },
-                            {
-                                [prefix + 'tree-title-wrap']: true
-                            }
-                        ).split(' ')
-                    ],
+                    class: classNames({
+                        'active': (this.$attrs.value || []).findIndex(item => item[rfValue] === data[rfValue]) > -1,
+                        [`${this.fixedPrefix}tree-title-wrap`]: true
+                    }),
                     on: {
                         click: () => this.clickHandle(data)
                     },
                 }, [
-                    this.multiple && h(
-                        'CCheckbox',
+                    this.multiple && h('CCheckbox',
                         {
                             props: {
                                 value: checkboxData,
@@ -371,10 +328,11 @@
                 ])
             },
             // 文件图标
-            createControllersIcon(h, data){
+            createControllersIcon(h, data) {
                 if (!this.controllers && !this.$slots['controllers']) {
                     return null
                 }
+                // 用户插槽
                 if (this.$slots['controllers']) {
                     return this.$slots['controllers'].map((item) => {
                         const {tag, listeners = {}, propsData} = item.componentOptions || {}
@@ -384,27 +342,26 @@
                                 return listeners[key].call(this, data, e)
                             }
                         })
-                        if (tag)
-                            return h(
-                                tag,
-                                {
-                                    props: {
-                                        ...propsData
-                                    },
-                                    ...item.data,
-                                    slot: 'controllers',
-                                    on: _listeners
-                                }
-                            )
-                        return null
+                        if (!tag) {
+                            return null
+                        }
+                        return h(tag,
+                            {
+                                props: {
+                                    ...propsData
+                                },
+                                ...item.data,
+                                slot: 'controllers',
+                                on: _listeners
+                            }
+                        )
                     }).filter(Boolean)
                 }
                 if (!this.controllers) {
                     return null
                 }
                 return [
-                    h(
-                        'CIcon',
+                    h('CIcon',
                         {
                             props: {
                                 color: '#333',
@@ -418,8 +375,7 @@
                             }
                         },
                     ),
-                    h(
-                        'CIcon',
+                    h('CIcon',
                         {
                             props: {
                                 color: '#333',
@@ -433,8 +389,7 @@
                             }
                         }
                     ),
-                    h(
-                        'CIcon',
+                    h('CIcon',
                         {
                             props: {
                                 color: '#333',
@@ -451,7 +406,7 @@
                 ]
             },
             // 递归树形图标
-            createTree(h ,data, index){
+            createTree(h, data, index) {
                 if (data.expand) {
                     return h('CTree',
                         {
@@ -513,8 +468,6 @@
                 }
                 return null
             },
-
-
             removeAllChildrenStatusValue(data) {
                 (data.children || []).forEach(item => {
                     this.$set(item, 'checked', false)
@@ -526,7 +479,6 @@
             },
             clickHandle(data) {
                 const rfValue = this.reflectKey['key']
-                // TODO: 控制数据
                 if (!data.disabled) {
                     if (this.multiple) {
                         // 多选
@@ -636,10 +588,6 @@
             }
         },
         render(h) {
-            const markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
-                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18
-            const prefix = this.prefix ? `${this.prefix}-` : ''
-
             if (!this.copyListData.length) {
                 return null
             }
@@ -650,24 +598,19 @@
                         return h(
                             'li',
                             {
-                                class: [
-                                    ...classNames({
-                                        [prefix + 'tree-li']: true
-                                    }).split(' ')
-                                ],
+                                class: classNames({
+                                    [`${this.fixedPrefix}tree-li`]: true
+                                }),
                             },
                             [
                                 h(
                                     'div',
-                                    {
-                                        class: []
-                                    },
                                     [
                                         h(
                                             'div',
                                             {
                                                 style: {
-                                                    height: markIconHeight * 1.5 + 'px'
+                                                    height: this.markIconHeight * 1.5 + 'px'
                                                 }
                                             },
                                             this.createLine(h)
@@ -698,7 +641,6 @@
                                                 ),
                                                 h(
                                                     'span',
-                                                    {},
                                                     [
                                                         this.createControllersIcon(h, item),
                                                     ]
@@ -716,7 +658,6 @@
         }
     }
 </script>
-
 <style scoped lang="scss">
     @import "../scss/normal-bg";
     @import "../scss/size";
