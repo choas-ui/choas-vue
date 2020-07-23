@@ -1,7 +1,6 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
-
     export default {
         name: 'CTree',
         function: true,
@@ -82,6 +81,12 @@
                 default() {
                     return 'node'
                 }
+            },
+            _c_tree_parent_id:{
+                type: String,
+                default() {
+                    return ''
+                }
             }
         },
         model: {
@@ -94,15 +99,121 @@
                 copySelectedData: {},
             }
         },
-        mounted() {
-            this.copyListData = _.cloneDeep(this.listData)
+        methods:{
+            removeAllChildrenStatusValue(data){
+                (data.children || []).forEach(item=>{
+                    this.$set(item, 'checked', false)
+                    this.$set(item, 'halfChecked', false)
+                    if((item.children || []).length){
+                        this.removeAllChildrenStatusValue(item)
+                    }
+                })
+            },
+          clickHandle(data){
+              const rfValue = this.reflectKey['key']
+              // TODO: 控制数据
+              // 单选，选择所有非收束节点
+              if(!data.disabled){
+                  if(this.multiple){
+                  // 多选
+                      if(!data[this.conditionProps]){
+                      // 点击末端节点 点击末端结点,向上遍历父节点，父节点添加状态值。
+                          const {value} = this.$attrs
+                          // console.log(data._c_tree_self_id)
+                          const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
+                          if (index > -1) {
+                              // 移除自身选取状态
+                              this.$set(data, 'checked', false)
+                              this.$set(data, 'halfChecked', false)
+                              // 向下移除所有子元素选取状态
+                              this.removeAllChildrenStatusValue(data)
+                              // 向上修改父元素
+                              value.splice(index, 1)
+                          } else {
+                              this.$set(data, 'checked', true)
+                              // 向下修改子元素
+                              // 向上修改父元素
+                              const selectData = _.cloneDeep(data)
+                              delete selectData.children
+                              delete selectData._c_tree_self_id
+                              value.push(selectData)
+                          }
+                          this.$emit('change', value)
+                      }else{
+                          // 点击非末端节点，父节点。双向遍历。
+
+                          // 获取所有子节点
+                          const flatObj = this.getAllChildren(data, [])
+                          let copyValue = _.cloneDeep(this.$attrs.value || [])
+                          if (flatObj.every(item =>copyValue.findIndex(v => v[rfValue] === item[rfValue]) > -1)) {
+                              data.checked = false
+                              copyValue = copyValue.filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                          } else {
+                              data.checked = true
+                              copyValue = (copyValue || []).filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
+                              copyValue = (copyValue || []).concat(flatObj)
+                          }
+                          copyValue = copyValue.map(item=>{
+                              delete item.children
+                              delete item._c_tree_self_id
+                              return item
+                          })
+                          this.$emit('change', copyValue)
+                      }
+                  }else{
+                  // 单选
+                      if(!data[this.conditionProps]){
+                      // 点击非收束子节点
+                          if (data.checked) {
+                              this.$set(data, 'checked', false)
+                              this.value = []
+                              this.$emit('change', this.value)
+                          } else {
+                              this.$set(data, 'checked', true)
+                              const selectData = _.cloneDeep(data)
+                              delete selectData.children
+                              delete selectData._c_tree_self_id
+                              this.value = [selectData]
+                              this.$emit('change', this.value)
+                          }
+                      }
+                  }
+              }
+          },
+            getAllChildren(data, res){
+                (data.children || []).forEach(item => {
+                    this.getAllChildren(item, res)
+                })
+                data.checked = true
+                if ((data.children || []).length) {
+                    data.halfChecked = false
+                }
+                if (!data[this.conditionProps]) {
+                    res.push(data)
+                }
+                return res
+            },
+            createdId(index){
+               return  this._c_tree_parent_id===''? index+this._c_tree_parent_id: this._c_tree_parent_id+'-' + index
+            },
         },
         watch: {
             listData: {
                 handler(v) {
                     if (!_.isEqual(v, this.copyListData)) {
-                        this.$set(this, 'copyListData', _.cloneDeep(v))
+                        this.$set(this, 'copyListData', _.cloneDeep(v).map((item, index)=>{
+                            item._c_tree_self_id = this.createdId(index)
+                            return  item
+                        }))
                     }
+                },
+                deep: true,
+                immediate: true
+            },
+            copyListData: {
+                handler(v){
+                    // 递归查找checked的选项，加入数组中
+                    // 判断父元素是否是checked 或者  halfChecked, 否则直接跳出
                 },
                 deep: true,
                 immediate: true
@@ -425,64 +536,10 @@
                         ).split(' ')
                     ],
                     on: {
-                        click: () => {
-                            // TODO: 控制数据
-                            // 单选仅能选根结点
-                            if (!this.multiple && !data.disabled && !data[this.conditionProps]) {
-                                if (data.checked) {
-                                    this.$set(data, 'checked', false)
-                                } else {
-                                    this.$set(data, 'checked', true)
-                                }
-                                this.value = [data]
-                                this.$emit('change', this.value)
-                            }
-                            // 多选, 点击根结点
-                            if (this.multiple && !data.disabled && !data[this.conditionProps]) {
-                                const {value} = this.$attrs
-                                const index = (value || []).findIndex(item => item[rfValue] === data[rfValue])
-                                if (index > -1) {
-                                    this.$set(data, 'checked', false)
-                                    value.splice(index, 1)
-                                } else {
-                                    this.$set(data, 'checked', true)
-                                    value.push(data)
-                                }
-                                this.value = [data]
-                                this.$emit('change', value)
-                            }
-                            // 多选, 点击父节点
-                            if (this.multiple && !data.disabled && data[this.conditionProps]) {
-                                const getAllChildren = (data, res) => {
-                                    (data.children || []).forEach(item => {
-                                        getAllChildren(item, res)
-                                    })
-                                    data.checked = true
-                                    if ((data.children || []).length) {
-                                        data.halfChecked = false
-                                    }
-                                    if (!data[this.conditionProps]) {
-                                        res.push(data)
-                                    }
-                                    return res
-                                }
-                                const flatObj = getAllChildren(data, [])
-                                let {value} = this.$attrs
-                                if (flatObj.every(item => (value || []).findIndex(v => v[rfValue] === item[rfValue]) > -1)) {
-                                    data.checked = false
-                                    value = (value || []).filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                                } else {
-                                    value = (value || []).filter(item => !flatObj.some(ele => ele[rfValue] === item[rfValue]))
-                                    value = (value || []).concat(flatObj)
-                                    data.checked = true
-                                }
-                                this.$emit('change', value)
-                            }
-
-                        }
+                        click: () => this.clickHandle(data)
                     },
                 }, [
-                    h(
+                    this.multiple && h(
                         'CCheckbox',
                         {
                             props: {
@@ -497,6 +554,12 @@
                             },
                             style: {
                                 marginRight: '8px',
+                            },
+                            nativeOn:{
+                                click: (e)=>{
+                                    this.clickHandle(data)
+                                    e.stopPropagation()
+                                }
                             }
                         },
                     ),
@@ -504,12 +567,7 @@
                 ])
             }
             // 递归树形图标
-            const createTree = (data) => {
-                // const obj = Object.keys(this.$props).map(key => {
-                //     return {
-                //         [key]: this.$props[key]
-                //     }
-                // })
+            const createTree = (data, index) => {
                 if (data.expand) {
                     return h('CTree',
                         {
@@ -517,8 +575,8 @@
                                 ...this.$attrs
                             },
                             props: {
-                                // ...obj,
                                 lineStartLv: this.lineStartLv + 1,
+                                _c_tree_parent_id: this.createdId(index),
                                 listData: data.children,
                                 line: this.line,
                                 reflectKey: this.reflectKey,
@@ -577,7 +635,7 @@
             return h(
                 'ul',
                 [
-                    (this.copyListData).map((item) => {
+                    (this.copyListData).map((item, index) => {
                         return h(
                             'li',
                             {
@@ -638,7 +696,7 @@
                                         ),
                                     ]
                                 ),
-                                createTree(item)
+                                createTree(item, index)
                             ]
                         )
                     })

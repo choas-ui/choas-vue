@@ -46,6 +46,7 @@
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
                                 :condition-props="conditionProps"
+                                :controllers="controllers"
                         />
                     </div>
                     <div v-else class="empty-box">
@@ -138,6 +139,9 @@
                 type: Boolean
             },
             isShow: {
+                type: Boolean
+            },
+            controllers: {
                 type: Boolean
             },
             titleImg: {

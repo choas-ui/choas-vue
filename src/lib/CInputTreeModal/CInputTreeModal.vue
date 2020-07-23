@@ -54,6 +54,7 @@
                     :add-tree-node="$listeners.addTreeNode? addTreeNode : null"
                     :reflect-key="reflectKey"
                     :multiple="multiple"
+                    :controllers="controllers"
 
                     :width="width"
                     :height="height"
@@ -138,6 +139,9 @@
                 }
             },
             multiple: {
+                type: Boolean
+            },
+            controllers: {
                 type: Boolean
             },
             buttonTxt: {

@@ -1,7 +1,9 @@
 #### 树形组件
 ---
-  <p>层次分明的可选择控件。</p>
-  <p>conditionProps。</p>
+  <ul>
+    <li>层次分明的可选择控件。</li>
+    <li>单选模式/多选模式，均仅可选非收束节点。</li>
+  </ul>
 
 #### 数据 listData
 ---
@@ -119,7 +121,8 @@
                         },
                     ]
                }
-          ]
+          ],
+          selectedData: [],
       }
     }
   }
@@ -139,7 +142,7 @@
         <p>{{ selectedData }}</p>
         <CTree
             :list-data="listData"
-            v-model="selectData"
+            v-model="selectedData"
         >
         </CTree>
     </template>
@@ -248,7 +251,7 @@ export default {
                     ]
                 }
             ],
-            selectData:[],
+            selectedData:[],
         }
     }
 }
@@ -856,8 +859,71 @@ export default {
 #### 标记切换 active-mark-icon
 ---
 
-#### 多选 rotateSetting
+#### 多选 multiple
 ---
+
+:::demo
+```html
+    <template>
+        <p>{{ selectedData }}</p>
+        <CTree
+            :list-data="listData"
+            v-model="selectedData"
+            multiple
+        />
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    node: 1,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            node: 1,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    node: 1,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectedData:[],
+            searchStr:'',
+        }
+    },
+    methods:{
+        logs(item,event){console.log(item,event)}
+    },
+}
+</script>
+```
+:::
 
 #### 属性列表 props
 ---

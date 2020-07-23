@@ -25,39 +25,39 @@
                 />
             </template>
             <template v-else>
-                        <slot v-if="getDisabled"
-                              name="disabled-icon"
-                        >
-                            <CIcon :style="{
-                                    position: 'absolute',
-                                    top: `-1px`,
-                                    left: `-1px`,
-                                    display: 'inline-block',
-                                    background: `radial-gradient(#888 40%, #aaa 60%)`,
-                                    zIndex: 9
-                                }"
-                                   key="disabled"
-                                   icon-name="choas-close"
-                                   color="#fff"
-                            ></CIcon>
-                        </slot>
-                        <template v-else>
-                            <slot v-if="getHalfChecked"
-                                  name="half-checked-icon"
-                            >
-                                <span :style="{
-                                        position: 'absolute',
-                                        top: `${4/2-1}px`,
-                                        left: `${4/2-1}px`,
-                                        display: 'inline-block',
-                                        width:`${width/1 - 4}px`,
-                                        height:`${height/1 - 4}px`,
-                                        background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
-                                    }"
-                                ></span>
-                            </slot>
-                        </template>
-                    </template>
+                <slot v-if="getDisabled"
+                      name="disabled-icon"
+                >
+                    <CIcon :style="{
+                                   position: 'absolute',
+                                   top: `-1px`,
+                                   left: `-1px`,
+                                   display: 'inline-block',
+                                   background: `radial-gradient(#888 40%, #aaa 60%)`,
+                                   zIndex: 9
+                               }"
+                           key="disabled"
+                           icon-name="choas-close"
+                           color="#fff"
+                    ></CIcon>
+                </slot>
+                <template v-else>
+                    <slot v-if="getHalfChecked"
+                          name="half-checked-icon"
+                    >
+                        <span :style="{
+                                       position: 'absolute',
+                                       top: `${4/2-1}px`,
+                                       left: `${4/2-1}px`,
+                                       display: 'inline-block',
+                                       width:`${width/1 - 4}px`,
+                                       height:`${height/1 - 4}px`,
+                                       background: `radial-gradient(#1890ffee 40%, #1890ffcc 20%, #fff)`
+                                   }"
+                        ></span>
+                    </slot>
+                </template>
+            </template>
         </span>
         <span v-if="!noText"
               class="checkbox-item-title"
@@ -132,7 +132,7 @@
                     return ''
                 }
             },
-            noText:{
+            noText: {
                 type: Boolean
             }
         },
@@ -147,15 +147,15 @@
             }
         },
         mounted() {
-            if(!this.isSimpleModel){
+            if (!this.isSimpleModel) {
                 const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
-                if(index>-1){
-                    if(!this.value.checked){
-                        this.checkedArr.splice(index,1)
+                if (index > -1) {
+                    if (!this.value.checked) {
+                        this.checkedArr.splice(index, 1)
                     }
                 }
-                if(index<0){
-                    if(this.value.checked){
+                if (index < 0) {
+                    if (this.value.checked) {
                         this.checkedArr.push(_.cloneDeep(this.value))
                     }
                 }
@@ -166,21 +166,21 @@
                 if (this.isSimpleModel) {
                     return this.checkedArr.includes(this.value)
                 } else {
-                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
+                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
                 }
             },
             getDisabled() {
                 if (this.isSimpleModel) {
                     return this.disabled
                 } else {
-                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
+                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
                 }
             },
             getHalfChecked() {
                 if (this.isSimpleModel) {
                     return this.halfChecked
                 } else {
-                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).halfChecked
+                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).halfChecked
                 }
             },
             getKey() {
@@ -223,8 +223,8 @@
                 if (index < 0) {
                     this.checkedArr.push(_.cloneDeep(this.value))
                     if (!this.isSimpleModel) {
-                        this.$set(this.checkedArr[this.checkedArr.length-1], 'checked', true)
-                        this.$set(this.checkedArr[this.checkedArr.length-1], 'halfChecked', false)
+                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true)
+                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'halfChecked', false)
                     }
                 }
             }
@@ -239,7 +239,7 @@
             },
             checkedData: {
                 handler(v) {
-                    if(!_.isEqual(v, this.checkedArr)){
+                    if (!_.isEqual(v, this.checkedArr)) {
                         this.$set(this, 'checkedArr', v)
                     }
                 },
@@ -248,7 +248,7 @@
             },
             checkedArr: {
                 handler(v) {
-                    if(!_.isEqual(v, this.checkedData)){
+                    if (!_.isEqual(v, this.checkedData)) {
                         this.$emit('checkedDataChange', v)
                     }
                 },
