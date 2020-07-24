@@ -1,6 +1,7 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
+
     export default {
         name: 'CTree',
         function: true,
@@ -49,7 +50,12 @@
             line: {
                 type: Boolean
             },
+            // 多选模式
             multiple: {
+                type: Boolean
+            },
+            // 显示checkbox
+            checkbox: {
                 type: Boolean
             },
             // 展开图标左间距
@@ -100,8 +106,6 @@
                 fixedPrefix: '',
                 markIconWidth: 18,
                 markIconHeight: 18,
-                rfKey: '',
-                rfValue: '',
             }
         },
         mounted() {
@@ -110,13 +114,6 @@
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18;
             this.markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
-            this.rfKey = this.reflectKey['key'];
-            this.rfValue = this.reflectKey['key'];
-            this.$emit('change', _.cloneDeep(this.$attrs.value).map(item=>({
-                ...item,
-                checked: true
-            })))
-            this.setCheckedParentsNodeValue()
         },
         methods: {
             // 创建关联id
@@ -252,7 +249,7 @@
             },
             // 创建标题
             createTitle(h, data) {
-                const content = data[this.rfKey] || ''
+                const content = data[this.reflectKey['key']] || ''
                 const index = this.searchStr ? content.indexOf(this.searchStr) : -1
                 const childrenVnode = []
                 if (index > -1) {
@@ -283,8 +280,6 @@
                         )
                     )
                 }
-
-                const findValue = this.$attrs.value.find(item => item[this.rfValue] === data[this.rfValue]) || data
                 return h('span', {
                     style: {
                         marginLeft: this.markIconWidth / 4 + 'px',
@@ -295,31 +290,35 @@
                         title: content,
                     },
                     class: classNames({
-                        'active': (this.$attrs.value || []).findIndex(item => item[this.rfValue] === data[this.rfValue]) > -1,
+                        'active': (this.$attrs.value || []).find(item => data[this.reflectKey['value']]&& (item[this.reflectKey['value']] === data[this.reflectKey['value']])),
                         [`${this.fixedPrefix}tree-title-wrap`]: true
                     }),
                     on: {
-                        click: () => this.clickHandle(findValue)
+                        click: () => {
+                            this.$set(data, 'checked', !data.checked)
+                            this.clickHandle(data)
+                        }
                     },
                 }, [
-                    this.multiple && h('CCheckbox',
+                    this.multiple && this.checkbox && h('CCheckbox',
                         {
                             props: {
-                                value: data,
+                                value: _.cloneDeep(data),
                                 reflectKey: this.reflectKey,
                                 width: '16',
                                 height: '16',
                                 noText: true,
                             },
                             attrs: {
-                                checkedData: [findValue],
+                                checkedData: [_.cloneDeep(data)],
                             },
                             style: {
                                 marginRight: '8px',
                             },
                             nativeOn: {
                                 click: (e) => {
-                                    this.clickHandle(findValue)
+                                    this.$set(data, 'checked', !data.checked)
+                                    this.clickHandle(data)
                                     e.stopPropagation()
                                 }
                             }
@@ -425,7 +424,8 @@
                                 fileIconFixMargin: this.fileIconFixMargin,
                                 markIconFixMarginLeft: this.markIconFixMarginLeft,
                                 multiple: this.multiple, // 多选
-                                conditionProps: this.conditionProps, // 多选
+                                checkbox: this.checkbox, // 显示选择框
+                                conditionProps: this.conditionProps, // 不可选条件
                             },
                             on: this.$listeners
                         },
@@ -468,104 +468,121 @@
             },
             // 点击关联元素
             clickHandle(data) {
+                let {value} = this.$attrs
                 let res = []
                 if (!data.disabled) {
                     // 点击尾端结点
                     if (!data[this.conditionProps]) {
                         if (this.multiple) {
-                            // 多选模式,点击尾节点向上递归父节点
-                            this.$set(data, 'checked', !data.checked);
-                            data.checked ? this.setCheckedParentsNodeValue() : this.setUnCheckedParentsNodeValue()
-                            res = !data.checked ? [data]: []
+                            // 多选模式,点击由尾节点(当前值)向上递归父节点
+                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
                         } else {
-                            // 单选模式下仅改变自身
-                            this.$set(data, 'checked', !data.checked);
-                            res = []
+                            // 单选模式
+                            const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.')
+                            const lastData = _.get(this.copyListData, path, null)
+                            // 取消上次选中
+                            lastData && this.$set(lastData, 'checked', false)
+                            // 隔离数据
+                            res = _.cloneDeep(data)
+                            delete res.children
+                            // 本次选中
+                            res = [res]
                         }
                     } else {
                         // 多选模式,点击包含子节点的父节点
                         if (this.multiple) {
-                            if (!data.checked) {
-                                // 向下选择子节点
-                                res = this.getAllChildren(data, [])
-                                // 向上选择父节点
-                                this.setCheckedParentsNodeValue()
+                            // 设置子节点值
+                            this.setAllChildrenNodeValue(data, !data.checked)
+                            // 设置父节点值
+                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id,!data.checked)
+                        }
+                    }
+                }
+                if (this.multiple) {
+                    this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
+                }
+                this.$emit('change', res.filter(item => item.checked))
+            },
+            setParentNodeValue(data, path, isCancel){
+                const pathArr = path.split('-')
+                while (pathArr.length) {
+                    const parentNode = _.get(data, pathArr.join('.children.'), {children: []})
+                    if(isCancel){
+                        this.$set(parentNode, 'checked', false)
+                        if ((parentNode.children || []).some(item => item.checked || item.halfChecked)) {
+                            this.$set(parentNode, 'halfChecked', true)
+                        } else {
+                            this.$set(parentNode, 'halfChecked', false)
+                        }
+                    }else{
+                        if (parentNode.children.length) {
+                            if (parentNode.children.length === 1 || parentNode.children.every(item => item.checked)) {
+                                this.$set(parentNode, 'checked', true)
+                                delete parentNode.halfChecked
                             } else {
-                                //向下取消子节点
-                                res = this.removedAllChildren(data, [])
-                                // 向上取消父节点
-                                this.setUnCheckedParentsNodeValue()
+                                this.$set(parentNode, 'halfChecked', true)
                             }
                         }
                     }
+
+                    pathArr.pop()
                 }
-                console.log(res)
-                this.$emit('change',res)
             },
-            // 向上递归父节点
-            setCheckedParentsNodeValue() {
-                const pathArr = this._c_tree_parent_id.split('-')
-                while (pathArr.length) {
-                    const parentNode = _.get(this.copyListData, pathArr.join('.children.'), {children: []})
-                    if (parentNode.children.length) {
-                        if (parentNode.children.length === 1 || parentNode.children.every(item => item.checked)) {
-                            this.$set(parentNode, 'checked', true)
-                            this.$set(parentNode, 'halfChecked', false)
-                        } else {
-                            this.$set(parentNode, 'halfChecked', true)
+            setAllChildrenNodeValue(data, isCancel){
+                (data.children || []).forEach(item => {
+                    this.$set(item, 'checked', !isCancel)
+                    this.setAllChildrenNodeValue(item, isCancel)
+                })
+                delete data.halfChecked
+            },
+            // 获取当前选择值 返回给双向绑定
+            getAllCheckedValue(copyListData, res = []) {
+                (copyListData || []).forEach(item => {
+                    if (item.checked || item.halfChecked) {
+                        this.getAllCheckedValue(item.children, res);
+                        if (item.checked && !item[this.conditionProps]) {
+                            delete item.children
+                            res.push(item)
                         }
                     }
-                    pathArr.pop()
-                }
+                })
+                return res
             },
-            // 向下递归父节点
-            setUnCheckedParentsNodeValue() {
-                const pathArr = this._c_tree_parent_id.split('-')
-                while (pathArr.length) {
-                    const parentNode = _.get(this.copyListData, pathArr.join('.children.'), {children: []})
-                    this.$set(parentNode, 'checked', false)
-                    if (parentNode.children.some(item => item.checked)) {
-                        this.$set(parentNode, 'halfChecked', true)
-                    } else {
-                        this.$set(parentNode, 'halfChecked', false)
+            // 标记数据结构 同步数据 非常耗费时间
+            markIdentifyAndSyncData(listData, data, selectData, parentId = '') {
+                data.forEach((item, index) => {
+                    const selfPath = parentId + index
+                    item._c_tree_self_id = selfPath
+                    // 设置父元素属性
+                    if (selectData.length) {
+                        const findIndex = selectData.findIndex(select => select[this.reflectKey['value']] === item[this.reflectKey['value']])
+                        if (findIndex > -1) {
+                            const length = selfPath.length - 2 > 0 ? selfPath.length - 2 : 0
+                            const pPath = selfPath.slice(0, length)
+                            this.$set(item, 'checked', true)
+                            // 尽量减少重复次数
+                            selectData.splice(index, 1)
+                            if (pPath) {
+                                this.setParentNodeValue(listData, pPath, true)
+                            }
+                        }
                     }
-                    pathArr.pop()
-                }
-            },
-            // 选取所有的子元素
-            getAllChildren(data, res) {
-                (data.children || []).forEach(item => {
-                    this.getAllChildren(item, res)
+                    if ((item.children || []).length) {
+                        // 编辑数据结构
+                        this.markIdentifyAndSyncData(listData, item.children, selectData, item._c_tree_self_id + '-')
+                    }
                 })
-                this.$set(data, 'checked', true)
-                if ((data.children || []).length) {
-                    delete data.halfChecked
-                }
-                if (!data[this.conditionProps]) {
-                    res.push(data)
-                }
-                return res
-            },
-            // 选取所有的子元素
-            removedAllChildren(data, res) {
-                (data.children || []).forEach(item => {
-                    this.removedAllChildren(item, res)
-                })
-                this.$set(data, 'checked', false)
-                delete data.halfChecked
-                if ((data.children || []).length) {
-                    delete data.halfChecked
-                }
-                if (!data[this.conditionProps]) {
-                    res.push(data)
-                }
-                return res
-            },
+            }
         },
         watch: {
             listData: {
                 handler(v) {
                     if (!_.isEqual(v, this.copyListData)) {
+                        // 同步已选值统一设置checked属性
+                        this.$emit('change', this.$attrs.value.map(item => ({...item, checked: true})))
+                        // 同步listData已选值设置checked属性,向上递归设置父节点属性
+                        // TODO 该操作比较耗费性能 以后优化
+                        this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value))
                         this.$set(this, 'copyListData', v)
                     }
                 },
@@ -647,53 +664,67 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
+
     ul {
         padding: 0;
         margin: 0;
         font-size: addPX($df-fs);
+
         li {
             list-style: none;
+
             & > div {
                 display: flex;
                 align-items: center;
             }
         }
     }
+
     .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;
+
             & > div {
                 width: 100%;
                 display: flex;
+
                 & > div {
                     display: flex;
                 }
             }
+
             & > ul {
                 width: 100%;
             }
+
             span {
                 height: 100%;
             }
         }
+
         &-title-wrap {
             cursor: pointer;
             flex: 1;
+
             &:hover {
                 color: $primary;
             }
         }
+
         &-title-wrap.active {
             color: $primary;
             font-weight: bold;
         }
+
         &-mark-icon-box {
             display: inline-block;
         }
+
         &-vertical-line {
             display: inline-block;
             text-align: right;
+
             & > span {
                 display: inline-block;
                 width: addPX($ssm-borderWt);
@@ -701,16 +732,19 @@
                 border-right: addPX($ssm-borderWt) solid #c2c2c2;
             }
         }
+
         &-vertical-half-line {
             & > span {
                 height: 50%;
                 vertical-align: top;
             }
         }
+
         &-align-line {
             text-align: left;
             align-items: center;
             display: flex;
+
             & > span {
                 display: flex;
                 height: 1px;

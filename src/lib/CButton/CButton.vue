@@ -119,7 +119,7 @@
         outline: none;
         color: #666;
         line-height: normal;
-        box-shadow: 1px 2px 4px $shadowCr;
+        box-shadow: 1px 2px 10px $shadowCr;
         &:active{
             box-shadow: 0 0 4px $shadowCr inset;
         }

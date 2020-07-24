@@ -40,6 +40,7 @@
                         <CTree
                                 file-icon
                                 :multiple="multiple"
+                                :checkbox="checkbox"
                                 :line="line"
                                 v-model="selectData"
                                 :list-data="list_data"
@@ -116,7 +117,9 @@
             multiple: {
                 type: Boolean
             },
-
+            checkbox: {
+                type: Boolean
+            },
             width: {
                 type: String,
                 default() {
@@ -179,14 +182,14 @@
                     return []
                 }
             },
-            // 收束条件
+            // 不可选条件
             conditionProps: {
                 type: String,
                 default() {
                     return 'node'
                 }
             },
-            // 级联收束条件
+            // 级联不可选条件
             cascadeConditionProps: {
                 type: String,
                 default() {

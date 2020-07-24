@@ -54,6 +54,7 @@
                     :add-tree-node="$listeners.addTreeNode? addTreeNode : null"
                     :reflect-key="reflectKey"
                     :multiple="multiple"
+                    :checkbox="checkbox"
                     :controllers="controllers"
 
                     :width="width"
@@ -139,6 +140,9 @@
                 }
             },
             multiple: {
+                type: Boolean
+            },
+            checkbox: {
                 type: Boolean
             },
             controllers: {

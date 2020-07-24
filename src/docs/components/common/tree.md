@@ -2,7 +2,8 @@
 ---
   <ul>
     <li>层次分明的可选择控件。</li>
-    <li>单选模式/多选模式，均仅可选非收束节点。</li>
+    <li>单选模式/多选模式，均仅可选conditionProps(不可选节点)不为truthy的节点值。</li>
+    <li>约定不可选节点为truthy的节点不可被选取。</li>
   </ul>
 
 #### 数据 listData
@@ -259,7 +260,7 @@ export default {
 ```
 :::
 
-#### 可选节点 conditionProps
+#### 不可选节点 conditionProps
 ---
   <p>用于指定映射键、值关联。</p>
 
@@ -273,7 +274,7 @@ export default {
                 :reflectKey="{
                     key: 'name',
                     value: 'id'
-                    }"
+                }"
         />
     </template>
 <script>
@@ -284,6 +285,7 @@ export default {
                 {
                     id: '014557484S',
                     name: '特殊事务部',
+                    node: 1,
                     expand: true,
                     children:[
                         {
@@ -293,6 +295,7 @@ export default {
                         {
                             id: '014557484S-2',
                             name: '业务部',
+                            node: 1,
                             expand: true,
                             children:[
                                 {
@@ -302,6 +305,7 @@ export default {
                                 {
                                     id: '014557484S-2-2',
                                     name: '二组',
+                                    node: 1,
                                     expand: true,
                                     children: [
                                          {
@@ -335,6 +339,71 @@ export default {
             line
             :list-data="listData"
             v-model="selectedData"
+        >
+        </CTree>
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectedData:[],
+        }
+    }
+}
+</script>
+```
+:::
+
+#### 标线起始 lineStartLv
+---
+  <ul>
+    <li>默认起始为0。</li>
+    <li>控制距离起始位置的宽度,数值为图标宽度的2*n-1倍。</li>
+  </ul>
+   
+:::demo
+```html
+    <template>
+        <p>{{ selectedData }}</p>
+        <CTree
+            :list-data="listData"
+            v-model="selectedData"
+            :line-start-lv="1"
         >
         </CTree>
     </template>
@@ -649,8 +718,8 @@ export default {
 #### 后置操作按钮组 controllers
 ---
   <ul>
-    <li><p>controllers 属性将呈现一组可以操作树形节点的按钮。</p></li>
-    <li><p>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加。</p></li>
+    <li>controllers 属性将呈现一组可以操作树形节点的按钮。</li>
+    <li>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加。</li>
   </ul>
 
 :::demo
@@ -718,9 +787,9 @@ export default {
 ```
 :::
   <ul>
-    <li><p>自行添加一组controllers，click事件点击的数据和事件对象。</p></li>
+    <li>自行添加一组controllers，click事件点击的数据和事件对象。</li>
+    <li>统一放置在一个template插槽中。</li>
   </ul>
-  <p>统一放置在一个template 插槽中。</p>
   
 :::demo
 ```html
@@ -789,7 +858,9 @@ export default {
 </script>
 ```
 :::
-  <p>单个名为controllers的插槽。</p>
+  <ul>
+    <li>单个名为controllers的插槽。</li>
+  </ul>
   
 :::demo
 ```html
@@ -870,6 +941,79 @@ export default {
             :list-data="listData"
             v-model="selectedData"
             multiple
+        />
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    node: 1,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            node: 1,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    node: 1,
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectedData:[],
+            searchStr:'',
+        }
+    },
+    methods:{
+        logs(item,event){console.log(item,event)}
+    },
+}
+</script>
+```
+:::
+
+
+#### 显示checkbox checkbox
+---
+  <ul>
+    <li>显示checkbox。</li>
+  </ul>
+  
+:::demo
+```html
+    <template>
+        <p>{{ selectedData }}</p>
+        <CTree
+            :list-data="listData"
+            v-model="selectedData"
+            multiple
+
+            checkbox
         />
     </template>
 <script>
