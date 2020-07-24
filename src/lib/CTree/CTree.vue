@@ -495,6 +495,8 @@
                             this.setAllChildrenNodeValue(data, !data.checked)
                             // 设置父节点值
                             this.setParentNodeValue(this.copyListData, this._c_tree_parent_id,!data.checked)
+                        }else{
+                            res=[...this.$attrs.value]
                         }
                     }
                 }
