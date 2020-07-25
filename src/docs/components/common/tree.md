@@ -859,7 +859,7 @@ export default {
 ```
 :::
   <ul>
-    <li>单个名为controllers的插槽。</li>
+    <li>多个名为controllers的插槽。</li>
   </ul>
   
 :::demo
@@ -870,6 +870,11 @@ export default {
             :list-data="listData"
             v-model="selectedData"
         >
+        <CIcon slot="controllers"
+               color="green"
+               icon-name="choas-confirm"
+               @click="logs"
+        />
         <CIcon slot="controllers"
                color="green"
                icon-name="choas-confirm"

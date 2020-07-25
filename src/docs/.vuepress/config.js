@@ -158,6 +158,9 @@ module.exports = {
                                 [
                                     '/components/common/input', '输入框* CInput'
                                 ],
+                                [
+                                    '/components/common/input', '表单* CFrom'
+                                ],
                             ]
                         },
                         {

@@ -11,7 +11,7 @@
                          [`last-item`]: index === listData.length - 1
                      }"
                      :style="checkedArr.findIndex(v => v[reflectKey['value']]===item[reflectKey['value']])>-1? activeStyle: normalStyle"
-                     @click="($event) =>setClickKey(item, $event)"
+                     @click="(e) =>setClickKey(item, e)"
             >
                 {{ item[reflectKey['key']] }}
             </CButton>
@@ -125,6 +125,7 @@
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
                     {
+                        [this.className]: true,
                         [`${prefix}btn-group-wrap`]: true
                     }
                 )
