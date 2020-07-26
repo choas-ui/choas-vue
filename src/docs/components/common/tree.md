@@ -1003,7 +1003,7 @@ export default {
 :::
 
 
-#### 显示checkbox checkbox
+#### 显示多选框 checkbox
 ---
   <ul>
     <li>显示checkbox。</li>
