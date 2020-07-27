@@ -72,6 +72,31 @@
             },
             setParentNodeValue: {
                 type: Function,
+            },
+            // 在编辑数据
+            editItemId: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            markIconWidth:{
+                type: Number,
+                default(){
+                    return 18
+                }
+            },
+            markIconHeight:{
+                type: Number,
+                default(){
+                    return 18
+                }
+            },
+            fixedPrefix:{
+                type: String,
+                default(){
+                    return ''
+                }
             }
         },
         model: {
@@ -82,21 +107,11 @@
             return {
                 copyListData: {},
                 copySelectedData: {},
-                fixedPrefix: '',
-                markIconWidth: 18,
-                markIconHeight: 18,
                 isControllersShow: false,
                 isEditModel: false,
                 editContent: '',
                 addContent: ''
             }
-        },
-        mounted() {
-            this.fixedPrefix = this.prefix ? `${this.prefix}-` : '';
-            this.markIconWidth = _.get(this.$slots, "mark-icon.0.propsData.width", 0) ||
-                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.width.default", 0) || 18;
-            this.markIconHeight = _.get(this.$slots, "mark-icon.0.propsData.height", 0) ||
-                _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
         },
         methods: {
             // 创建标题
@@ -132,61 +147,58 @@
                         )
                     )
                 }
-                return h('span', {
-                    style: {
-                        marginLeft: this.markIconWidth / 4 + 'px',
-                        display: 'inline-flex',
-                        alignItems: 'center'
-                    },
-                    attrs: {
-                        title: content,
-                    },
-                    class: classNames({
-                        'active': (this.$attrs.value || []).find(item => data[this.reflectKey['value']] && (item[this.reflectKey['value']] === data[this.reflectKey['value']])),
-                        [`${this.fixedPrefix}tree-title-wrap`]: true
-                    }),
-                    on: {
-                        click: () => {
-                            this.$set(data, 'checked', !data.checked)
-                            this.clickHandle(data)
+                if (this.isEditModel) {
+                    return h('input',
+                        {
+                            attrs:{
+                                value: content
+                            }
                         }
-                    },
-                }, [
-                    this.multiple && this.checkbox && h('CCheckbox',
-                        {
-                            props: {
-                                value: _.cloneDeep(data),
-                                reflectKey: this.reflectKey,
-                                width: '16',
-                                height: '16',
-                                noText: true,
-                            },
-                            attrs: {
-                                checkedData: [_.cloneDeep(data)],
-                            },
-                            style: {
-                                marginRight: '8px',
-                            },
-                            nativeOn: {
-                                click: (e) => {
-                                    this.$set(data, 'checked', !data.checked)
-                                    this.clickHandle(data)
-                                    e.stopPropagation()
+                        )
+                }
+                return h('span', {
+                        style: {
+                            marginLeft: this.markIconWidth / 4 + 'px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            cursor: "pointer"
+                        },
+                        attrs: {
+                            title: content,
+                        },
+                        class: classNames({
+                            'active': (this.$attrs.value || []).find(item => data[this.reflectKey['value']] && (item[this.reflectKey['value']] === data[this.reflectKey['value']])),
+                            [`${this.fixedPrefix}tree-title-wrap`]: true
+                        }),
+                        on: {
+                            click: () => {
+                                this.$set(data, 'checked', !data.checked)
+                                this.clickHandle(data)
+                            }
+                        },
+
+                    }, [
+
+                        this.multiple && this.checkbox && h('CCheckbox',
+                            {
+                                props: {
+                                    value: _.cloneDeep(data),
+                                    reflectKey: this.reflectKey,
+                                    width: '16',
+                                    height: '16',
+                                    noText: true,
+                                },
+                                attrs: {
+                                    checkedData: [_.cloneDeep(data)],
+                                },
+                                style: {
+                                    marginRight: '8px',
                                 }
-                            }
-                        },
-                    ),
-                    h('span',
-                        {
-                            style: {
-                                cursor: "pointer"
-                            }
-                        },
-                        [
-                            childrenVnode
-                        ]
-                    )
-                ])
+                            },
+                        ),
+                        childrenVnode
+                    ]
+                )
             },
             // 创建文件图标
             createControllersIcon(h, data) {
@@ -231,8 +243,8 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    this.isEditModel = true
-                                    console.log('edit')
+                                    this.$emit('changeEditItemId', data._c_tree_self_id)
+                                    console.log('CTreeLiContent edit')
                                 }
                             }
                         },
@@ -246,8 +258,8 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    this.isEditModel = true
-                                    console.log('add')
+                                    this.$emit('changeEditItemId', '')
+                                    console.log('CTreeLiContent add')
                                 }
                             }
                         }
@@ -261,8 +273,8 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    this.isEditModel = true
-                                    console.log('remove')
+                                    this.$emit('changeEditItemId', '')
+                                    console.log('CTreeLiContent remove')
                                 }
                             }
                         }
@@ -304,12 +316,10 @@
                     }
                 }
                 // 减少更新频率
-                if (!_.isEqual(value, res)) {
-                    if (this.multiple) {
-                        this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
-                    }
-                    this.$emit('change', res.filter(item => item.checked))
+                if (this.multiple) {
+                    this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
                 }
+                this.$emit('change', res.filter(item => item.checked))
             },
             // 获取所有被选取的子节点
             setAllChildrenNodeValue(data, isCancel) {
@@ -343,6 +353,16 @@
                 deep: true,
                 immediate: true
             },
+            editItemId: {
+                handler(v){
+                    this.isEditModel = v === this.selfData._c_tree_self_id;
+                    this.isControllersShow = false;
+                    this.editContent = ''
+                    this.addContent = ''
+                },
+                deep: true,
+                immediate: true
+            }
         },
         render(h) {
             return h('span',
@@ -350,6 +370,7 @@
                     style: {
                         display: "inline-flex",
                         justifyContent: 'space-between',
+                        alignItems: "center",
                         flex: 1
                     },
                     on: {
@@ -370,40 +391,42 @@
                             this.createControllersIcon(h, this.selfData),
                         ]
                     ),
-                    this.isControllersShow && this.isEditModel && [
-                        h('CIcon',
-                            {
-                                props: {
-                                    iconName: 'choas-selected',
-                                    color: 'green',
-                                    activeColor: 'green'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.isEditModel = false;
-                                        // 数据更新请求完成后 自动更新数据
-                                        this.clickHandle(this.selfData)
-                                    }
-                                },
-                            }
-                        ),
-                        h('CIcon',
-                            {
-                                props: {
-                                    iconName: 'choas-close',
-                                    color: 'red',
-                                    activeColor: 'red'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.isEditModel = false;
-                                        this.editContent = ''
-                                        this.addContent = ''
-                                    }
-                                },
-                            }
-                        ),
-                    ]
+                    this.isControllersShow && this.isEditModel && h('span',
+                        [
+                            h('CIcon',
+                                {
+                                    props: {
+                                        iconName: 'choas-selected',
+                                        color: 'green',
+                                        activeColor: 'green',
+                                        key: 'selected'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$emit('changeEditItemId', '')
+                                            // 数据更新请求完成后 自动更新数据
+                                            this.clickHandle(this.selfData)
+                                        }
+                                    },
+                                }
+                            ),
+                            h('CIcon',
+                                {
+                                    props: {
+                                        iconName: 'choas-close',
+                                        color: 'red',
+                                        activeColor: 'red',
+                                        key: 'close'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$emit('changeEditItemId', '')
+                                        }
+                                    },
+                                }
+                            ),
+                        ]
+                    )
                 ]
             )
         }
