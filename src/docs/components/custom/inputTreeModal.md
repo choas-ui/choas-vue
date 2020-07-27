@@ -526,3 +526,121 @@
 ```
 :::
 
+#### 标题与背景图 title&titleImg
+---
+  <ul>
+     <li>提供可变的标题与标题背景。</li>
+  </ul>
+
+:::demo
+```html
+    <template>
+        <CInputTreeModal
+               :canBeEdited="canBeEdited"
+               :list-data="listData"
+               :reflectKey="reflectKey"
+               v-model="selectedData"
+               title="可变的标题"
+    
+               mask
+               line
+        />
+    </template>
+    <script>
+        export default {
+            data(){
+                return{
+                    canBeEdited: true,
+                    selectedData: [
+                        {
+                            id: '014557484S-2-2-0017',
+                            name: '谢广坤',
+                        }
+                    ],
+                    reflectKey: {
+                        key: 'name',
+                        value: 'id'
+                    },
+                    listData: [
+                        {
+                            id: '014557484S',
+                            name: '特殊事务部',
+                            expand: true,
+                            node: true,
+                            children: [
+                                {
+                                    id: '014557484S-0',
+                                    name: '指挥部',
+                                    expand: true,
+                                    node: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-0-007',
+                                            name: '谢永强',
+                                        },
+                                        {
+                                            id: '014557484S-0-008',
+                                            name: '谢大脚',
+                                        },
+                                    ],
+                                },
+                                {
+                                    id: '014557484S-1',
+                                    name: '后勤',
+                                    expand: true,
+                                    node: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-1-0017',
+                                            name: '尼古拉斯.赵',
+                                        },
+                                        {
+                                            id: '014557484S-1-0019',
+                                            name: '王常规',
+                                        },
+                                        
+                                    ],
+                                },
+                                {
+                                    id: '014557484S-2',
+                                    name: '业务部',
+                                    expand: true,
+                                    node: true,
+                                    children: [
+                                        {
+                                            id: '014557484S-2-1',
+                                            name: '一组',
+                                            node: true,
+                                        },
+                                        {
+                                            id: '014557484S-2-2',
+                                            name: '二组',
+                                            expand: true,
+                                            node: true,
+                                            children: [
+                                                {
+                                                    id: '014557484S-2-2-0017',
+                                                    name: '谢广坤',
+                                                },
+                                                {
+                                                    id: '014557484S-2-2-0018',
+                                                    name: '王小蒙',
+                                                },
+                                                {
+                                                    id: '014557484S-2-2-0019',
+                                                    name: '刘能',
+                                                },
+                                            ],
+                                        },
+                                    ]
+                                },
+                            ]
+                        }
+                    ],
+                }
+            }
+        }
+    </script>
+```
+:::
+

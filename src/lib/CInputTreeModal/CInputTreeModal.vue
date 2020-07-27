@@ -175,6 +175,11 @@
                     return ''
                 }
             },
+            titleImg:{
+                default() {
+                    return null
+                }
+            },
             listData: {
                 type: Array,
                 required: true,

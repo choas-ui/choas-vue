@@ -8,7 +8,9 @@
   </p>
   
   <ol reversed>
-     <li>新增<b>Tree</b>组件中的多选框。</li>
+     <li>引入部分矢量图标。</li>
+     <li>新增<b>Tree</b>组件中多选框选项。</li>
+     <li>新增<b>Tree</b>组件中可变标题可变背景选项。</li>
      <li>新增<b>RadioGroup</b>组件 。</li>
      <li>新增<b>Radio</b>组件 。</li>
      <li>新增Tree右侧controllers按钮功能。</li>
