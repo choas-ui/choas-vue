@@ -227,9 +227,19 @@
   <span class="icon-lib">
     <p><CIcon icon-name="choas-picture" width="25" height="25"/></p>
     <p>choas-picture</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-warning" width="25" height="25"/></p>
+    <p>choas-warning</p>
   </span> 
-  
-  
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-warning-light" width="25" height="25"/></p>
+    <p>choas-warning-light</p>
+  </span> 
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-fill-warning" width="25" height="25"/></p>
+    <p>choas-fill-warning</p>
+  </span> 
     
   
   

@@ -1,9 +1,13 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
+    import CTreeLiContent from "./CTreeLiContent";
 
     export default {
         name: 'CTree',
+        components: {
+            CTreeLiContent
+        },
         function: true,
         props: {
             listData: {
@@ -119,6 +123,74 @@
             // 创建关联id
             createdId(index) {
                 return this._c_tree_parent_id ? this._c_tree_parent_id + '-' + index : index + ''
+            },
+            createdLiContent(h, item, index) {
+                return h('div',
+                    [
+                        h('div',
+                            {
+                                style: {
+                                    height: this.markIconHeight * 1.5 + 'px'
+                                }
+                            },
+                            this.createLine(h)
+                        ),
+                        h('div',
+                            {
+                                style: {
+                                    display: 'flex',
+                                    flex: 1,
+                                }
+                            },
+                            [
+                                this.createIconMark(h, item),
+                                this.createFileIcon(h, item),
+                                h('CTreeLiContent',
+                                    {
+                                        attrs: {
+                                            ...this.$attrs
+                                        },
+                                        props: {
+                                            lineStartLv: this.lineStartLv + 1,
+                                            _c_tree_parent_id: this.createdId(index),
+                                            selfData: item,
+                                            listData: this.listData,
+                                            reflectKey: this.reflectKey,
+                                            searchStr: this.searchStr,
+                                            controllers: this.controllers,
+                                            multiple: this.multiple, // 多选
+                                            checkbox: this.checkbox, // 显示选择框
+                                            conditionProps: this.conditionProps, // 不可选条件
+                                            setParentNodeValue: this.setParentNodeValue, // 设置父元素属性函数
+                                        },
+                                        on: this.$listeners
+                                    },
+                                    [
+                                        ...Object.keys(this.$slots).map((key) => {
+                                            if (key === 'controllers') {
+                                                return this.$slots[key].map(item => {
+                                                    const {tag, listeners = {}, propsData} = item.componentOptions || {}
+                                                    if (tag)
+                                                        return h(tag,
+                                                            {
+                                                                props: {
+                                                                    ...propsData,
+                                                                },
+                                                                slot: 'controllers',
+                                                                ...item.data,
+                                                                on: listeners
+                                                            }
+                                                        )
+                                                    return null
+                                                }).filter(Boolean)
+                                            }
+                                        }).filter(Boolean)
+                                    ]
+                                ),
+                            ]
+                        ),
+                    ]
+                )
             },
             // 创建展开图标
             createIconMark(h, data) {
@@ -247,164 +319,6 @@
                     }
                 })
             },
-            // 创建标题
-            createTitle(h, data) {
-                const content = data[this.reflectKey['key']] || ''
-                const index = this.searchStr ? content.indexOf(this.searchStr) : -1
-                const childrenVnode = []
-                if (index > -1) {
-                    childrenVnode.push(
-                        h('span', {
-                                style: {
-                                    color: this.markColor,
-                                }
-                            },
-                            [content.slice(0, index + this.searchStr.length)]
-                        )
-                    )
-                    childrenVnode.push(
-                        h('span',
-                            [content.slice(index + this.searchStr.length)]
-                        )
-                    )
-                } else {
-                    childrenVnode.push(
-                        h('span',
-                            {
-                                style: {
-                                    display: 'inline-flex',
-                                    alignItem: 'center'
-                                }
-                            },
-                            [content]
-                        )
-                    )
-                }
-                return h('span', {
-                    style: {
-                        marginLeft: this.markIconWidth / 4 + 'px',
-                        display: 'inline-flex',
-                        alignItems: 'center'
-                    },
-                    attrs: {
-                        title: content,
-                    },
-                    class: classNames({
-                        'active': (this.$attrs.value || []).find(item => data[this.reflectKey['value']]&& (item[this.reflectKey['value']] === data[this.reflectKey['value']])),
-                        [`${this.fixedPrefix}tree-title-wrap`]: true
-                    }),
-                    on: {
-                        click: () => {
-                            this.$set(data, 'checked', !data.checked)
-                            this.clickHandle(data)
-                        }
-                    },
-                }, [
-                    this.multiple && this.checkbox && h('CCheckbox',
-                        {
-                            props: {
-                                value: _.cloneDeep(data),
-                                reflectKey: this.reflectKey,
-                                width: '16',
-                                height: '16',
-                                noText: true,
-                            },
-                            attrs: {
-                                checkedData: [_.cloneDeep(data)],
-                            },
-                            style: {
-                                marginRight: '8px',
-                            },
-                            nativeOn: {
-                                click: (e) => {
-                                    this.$set(data, 'checked', !data.checked)
-                                    this.clickHandle(data)
-                                    e.stopPropagation()
-                                }
-                            }
-                        },
-                    ),
-                    childrenVnode
-                ])
-            },
-            // 创建文件图标
-            createControllersIcon(h, data) {
-                if (!this.controllers && !this.$slots['controllers']) {
-                    return null
-                }
-                // 用户插槽
-                if (this.$slots['controllers']) {
-                    return this.$slots['controllers'].map((item) => {
-                        const {tag, listeners = {}, propsData} = item.componentOptions || {}
-                        const _listeners = {}
-                        Object.keys(listeners).forEach(key => {
-                            _listeners[key] = (e) => {
-                                return listeners[key].call(this, data, e)
-                            }
-                        })
-                        if (!tag) {
-                            return null
-                        }
-                        return h(tag,
-                            {
-                                props: {
-                                    ...propsData
-                                },
-                                ...item.data,
-                                slot: 'controllers',
-                                on: _listeners
-                            }
-                        )
-                    }).filter(Boolean)
-                }
-                if (!this.controllers) {
-                    return null
-                }
-                return [
-                    h('CIcon',
-                        {
-                            props: {
-                                color: '#333',
-                                iconName: 'choas-edit',
-                            },
-                            slot: 'controllers',
-                            on: {
-                                click() {
-                                    console.log(data, 'default-controllers')
-                                }
-                            }
-                        },
-                    ),
-                    h('CIcon',
-                        {
-                            props: {
-                                color: '#333',
-                                iconName: 'choas-add',
-                            },
-                            slot: 'controllers',
-                            on: {
-                                click() {
-                                    console.log(data, 'default-controllers')
-                                }
-                            }
-                        }
-                    ),
-                    h('CIcon',
-                        {
-                            props: {
-                                color: '#333',
-                                iconName: 'choas-delete',
-                            },
-                            slot: 'controllers',
-                            on: {
-                                click() {
-                                    console.log(data, 'default-controllers')
-                                }
-                            }
-                        }
-                    )
-                ]
-            },
             // 创建递归树形
             createTree(h, data, index) {
                 if (data.expand) {
@@ -466,58 +380,19 @@
                 }
                 return null
             },
-            // 点击关联元素
-            clickHandle(data) {
-                let {value} = this.$attrs
-                let res = []
-                if (!data.disabled) {
-                    // 点击尾端结点
-                    if (!data[this.conditionProps]) {
-                        if (this.multiple) {
-                            // 多选模式,点击由尾节点(当前值)向上递归父节点
-                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
-                        } else {
-                            // 单选模式
-                            const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.')
-                            const lastData = _.get(this.copyListData, path, null)
-                            // 取消上次选中
-                            lastData && this.$set(lastData, 'checked', false)
-                            // 隔离数据
-                            res = _.cloneDeep(data)
-                            delete res.children
-                            // 本次选中
-                            res = [res]
-                        }
-                    } else {
-                        // 多选模式,点击包含子节点的父节点
-                        if (this.multiple) {
-                            // 设置子节点值
-                            this.setAllChildrenNodeValue(data, !data.checked)
-                            // 设置父节点值
-                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id,!data.checked)
-                        }else{
-                            res=[...this.$attrs.value]
-                        }
-                    }
-                }
-                if (this.multiple) {
-                    this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
-                }
-                this.$emit('change', res.filter(item => item.checked))
-            },
-            setParentNodeValue(data, path, isCancel){
+            setParentNodeValue(data, path, isCancel) {
                 const pathArr = path.split('-')
                 while (pathArr.length) {
                     const parentNode = _.get(data, pathArr.join('.children.'), {children: []})
-                    if(isCancel){
+                    if (isCancel) {
                         this.$set(parentNode, 'checked', false)
                         if ((parentNode.children || []).some(item => item.checked || item.halfChecked)) {
                             this.$set(parentNode, 'halfChecked', true)
                         } else {
                             this.$set(parentNode, 'halfChecked', false)
                         }
-                    }else{
-                        if (parentNode.children.length) {
+                    } else {
+                        if ((parentNode.children || []).length) {
                             if (parentNode.children.length === 1 || parentNode.children.every(item => item.checked)) {
                                 this.$set(parentNode, 'checked', true)
                                 delete parentNode.halfChecked
@@ -529,26 +404,6 @@
 
                     pathArr.pop()
                 }
-            },
-            setAllChildrenNodeValue(data, isCancel){
-                (data.children || []).forEach(item => {
-                    this.$set(item, 'checked', !isCancel)
-                    this.setAllChildrenNodeValue(item, isCancel)
-                })
-                delete data.halfChecked
-            },
-            // 获取当前选择值 返回给双向绑定
-            getAllCheckedValue(copyListData, res = []) {
-                (copyListData || []).forEach(item => {
-                    if (item.checked || item.halfChecked) {
-                        this.getAllCheckedValue(item.children, res);
-                        if (item.checked && !item[this.conditionProps]) {
-                            delete item.children
-                            res.push(item)
-                        }
-                    }
-                })
-                return res
             },
             // 标记数据结构 同步数据 非常耗费时间
             markIdentifyAndSyncData(listData, data, selectData, parentId = '') {
@@ -611,47 +466,7 @@
                                 }),
                             },
                             [
-                                h('div',
-                                    [
-                                        h('div',
-                                            {
-                                                style: {
-                                                    height: this.markIconHeight * 1.5 + 'px'
-                                                }
-                                            },
-                                            this.createLine(h)
-                                        ),
-                                        h('div',
-                                            {
-                                                style: {
-                                                    display: 'flex',
-                                                    flex: 1,
-                                                }
-                                            },
-                                            [
-                                                h('div',
-                                                    {
-                                                        style: {
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            flex: 1
-                                                        },
-                                                    },
-                                                    [
-                                                        this.createIconMark(h, item),
-                                                        this.createFileIcon(h, item),
-                                                        this.createTitle(h, item),
-                                                    ]
-                                                ),
-                                                h('span',
-                                                    [
-                                                        this.createControllersIcon(h, item),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                    ]
-                                ),
+                                this.createdLiContent(h, item, index),
                                 this.createTree(h, item, index)
                             ]
                         )
@@ -671,62 +486,38 @@
         padding: 0;
         margin: 0;
         font-size: addPX($df-fs);
-
         li {
             list-style: none;
-
             & > div {
                 display: flex;
                 align-items: center;
             }
         }
     }
-
     .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;
-
             & > div {
                 width: 100%;
                 display: flex;
-
                 & > div {
                     display: flex;
                 }
             }
-
             & > ul {
                 width: 100%;
             }
-
             span {
                 height: 100%;
             }
         }
-
-        &-title-wrap {
-            cursor: pointer;
-            flex: 1;
-
-            &:hover {
-                color: $primary;
-            }
-        }
-
-        &-title-wrap.active {
-            color: $primary;
-            font-weight: bold;
-        }
-
         &-mark-icon-box {
             display: inline-block;
         }
-
         &-vertical-line {
             display: inline-block;
             text-align: right;
-
             & > span {
                 display: inline-block;
                 width: addPX($ssm-borderWt);
@@ -734,19 +525,16 @@
                 border-right: addPX($ssm-borderWt) solid #c2c2c2;
             }
         }
-
         &-vertical-half-line {
             & > span {
                 height: 50%;
                 vertical-align: top;
             }
         }
-
         &-align-line {
             text-align: left;
             align-items: center;
             display: flex;
-
             & > span {
                 display: flex;
                 height: 1px;
