@@ -73,8 +73,15 @@
             setParentNodeValue: {
                 type: Function,
             },
-            // 在编辑数据
+            // 在编辑数据位置
             editItemId: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            // 在添加数据位置
+            addItemId: {
                 type: String,
                 default() {
                     return ''
@@ -152,6 +159,16 @@
                         {
                             attrs:{
                                 value: content
+                            },
+                            on:{
+                                blur:(e)=>{
+                                    console.log(e)
+                                    if(this.addItemId){
+                                        this.addContent = e.target.value
+                                    }else{
+                                        this.editContent = e.target.value
+                                    }
+                                }
                             }
                         }
                         )
@@ -200,6 +217,36 @@
                     ]
                 )
             },
+            // 生成子节点并存储子节点位置
+            createNewNodeValue(data){
+                const clickValue = _.get(this.copyListData,data._c_tree_self_id.split('-').join('.children.'), [])
+                const _c_tree_self_id =  data._c_tree_self_id+ '-'+(data.children || []).length
+                clickValue.children= clickValue.children || []
+                clickValue.children.push({
+                    [this.reflectKey['key']]: '',
+                    [this.reflectKey['value']]: '',
+                    _c_tree_self_id,
+                })
+                // 记录新增值的位置
+                this.$emit('changeAddItemId', _c_tree_self_id)
+            },
+            // 移除未添加的新节点和值
+            removeNoAddNodeValue(){
+                if(this.addItemId){
+                    let path = this.addItemId.split('-')
+                    const [last, ...others] = [...path].reverse()
+                    path = [...others].reverse().join('.children.')
+                    const pNodeValue = _.get(this.copyListData, path, null)
+                    pNodeValue && pNodeValue.children.splice(last, 1)
+                    this.$emit('changeAddItemId', '')
+                    this.addContent = ''
+                }
+            },
+            // 移除编辑状态和值
+            cancelEditValue(){
+                this.$emit('changeEditItemId', '')
+                this.editContent = '';
+            },
             // 创建文件图标
             createControllersIcon(h, data) {
                 if (!this.controllers && !this.$slots['controllers']) {
@@ -243,13 +290,17 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
+                                    // 记录编辑行id,编辑行转为可编辑状态
                                     this.$emit('changeEditItemId', data._c_tree_self_id)
-                                    console.log('CTreeLiContent edit')
+                                    // 移除未添加的新增值
+                                    this.removeNoAddNodeValue()
+                                    // 编辑值
+                                    console.log("编辑值",this.editContent)
                                 }
                             }
                         },
                     ),
-                    h('CIcon',
+                    data[this.conditionProps] && h('CIcon',
                         {
                             props: {
                                 color: '#333',
@@ -258,8 +309,14 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    this.$emit('changeEditItemId', '')
-                                    console.log('CTreeLiContent add')
+                                    // 取消在编辑状态
+                                    this.cancelEditValue()
+                                    // 移除未添加的新增值
+                                    this.removeNoAddNodeValue()
+                                    // 生成子节点信息并记录子节点位置
+                                    this.createNewNodeValue(data)
+                                    // 新增成功后 该子节点位置应空，若不为空视为添加失败，操作其他编辑项时会自动删除,则认为取消添加，操作时删除该值
+                                    console.log("新增值",this.addContent)
                                 }
                             }
                         }
@@ -273,8 +330,11 @@
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    this.$emit('changeEditItemId', '')
-                                    console.log('CTreeLiContent remove')
+                                    // 移除编辑状态和值
+                                    this.cancelEditValue();
+                                    // 移除新增节点和值
+                                    this.removeNoAddNodeValue();
+                                    console.log("新增值",data)
                                 }
                             }
                         }
@@ -354,15 +414,25 @@
                 immediate: true
             },
             editItemId: {
-                handler(v){
-                    this.isEditModel = v === this.selfData._c_tree_self_id;
+                handler(){
+                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
                     this.isControllersShow = false;
                     this.editContent = ''
                     this.addContent = ''
                 },
                 deep: true,
                 immediate: true
-            }
+            },
+            addItemId: {
+                handler(){
+                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
+                    this.isControllersShow = false;
+                    this.editContent = ''
+                    this.addContent = ''
+                },
+                deep: true,
+                immediate: true
+            },
         },
         render(h) {
             return h('span',
@@ -403,9 +473,17 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.$emit('changeEditItemId', '')
-                                            // 数据更新请求完成后 自动更新数据
-                                            this.clickHandle(this.selfData)
+                                            if(this.addItemId){
+                                                // 需要获取父节点id
+                                                console.log('新增节点', this.addContent, this.selfData)
+                                            }else{
+                                                console.log('修改节点', this.editContent, this.selfData)
+                                            }
+                                            // 数据更新请求完成后
+                                            // 取消在编辑状态
+                                            // 自动更新数据
+                                            // this.cancelEditValue()
+                                            // this.clickHandle(this.selfData)
                                         }
                                     },
                                 }
@@ -420,7 +498,10 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.$emit('changeEditItemId', '')
+                                            // 移除未添加的新增值
+                                            this.removeNoAddNodeValue()
+                                            // 移除在编辑状态
+                                            this.cancelEditValue()
                                         }
                                     },
                                 }
@@ -441,12 +522,10 @@
     .tree {
         &-title-wrap {
             flex: 1;
-
             &:hover {
                 color: $primary;
             }
         }
-
         &-title-wrap.active {
             color: $primary;
             font-weight: bold;

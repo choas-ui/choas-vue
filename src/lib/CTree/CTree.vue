@@ -102,14 +102,18 @@
                 fixedPrefix: '',
                 markIconWidth: 18,
                 markIconHeight: 18,
-                editItemId: ''
+                editItemId: '', // 在编辑元素位置编码
+                addItemId: '', // 在添加元素位置编码
             }
         },
-        mounted() {
-        },
         methods: {
+            // 记录在编辑位置
             changeEditItemId(v){
               this.editItemId = v
+            },
+            // 记录在添加位置
+            changeAddItemId(v){
+                this.addItemId = v
             },
             setParentNodeValue(data, path, isCancel) {
                 const pathArr = path.split('-')
@@ -198,12 +202,16 @@
                         conditionProps: this.conditionProps, // 不可选条件
                         setParentNodeValue: this.setParentNodeValue,
                         editItemId: this.editItemId,
+                        addItemId: this.addItemId,
                     },
                     on: {
+                        ...this.$listeners,
                         changeEditItemId:(v)=>{
                             this.changeEditItemId(v)
                         },
-                        ...this.$listeners
+                        changeAddItemId:(v)=>{
+                            this.changeAddItemId(v)
+                        },
                     }
                 },
                 /* 重新带入插槽 */
@@ -248,66 +256,4 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-
-    ul {
-        padding: 0;
-        margin: 0;
-        font-size: addPX($df-fs);
-        li {
-            list-style: none;
-            & > div {
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
-    .tree {
-        &-li {
-            display: flex;
-            flex-wrap: wrap;
-            & > div {
-                width: 100%;
-                display: flex;
-                & > div {
-                    display: flex;
-                }
-            }
-            & > ul {
-                width: 100%;
-            }
-            span {
-                height: 100%;
-            }
-        }
-        &-mark-icon-box {
-            display: inline-block;
-        }
-        &-vertical-line {
-            display: inline-block;
-            text-align: right;
-            & > span {
-                display: inline-block;
-                width: addPX($ssm-borderWt);
-                height: 100%;
-                border-right: addPX($ssm-borderWt) solid #c2c2c2;
-            }
-        }
-        &-vertical-half-line {
-            & > span {
-                height: 50%;
-                vertical-align: top;
-            }
-        }
-        &-align-line {
-            text-align: left;
-            align-items: center;
-            display: flex;
-            & > span {
-                display: flex;
-                height: 1px;
-                width: 100%;
-                border-bottom: addPX($ssm-borderWt) solid #c2c2c2;
-            }
-        }
-    }
 </style>

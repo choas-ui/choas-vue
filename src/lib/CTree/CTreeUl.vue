@@ -101,12 +101,20 @@
             setParentNodeValue:{
                 type:Function
             },
+            // 在添加数据位置
             editItemId:{
                 type: String,
                 default(){
                     return ''
                 }
-            }
+            },
+            // 在添加数据位置
+            addItemId: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
         },
         model: {
             props: 'value',
@@ -145,12 +153,6 @@
                             this.createLine(h)
                         ),
                         h('div',
-                            {
-                                style: {
-                                    display: 'flex',
-                                    flex: 1,
-                                }
-                            },
                             [
                                 this.createIconMark(h, item),
                                 this.createFileIcon(h, item),
@@ -171,13 +173,18 @@
                                             checkbox: this.checkbox, // 显示选择框
                                             conditionProps: this.conditionProps, // 不可选条件
                                             setParentNodeValue: this.setParentNodeValue, // 设置父元素属性函数
-                                            editItemId: this.editItemId,
+                                            editItemId: this.editItemId, // 在编辑数据位置
                                             changeEditItemId: this.changeEditItemId,
+                                            addItemId: this.addItemId, //  在添加数据位置
+                                            changeAddItemId: this.changeAddItemId,
                                         },
                                         on: {
                                             ...this.$listeners,
                                             changeEditItemId:(v)=>{
                                                 this.$emit('changeEditItemId', v)
+                                            },
+                                            changeAddItemId:(v)=>{
+                                                this.$emit('changeAddItemId', v)
                                             }
                                         }
                                     },
@@ -356,13 +363,18 @@
                                 multiple: this.multiple, // 多选
                                 checkbox: this.checkbox, // 显示选择框
                                 conditionProps: this.conditionProps, // 不可选条件
-                                editItemId: this.editItemId,
-                                changeEditItemId: this.changeEditItemId,
-                                setParentNodeValue: this.setParentNodeValue,
+                                editItemId: this.editItemId, // 在编辑数据位置
+                                changeEditItemId: this.changeEditItemId, // 设置在编辑数据位置
+                                addItemId: this.addItemId, // 在添加数据位置
+                                changeAddItemId: this.changeAddItemId, // 设置在添加数据位置
+                                setParentNodeValue: this.setParentNodeValue, // 设置父节点属性
                             },
                             on: {
                                 changeEditItemId:(v)=>{
                                     this.$emit('changeEditItemId', v)
+                                },
+                                changeAddItemId:(v)=>{
+                                    this.$emit('changeAddItemId', v)
                                 },
                                 ...this.$listeners
                             }
@@ -472,6 +484,9 @@
                 display: flex;
                 & > div {
                     display: flex;
+                    &:nth-of-type(2){
+                        flex: 1;
+                    }
                 }
             }
             & > ul {

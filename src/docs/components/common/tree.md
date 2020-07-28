@@ -389,71 +389,6 @@ export default {
 ```
 :::
 
-#### 标线起始 lineStartLv
----
-  <ul>
-    <li>默认起始为0。</li>
-    <li>控制距离起始位置的宽度,数值为图标宽度的2*n-1倍。</li>
-  </ul>
-   
-:::demo
-```html
-    <template>
-        <p>{{ selectedData }}</p>
-        <CTree
-            :list-data="listData"
-            v-model="selectedData"
-            :line-start-lv="1"
-        >
-        </CTree>
-    </template>
-<script>
-export default {
-    data(){
-        return {
-            listData:[
-                {
-                    key: '颜色',
-                    value: '0',
-                    expand: true,
-                    children:[
-                        {
-                            key: '冷色',
-                            value: '0-0',
-                        },
-                        {
-                            key: '暖色',
-                            value: '0-1',
-                            expand: true,
-                            children:[
-                                {
-                                    key: '红色',
-                                    value: '0-1-0',
-                                },
-                                {
-                                    key: '橙色',
-                                    value: '0-1-1',
-                                    expand: true,
-                                    children: [
-                                         {
-                                            key: '橙红',
-                                            value: '0-1-1-0',
-                                         },
-                                    ],
-                                },
-                            ]
-                        },
-                    ]
-                }
-            ],
-            selectedData:[],
-        }
-    }
-}
-</script>
-```
-:::
-
 #### 展开图标 mark-icon
 ---
   <ul>
@@ -719,7 +654,7 @@ export default {
 ---
   <ul>
     <li>controllers 属性将呈现一组可以操作树形节点的按钮。</li>
-    <li>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加。</li>
+    <li>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加，不显示添加节点按钮。</li>
   </ul>
 
 :::demo
