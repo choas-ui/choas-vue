@@ -162,7 +162,6 @@
                             },
                             on:{
                                 blur:(e)=>{
-                                    console.log(e)
                                     if(this.addItemId){
                                         this.addContent = e.target.value
                                     }else{
@@ -375,7 +374,6 @@
                         }
                     }
                 }
-                // 减少更新频率
                 if (this.multiple) {
                     this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
                 }
@@ -396,6 +394,7 @@
                         this.getAllCheckedValue(item.children, res);
                         if (item.checked && !item[this.conditionProps]) {
                             delete item.children
+                            delete item._c_tree_self_id
                             res.push(item)
                         }
                     }

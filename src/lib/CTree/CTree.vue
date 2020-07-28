@@ -83,12 +83,6 @@
                 default() {
                     return 'node'
                 }
-            },
-            _c_tree_parent_id: {
-                type: String,
-                default() {
-                    return ''
-                }
             }
         },
         model: {
@@ -151,6 +145,7 @@
                             const length = selfPath.length - 2 > 0 ? selfPath.length - 2 : 0
                             const pPath = selfPath.slice(0, length)
                             this.$set(item, 'checked', true)
+                            this.setAllChildrenNodeValue(item)
                             // 尽量减少重复次数
                             selectData.splice(index, 1)
                             if (pPath) {
@@ -163,18 +158,41 @@
                         this.markIdentifyAndSyncData(listData, item.children, selectData, item._c_tree_self_id + '-')
                     }
                 })
-            }
+            },
+            // 获取所有被选取的子节点
+            setAllChildrenNodeValue(data, isCancel) {
+                (data.children || []).forEach(item => {
+                    this.$set(item, 'checked', !isCancel)
+                    this.setAllChildrenNodeValue(item, isCancel)
+                })
+                delete data.halfChecked
+            },
+            // 获取当前选择值 返回给双向绑定
+            getAllCheckedValue(copyListData, res = []) {
+                (copyListData || []).forEach(item => {
+                    if (item.checked || item.halfChecked) {
+                        this.getAllCheckedValue(item.children, res);
+                        if (item.checked && !item[this.conditionProps]) {
+                            delete item.children
+                            delete item._c_tree_self_id
+                            res.push(item)
+                        }
+                    }
+                })
+                return res
+            },
         },
         watch: {
             listData: {
                 handler(v) {
                     if (!_.isEqual(v, this.copyListData)) {
-                        // 同步已选值统一设置checked属性
-                        this.$emit('change', this.$attrs.value.map(item => ({...item, checked: true})))
                         // 同步listData已选值设置checked属性,向上递归设置父节点属性
                         // TODO 该操作比较耗费性能 以后优化
                         this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value))
                         this.$set(this, 'copyListData', v)
+                        // 同步已选值统一设置checked属性
+                        this.$emit('change', this.getAllCheckedValue(v))
+
                     }
                 },
                 deep: true,

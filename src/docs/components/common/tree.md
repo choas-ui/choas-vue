@@ -942,6 +942,7 @@ export default {
 ---
   <ul>
     <li>显示checkbox。</li>
+    <li>选中值中未添加checked的会自动的添加checked。如选定了不可选取节点，则会<b>替换</b>选中节点为其子节点或者空节点。</li>
   </ul>
   
 :::demo
@@ -998,7 +999,83 @@ export default {
                     ]
                 }
             ],
-            selectedData:[],
+            selectedData:[
+                {
+                    key: '橙色',
+                    value: '0-1-1',
+                },
+            ],
+            searchStr:'',
+        }
+    },
+    methods:{
+        logs(item,event){console.log(item,event)}
+    },
+}
+</script>
+```
+:::
+
+:::demo
+```html
+    <template>
+        <p>{{ selectedData }}</p>
+        <CTree
+            :list-data="listData"
+            v-model="selectedData"
+            multiple
+
+            checkbox
+        />
+    </template>
+<script>
+export default {
+    data(){
+        return {
+            listData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                    expand: true,
+                    node: 1,
+                    children:[
+                        {
+                            key: '冷色',
+                            value: '0-0',
+                        },
+                        {
+                            key: '暖色',
+                            value: '0-1',
+                            expand: true,
+                            node: 1,
+                            children:[
+                                {
+                                    key: '红色',
+                                    value: '0-1-0',
+                                },
+                                {
+                                    key: '橙色',
+                                    value: '0-1-1',
+                                    node: 1,
+                                    expand: true,
+                                    children: [
+                                         {
+                                            key: '橙红',
+                                            value: '0-1-1-0',
+                                         },
+                                    ],
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
+            selectedData:[
+                {
+                    key: '颜色',
+                    value: '0',
+                },
+            ],
             searchStr:'',
         }
     },
