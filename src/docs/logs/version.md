@@ -14,7 +14,7 @@
      <li>新增<b>RadioGroup</b>组件 。</li>
      <li>新增<b>Radio</b>组件 。</li>
      <li>新增Tree右侧controllers按钮功能。</li>
-     <li>修改Tree选取逻辑。</li>
+     <li>修改Tree默认值控制双向绑定的选取逻辑。</li>
      <li>修复Checkbox不显示激活样式bug。</li>
      <li>修改Button阴影。</li>
   </ol>
