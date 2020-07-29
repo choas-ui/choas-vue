@@ -109,9 +109,6 @@ module.exports = {
                                     '/components/common/button', '按钮 CButton'
                                 ],
                                 [
-                                    '/components/common/confirm', '轻确认* CConfirm'
-                                ],
-                                [
                                     '/components/common/icon', '图标 CIcon'
                                 ],
                                 [
@@ -125,6 +122,9 @@ module.exports = {
                                 ],
                                 [
                                     '/components/common/progress', '进度条* CProgress'
+                                ],
+                                [
+                                    '/components/common/prompt', '轻提示* prompt'
                                 ],
                                 [
                                     '/components/common/selection', '下拉框* CSelection'

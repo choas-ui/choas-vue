@@ -37,6 +37,10 @@
     <p>choas-delete</p>
   </span>
   <span class="icon-lib">
+    <p><CIcon icon-name="choas-big-delete" width="25" height="25"/></p>
+    <p>choas-big-delete</p>
+  </span>
+  <span class="icon-lib">
     <p><CIcon icon-name="choas-arrow-top" width="25" height="25"/></p>
     <p>choas-arrow-top</p>
   </span>
@@ -87,6 +91,10 @@
   <span class="icon-lib">
     <p><CIcon icon-name="choas-add" width="25" height="25"/></p>
     <p>choas-add</p>
+  </span>
+  <span class="icon-lib">
+    <p><CIcon icon-name="choas-light-add" width="25" height="25"/></p>
+    <p>choas-light-add</p>
   </span>
   <span class="icon-lib">
     <p><CIcon icon-name="choas-min" width="25" height="25"/></p>
@@ -277,7 +285,7 @@
     />
     <CIcon
         iconName="choas-close"
-        color="red"
+        color="#ff5e5c"
     />
     <CIcon
         src="/assets/img/iconExp/snowman.jpg"
@@ -305,7 +313,7 @@
         iconName="choas-forbid"
         width="40"
         height="40"
-        color="red"
+        color="#ff5e5c"
     />
     <CIcon
         width="80"
@@ -359,7 +367,7 @@
     />
     <CIcon
         font-class="fa fa-medkit"
-        color="red"
+        color="#ff5e5c"
         width="40"
         height="40"
         font-size="30"

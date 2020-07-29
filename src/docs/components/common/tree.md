@@ -655,6 +655,17 @@ export default {
   <ul>
     <li>controllers 属性将呈现一组可以操作树形节点的按钮。</li>
     <li>新增按钮需要conditionProps配合鉴定权限，如未指定，视为不可添加，不显示添加节点按钮。</li>
+    <li>
+        <span>editTreeNode用于编辑数据，编辑完成后修改树形数据列表。参数有两项:</span>
+        <ul>
+            <li>
+                data，对象,新增为{pId,title},修改{id,title},删除{id}。
+            </li>
+            <li>
+                type,字符串,add,edit,delete。
+            </li>
+        </ul>
+    </li>
   </ul>
 
 :::demo
@@ -665,14 +676,8 @@ export default {
             :list-data="listData"
             v-model="selectedData"
             controllers
-        >
-            <CIcon
-                slot="mark-icon"
-                icon-name="choas-square-add"
-            />
-            <CIcon
-                slot="file-icon"
-                icon-name="choas-lists"/>
+            :edit-tree-node="editTreeNode"
+        />
         </CTree>
     </template>
 <script>
@@ -684,6 +689,7 @@ export default {
                     key: '颜色',
                     value: '0',
                     expand: true,
+                    node: 1,
                     children:[
                         {
                             key: '冷色',
@@ -693,6 +699,7 @@ export default {
                             key: '暖色',
                             value: '0-1',
                             expand: true,
+                            node: 1,
                             children:[
                                 {
                                     key: '红色',
@@ -701,11 +708,13 @@ export default {
                                 {
                                     key: '橙色',
                                     value: '0-1-1',
+                                    node: 1,
+                                    expand: true,
                                     children: [
-                                         {
+                                        {
                                             key: '橙红',
                                             value: '0-1-1-0',
-                                         },
+                                        },
                                     ],
                                 },
                             ]
@@ -715,6 +724,16 @@ export default {
             ],
             selectedData:[],
             searchStr:'',
+        }
+    },
+    methods:{
+        editTreeNode(item, type){
+            return new Promise(resolve => {
+                setTimeout(()=>{
+                    console.log(item, type, 123)
+                    resolve({code: 200})
+                },5000)
+            }).then(res=>res)
         }
     }
 }
@@ -930,7 +949,6 @@ export default {
         }
     },
     methods:{
-        logs(item,event){console.log(item,event)}
     },
 }
 </script>
@@ -1009,7 +1027,6 @@ export default {
         }
     },
     methods:{
-        logs(item,event){console.log(item,event)}
     },
 }
 </script>
@@ -1080,7 +1097,6 @@ export default {
         }
     },
     methods:{
-        logs(item,event){console.log(item,event)}
     },
 }
 </script>

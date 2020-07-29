@@ -111,7 +111,7 @@
   </template>
   <style>
      .demo-content>div>button.usr-btn-class{
-      background: red;
+      background: #ff5e5c;
     }
   </style>
 ```
@@ -130,7 +130,7 @@
   </template>
   <style>
     .usr-btn-primary{
-      background: red;
+      background: #ff5e5c;
     }
   </style>
 ```

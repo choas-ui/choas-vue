@@ -68,7 +68,7 @@
                                width="20"
                                height="20"
                                color="#666"
-                               active-color="red"
+                               active-color="#ff5e5c"
                                :style="{
                                     lineHeight: '100%'
                                }"

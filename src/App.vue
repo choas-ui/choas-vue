@@ -8,6 +8,7 @@
                 controllers
                 line
                 checkbox
+                :edit-tree-node="editTreeNode"
         />
     </div>
 </template>
@@ -55,12 +56,29 @@
                         ]
                     }
                 ],
-                selectedData:[],
+                selectedData:[{
+                    key: '橙红',
+                    value: '0-1-1-0',
+                },],
                 searchStr:'',
             }
         },
         methods:{
-            logs(item,event){console.log(item,event)}
+            editTreeNode(item, type){
+                return new Promise(resolve => {
+                    setTimeout(()=>{
+                        if(item && type){
+                            resolve({code: 200})
+                        }
+                    },5000)
+                }).then(res=>{
+                    // 处理list
+                    if(res.code === 200){
+                        this.listData = this.selectedData
+                    }
+                    return res
+                })
+            },
         },
     }
 </script>
@@ -71,6 +89,6 @@
     }
 
     button.usr-btn-class {
-        background: red;
+        background: #ff5e5c;
     }
 </style>

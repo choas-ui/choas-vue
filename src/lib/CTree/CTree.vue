@@ -27,7 +27,7 @@
             markColor: {
                 type: String,
                 default() {
-                    return 'red'
+                    return '#ff5e5c'
                 }
             },
             className: {
@@ -83,6 +83,9 @@
                 default() {
                     return 'node'
                 }
+            },
+            editTreeNode: {
+                type: Function
             }
         },
         model: {
@@ -102,11 +105,11 @@
         },
         methods: {
             // 记录在编辑位置
-            changeEditItemId(v){
-              this.editItemId = v
+            changeEditItemId(v) {
+                this.editItemId = v
             },
             // 记录在添加位置
-            changeAddItemId(v){
+            changeAddItemId(v) {
                 this.addItemId = v
             },
             setParentNodeValue(data, path, isCancel) {
@@ -173,8 +176,6 @@
                     if (item.checked || item.halfChecked) {
                         this.getAllCheckedValue(item.children, res);
                         if (item.checked && !item[this.conditionProps]) {
-                            delete item.children
-                            delete item._c_tree_self_id
                             res.push(item)
                         }
                     }
@@ -191,8 +192,12 @@
                         this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value))
                         this.$set(this, 'copyListData', v)
                         // 同步已选值统一设置checked属性
-                        this.$emit('change', this.getAllCheckedValue(v))
-
+                        const value = _.cloneDeep(this.getAllCheckedValue(v))
+                        value.forEach(item => {
+                            delete item.children
+                            delete item._c_tree_self_id
+                        })
+                        this.$emit('change', value)
                     }
                 },
                 deep: true,
@@ -218,16 +223,17 @@
                         multiple: this.multiple, // 多选
                         checkbox: this.checkbox, // 显示选择框
                         conditionProps: this.conditionProps, // 不可选条件
-                        setParentNodeValue: this.setParentNodeValue,
-                        editItemId: this.editItemId,
-                        addItemId: this.addItemId,
+                        setParentNodeValue: this.setParentNodeValue, // 设置父元素值
+                        editTreeNode: this.editTreeNode, // 编辑节点
+                        editItemId: this.editItemId, // 在编辑状态的id
+                        addItemId: this.addItemId, // 在添加状态的id
                     },
                     on: {
                         ...this.$listeners,
-                        changeEditItemId:(v)=>{
+                        changeEditItemId: (v) => {
                             this.changeEditItemId(v)
                         },
-                        changeAddItemId:(v)=>{
+                        changeAddItemId: (v) => {
                             this.changeAddItemId(v)
                         },
                     }

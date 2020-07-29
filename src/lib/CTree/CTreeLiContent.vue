@@ -24,7 +24,7 @@
             markColor: {
                 type: String,
                 default() {
-                    return 'red'
+                    return '#ff5e5c'
                 }
             },
             prefix: {
@@ -87,23 +87,27 @@
                     return ''
                 }
             },
-            markIconWidth:{
+            markIconWidth: {
                 type: Number,
-                default(){
+                default() {
                     return 18
                 }
             },
-            markIconHeight:{
+            markIconHeight: {
                 type: Number,
-                default(){
+                default() {
                     return 18
                 }
             },
-            fixedPrefix:{
+            fixedPrefix: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
+            },
+            // 编辑节点
+            editTreeNode: {
+                type: Function
             }
         },
         model: {
@@ -157,20 +161,20 @@
                 if (this.isEditModel) {
                     return h('input',
                         {
-                            attrs:{
+                            attrs: {
                                 value: content
                             },
-                            on:{
-                                blur:(e)=>{
-                                    if(this.addItemId){
+                            on: {
+                                blur: (e) => {
+                                    if (this.addItemId) {
                                         this.addContent = e.target.value
-                                    }else{
+                                    } else {
                                         this.editContent = e.target.value
                                     }
                                 }
                             }
                         }
-                        )
+                    )
                 }
                 return h('span', {
                         style: {
@@ -217,10 +221,10 @@
                 )
             },
             // 生成子节点并存储子节点位置
-            createNewNodeValue(data){
-                const clickValue = _.get(this.copyListData,data._c_tree_self_id.split('-').join('.children.'), [])
-                const _c_tree_self_id =  data._c_tree_self_id+ '-'+(data.children || []).length
-                clickValue.children= clickValue.children || []
+            createNewNodeValue(data) {
+                const clickValue = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), [])
+                const _c_tree_self_id = data._c_tree_self_id + '-' + (data.children || []).length
+                clickValue.children = clickValue.children || []
                 clickValue.children.push({
                     [this.reflectKey['key']]: '',
                     [this.reflectKey['value']]: '',
@@ -230,8 +234,8 @@
                 this.$emit('changeAddItemId', _c_tree_self_id)
             },
             // 移除未添加的新节点和值
-            removeNoAddNodeValue(){
-                if(this.addItemId){
+            removeNoAddNodeValue() {
+                if (this.addItemId) {
                     let path = this.addItemId.split('-')
                     const [last, ...others] = [...path].reverse()
                     path = [...others].reverse().join('.children.')
@@ -242,7 +246,7 @@
                 }
             },
             // 移除编辑状态和值
-            cancelEditValue(){
+            cancelEditValue() {
                 this.$emit('changeEditItemId', '')
                 this.editContent = '';
             },
@@ -285,16 +289,21 @@
                             props: {
                                 color: '#333',
                                 iconName: 'choas-edit',
+                                activeColor: '#1890ff',
+                            },
+                            style:{
+                                marginRight: '4px'
                             },
                             slot: 'controllers',
                             on: {
                                 click: () => {
-                                    // 记录编辑行id,编辑行转为可编辑状态
-                                    this.$emit('changeEditItemId', data._c_tree_self_id)
+                                    // 取消在编辑状态
+                                    this.cancelEditValue()
                                     // 移除未添加的新增值
                                     this.removeNoAddNodeValue()
-                                    // 编辑值
-                                    console.log("编辑值",this.editContent)
+                                    // 生成子节点信息并记录子节点位置
+                                    // 记录编辑行id,编辑行转为可编辑状态
+                                    this.$emit('changeEditItemId', data._c_tree_self_id)
                                 }
                             }
                         },
@@ -302,8 +311,10 @@
                     data[this.conditionProps] && h('CIcon',
                         {
                             props: {
-                                color: '#333',
+                                color: '#ccc',
+                                activeColor: '#1ac756',
                                 iconName: 'choas-add',
+                                marginRight: '4px',
                             },
                             slot: 'controllers',
                             on: {
@@ -314,8 +325,6 @@
                                     this.removeNoAddNodeValue()
                                     // 生成子节点信息并记录子节点位置
                                     this.createNewNodeValue(data)
-                                    // 新增成功后 该子节点位置应空，若不为空视为添加失败，操作其他编辑项时会自动删除,则认为取消添加，操作时删除该值
-                                    console.log("新增值",this.addContent)
                                 }
                             }
                         }
@@ -324,16 +333,20 @@
                         {
                             props: {
                                 color: '#333',
+                                activeColor: '#ff5e5c',
                                 iconName: 'choas-delete',
                             },
                             slot: 'controllers',
                             on: {
-                                click: () => {
-                                    // 移除编辑状态和值
-                                    this.cancelEditValue();
-                                    // 移除新增节点和值
-                                    this.removeNoAddNodeValue();
-                                    console.log("新增值",data)
+                                click: async () => {
+                                    // 树形重选
+                                    let data = {
+                                        id: this.selfData[this.reflectKey['value']],
+                                        title: this.editContent
+                                    }
+                                    const type = 'delete'
+                                    alert('删除提示，私密大 prompt')
+                                    await this.selfEditTreeNode(data, type)
                                 }
                             }
                         }
@@ -401,6 +414,24 @@
                 })
                 return res
             },
+            async selfEditTreeNode(data, type) {
+                if(typeof this.editTreeNode !== 'function'){
+                    throw new Error('editTreeNode type Error!')
+                }
+                return this.editTreeNode(data, type).then((res) => {
+                    if (parseInt(res.code, 10) === 200) {
+                        // 取消在编辑状态
+                        // 自动更新数据
+                        this.cancelEditValue()
+                        // 移除未添加的新增值
+                        this.removeNoAddNodeValue()
+                        // 树形重选
+                        this.clickHandle(this.selfData)
+                    } else {
+                        alert('error')
+                    }
+                })
+            }
         },
         watch: {
             listData: {
@@ -413,7 +444,7 @@
                 immediate: true
             },
             editItemId: {
-                handler(){
+                handler() {
                     this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
                     this.isControllersShow = false;
                     this.editContent = ''
@@ -423,7 +454,7 @@
                 immediate: true
             },
             addItemId: {
-                handler(){
+                handler() {
                     this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
                     this.isControllersShow = false;
                     this.editContent = ''
@@ -471,18 +502,41 @@
                                         key: 'selected'
                                     },
                                     on: {
-                                        click: () => {
-                                            if(this.addItemId){
+                                        click: async () => {
+                                            let data = {}
+                                            let type = ''
+                                            if (this.addItemId) {
                                                 // 需要获取父节点id
-                                                console.log('新增节点', this.addContent, this.selfData)
-                                            }else{
-                                                console.log('修改节点', this.editContent, this.selfData)
+                                                if(!this.addContent){
+                                                    // 取消在编辑状态
+                                                    this.cancelEditValue()
+                                                    // 移除未添加的新增值
+                                                    this.removeNoAddNodeValue()
+                                                    return
+                                                }
+                                                const path = this.selfData._c_tree_self_id.split('-')
+                                                const [, ...pPath] = [...path].reverse()
+                                                const pNode = _.get(this.copyListData, pPath.reverse().join('.children.'), {})
+                                                data = {
+                                                    pId: pNode[this.reflectKey['value']],
+                                                    value: this.addContent
+                                                }
+                                                type = 'add'
+                                            } else {
+                                                if(!this.editContent){
+                                                    // 取消在编辑状态
+                                                    this.cancelEditValue()
+                                                    // 移除未添加的新增值
+                                                    this.removeNoAddNodeValue()
+                                                    return
+                                                }
+                                                data = {
+                                                    id: this.selfData[this.reflectKey['value']],
+                                                    value: this.editContent
+                                                }
+                                                type = 'edit'
                                             }
-                                            // 数据更新请求完成后
-                                            // 取消在编辑状态
-                                            // 自动更新数据
-                                            // this.cancelEditValue()
-                                            // this.clickHandle(this.selfData)
+                                            await this.selfEditTreeNode(data, type)
                                         }
                                     },
                                 }
@@ -491,16 +545,16 @@
                                 {
                                     props: {
                                         iconName: 'choas-close',
-                                        color: 'red',
-                                        activeColor: 'red',
+                                        color: '#ff5e5c',
+                                        activeColor: '#ff5e5c',
                                         key: 'close'
                                     },
                                     on: {
                                         click: () => {
+                                            // 取消在编辑状态
+                                            this.cancelEditValue()
                                             // 移除未添加的新增值
                                             this.removeNoAddNodeValue()
-                                            // 移除在编辑状态
-                                            this.cancelEditValue()
                                         }
                                     },
                                 }
@@ -521,10 +575,12 @@
     .tree {
         &-title-wrap {
             flex: 1;
+
             &:hover {
                 color: $primary;
             }
         }
+
         &-title-wrap.active {
             color: $primary;
             font-weight: bold;

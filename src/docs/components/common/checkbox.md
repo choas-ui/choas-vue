@@ -155,7 +155,7 @@
         />
         <CIcon icon-name="choas-forbid"
                slot="disabled-icon"
-               color="red"
+               color="#ff5e5c"
                :style="{
                     position: 'absolute', 
                     left: '-1px', 
@@ -188,7 +188,7 @@
         />
         <CIcon icon-name="choas-forbid"
                slot="disabled-icon"
-               color="red"
+               color="#ff5e5c"
                :style="{
                     position: 'absolute', 
                     left: '-1px', 
@@ -221,7 +221,7 @@
         />
         <CIcon icon-name="choas-forbid"
                slot="disabled-icon"
-               color="red"
+               color="#ff5e5c"
                :style="{
                     position: 'absolute', 
                     left: '-1px', 
