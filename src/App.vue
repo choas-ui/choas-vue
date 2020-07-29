@@ -1,5 +1,7 @@
 <template>
-    <CPrompt>123</CPrompt>
+    <div>
+        <CPrompt dialog="燃烧你的卡路里">123</CPrompt>
+    </div>
 </template>
 
 <script>
@@ -8,9 +10,12 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     body {
         margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vh;
     }
 
     button.usr-btn-class {
