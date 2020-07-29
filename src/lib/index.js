@@ -7,6 +7,7 @@ import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
 import CProgress from './CProgress'
+import CPrompt from "./CPrompt/CPrompt";
 import CRadio from './CRadio'
 import CRadioGroup from './CRadioGroup'
 import CSelection from './CSelection'
@@ -27,6 +28,7 @@ const components = [
     CInputTreeModal,
     CModal,
     CProgress,
+    CPrompt,
     CRadio,
     CRadioGroup,
     CSelection,
@@ -53,6 +55,7 @@ export default {
     CIcon,
     CInputTreeModal,
     CModal,
+    CPrompt,
     CRadio,
     CRadioGroup,
     CSelection,

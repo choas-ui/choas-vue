@@ -9,15 +9,17 @@
   
   <ol reversed>
      <li>引入部分矢量图标。</li>
+     <li>新增<b>Prompt</b>组件。</li>
      <li>新增<b>Tree</b>组件中多选框选项。</li>
      <li>新增<b>Tree</b>组件中可变标题可变背景选项。</li>
-     <li>新增<b>RadioGroup</b>组件 。</li>
-     <li>新增<b>Radio</b>组件 。</li>
+     <li>新增<b>RadioGroup</b>组件。</li>
+     <li>新增<b>Radio</b>组件。</li>
      <li>新增Tree右侧controllers按钮功能。</li>
+     <li>修改Tree搜索逻辑。</li>
      <li>修改Tree默认值控制双向绑定的选取逻辑。</li>
+     <li>修改Button阴影。</li>
      <li>修复直接操作选取值导致的无法编辑问题。</li>
      <li>修复Checkbox不显示激活样式bug。</li>
-     <li>修改Button阴影。</li>
   </ol>
 :::
 

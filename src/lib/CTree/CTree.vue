@@ -94,11 +94,9 @@
         },
         data() {
             return {
-                copyListData: {},
-                copySelectedData: {},
-                fixedPrefix: '',
-                markIconWidth: 18,
-                markIconHeight: 18,
+                copyListData: {}, // 备份数据
+                treeUlData: {}, // 渲染list
+                copySelectedData: {}, // 渲染已选数据
                 editItemId: '', // 在编辑元素位置编码
                 addItemId: '', // 在添加元素位置编码
             }
@@ -182,6 +180,25 @@
                 })
                 return res
             },
+            // 筛选数据
+            filterData(data,v){
+                let key = this.reflectKey['key']
+                for (let i = 0; i <data.length ; i++) {
+                    let item = data[i]
+                    item.expand= true
+                    if((item.children || []).length){
+                        this.filterData(item.children, v)
+                    }
+                    if(!(item.children || []).length){
+                        delete item.children
+                        if(item[key].indexOf(v)<0){
+                            data.splice(i,1)
+                            i--
+                        }
+                    }
+                }
+                return data
+            },
         },
         watch: {
             listData: {
@@ -190,7 +207,8 @@
                         // 同步listData已选值设置checked属性,向上递归设置父节点属性
                         // TODO 该操作比较耗费性能 以后优化
                         this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value))
-                        this.$set(this, 'copyListData', v)
+                        this.$set(this, 'copyListData', _.cloneDeep(v))
+                        this.$set(this, 'treeUlData', _.cloneDeep(v))
                         // 同步已选值统一设置checked属性
                         const value = _.cloneDeep(this.getAllCheckedValue(v))
                         value.forEach(item => {
@@ -203,6 +221,14 @@
                 deep: true,
                 immediate: true
             },
+            searchStr(v){
+                if(v){
+                    this.$set(this, 'treeUlData', this.filterData(this.treeUlData, v))
+                }else{
+                    this.$set(this, 'treeUlData', _.cloneDeep(this.copyListData))
+
+                }
+            }
         },
         render(h) {
             return h('CTreeUl',
@@ -213,7 +239,7 @@
                     props: {
                         lineStartLv: 0,
                         _c_tree_parent_id: '',
-                        listData: this.copyListData,
+                        listData: this.treeUlData,
                         line: this.line,
                         reflectKey: this.reflectKey,
                         searchStr: this.searchStr,

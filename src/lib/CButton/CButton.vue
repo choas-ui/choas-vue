@@ -59,10 +59,9 @@
                 return classNames(
                     this.className,
                     {
+                        [`${prefix}btn`]: true,
                         [`${prefix}btn-block`]: this.block,
-                    },
-                    {
-                        [`not-allowed-cursor`]: this.type === 'disabled'
+                        [`not-allowed-cursor`]: this.type === 'disabled',
                     },
                     {
                         [`${prefix}btn-primary`]: this.type === 'primary' || !(this.type),
@@ -78,9 +77,6 @@
                         [`${prefix}btn-df`]: this.size === 'default' || !(this.size),
                         [`${prefix}btn-sm`]: this.size === 'small',
                         [`${prefix}btn-ssm`]: this.size === 'ssmall',
-                    },
-                    {
-                        [`${prefix}btn`]: true,
                     }
                 )
             },
