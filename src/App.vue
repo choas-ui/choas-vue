@@ -12,6 +12,9 @@
 <script>
     export default {
         name: 'App',
+        mounted(){
+            this.$cMessage.success({timeSpan: 2})
+        }
     }
 </script>
 

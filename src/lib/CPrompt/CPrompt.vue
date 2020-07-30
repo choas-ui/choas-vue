@@ -234,7 +234,7 @@
                     ref: 'promptWrap',
                     class: this.getPromptWrap,
                     on: {
-                        click: (e) => {
+                        click: () => {
                             this.showPrompt(true)
                         }
                     }
