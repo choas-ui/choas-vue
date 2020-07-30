@@ -43,6 +43,10 @@ function registerComponentsList() {
                     path: getPath('CProgress')
                 },
                 {
+                    name: 'CPrompt',
+                    path: getPath('CPrompt')
+                },
+                {
                     name: 'CRadio',
                     path: getPath('CRadio')
                 },
@@ -124,7 +128,7 @@ module.exports = {
                                     '/components/common/progress', '进度条* CProgress'
                                 ],
                                 [
-                                    '/components/common/prompt', '轻提示* prompt'
+                                    '/components/common/prompt', '轻提示* CPrompt'
                                 ],
                                 [
                                     '/components/common/selection', '下拉框* CSelection'

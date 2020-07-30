@@ -1,6 +1,11 @@
 <template>
     <div>
-        <CPrompt dialog="燃烧你的卡路里">123</CPrompt>
+<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-left">123</CPrompt>-->
+<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-right">123</CPrompt>-->
+<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-center">123</CPrompt>-->
+        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-left" :render-component="(h)=>h('div',[123])">123</CPrompt>
+<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-right">123</CPrompt>-->
+<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-center">123</CPrompt>-->
     </div>
 </template>
 
@@ -16,9 +21,10 @@
         overflow: hidden;
         height: 100vh;
         width: 100vh;
-    }
-
-    button.usr-btn-class {
-        background: #ff5e5c;
+        &>div{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
     }
 </style>

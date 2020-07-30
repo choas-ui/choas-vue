@@ -120,6 +120,7 @@
                 copySelectedData: {},
                 isControllersShow: false,
                 isEditModel: false,
+                isDeleteModel: false,
                 editContent: '',
                 addContent: ''
             }
@@ -291,10 +292,9 @@
                                 iconName: 'choas-edit',
                                 activeColor: '#1890ff',
                             },
-                            style:{
+                            style: {
                                 marginRight: '4px'
                             },
-                            slot: 'controllers',
                             on: {
                                 click: () => {
                                     // 取消在编辑状态
@@ -316,7 +316,6 @@
                                 iconName: 'choas-add',
                                 marginRight: '4px',
                             },
-                            slot: 'controllers',
                             on: {
                                 click: () => {
                                     // 取消在编辑状态
@@ -329,28 +328,42 @@
                             }
                         }
                     ),
-                    h('CIcon',
+                    h('CPrompt',
                         {
                             props: {
-                                color: '#333',
-                                activeColor: '#ff5e5c',
-                                iconName: 'choas-delete',
+                                dialog: '正在删除，请确认！'
                             },
-                            slot: 'controllers',
                             on: {
-                                click: async () => {
-                                    // 树形重选
+                                confirm: async () => {
                                     let data = {
                                         id: this.selfData[this.reflectKey['value']],
                                         title: this.editContent
                                     }
                                     const type = 'delete'
-                                    alert('删除提示，私密大 prompt')
                                     await this.selfEditTreeNode(data, type)
+                                },
+                                cancel:()=>{
+                                    this.isDeleteModel = false
+                                    this.isControllersShow =false
                                 }
                             }
-                        }
-                    )
+                        },
+                        [
+                            h('CIcon',
+                                {
+                                    props: {
+                                        color: '#333',
+                                        activeColor: '#ff5e5c',
+                                        iconName: 'choas-delete',
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.isDeleteModel = true
+                                        },
+                                    }
+                                }
+                            )
+                        ]),
                 ]
             },
             // 点击关联元素
@@ -415,7 +428,7 @@
                 return res
             },
             async selfEditTreeNode(data, type) {
-                if(typeof this.editTreeNode !== 'function'){
+                if (typeof this.editTreeNode !== 'function') {
                     throw new Error('editTreeNode type Error!')
                 }
                 return this.editTreeNode(data, type).then((res) => {
@@ -427,6 +440,7 @@
                         this.removeNoAddNodeValue()
                         // 树形重选
                         this.clickHandle(this.selfData)
+                        this.isEditModel = false
                     } else {
                         alert('error')
                     }
@@ -478,7 +492,7 @@
                             this.isControllersShow = true
                         },
                         mouseleave: () => {
-                            if (!this.isEditModel) {
+                            if (!this.isEditModel && !this.isDeleteModel) {
                                 this.isControllersShow = false
                             }
                         },
@@ -493,21 +507,19 @@
                     ),
                     this.isControllersShow && this.isEditModel && h('span',
                         [
-                            h('CIcon',
+
+                            h('CPrompt',
                                 {
                                     props: {
-                                        iconName: 'choas-selected',
-                                        color: 'green',
-                                        activeColor: 'green',
-                                        key: 'selected'
+                                        dialog: this.editContent ?'正在修改数据，请确认！': this.addContent? '正在新增数据，请确认': '当前未发生改变'
                                     },
                                     on: {
-                                        click: async () => {
+                                        confirm: async () => {
                                             let data = {}
                                             let type = ''
                                             if (this.addItemId) {
                                                 // 需要获取父节点id
-                                                if(!this.addContent){
+                                                if (!this.addContent) {
                                                     // 取消在编辑状态
                                                     this.cancelEditValue()
                                                     // 移除未添加的新增值
@@ -523,7 +535,7 @@
                                                 }
                                                 type = 'add'
                                             } else {
-                                                if(!this.editContent){
+                                                if (!this.editContent) {
                                                     // 取消在编辑状态
                                                     this.cancelEditValue()
                                                     // 移除未添加的新增值
@@ -537,9 +549,29 @@
                                                 type = 'edit'
                                             }
                                             await this.selfEditTreeNode(data, type)
+                                        },
+                                        cancel:()=>{
+                                            this.isDeleteModel = false
+                                            this.isControllersShow =false
                                         }
-                                    },
-                                }
+                                    }
+                                },
+                                [
+                                    h('CIcon',
+                                        {
+                                            props: {
+                                                iconName: 'choas-selected',
+                                                color: 'green',
+                                                activeColor: 'green',
+                                                key: 'selected'
+                                            },
+                                            on: {
+                                                click: async () => {
+                                                }
+                                            },
+                                        }
+                                    ),
+                                ]
                             ),
                             h('CIcon',
                                 {
