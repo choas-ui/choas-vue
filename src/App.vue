@@ -1,33 +1,33 @@
 <template>
-    <div>
-<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-left">123</CPrompt>-->
-<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-right">123</CPrompt>-->
-<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="top-center">123</CPrompt>-->
-        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-left" :render-component="(h)=>h('div',[123])">123</CPrompt>
-<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-right">123</CPrompt>-->
-<!--        <CPrompt dialog="燃烧你的卡路里" place-setting="bottom-center">123</CPrompt>-->
-    </div>
+  <CButton @click="clickHandle"></CButton>
 </template>
 
 <script>
-    export default {
-        name: 'App',
-        mounted(){
-            this.$cMessage.success({timeSpan: 2})
-        }
+export default {
+  name: 'App',
+  mounted() {
+  },
+  methods: {
+    clickHandle() {
+      this.$cMessage.success({timeSpan: 2})
+      this.$cMessage.info({timeSpan: 2})
+
     }
+  }
+}
 </script>
 
 <style lang="scss">
-    body {
-        margin: 0;
-        overflow: hidden;
-        height: 100vh;
-        width: 100vh;
-        &>div{
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
-    }
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vh;
+
+  & > div {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
 </style>
