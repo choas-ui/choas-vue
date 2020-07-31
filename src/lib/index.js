@@ -6,7 +6,6 @@ import CCheckbox from "./CCheckbox";
 import CCheckboxGroup from "./CCheckboxGroup";
 import CIcon from './CIcon'
 import CInputTreeModal from './CInputTreeModal'
-import cMessage from './CMessage'
 import CModal from './CModal'
 import CProgress from './CProgress'
 import CPrompt from "./CPrompt/CPrompt";
@@ -16,6 +15,8 @@ import CSelection from './CSelection'
 import CTag from './CTag'
 import CTree from './CTree'
 import CTreeModal from './CTreeModal'
+
+import cMessage from './CMessage'
 
 
 

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 import CMessage from './CMessage'
 
-const createVm = ()=>{
+const createVm = () => {
     const divNode = document.createElement('div')
     document.body.append(divNode)
     return new Vue({
@@ -20,24 +20,25 @@ const createVm = ()=>{
                 {
                     class: 'c-message-box',
                     style: {
-                        position: 'absolute',
+                        position: 'fixed',
                         width: 0,
                         height: 0,
                         left: 0,
                         top: 0,
+                        zIndex: 999
                     }
                 },
                 this.listData.map((props) => {
                     return h('CMessage',
                         {
-                            props:{
+                            props: {
                                 ...props,
                             },
                             key: props.id,
                             on: {
                                 changeListData: (id) => {
                                     const index = this.listData.findIndex(item => item.id === id)
-                                    if(index>-1){
+                                    if (index > -1) {
                                         this.listData.splice(index, 1)
                                     }
                                 }
@@ -48,13 +49,13 @@ const createVm = ()=>{
             )
         }
     }).$mount(divNode)
-}
+};
 
 
 const cMessage = {
     vm: null,
     success(msgData) {
-        if(!this.vm){
+        if (!this.vm) {
             this.vm = createVm()
         }
         this.vm.listData.push({
@@ -63,8 +64,8 @@ const cMessage = {
             id: _.uniqueId('msg-')
         })
     },
-    info(msgData){
-        if(!this.vm){
+    info(msgData) {
+        if (!this.vm) {
             this.vm = createVm()
         }
         this.vm.listData.push({
@@ -73,18 +74,18 @@ const cMessage = {
             id: _.uniqueId('msg-')
         })
     },
-    error(msgData){
-        if(!this.vm){
+    danger(msgData) {
+        if (!this.vm) {
             this.vm = createVm()
         }
         this.vm.listData.push({
             ...msgData,
-            noticeType: 'error',
+            noticeType: 'danger',
             id: _.uniqueId('msg-')
         })
     },
-    warning(msgData){
-        if(!this.vm){
+    warning(msgData) {
+        if (!this.vm) {
             this.vm = createVm()
         }
         this.vm.listData.push({
@@ -93,7 +94,7 @@ const cMessage = {
             id: _.uniqueId('msg-')
         })
     }
-}
+};
 
 
 export default cMessage

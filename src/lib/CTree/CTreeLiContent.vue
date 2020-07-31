@@ -441,8 +441,15 @@
                         // 树形重选
                         this.clickHandle(this.selfData)
                         this.isEditModel = false
+                        this.$cMessage.info({
+                            message: '操作成功!',
+                            timeSpan: 2,
+                        });
                     } else {
-                        alert('error')
+                        this.$cMessage.error({
+                            message: '操作失败!',
+                            timeSpan: 2,
+                        });
                     }
                 })
             }

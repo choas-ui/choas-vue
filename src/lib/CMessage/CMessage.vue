@@ -6,10 +6,16 @@ export default {
   props: {
     noticeType: {
       validate(v) {
-        return ['info', 'success', 'warning', 'error'].indexOf(v) > 0
+        return ['info', 'success', 'warning', 'danger'].indexOf(v) > 0
       },
       default() {
         return 'info'
+      }
+    },
+    txtColor:{
+      type: String,
+      default(){
+        return '#fff'
       }
     },
     message: {
@@ -59,6 +65,8 @@ export default {
             [prefix + 'message-wrap']: true,
             [prefix + 'message-info']: this.noticeType === 'info',
             [prefix + 'message-success']: this.noticeType === 'success',
+            [prefix + 'message-warning']: this.noticeType === 'warning',
+            [prefix + 'message-danger']: this.noticeType === 'danger',
           }
       )
     },
@@ -87,7 +95,8 @@ export default {
                 class: this.getMessageWrapClass,
                 style: {
                   width: this.width + 'px',
-                  marginLeft: `calc(50vw - ${(this.width / 2).toFixed(0)}px)`
+                  marginLeft: `calc(50vw - ${(this.width / 2).toFixed(0)}px)`,
+                  color: this.txtColor
                 },
                 on: {
                   mouseenter: () => {
@@ -118,27 +127,34 @@ export default {
   &-wrap {
     padding: addPX($ssm-padding);
     box-sizing: border-box;
-    border-radius: addPX($df-radius);
-    color: #ffffff;
+    border-radius: addPX($lg-radius);
     margin: addPX($sm-margin) 0;
     font-size: addPX($df-fs);
   }
 
   &-info {
-    border: 2px solid darkColor20($info);
-    background: weakColor80($info);
+    border: 2px solid scale-color($info, $lightness: -10%);
+    background: scale-color($info, $lightness: +30%);
   }
 
   &-success {
-    border: 2px solid darkColor20($success);
-    background: weakColor80($success);
+    border: 2px solid scale-color($success, $lightness: -10%);
+    background: scale-color($success, $lightness: +30%);
+  }
+  &-danger {
+    border: 2px solid scale-color($danger, $lightness: -10%);
+    background: scale-color($danger, $lightness: +30%);
+  }
+  &-warning {
+    border: 2px solid scale-color($warning, $lightness: -10%);
+    background: scale-color($warning, $lightness: +30%);
   }
 }
 .slide-fade-enter-active {
   transition: all .3s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to{
   transform: translateY(-10px);

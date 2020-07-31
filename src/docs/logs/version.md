@@ -10,6 +10,7 @@
   <ol reversed>
      <li>引入部分矢量图标。</li>
      <li><b>Prompt</b>组件函数化。</li>
+     <li>新增<b>Message</b>组件。</li>
      <li>新增<b>Prompt</b>组件。</li>
      <li>新增<b>Tree</b>组件中多选框选项。</li>
      <li>新增<b>Tree</b>组件中可变标题可变背景选项。</li>

@@ -1,4 +1,5 @@
 const path = require('path')
+const CButton  = require('choas-vue/src/lib')
 
 function getPath(ComponentName) {
     return path.resolve(process.cwd(), `src/lib/${ComponentName}`)
@@ -10,8 +11,8 @@ function registerComponentsList() {
         {
             components: [
                 {
-                    name: 'CButton',
-                    path: getPath('CButton')
+                    name: CButton.name,
+                    path: CButton
                 },
                 {
                     name: 'CButtonGroup',

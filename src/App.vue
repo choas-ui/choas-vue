@@ -7,8 +7,7 @@ export default {
   name: 'App',
   data() {
     return {
-      x: 10
-    }
+      x: 10 }
   },
   mounted() {
   },
@@ -23,7 +22,7 @@ export default {
           }
         })
       } else {
-        this.$cMessage.success({timeSpan: 2})
+        this.$cMessage.success({message: 'Success',timeSpan: 2})
       }
     }
   }
