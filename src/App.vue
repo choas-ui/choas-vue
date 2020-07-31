@@ -5,13 +5,26 @@
 <script>
 export default {
   name: 'App',
+  data() {
+    return {
+      x: 10
+    }
+  },
   mounted() {
   },
   methods: {
     clickHandle() {
-      this.$cMessage.success({timeSpan: 2})
-      this.$cMessage.info({timeSpan: 2})
-
+      if (Math.random() > 0.5) {
+        this.$cMessage.info({
+          timeSpan: 2,
+          message: 'INFO',
+          callback: () => {
+            console.log(this.x)
+          }
+        })
+      } else {
+        this.$cMessage.success({timeSpan: 2})
+      }
     }
   }
 }
