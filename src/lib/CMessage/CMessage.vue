@@ -62,6 +62,7 @@ export default {
   },
   mounted() {
     this.removeHandle()
+
   },
   render(h) {
     return h('div',
