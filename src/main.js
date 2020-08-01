@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
-import ChoasUI from 'choas-vue'
+import choasUI from './lib'
+
 Vue.config.productionTip = false
-Vue.use(ChoasUI)
+Vue.use(choasUI)
+
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')
