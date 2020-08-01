@@ -49,7 +49,7 @@
       </div>
       <div v-if="'footer' in $scopedSlots || type" :class="getFooter">
         <slot name="footer">
-          <CButton :type="type" @click="removeModal($event)">确&nbsp;&nbsp;认</CButton>
+          <CButton :type="type" size="small" @click="removeModal($event)">确&nbsp;&nbsp;认</CButton>
         </slot>
       </div>
     </div>
@@ -321,11 +321,10 @@ export default {
 
     &-footer {
       width: 100%;
-      min-height: addPX($df-height);
+      min-height: addPX($lg-height);
       display: flex;
       justify-content: flex-end;
       align-items: center;
-
       & button {
         margin-right: addPX($lg-padding);
       }
