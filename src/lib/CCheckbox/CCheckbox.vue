@@ -2,6 +2,9 @@
     <span :class="getItemClass"
           @click="selectHandle"
     >
+        <label style="display: none">
+            <input type="checkbox" :value="value" v-model="checkedArr">
+        </label>
         <span :class="getFakeIconClass"
               :style="{
                 width: width +'px',
@@ -148,7 +151,7 @@
         },
         mounted() {
             if (!this.isSimpleModel) {
-                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
+                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
                 if (index > -1) {
                     if (!this.value.checked) {
                         this.checkedArr.splice(index, 1)
@@ -187,7 +190,7 @@
                 return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
             },
             getFakeIconClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}checkbox-item-fake-icon`]: true
@@ -195,7 +198,7 @@
                 )
             },
             getItemClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}checkbox-item`]: true
@@ -221,9 +224,9 @@
                     this.checkedArr.splice(index, 1)
                 }
                 if (index < 0) {
-                    this.checkedArr.push(_.cloneDeep(this.value))
+                    this.checkedArr.push(_.cloneDeep(this.value));
                     if (!this.isSimpleModel) {
-                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true)
+                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true);
                         this.$set(this.checkedArr[this.checkedArr.length - 1], 'halfChecked', false)
                     }
                 }
@@ -239,7 +242,7 @@
             },
             checkedData: {
                 handler(v) {
-                    if (!_.isEqual(v, this.checkedArr)) {
+                    if (v && !_.isEqual(v, this.checkedArr)) {
                         this.$set(this, 'checkedArr', v)
                     }
                 },
