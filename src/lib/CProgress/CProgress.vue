@@ -121,7 +121,7 @@
                         background = `linear-gradient(${bc.deg || 45}deg, ${bc.color[0]} 25%, ${bc.color[1]} 0%,${bc.color[1]} 50%,${bc.color[0]}
                 0%,${bc.color[0]} 75%,${bc.color[1]} 0%)`
                         backgroundSize = `${Math.round(this.height / Math.tan(((bc.deg || 45) / 180) * 3.14))}px`
-                        animationDuration = `${Math.ceil((this.timeSpan / 100) * this.value)}s`
+                        animationDuration = `${this.timeSpan}s`
                     } else {
                         background = bc.color[0] || bc.color[1]
                     }
@@ -231,7 +231,7 @@
     }
 
     .bounce-enter-active {
-        animation: linear bounce-in 10s infinite;
+        animation: bounce-in 2s infinite linear ;
     }
 
     @keyframes bounce-in {

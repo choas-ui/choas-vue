@@ -96,7 +96,7 @@
         },
         computed: {
             getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}checkbox-group-wrap`]: true

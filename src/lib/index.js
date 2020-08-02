@@ -5,6 +5,7 @@ import CCascade from './CCascade'
 import CCheckbox from "./CCheckbox";
 import CCheckboxGroup from "./CCheckboxGroup";
 import CIcon from './CIcon'
+import CInput from './CInput'
 import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
 import CProgress from './CProgress'
@@ -28,6 +29,7 @@ const components = [
     CCheckbox,
     CCheckboxGroup,
     CIcon,
+    CInput,
     CInputTreeModal,
     CModal,
     CProgress,
@@ -48,21 +50,26 @@ const install = function (Vue) {
 if (typeof window.Vue !== "undefined" && window.Vue) {
     install(window.Vue);
 }
-Vue.prototype.$cMessage = cMessage
+Vue.prototype.$cMessage = cMessage;
 
 export default {
     install,
+
     CButton,
+    CButtonGroup,
     CCascade,
     CCheckbox,
     CCheckboxGroup,
     CIcon,
+    CInput,
     CInputTreeModal,
     CModal,
+    CProgress,
     CPrompt,
     CRadio,
     CRadioGroup,
     CSelection,
+    CTag,
     CTree,
     CTreeModal
 }

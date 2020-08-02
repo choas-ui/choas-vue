@@ -1,5 +1,7 @@
 <template>
     <div>
+        <p>{{ value }}</p>
+        <CInput v-model="value" placeholder="一些不知道的内容"/>
     </div>
 </template>
 
@@ -7,6 +9,7 @@
     export default {
         data(){
             return {
+                value: ''
             }
         }
     }
