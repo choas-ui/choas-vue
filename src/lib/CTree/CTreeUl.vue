@@ -63,14 +63,14 @@
                 type: Boolean
             },
             // 展开图标左间距
-            markIconFixMarginLeft: {
+            markIconFixMarginRight: {
                 type: Number,
                 default() {
                     return 0
                 }
             },
             // 文件标识图标左间距
-            fileIconFixMargin: {
+            fileIconFixMarginRightRight: {
                 type: Number,
                 default() {
                     return 0
@@ -197,7 +197,7 @@
                                         ...Object.keys(this.$slots).map((key) => {
                                             if (key === 'controllers') {
                                                 return this.$slots[key].map(item => {
-                                                    const {tag, listeners = {}, propsData} = item.componentOptions || {}
+                                                    const {tag, listeners = {}, propsData} = item.componentOptions || {};
                                                     if (tag)
                                                         return h(tag,
                                                             {
@@ -208,7 +208,7 @@
                                                                 ...item.data,
                                                                 on: listeners
                                                             }
-                                                        )
+                                                        );
                                                     return null
                                                 }).filter(Boolean)
                                             }
@@ -227,21 +227,35 @@
                 }
                 const className = classNames({
                     [`${this.fixedPrefix}tree-mark-icon`]: true
-                })
-                if (this.$slots['mark-icon']) {
+                });
+                if (!data.expand && this.$slots['expand-icon']) {
                     return h('span', {
                             class: className,
                             style: {
-                                transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : '',
-                                marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
+                                marginRight: `${this.markIconFixMarginRight}px`
                             },
                             on: {
                                 click: () => {
-                                    this.$set(data, 'expand', !data.expand)
+                                    this.$set(data, 'expand', true)
                                 }
                             }
                         },
-                        this.$slots['mark-icon']
+                        this.$slots['expand-icon']
+                    )
+                }
+                if (data.expand && this.$slots['pick-up-icon']) {
+                    return h('span', {
+                            class: className,
+                            style: {
+                                marginRight: `${this.markIconFixMarginRight}px`
+                            },
+                            on: {
+                                click: () => {
+                                    this.$set(data, 'expand', false)
+                                }
+                            }
+                        },
+                        this.$slots['pick-up-icon']
                     )
                 }
                 return h('CIcon', {
@@ -251,7 +265,7 @@
                     class: className,
                     style: {
                         transform: data.expand || !(data.children || []).length ? 'rotate(90deg)' : 'rotate(0)',
-                        marginLeft: this.lineStartLv ? `${this.markIconFixMarginLeft}px` : '0'
+                        marginRight: `${this.markIconFixMarginRight}px`
                     },
                     on: {
                         click: () => {
@@ -304,12 +318,12 @@
                                         [`${this.fixedPrefix}tree-align-line`]: this.line
                                     }),
                                     style: {
-                                        // 两倍展开图标长 + 展开图标左间距（6）-竖线宽（1）
-                                        width: (this.markIconWidth * 2) + (this.markIconFixMarginLeft - 1) + 'px',
+                                        // 两倍展开图标长
+                                        width: (this.markIconWidth * 2) + 'px',
                                     }
                                 }
                             )
-                        } else if (index >= this.lineStartLv) {
+                        } else if (index >= (this.lineStartLv-1)*2) {
                             // 子元素竖线
                             return h('span',
                                 {
@@ -335,7 +349,7 @@
                         {
                             slot: 'file-icon',
                             style: {
-                                margin: `0 ${this.fileIconFixMargin}px`
+                                margin: `0 ${this.fileIconFixMarginRight}px`
                             }
                         },
                         [this.$slots['file-icon']]
@@ -363,8 +377,8 @@
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
                                 controllers: this.controllers,
-                                fileIconFixMargin: this.fileIconFixMargin,
-                                markIconFixMarginLeft: this.markIconFixMarginLeft,
+                                fileIconFixMarginRight: this.fileIconFixMarginRight,
+                                markIconFixMarginRight: this.markIconFixMarginRight,
                                 multiple: this.multiple, // 多选
                                 checkbox: this.checkbox, // 显示选择框
                                 conditionProps: this.conditionProps, // 不可选条件
@@ -389,10 +403,10 @@
                         /* 重新带入插槽 */
                         [
                             ...Object.keys(this.$slots).map((key) => {
-                                const {tag} = this.$slots[key][0].componentOptions || {}
+                                const {tag} = this.$slots[key][0].componentOptions || {};
                                 if (key === 'controllers') {
                                     return this.$slots[key].map(item => {
-                                        const {tag, listeners = {}, propsData} = item.componentOptions || {}
+                                        const {tag, listeners = {}, propsData} = item.componentOptions || {};
                                         if (tag)
                                             return h(tag,
                                                 {
@@ -403,7 +417,7 @@
                                                     ...item.data,
                                                     on: listeners
                                                 }
-                                            )
+                                            );
                                         return null
                                     }).filter(Boolean)
                                 }
@@ -436,8 +450,8 @@
             },
         },
         render(h) {
-            const path = this._c_tree_parent_id
-            let theLvListData = this.copyListData || []
+            const path = this._c_tree_parent_id;
+            let theLvListData = this.copyListData || [];
             if (path !== '') {
                 theLvListData = _.get(this.copyListData, path.split('-').join('.children.') + '.children', [])
             }

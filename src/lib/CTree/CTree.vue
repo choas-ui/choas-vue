@@ -55,14 +55,14 @@
                 type: Boolean
             },
             // 展开图标左间距
-            markIconFixMarginLeft: {
+            markIconFixMarginRight: {
                 type: Number,
                 default() {
                     return 0
                 }
             },
             // 文件标识图标左间距
-            fileIconFixMargin: {
+            fileIconFixMarginRight: {
                 type: Number,
                 default() {
                     return 0
@@ -111,11 +111,11 @@
                 this.addItemId = v
             },
             setParentNodeValue(data, path, isCancel) {
-                const pathArr = path.split('-')
+                const pathArr = path.split('-');
                 while (pathArr.length) {
-                    const parentNode = _.get(data, pathArr.join('.children.'), {children: []})
+                    const parentNode = _.get(data, pathArr.join('.children.'), {children: []});
                     if (isCancel) {
-                        this.$set(parentNode, 'checked', false)
+                        this.$set(parentNode, 'checked', false);
                         if ((parentNode.children || []).some(item => item.checked || item.halfChecked)) {
                             this.$set(parentNode, 'halfChecked', true)
                         } else {
@@ -124,7 +124,7 @@
                     } else {
                         if ((parentNode.children || []).length) {
                             if (parentNode.children.length === 1 || parentNode.children.every(item => item.checked)) {
-                                this.$set(parentNode, 'checked', true)
+                                this.$set(parentNode, 'checked', true);
                                 delete parentNode.halfChecked
                             } else {
                                 this.$set(parentNode, 'halfChecked', true)
@@ -137,18 +137,18 @@
             // 标记数据结构 同步数据 非常耗费时间
             markIdentifyAndSyncData(listData, data, selectData, parentId = '') {
                 data.forEach((item, index) => {
-                    const selfPath = parentId + index
-                    item._c_tree_self_id = selfPath
+                    const selfPath = parentId + index;
+                    item._c_tree_self_id = selfPath;
                     // 设置父元素属性
                     if (selectData.length) {
-                        const findIndex = selectData.findIndex(select => select[this.reflectKey['value']] === item[this.reflectKey['value']])
+                        const findIndex = selectData.findIndex(select => select[this.reflectKey['value']] === item[this.reflectKey['value']]);
                         if (findIndex > -1) {
-                            const length = selfPath.length - 2 > 0 ? selfPath.length - 2 : 0
-                            const pPath = selfPath.slice(0, length)
-                            this.$set(item, 'checked', true)
-                            this.setAllChildrenNodeValue(item)
+                            const length = selfPath.length - 2 > 0 ? selfPath.length - 2 : 0;
+                            const pPath = selfPath.slice(0, length);
+                            this.$set(item, 'checked', true);
+                            this.setAllChildrenNodeValue(item);
                             // 尽量减少重复次数
-                            selectData.splice(index, 1)
+                            selectData.splice(index, 1);
                             if (pPath) {
                                 this.setParentNodeValue(listData, pPath, true)
                             }
@@ -163,9 +163,9 @@
             // 获取所有被选取的子节点
             setAllChildrenNodeValue(data, isCancel) {
                 (data.children || []).forEach(item => {
-                    this.$set(item, 'checked', !isCancel)
+                    this.$set(item, 'checked', !isCancel);
                     this.setAllChildrenNodeValue(item, isCancel)
-                })
+                });
                 delete data.halfChecked
             },
             // 获取当前选择值 返回给双向绑定
@@ -177,22 +177,22 @@
                             res.push(item)
                         }
                     }
-                })
+                });
                 return res
             },
             // 筛选数据
             filterData(data,v){
-                let key = this.reflectKey['key']
+                let key = this.reflectKey['key'];
                 for (let i = 0; i <data.length ; i++) {
-                    let item = data[i]
-                    item.expand= true
+                    let item = data[i];
+                    item.expand= true;
                     if((item.children || []).length){
                         this.filterData(item.children, v)
                     }
                     if(!(item.children || []).length){
-                        delete item.children
+                        delete item.children;
                         if(item[key].indexOf(v)<0){
-                            data.splice(i,1)
+                            data.splice(i,1);
                             i--
                         }
                     }
@@ -206,15 +206,15 @@
                     if (!_.isEqual(v, this.copyListData)) {
                         // 同步listData已选值设置checked属性,向上递归设置父节点属性
                         // TODO 该操作比较耗费性能 以后优化
-                        this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value))
-                        this.$set(this, 'copyListData', _.cloneDeep(v))
-                        this.$set(this, 'treeUlData', _.cloneDeep(v))
+                        this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value));
+                        this.$set(this, 'copyListData', _.cloneDeep(v));
+                        this.$set(this, 'treeUlData', _.cloneDeep(v));
                         // 同步已选值统一设置checked属性
-                        const value = _.cloneDeep(this.getAllCheckedValue(v))
+                        const value = _.cloneDeep(this.getAllCheckedValue(v));
                         value.forEach(item => {
-                            delete item.children
+                            delete item.children;
                             delete item._c_tree_self_id
-                        })
+                        });
                         this.$emit('change', value)
                     }
                 },
@@ -244,8 +244,8 @@
                         reflectKey: this.reflectKey,
                         searchStr: this.searchStr,
                         controllers: this.controllers,
-                        fileIconFixMargin: this.fileIconFixMargin,
-                        markIconFixMarginLeft: this.markIconFixMarginLeft,
+                        fileIconFixMarginRight: this.fileIconFixMarginRight,
+                        markIconFixMarginRight: this.markIconFixMarginRight,
                         multiple: this.multiple, // 多选
                         checkbox: this.checkbox, // 显示选择框
                         conditionProps: this.conditionProps, // 不可选条件
@@ -267,10 +267,10 @@
                 /* 重新带入插槽 */
                 [
                     ...Object.keys(this.$slots).map((key) => {
-                        const {tag} = this.$slots[key][0].componentOptions || {}
+                        const {tag} = this.$slots[key][0].componentOptions || {};
                         if (key === 'controllers') {
                             return this.$slots[key].map(item => {
-                                const {tag, listeners = {}, propsData} = item.componentOptions || {}
+                                const {tag, listeners = {}, propsData} = item.componentOptions || {};
                                 if (tag)
                                     return h(tag,
                                         {
@@ -281,7 +281,7 @@
                                             ...item.data,
                                             on: listeners
                                         }
-                                    )
+                                    );
                                 return null
                             }).filter(Boolean)
                         }

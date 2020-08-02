@@ -128,19 +128,21 @@
         methods: {
             // 创建标题
             createTitle(h, data) {
-                const content = data[this.reflectKey['key']] || ''
-                const index = this.searchStr ? content.indexOf(this.searchStr) : -1
-                const childrenVnode = []
+                const content = data[this.reflectKey['key']] || '';
+                const index = this.searchStr ? content.indexOf(this.searchStr) : -1;
+                const childrenVnode = [];
                 if (index > -1) {
                     childrenVnode.push(
                         h('span', {
                                 style: {
                                     color: this.markColor,
+                                    minHeight: this.markIconHeight+'px',
+                                    lineHeight: this.markIconHeight+2+'px',
                                 }
                             },
                             [content.slice(0, index + this.searchStr.length)]
                         )
-                    )
+                    );
                     childrenVnode.push(
                         h('span',
                             [content.slice(index + this.searchStr.length)]
@@ -152,7 +154,9 @@
                             {
                                 style: {
                                     display: 'inline-flex',
-                                    alignItem: 'center'
+                                    alignItem: 'center',
+                                    minHeight: this.markIconHeight+'px',
+                                    lineHeight: this.markIconHeight+2+'px',
                                 }
                             },
                             [content]
@@ -182,7 +186,9 @@
                             marginLeft: this.markIconWidth / 4 + 'px',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            cursor: "pointer"
+                            cursor: "pointer",
+                            minHeight: this.markIconHeight+'px',
+                            lineHeight: this.markIconHeight+2+'px',
                         },
                         attrs: {
                             title: content,
@@ -193,7 +199,7 @@
                         }),
                         on: {
                             click: () => {
-                                this.$set(data, 'checked', !data.checked)
+                                this.$set(data, 'checked', !data.checked);
                                 this.clickHandle(data)
                             }
                         },
@@ -223,32 +229,32 @@
             },
             // 生成子节点并存储子节点位置
             createNewNodeValue(data) {
-                const clickValue = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), [])
-                const _c_tree_self_id = data._c_tree_self_id + '-' + (data.children || []).length
-                clickValue.children = clickValue.children || []
+                const clickValue = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), []);
+                const _c_tree_self_id = data._c_tree_self_id + '-' + (data.children || []).length;
+                clickValue.children = clickValue.children || [];
                 clickValue.children.push({
                     [this.reflectKey['key']]: '',
                     [this.reflectKey['value']]: '',
                     _c_tree_self_id,
-                })
+                });
                 // 记录新增值的位置
                 this.$emit('changeAddItemId', _c_tree_self_id)
             },
             // 移除未添加的新节点和值
             removeNoAddNodeValue() {
                 if (this.addItemId) {
-                    let path = this.addItemId.split('-')
-                    const [last, ...others] = [...path].reverse()
-                    path = [...others].reverse().join('.children.')
-                    const pNodeValue = _.get(this.copyListData, path, null)
-                    pNodeValue && pNodeValue.children.splice(last, 1)
-                    this.$emit('changeAddItemId', '')
+                    let path = this.addItemId.split('-');
+                    const [last, ...others] = [...path].reverse();
+                    path = [...others].reverse().join('.children.');
+                    const pNodeValue = _.get(this.copyListData, path, null);
+                    pNodeValue && pNodeValue.children.splice(last, 1);
+                    this.$emit('changeAddItemId', '');
                     this.addContent = ''
                 }
             },
             // 移除编辑状态和值
             cancelEditValue() {
-                this.$emit('changeEditItemId', '')
+                this.$emit('changeEditItemId', '');
                 this.editContent = '';
             },
             // 创建文件图标
@@ -259,13 +265,13 @@
                 // 用户插槽
                 if (this.$slots['controllers']) {
                     return this.$slots['controllers'].map((item) => {
-                        const {tag, listeners = {}, propsData} = item.componentOptions || {}
-                        const _listeners = {}
+                        const {tag, listeners = {}, propsData} = item.componentOptions || {};
+                        const _listeners = {};
                         Object.keys(listeners).forEach(key => {
                             _listeners[key] = (e) => {
                                 return listeners[key].call(this, data, e)
                             }
-                        })
+                        });
                         if (!tag) {
                             return null
                         }
@@ -298,9 +304,9 @@
                             on: {
                                 click: () => {
                                     // 取消在编辑状态
-                                    this.cancelEditValue()
+                                    this.cancelEditValue();
                                     // 移除未添加的新增值
-                                    this.removeNoAddNodeValue()
+                                    this.removeNoAddNodeValue();
                                     // 生成子节点信息并记录子节点位置
                                     // 记录编辑行id,编辑行转为可编辑状态
                                     this.$emit('changeEditItemId', data._c_tree_self_id)
@@ -319,9 +325,9 @@
                             on: {
                                 click: () => {
                                     // 取消在编辑状态
-                                    this.cancelEditValue()
+                                    this.cancelEditValue();
                                     // 移除未添加的新增值
-                                    this.removeNoAddNodeValue()
+                                    this.removeNoAddNodeValue();
                                     // 生成子节点信息并记录子节点位置
                                     this.createNewNodeValue(data)
                                 }
@@ -338,12 +344,12 @@
                                     let data = {
                                         id: this.selfData[this.reflectKey['value']],
                                         title: this.editContent
-                                    }
-                                    const type = 'delete'
+                                    };
+                                    const type = 'delete';
                                     await this.selfEditTreeNode(data, type)
                                 },
                                 cancel:()=>{
-                                    this.isDeleteModel = false
+                                    this.isDeleteModel = false;
                                     this.isControllersShow =false
                                 }
                             }
@@ -368,8 +374,8 @@
             },
             // 点击关联元素
             clickHandle(data) {
-                let {value} = this.$attrs
-                let res = []
+                let {value} = this.$attrs;
+                let res = [];
                 if (!data.disabled) {
                     // 点击尾端结点
                     if (!data[this.conditionProps]) {
@@ -378,13 +384,13 @@
                             this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
                         } else {
                             // 单选模式
-                            const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.')
-                            const lastData = _.get(this.copyListData, path, null)
+                            const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.');
+                            const lastData = _.get(this.copyListData, path, null);
                             // 取消上次选中
-                            lastData && this.$set(lastData, 'checked', false)
+                            lastData && this.$set(lastData, 'checked', false);
                             // 隔离数据
-                            res = _.cloneDeep(data)
-                            delete res.children
+                            res = _.cloneDeep(data);
+                            delete res.children;
                             // 本次选中
                             res = [res]
                         }
@@ -392,7 +398,7 @@
                         // 多选模式,点击包含子节点的父节点
                         if (this.multiple) {
                             // 设置子节点值
-                            this.setAllChildrenNodeValue(data, !data.checked)
+                            this.setAllChildrenNodeValue(data, !data.checked);
                             // 设置父节点值
                             this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
                         } else {
@@ -408,9 +414,9 @@
             // 获取所有被选取的子节点
             setAllChildrenNodeValue(data, isCancel) {
                 (data.children || []).forEach(item => {
-                    this.$set(item, 'checked', !isCancel)
+                    this.$set(item, 'checked', !isCancel);
                     this.setAllChildrenNodeValue(item, isCancel)
-                })
+                });
                 delete data.halfChecked
             },
             // 获取当前选择值 返回给双向绑定
@@ -419,12 +425,12 @@
                     if (item.checked || item.halfChecked) {
                         this.getAllCheckedValue(item.children, res);
                         if (item.checked && !item[this.conditionProps]) {
-                            delete item.children
-                            delete item._c_tree_self_id
+                            delete item.children;
+                            delete item._c_tree_self_id;
                             res.push(item)
                         }
                     }
-                })
+                });
                 return res
             },
             async selfEditTreeNode(data, type) {
@@ -435,12 +441,12 @@
                     if (parseInt(res.code, 10) === 200) {
                         // 取消在编辑状态
                         // 自动更新数据
-                        this.cancelEditValue()
+                        this.cancelEditValue();
                         // 移除未添加的新增值
-                        this.removeNoAddNodeValue()
+                        this.removeNoAddNodeValue();
                         // 树形重选
-                        this.clickHandle(this.selfData)
-                        this.isEditModel = false
+                        this.clickHandle(this.selfData);
+                        this.isEditModel = false;
                         this.$cMessage.info({
                             message: '操作成功!',
                             timeSpan: 2,
@@ -468,7 +474,7 @@
                 handler() {
                     this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
                     this.isControllersShow = false;
-                    this.editContent = ''
+                    this.editContent = '';
                     this.addContent = ''
                 },
                 deep: true,
@@ -478,8 +484,8 @@
                 handler() {
                     this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
                     this.isControllersShow = false;
-                    this.editContent = ''
-                    this.addContent = ''
+                    this.editContent = '';
+                    this.addContent = '';
                 },
                 deep: true,
                 immediate: true
@@ -492,7 +498,7 @@
                         display: "inline-flex",
                         justifyContent: 'space-between',
                         alignItems: "center",
-                        flex: 1
+                        flex: 1,
                     },
                     on: {
                         mouseenter: () => {
@@ -522,43 +528,43 @@
                                     },
                                     on: {
                                         confirm: async () => {
-                                            let data = {}
-                                            let type = ''
+                                            let data = {};
+                                            let type = '';
                                             if (this.addItemId) {
                                                 // 需要获取父节点id
                                                 if (!this.addContent) {
                                                     // 取消在编辑状态
-                                                    this.cancelEditValue()
+                                                    this.cancelEditValue();
                                                     // 移除未添加的新增值
-                                                    this.removeNoAddNodeValue()
+                                                    this.removeNoAddNodeValue();
                                                     return
                                                 }
-                                                const path = this.selfData._c_tree_self_id.split('-')
-                                                const [, ...pPath] = [...path].reverse()
-                                                const pNode = _.get(this.copyListData, pPath.reverse().join('.children.'), {})
+                                                const path = this.selfData._c_tree_self_id.split('-');
+                                                const [, ...pPath] = [...path].reverse();
+                                                const pNode = _.get(this.copyListData, pPath.reverse().join('.children.'), {});
                                                 data = {
                                                     pId: pNode[this.reflectKey['value']],
                                                     value: this.addContent
-                                                }
+                                                };
                                                 type = 'add'
                                             } else {
                                                 if (!this.editContent) {
                                                     // 取消在编辑状态
-                                                    this.cancelEditValue()
+                                                    this.cancelEditValue();
                                                     // 移除未添加的新增值
-                                                    this.removeNoAddNodeValue()
+                                                    this.removeNoAddNodeValue();
                                                     return
                                                 }
                                                 data = {
                                                     id: this.selfData[this.reflectKey['value']],
                                                     value: this.editContent
-                                                }
+                                                };
                                                 type = 'edit'
                                             }
                                             await this.selfEditTreeNode(data, type)
                                         },
                                         cancel:()=>{
-                                            this.isDeleteModel = false
+                                            this.isDeleteModel = false;
                                             this.isControllersShow =false
                                         }
                                     }
@@ -591,7 +597,7 @@
                                     on: {
                                         click: () => {
                                             // 取消在编辑状态
-                                            this.cancelEditValue()
+                                            this.cancelEditValue();
                                             // 移除未添加的新增值
                                             this.removeNoAddNodeValue()
                                         }
