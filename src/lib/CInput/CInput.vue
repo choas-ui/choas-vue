@@ -1,7 +1,7 @@
 <template>
     <div :class="getInputWrapClass">
         <label hidden>
-            <input type="text" :value="inputValue">
+            <input :type="type" :value="inputValue">
         </label>
         <div>
             <slot name="prefix-icon"></slot>
@@ -18,11 +18,19 @@
                      @blur="blurHandle"
                 >
                 </div>
-                <CIcon v-if="clearable"
+                <span v-if="!inputValue" :style="getPlaceholderStyle" @click="focusHandle">{{placeholder}}</span>
+                <CIcon v-if="clearable && type ==='text'"
                        icon-name="choas-fill-danger"
                        :class-name="getClearableClass"
                        :style="getClearableStyle"
                        @click="clearHandle"
+                       color="#aaa"
+                />
+                <CIcon v-if="type ==='password'"
+                       :icon-name="canPasswordSee ?'choas-close-eye':'choas-eye'"
+                       :class-name="getClearableClass"
+                       :style="getClearableStyle"
+                       @click="seePasswordHandle"
                        color="#aaa"
                 />
             </div>
@@ -88,6 +96,14 @@
                     return typeof v === "function" || typeof v === 'string';
                 },
             },
+            type: {
+                validate(v) {
+                    return ['text', 'password'].includes(v)
+                },
+                default() {
+                    return 'text'
+                }
+            },
             // 是否显示清除按钮
             clearable: {
                 type: Boolean
@@ -105,7 +121,8 @@
                 default() {
                     return ''
                 }
-            }
+            },
+            value:{}
         },
         model: {
             prop: 'value',
@@ -115,11 +132,13 @@
             return {
                 inputFocus: false,
                 inputValue: '',
+                canPasswordSee: false
             };
         },
         mounted() {
+            const obj = this.$refs.div;
             // 禁止复制富文本
-            document.addEventListener('paste', e => {
+            obj.addEventListener('paste', e => {
                 // 阻止默认的复制事件
                 e.preventDefault();
                 // 获取页面文本选区
@@ -135,6 +154,8 @@
                 // 将焦点移动到复制文本结尾
                 range.collapse(false);
             })
+            // 设置密码样式
+            this.setInputDomValue(obj)
         },
         computed: {
             getClearableStyle() {
@@ -149,6 +170,14 @@
                     [prefix + 'input-clearable']: true
                 })
             },
+            getPlaceholderStyle() {
+                return {
+                    position: 'absolute',
+                    left: paddingNum[this.size || 'default'] + 'px',
+                    top: 0,
+                    color: '#aaa'
+                }
+            },
             getContentStyle() {
                 return {
                     marginRight: this.clearable ? 18 + 'px' : 0
@@ -157,13 +186,13 @@
             // input外框样式
             getInputStyle() {
                 let padding = `0 ${paddingNum[this.size || 'default']}px`;
-                if(this.$slots['prefix-icon'] && this.$slots['behind-icon']){
+                if (this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
                     padding = `0`;
                 }
-                if(this.$slots['prefix-icon'] && !this.$slots['behind-icon']){
+                if (this.$slots['prefix-icon'] && !this.$slots['behind-icon']) {
                     padding = `0 0 0 ${paddingNum[this.size || 'default']}px`;
                 }
-                if(!this.$slots['prefix-icon'] && this.$slots['behind-icon']){
+                if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
                     padding = `0 ${paddingNum[this.size || 'default']}px 0 0`;
                 }
                 return {
@@ -199,40 +228,46 @@
         methods: {
             // 输入
             inputHandle(e) {
+                const obj = this.$refs.div;
                 if (e.inputType === 'insertCompositionText') {
                     return
                 }
                 if (e.inputType === 'insertParagraph') {
                     // 回车键时阻止创建新的一行
-                    let obj = this.$refs.div;
-                    obj.innerHTML = this.inputValue || '&#8203';
-                    this.setEndTextPos(obj)
                 }
                 if (e.inputType === 'deleteContentBackward') {
                     let slicePos = this.inputValue.length - 1;
-                    let obj = this.$refs.div;
                     slicePos = slicePos > 0 ? slicePos : 0;
                     // 防止副文本删除导致的光标上移问题
                     this.inputValue = slicePos ? this.inputValue.slice(0, slicePos) : '';
-                    obj.innerHTML = this.inputValue || "&#8203";
-                    this.setEndTextPos(obj);
                 }
                 if (e.inputType === 'insertText') {
                     this.inputValue += e.data;
                 }
+                this.setInputDomValue(obj)
+                this.setEndTextPos(obj)
                 if (this.value !== this.inputValue) {
                     // 触发input事件
                     this.$emit('input', this.inputValue)
                 }
+
             },
             // 中文输入
             changeHandleEnd(e) {
-                this.inputValue += e.data;
+                const obj = this.$refs.div
+                if (this.type === 'text') {
+                    this.inputValue += e.data;
+                }else{
+                    this.setInputDomValue(obj)
+                    this.setEndTextPos(obj)
+                }
             },
             // 焦点
             focusHandle() {
                 // 设置焦点
                 this.inputFocus = true;
+                let obj = this.$refs.div;
+                this.setEndTextPos(obj)
             },
             // 失焦
             blurHandle() {
@@ -248,6 +283,34 @@
                 let obj = this.$refs.div;
                 this.inputValue = '';
                 obj.innerHTML = '&#8203';
+                this.setEndTextPos(obj)
+            },
+            // 设置值
+            setInputDomValue(obj) {
+                if (this.inputValue) {
+                    if (this.type === 'text') {
+                        obj.innerHTML = this.inputValue
+                    }
+                    if (this.type === 'password') {
+                        obj.innerHTML = this.inputValue.replace(/./ig, '&bull;')
+                    }
+                } else {
+                    obj.innerHTML = "&#8203";
+
+                }
+            },
+            // 查看密码
+            seePasswordHandle() {
+                let timer = 0
+                if (this.canPasswordSee) {
+                    this.canPasswordSee = false
+                } else {
+                    this.canPasswordSee = true
+                    timer && clearInterval(timer)
+                    timer = setTimeout(() => {
+                        this.canPasswordSee = false
+                    }, 2000)
+                }
             },
             // 设置光标位置
             setEndTextPos(obj) {
@@ -275,13 +338,30 @@
                 },
                 immediate: true
             },
+            // 内部维护值
             inputValue: {
                 handler(v) {
                     if (!_.isEqual(v, this.value)) {
                         this.$emit('changeValue', v)
                     }
                 },
+                immediate: true
             },
+            // 监听密码可见值 修改现实区内容
+            canPasswordSee: {
+                handler(v) {
+                    const obj = this.$refs.div
+                    if (obj) {
+                        if (v) {
+                            obj.innerHTML = this.inputValue
+                        } else {
+                            this.setInputDomValue(obj)
+                        }
+                        this.setEndTextPos(obj)
+                    }
+                },
+                immediate: true
+            }
 
         }
     }
@@ -311,11 +391,6 @@
             word-break: keep-all;
             white-space: nowrap;
             color: scale_color($lineColor, $lightness: -80%);
-
-            &:empty::before {
-                content: attr(placeholder);
-                color: scale_color($lineColor, $lightness: 20%);
-            }
         }
 
         &-llarge {

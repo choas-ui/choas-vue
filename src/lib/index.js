@@ -54,7 +54,6 @@ Vue.prototype.$cMessage = cMessage;
 
 export default {
     install,
-
     CButton,
     CButtonGroup,
     CCascade,
