@@ -8,17 +8,6 @@
             <div :class="getInputClass"
                  :style="getInputStyle"
             >
-                <div contenteditable
-                     :style="getContentStyle"
-                     ref="div"
-                     :placeholder="placeholder"
-                     @input="inputHandle"
-                     @compositionend="changeHandleEnd"
-                     @focus="focusHandle"
-                     @blur="blurHandle"
-                >
-                </div>
-                <span v-if="!inputValue" :style="getPlaceholderStyle" @click="focusHandle">{{placeholder}}</span>
                 <CIcon v-if="clearable && type ==='text'"
                        icon-name="choas-fill-danger"
                        :class-name="getClearableClass"
@@ -36,9 +25,7 @@
             </div>
             <slot name="behind-icon"></slot>
         </div>
-        <ul v-if="(listData || []).length">
-            <li>列表</li>
-        </ul>
+
     </div>
 </template>
 
@@ -96,6 +83,7 @@
                     return typeof v === "function" || typeof v === 'string';
                 },
             },
+            // 输入框类型
             type: {
                 validate(v) {
                     return ['text', 'password'].includes(v)
@@ -122,7 +110,7 @@
                     return ''
                 }
             },
-            value:{}
+            value: {}
         },
         model: {
             prop: 'value',
@@ -153,7 +141,7 @@
                 range.insertNode(pasteTxt);
                 // 将焦点移动到复制文本结尾
                 range.collapse(false);
-            })
+            });
             // 设置密码样式
             this.setInputDomValue(obj)
         },
@@ -190,10 +178,10 @@
                     padding = `0`;
                 }
                 if (this.$slots['prefix-icon'] && !this.$slots['behind-icon']) {
-                    padding = `0 0 0 ${paddingNum[this.size || 'default']}px`;
+                    padding = `0 ${paddingNum[this.size || 'default']}px 0 0`;
                 }
                 if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
-                    padding = `0 ${paddingNum[this.size || 'default']}px 0 0`;
+                    padding = `0 0 0 ${paddingNum[this.size || 'default']}px`;
                 }
                 return {
                     border: `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`,
@@ -244,8 +232,8 @@
                 if (e.inputType === 'insertText') {
                     this.inputValue += e.data;
                 }
-                this.setInputDomValue(obj)
-                this.setEndTextPos(obj)
+                this.setInputDomValue(obj);
+                this.setEndTextPos(obj);
                 if (this.value !== this.inputValue) {
                     // 触发input事件
                     this.$emit('input', this.inputValue)
@@ -254,11 +242,11 @@
             },
             // 中文输入
             changeHandleEnd(e) {
-                const obj = this.$refs.div
+                const obj = this.$refs.div;
                 if (this.type === 'text') {
                     this.inputValue += e.data;
-                }else{
-                    this.setInputDomValue(obj)
+                } else {
+                    this.setInputDomValue(obj);
                     this.setEndTextPos(obj)
                 }
             },
@@ -301,12 +289,12 @@
             },
             // 查看密码
             seePasswordHandle() {
-                let timer = 0
+                let timer = 0;
                 if (this.canPasswordSee) {
                     this.canPasswordSee = false
                 } else {
-                    this.canPasswordSee = true
-                    timer && clearInterval(timer)
+                    this.canPasswordSee = true;
+                    timer && clearInterval(timer);
                     timer = setTimeout(() => {
                         this.canPasswordSee = false
                     }, 2000)
@@ -350,7 +338,7 @@
             // 监听密码可见值 修改现实区内容
             canPasswordSee: {
                 handler(v) {
-                    const obj = this.$refs.div
+                    const obj = this.$refs.div;
                     if (obj) {
                         if (v) {
                             obj.innerHTML = this.inputValue
@@ -363,6 +351,141 @@
                 immediate: true
             }
 
+        },
+        render(h) {
+            return h('div',
+                {
+                    class: this.getWrapBoxClass()
+                },
+                [
+                    h('label',
+                        {
+                            style: {
+                                display: 'none'
+                            }
+                        },
+                        [
+                            h('input',
+                                {
+                                    props: {
+                                        type: this.type
+                                    },
+                                    domProps: {
+                                        value: this.inputValue
+                                    }
+                                }
+                            ),
+                            h('div',
+                                [
+                                    this.$slots['prefix-icon'] && h('CIcon',
+                                        {
+                                            props: this.$slot['prefix-icon'].propsData,
+                                            style: {
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 0
+                                            }
+                                        },
+                                    ),
+                                    h('div',
+                                        {
+                                            class: this.getInputClass,
+                                            style: this.getInputStyle,
+                                        },
+                                        []
+                                    ),
+                                    // 主输入框
+                                    h('div',
+                                        {
+                                            style: this.getContentStyle,
+                                            ref: 'div',
+                                            props: {
+                                                placeholder: this.placeholder,
+                                            },
+                                            domProps: {
+                                                contenteditable: true,
+                                            },
+                                            on: {
+                                                input: (e) => {
+                                                    this.inputHandle(e)
+                                                },
+                                                compositionend: (e) => {
+                                                    this.changeHandleEnd(e)
+                                                },
+                                                focus: (e) => {
+                                                    this.focusHandle(e)
+                                                },
+                                                blur: (e) => {
+                                                    this.blurHandle(e)
+                                                },
+
+                                            }
+                                        }
+                                    ),
+                                    // 输入提示
+                                    !this.inputValue && h('span', {
+                                            style: this.getPlaceholderStyle,
+                                            on: {
+                                                click: (e) => {
+                                                    this.focusHandle(e)
+                                                }
+                                            }
+                                        },
+                                        [this.placeholder]
+                                    ),
+                                    this.clearable && this.type === 'text' && h('CIcon',
+                                        {
+                                            props: {
+                                                iconName: 'choas-fill-danger',
+                                                color: '#aaa'
+                                            },
+                                            class: this.getClearableClass,
+                                            style: this.getClearableStyle,
+                                            on: {
+                                                click: (e) => {
+                                                    this.clearHandle(e)
+                                                }
+                                            }
+                                        }),
+                                    // 查看密码按钮
+                                    this.type === 'password' && h('CIcon',
+                                        {
+                                            props: {
+                                                iconName: this.canPasswordSee ? 'choas-close-eye' : 'choas-eye',
+                                                color: '#aaa'
+                                            },
+                                            class: this.getClearableClass,
+                                            style: this.getClearableStyle,
+                                            on: {
+                                                click: (e) => {
+                                                    this.seePasswordHandle(e)
+                                                }
+                                            }
+                                        }),
+                                    // 后置图标
+                                    this.$slots['behind-icon'] && h('CIcon',
+                                        {
+                                            props: this.$slot['behind-icon'].propsData,
+                                            style: {
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 0
+                                            }
+                                        },
+                                    ),
+                                    // 下拉列表
+                                    (this.listData || []).length && h('ul',
+                                        {},
+                                        [
+                                            h('li', ['li'])
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
         }
     }
 </script>
