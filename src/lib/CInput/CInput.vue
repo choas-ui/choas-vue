@@ -4,24 +4,29 @@
             <input type="text" :value="inputValue">
         </label>
         <div>
-            <div class="prefix-icon">
-                前置图标
-            </div>
+            <slot name="prefix-icon"></slot>
             <div :class="getInputClass"
                  :style="getInputStyle"
             >
                 <div contenteditable
+                     :style="getContentStyle"
                      ref="div"
                      :placeholder="placeholder"
                      @input="inputHandle"
                      @compositionend="changeHandleEnd"
-                     @focus="inputFocus = true"
-                     @blur="inputFocus = false"
+                     @focus="focusHandle"
+                     @blur="blurHandle"
+                >
+                </div>
+                <CIcon v-if="clearable"
+                       icon-name="choas-fill-danger"
+                       :class-name="getClearableClass"
+                       :style="getClearableStyle"
+                       @click="clearHandle"
+                       color="#aaa"
                 />
             </div>
-            <div class="prefix-icon">
-                后置图标
-            </div>
+            <slot name="behind-icon"></slot>
         </div>
         <ul v-if="(listData || []).length">
             <li>列表</li>
@@ -32,6 +37,14 @@
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
+
+    const paddingNum = {
+        llarge: 32,
+        large: 26,
+        default: 20,
+        small: 14,
+        ssmall: 8,
+    };
 
     export default {
         name: 'CInput',
@@ -71,7 +84,27 @@
             },
             // 自动完成格式 用于生成自动完成的列表
             autocompleteFormat: {
-                type: Function
+                validate(v) {
+                    return typeof v === "function" || typeof v === 'string';
+                },
+            },
+            // 是否显示清除按钮
+            clearable: {
+                type: Boolean
+            },
+            // 类名
+            className: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            // 前缀名
+            prefix: {
+                type: String,
+                default() {
+                    return ''
+                }
             }
         },
         model: {
@@ -85,6 +118,7 @@
             };
         },
         mounted() {
+            // 禁止复制富文本
             document.addEventListener('paste', e => {
                 // 阻止默认的复制事件
                 e.preventDefault();
@@ -103,11 +137,42 @@
             })
         },
         computed: {
-            getInputStyle(){
+            getClearableStyle() {
                 return {
-                    border: `1px solid ${this.inputFocus? "#1890ff" : "#aaa"}`
+                    top: `calc(50% - 8px)`,
+                    right: paddingNum[this.size || 'default'] + 'px',
                 }
             },
+            getClearableClass() {
+                const prefix = this.prefix ? this.prefix + '-' : '';
+                return classNames({
+                    [prefix + 'input-clearable']: true
+                })
+            },
+            getContentStyle() {
+                return {
+                    marginRight: this.clearable ? 18 + 'px' : 0
+                }
+            },
+            // input外框样式
+            getInputStyle() {
+                let padding = `0 ${paddingNum[this.size || 'default']}px`;
+                if(this.$slots['prefix-icon'] && this.$slots['behind-icon']){
+                    padding = `0`;
+                }
+                if(this.$slots['prefix-icon'] && !this.$slots['behind-icon']){
+                    padding = `0 0 0 ${paddingNum[this.size || 'default']}px`;
+                }
+                if(!this.$slots['prefix-icon'] && this.$slots['behind-icon']){
+                    padding = `0 ${paddingNum[this.size || 'default']}px 0 0`;
+                }
+                return {
+                    border: `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`,
+                    position: 'relative',
+                    padding,
+                }
+            },
+            // input外框类
             getInputClass() {
                 const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
@@ -121,6 +186,7 @@
                     }
                 )
             },
+            // 组件外壳
             getInputWrapClass() {
                 const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
@@ -131,6 +197,7 @@
             }
         },
         methods: {
+            // 输入
             inputHandle(e) {
                 if (e.inputType === 'insertCompositionText') {
                     return
@@ -146,33 +213,57 @@
                     let obj = this.$refs.div;
                     slicePos = slicePos > 0 ? slicePos : 0;
                     // 防止副文本删除导致的光标上移问题
-                    this.inputValue = slicePos ?this.inputValue.slice(0, slicePos): '';
+                    this.inputValue = slicePos ? this.inputValue.slice(0, slicePos) : '';
                     obj.innerHTML = this.inputValue || "&#8203";
                     this.setEndTextPos(obj);
                 }
-                if(e.inputType === 'insertText'){
+                if (e.inputType === 'insertText') {
                     this.inputValue += e.data;
-
+                }
+                if (this.value !== this.inputValue) {
+                    // 触发input事件
+                    this.$emit('input', this.inputValue)
                 }
             },
+            // 中文输入
             changeHandleEnd(e) {
                 this.inputValue += e.data;
             },
-            setEndTextPos(obj){
-// 解决浏览器的兼容问题，做如下条件判断
-                    if (window.getSelection) {
-                        obj.focus();
-                        let range = window.getSelection();
-                        range.selectAllChildren(obj);
-                        range.collapseToEnd();//光标移至最后
-                    }
-                    else if (document.selection) {
-                        let range = document.selection.createRange();
-                        range.moveToElementText(obj);
-                        range.collapse(false);//光标移至最后
-                        range.select();
-                    }
+            // 焦点
+            focusHandle() {
+                // 设置焦点
+                this.inputFocus = true;
+            },
+            // 失焦
+            blurHandle() {
+                // 取消焦点
+                this.inputFocus = false;
+                // 触发change事件
+                if (this.value !== this.inputValue) {
+                    this.$emit('change', this.inputValue)
                 }
+            },
+            // 清除
+            clearHandle() {
+                let obj = this.$refs.div;
+                this.inputValue = '';
+                obj.innerHTML = '&#8203';
+            },
+            // 设置光标位置
+            setEndTextPos(obj) {
+                // 解决浏览器的兼容问题，做如下条件判断
+                if (window.getSelection) {
+                    obj.focus();
+                    let range = window.getSelection();
+                    range.selectAllChildren(obj);
+                    range.collapseToEnd();//光标移至最后
+                } else if (document.selection) {
+                    let range = document.selection.createRange();
+                    range.moveToElementText(obj);
+                    range.collapse(false);//光标移至最后
+                    range.select();
+                }
+            }
         },
         watch: {
             value: {
@@ -211,6 +302,7 @@
         outline: none;
         box-sizing: border-box;
         width: 300px;
+        border-radius: addPX($ssm-radius);
 
         > div {
             outline: none;
@@ -229,41 +321,35 @@
         &-llarge {
             height: addPX($llg-height);
             line-height: addPX($llg-height);
-            border-radius: addPX($llg-radius);
             font-size: addPX($llg-fs);
-            padding: 0 addPX($llg-padding);
         }
 
         &-large {
             height: addPX($lg-height);
             line-height: addPX($lg-height);
-            border-radius: addPX($lg-radius);
             font-size: addPX($lg-fs);
-            padding: 0 addPX($lg-padding);
         }
 
         &-default {
             height: addPX($df-height);
             line-height: addPX($df-height);
-            border-radius: addPX($df-radius);
             font-size: addPX($df-fs);
-            padding: 0 addPX($df-padding);
         }
 
         &-small {
             height: addPX($sm-height);
             line-height: addPX($sm-height);
-            border-radius: addPX($sm-radius);
             font-size: addPX($sm-fs);
-            padding: 0 addPX($sm-padding);
         }
 
         &-ssmall {
             height: addPX($ssm-height);
             line-height: addPX($ssm-height);
-            border-radius: addPX($ssm-radius);
             font-size: addPX($ssm-fs);
-            padding: 0 addPX($ssm-padding);
+        }
+
+        &-clearable {
+            position: absolute;
         }
     }
 </style>

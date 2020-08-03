@@ -1,11 +1,3 @@
 @function addPX($value){
   @return $value+px;
 }
-
-@function weakColor80($value){
-  @return unquote($value+'bb');
-}
-
-@function darkColor20($value){
-  @return unquote($value*0.8);
-}

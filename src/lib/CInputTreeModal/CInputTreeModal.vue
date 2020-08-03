@@ -73,6 +73,7 @@
 </template>
 <script>
     import _ from 'lodash'
+
     export default {
         name: 'CInputTreeModal',
         props: {
@@ -175,7 +176,7 @@
                     return ''
                 }
             },
-            titleImg:{
+            titleImg: {
                 default() {
                     return null
                 }
@@ -210,8 +211,8 @@
                 this.$emit('addTreeNode', v)
             },
             removeHandle(item, $event) {
-                const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']])
-                this.$set(this, 'selectedData', t)
+                const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']]);
+                this.$set(this, 'selectedData', t);
                 $event.stopPropagation();
                 $event.preventDefault();
             }
@@ -219,7 +220,7 @@
         watch: {
             selectedData: {
                 handler(v, old) {
-                    if(!_.isEqual(v, old)){
+                    if (!_.isEqual(v, old)) {
                         this.$emit('input', _.cloneDeep(v))
                     }
                 },
@@ -228,7 +229,7 @@
             },
             value: {
                 handler(v, old) {
-                    if(!_.isEqual(v, old)){
+                    if (!_.isEqual(v, old)) {
                         this.$set(this, 'selectedData', _.cloneDeep(v))
                     }
                 },
@@ -248,6 +249,7 @@
     .input-like-wrap {
         font-size: addPX($df-fs);
         display: flex;
+
         .input-like {
             border: addPX($ssm-borderWt) solid #D9D9D9;
             border-radius: addPX($sm-radius);
