@@ -1,34 +1,3 @@
-<template>
-    <div :class="getInputWrapClass">
-        <label hidden>
-            <input :type="type" :value="inputValue">
-        </label>
-        <div>
-            <slot name="prefix-icon"></slot>
-            <div :class="getInputClass"
-                 :style="getInputStyle"
-            >
-                <CIcon v-if="clearable && type ==='text'"
-                       icon-name="choas-fill-danger"
-                       :class-name="getClearableClass"
-                       :style="getClearableStyle"
-                       @click="clearHandle"
-                       color="#aaa"
-                />
-                <CIcon v-if="type ==='password'"
-                       :icon-name="canPasswordSee ?'choas-close-eye':'choas-eye'"
-                       :class-name="getClearableClass"
-                       :style="getClearableStyle"
-                       @click="seePasswordHandle"
-                       color="#aaa"
-                />
-            </div>
-            <slot name="behind-icon"></slot>
-        </div>
-
-    </div>
-</template>
-
 <script>
     import classNames from 'classnames'
     import _ from 'lodash'
