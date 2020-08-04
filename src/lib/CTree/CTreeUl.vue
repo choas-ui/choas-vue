@@ -504,6 +504,7 @@
                 width: 100%;
                 display: flex;
                 & > div {
+                    align-items: center;
                     display: flex;
                     &:nth-of-type(2){
                         flex: 1;

@@ -136,8 +136,8 @@
                         h('span', {
                                 style: {
                                     color: this.markColor,
-                                    minHeight: this.markIconHeight+'px',
-                                    lineHeight: this.markIconHeight+2+'px',
+                                    minHeight: this.markIconHeight + 'px',
+                                    lineHeight: this.markIconHeight + 2 + 'px',
                                 }
                             },
                             [content.slice(0, index + this.searchStr.length)]
@@ -155,8 +155,8 @@
                                 style: {
                                     display: 'inline-flex',
                                     alignItem: 'center',
-                                    minHeight: this.markIconHeight+'px',
-                                    lineHeight: this.markIconHeight+2+'px',
+                                    minHeight: this.markIconHeight + 'px',
+                                    lineHeight: this.markIconHeight + 2 + 'px',
                                 }
                             },
                             [content]
@@ -164,17 +164,24 @@
                     )
                 }
                 if (this.isEditModel) {
-                    return h('input',
+                    return h('CInput',
                         {
                             attrs: {
                                 value: content
                             },
+                            props: {
+                                width: '200',
+                                size: 'ssmall'
+                            },
+                            style:{
+                              verticalAlign: 'middle'
+                            },
                             on: {
-                                blur: (e) => {
+                                change: (v) => {
                                     if (this.addItemId) {
-                                        this.addContent = e.target.value
+                                        this.addContent = v
                                     } else {
-                                        this.editContent = e.target.value
+                                        this.editContent = v
                                     }
                                 }
                             }
@@ -187,8 +194,8 @@
                             display: 'inline-flex',
                             alignItems: 'center',
                             cursor: "pointer",
-                            minHeight: this.markIconHeight+'px',
-                            lineHeight: this.markIconHeight+2+'px',
+                            minHeight: this.markIconHeight + 'px',
+                            lineHeight: this.markIconHeight + 2 + 'px',
                         },
                         attrs: {
                             title: content,
@@ -348,9 +355,9 @@
                                     const type = 'delete';
                                     await this.selfEditTreeNode(data, type)
                                 },
-                                cancel:()=>{
+                                cancel: () => {
                                     this.isDeleteModel = false;
-                                    this.isControllersShow =false
+                                    this.isControllersShow = false
                                 }
                             }
                         },
@@ -524,7 +531,7 @@
                             h('CPrompt',
                                 {
                                     props: {
-                                        dialog: this.editContent ?'正在修改数据，请确认！': this.addContent? '正在新增数据，请确认': '当前未发生改变'
+                                        dialog: this.editContent ? '正在修改数据，请确认！' : this.addContent ? '正在新增数据，请确认' : '当前未发生改变'
                                     },
                                     on: {
                                         confirm: async () => {
@@ -563,9 +570,9 @@
                                             }
                                             await this.selfEditTreeNode(data, type)
                                         },
-                                        cancel:()=>{
+                                        cancel: () => {
                                             this.isDeleteModel = false;
-                                            this.isControllersShow =false
+                                            this.isControllersShow = false
                                         }
                                     }
                                 },

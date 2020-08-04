@@ -208,6 +208,7 @@
                     marginRight = behindWidth + 'px'
                 }
                 return {
+                    outerLine: 'none',
                     marginRight
                 }
             },
@@ -273,7 +274,7 @@
                 }
                 const obj = this.$refs.div;
                 if (e.inputType === 'insertCompositionText') {
-                    returnblur
+                    return
                 }
                 if (e.inputType === 'insertParagraph') {
                     // 回车键时阻止创建新的一行
@@ -625,7 +626,7 @@
                 handler(v) {
                     if (!_.isEqual(v, this.value)) {
                         const emitValue = this.type === 'number' ? Number.isNaN(parseFloat(v))? '': parseFloat(v) : v;
-                        this.$emit('changeValue', emitValue)
+                        this.$emit('input', emitValue)
                     }
                 },
                 immediate: true
