@@ -119,10 +119,6 @@
                 type: Function
             }
         },
-        model: {
-            prop: 'value',
-            event: 'changeValue'
-        },
         data() {
             return {
                 inputFocus: false,
@@ -347,6 +343,7 @@
                         this.setEndTextPos(obj);
                     },this.correctionTimeSpan * 1000);
                 }
+                console.log(this.inputValue)
                 if (this.value !== this.inputValue) {
                     // 触发input事件
                     this.$emit('input', this.inputValue)
@@ -376,7 +373,7 @@
                 this.inputFocus = false;
                 // 触发change事件
                 if (this.value !== this.inputValue) {
-                    this.$emit('change', this.inputValue)
+                    this.$emit('change', this.inputValue);
                     this.$emit('blur', this.inputValue)
                 }
             },
