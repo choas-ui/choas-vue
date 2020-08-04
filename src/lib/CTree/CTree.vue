@@ -7,7 +7,6 @@
         components: {
             CTreeUl
         },
-        function: true,
         props: {
             listData: {
                 type: Array,
@@ -87,17 +86,28 @@
             editTreeNode: {
                 type: Function
             },
-            value:{}
+            value: {
+                type: Array,
+                default() {
+                    return []
+                }
+            }
         },
         data() {
             return {
-                treeUlData: {}, // 渲染list
-                copySelectedData: {}, // 渲染已选数据
+                copyValue: [],
+                copyListData: [], // 用于渲染的list
+                backupCopyListData: [], // list备份
                 editItemId: '', // 在编辑元素位置编码
                 addItemId: '', // 在添加元素位置编码
             }
         },
         methods: {
+            // 改变列表值
+            changeCopyListData(v){
+                this.$set(this,'copyListData',v);
+                this.$set(this,'backupCopyListData',_.cloneDeep(v));
+            },
             // 记录在编辑位置
             changeEditItemId(v) {
                 this.editItemId = v
@@ -131,37 +141,48 @@
                 }
             },
             // 标记数据结构 同步数据 非常耗费时间
-            markIdentifyAndSyncData(listData, data, selectData, parentId = '') {
+            markIdentifyAndSyncData(data, selectData) {
                 data.forEach((item, index) => {
-                    const selfPath = parentId + index;
-                    item._c_tree_self_id = selfPath;
-                    // 设置父元素属性
                     if (selectData.length) {
                         const findIndex = selectData.findIndex(select => select[this.reflectKey['value']] === item[this.reflectKey['value']]);
                         if (findIndex > -1) {
-                            const length = selfPath.length - 2 > 0 ? selfPath.length - 2 : 0;
-                            const pPath = selfPath.slice(0, length);
+                            const pPath = item._c_tree_parent_id;
                             this.$set(item, 'checked', true);
+                            // 全选子元素
                             this.setAllChildrenNodeValue(item);
                             // 尽量减少重复次数
                             selectData.splice(index, 1);
                             if (pPath) {
-                                this.setParentNodeValue(listData, pPath, true)
+                                this.setParentNodeValue(data, pPath, true)
                             }
                         }
                     }
                     if ((item.children || []).length) {
                         // 编辑数据结构
-                        this.markIdentifyAndSyncData(listData, item.children, selectData, item._c_tree_self_id + '-')
+                        this.markIdentifyAndSyncData(item.children, selectData)
                     }
                 })
+            },
+            // 标记数据层级
+            markListDataIdentify(data, parentId = '') {
+                data.forEach((item, index) => {
+                    item._c_tree_parent_id = parentId;
+                    item._c_tree_self_id = parentId ? parentId + '-' + index : +index + '';
+                    // 设置父元素属性
+                    if ((item.children || []).length) {
+                        // 编辑数据结构
+                        this.markListDataIdentify(item.children, item._c_tree_self_id)
+                    }
+                });
+                return data
             },
             // 获取所有被选取的子节点
             setAllChildrenNodeValue(data, isCancel) {
                 (data.children || []).forEach(item => {
-                    this.$set(item, 'checked', !isCancel);
+                    this.$set(item, 'checked', true);
                     this.setAllChildrenNodeValue(item, isCancel)
                 });
+                // this.$set(data, 'checked', !isCancel);
                 delete data.halfChecked
             },
             // 获取当前选择值 返回给双向绑定
@@ -170,22 +191,11 @@
                     if (item.checked || item.halfChecked) {
                         this.getAllCheckedValue(item.children, res);
                         if (item.checked && !item[this.conditionProps]) {
-                            res.push(item)
+                            res.push(item);
                         }
                     }
                 });
                 return res
-            },
-            // 初始化
-            initTreeValue(){
-                this.markIdentifyAndSyncData(this.listData, this.listData, _.cloneDeep(this.value));
-                this.$set(this, 'treeUlData', this.listData);
-                // 同步已选值统一设置checked属性
-                const value = _.cloneDeep(this.getAllCheckedValue(this.listData));
-                value.forEach(item => {
-                    delete item.children;
-                });
-                this.$emit('input', value)
             },
             // 筛选数据
             filterData(data, v) {
@@ -210,8 +220,17 @@
         watch: {
             listData: {
                 handler(v, old) {
-                    if(!_.isEqual(v,old)){
-                        this.initTreeValue()
+                    // 父元素列表变化时
+                    if (!_.isEqual(v, old)) {
+                        const listDataOfIdentify = this.markListDataIdentify(_.cloneDeep(v));
+                        // 拷贝列表用于操作
+                        this.$set(this, 'copyListData', listDataOfIdentify);
+                        // 备份数据用于还原
+                        this.$set(this, 'backupCopyListData', _.cloneDeep(listDataOfIdentify));
+                        // 拷贝数值加状态
+                        this.markIdentifyAndSyncData(this.copyListData, _.cloneDeep(v));
+                        // 备份数值加状态
+                        this.markIdentifyAndSyncData(this.backupCopyListData, _.cloneDeep(v));
                     }
                 },
                 deep: true,
@@ -219,35 +238,44 @@
             },
             searchStr(v) {
                 if (v) {
-                    this.$set(this, 'treeUlData', this.filterData(this.treeUlData, v))
+                    this.$set(this, 'copyListData', this.filterData(this.copyListData, v))
                 } else {
-                    this.initTreeValue()
+                    this.$set(this, 'copyListData', _.cloneDeep(this.listDataOfIdentify));
                 }
             },
-            value:{
-                handler(v){
-                    console.log(v)
+            value: {
+                handler(v) {
+                    // 防止无限次循环问题
+                    if (!_.isEqual(v, this.copyValue)) {
+                        // 外部数据更新更新内部数据
+                        const res =[];
+                        this.getAllCheckedValue(this.copyListData,res);
+                        this.$set(this, 'copyValue', res);
+                    }
                 },
-                immediate: true,
-                deep: true
-            }
+                deep: true,
+                immediate: true
+            },
+            copyValue: {
+                handler(v) {
+                    this.$emit('input', v)
+                },
+                deep: true,
+                immediate: true
+            },
         },
         render(h) {
             return h('CTreeUl',
                 {
-                    attrs: {
-                        value: this.value
-                    },
                     props: {
-                        lineStartLv: 0,
-                        _c_tree_parent_id: '',
-                        listData: this.treeUlData,
-                        line: this.line,
-                        reflectKey: this.reflectKey,
-                        searchStr: this.searchStr,
-                        controllers: this.controllers,
-                        fileIconFixMarginRight: this.fileIconFixMarginRight,
-                        markIconFixMarginRight: this.markIconFixMarginRight,
+                        value: this.value,
+                        listData: this.copyListData,
+                        line: this.line, // 线段
+                        reflectKey: this.reflectKey, // 映射
+                        searchStr: this.searchStr, // 搜索
+                        controllers: this.controllers, // 是否显示编辑按钮
+                        fileIconFixMarginRight: this.fileIconFixMarginRight, // 文件图标右边距
+                        markIconFixMarginRight: this.markIconFixMarginRight, // 标记图标右边距
                         multiple: this.multiple, // 多选
                         checkbox: this.checkbox, // 显示选择框
                         conditionProps: this.conditionProps, // 不可选条件
@@ -258,6 +286,9 @@
                     },
                     on: {
                         ...this.$listeners,
+                        changeCopyListData:(v)=>{
+                            this.$emit('changeCopyListData', v)
+                        },
                         changeEditItemId: (v) => {
                             this.changeEditItemId(v)
                         },

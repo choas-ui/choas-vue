@@ -57,12 +57,6 @@
                     return 'node'
                 }
             },
-            _c_tree_parent_id: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
             // 本条数据
             selfData: {
                 type: Object,
@@ -108,11 +102,13 @@
             // 编辑节点
             editTreeNode: {
                 type: Function
+            },
+            value:{
+
             }
         },
         model: {
-            props: 'value',
-            event: 'change'
+            event: 'input'
         },
         data() {
             return {
@@ -201,7 +197,7 @@
                             title: content,
                         },
                         class: classNames({
-                            'active': (this.$attrs.value || []).find(item => data[this.reflectKey['value']] && (item[this.reflectKey['value']] === data[this.reflectKey['value']])),
+                            'active': data.checked,
                             [`${this.fixedPrefix}tree-title-wrap`]: true
                         }),
                         on: {
@@ -381,6 +377,7 @@
             },
             // 点击关联元素
             clickHandle(data) {
+                // TODO  直接改变copyValue
                 let {value} = this.$attrs;
                 let res = [];
                 if (!data.disabled) {
@@ -388,7 +385,7 @@
                     if (!data[this.conditionProps]) {
                         if (this.multiple) {
                             // 多选模式,点击由尾节点(当前值)向上递归父节点
-                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
+                            this.setParentNodeValue(this.copyListData, data._c_tree_parent_id, !data.checked)
                         } else {
                             // 单选模式
                             const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.');
@@ -407,7 +404,7 @@
                             // 设置子节点值
                             this.setAllChildrenNodeValue(data, !data.checked);
                             // 设置父节点值
-                            this.setParentNodeValue(this.copyListData, this._c_tree_parent_id, !data.checked)
+                            this.setParentNodeValue(this.copyListData, data._c_tree_parent_id, !data.checked)
                         } else {
                             res = [...this.$attrs.value]
                         }
@@ -416,7 +413,7 @@
                 if (this.multiple) {
                     this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
                 }
-                this.$emit('change', res.filter(item => item.checked))
+                this.$emit('input', res.filter(item => item.checked))
             },
             // 获取所有被选取的子节点
             setAllChildrenNodeValue(data, isCancel) {

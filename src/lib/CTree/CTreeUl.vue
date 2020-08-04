@@ -8,7 +8,6 @@
         components: {
             CTreeLiContent
         },
-        function: true,
         props: {
             listData: {
                 type: Array,
@@ -92,12 +91,6 @@
                     return 'node'
                 }
             },
-            _c_tree_parent_id: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
             setParentNodeValue:{
                 type:Function
             },
@@ -122,7 +115,7 @@
         },
         model: {
             props: 'value',
-            event: 'change'
+            event: 'input'
         },
         data() {
             return {
@@ -141,11 +134,7 @@
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
         },
         methods: {
-            // 创建关联id
-            createdId(index) {
-                return this._c_tree_parent_id ? this._c_tree_parent_id + '-' + index : index + ''
-            },
-            createdLiContent(h, item, index) {
+            createdLiContent(h, item) {
                 return h('div',
                     [
                         h('div',
@@ -154,7 +143,7 @@
                                     height: this.markIconHeight * 1.5 + 'px'
                                 }
                             },
-                            this.createLine(h)
+                            this.createLine(h,item._c_tree_self_id.split('-').length-1)
                         ),
                         h('div',
                             [
@@ -162,12 +151,8 @@
                                 this.createFileIcon(h, item),
                                 h('CTreeLiContent',
                                     {
-                                        attrs: {
-                                            ...this.$attrs
-                                        },
                                         props: {
-                                            lineStartLv: this.lineStartLv + 1,
-                                            _c_tree_parent_id: this.createdId(index),
+                                            value: this.value,
                                             selfData: item,
                                             listData: this.listData,
                                             reflectKey: this.reflectKey,
@@ -178,6 +163,7 @@
                                             conditionProps: this.conditionProps, // 不可选条件
                                             setParentNodeValue: this.setParentNodeValue, // 设置父元素属性函数
                                             editItemId: this.editItemId, // 记录编辑数据位置
+                                            changeCopyListData: this.changeCopyListData, // 修改列表
                                             changeEditItemId: this.changeEditItemId, // 设置编辑数据位置
                                             addItemId: this.addItemId, //  记录添加数据位置
                                             changeAddItemId: this.changeAddItemId, // 设置编辑数据位置
@@ -185,6 +171,9 @@
                                         },
                                         on: {
                                             ...this.$listeners,
+                                            changeCopyListData:(v)=>{
+                                                this.$emit('changeCopyListData', v)
+                                            },
                                             changeEditItemId:(v)=>{
                                                 this.$emit('changeEditItemId', v)
                                             },
@@ -275,11 +264,11 @@
                 })
             },
             // 创建树形连线
-            createLine(h) {
-                if (!this.lineStartLv) {
+            createLine(h, lineStartLv) {
+                if (!lineStartLv) {
                     return []
                 }
-                return new Array((this.lineStartLv) * 2).fill(1).map((item, index, arr) => {
+                return new Array((lineStartLv) * 2).fill(1).map((item, index, arr) => {
                     if (!index) {
                         // 竖线
                         return h('span',
@@ -323,7 +312,7 @@
                                     }
                                 }
                             )
-                        } else if (index >= (this.lineStartLv-1)*2) {
+                        } else if (index >= (lineStartLv-1)*2) {
                             // 子元素竖线
                             return h('span',
                                 {
@@ -362,17 +351,13 @@
                 })
             },
             // 创建递归树形
-            createTree(h, data, index) {
+            createTree(h, data) {
                 if (data.expand) {
                     return h('CTreeUl',
                         {
-                            attrs: {
-                                ...this.$attrs
-                            },
                             props: {
-                                lineStartLv: this.lineStartLv + 1,
-                                _c_tree_parent_id: this.createdId(index),
-                                listData: this.listData,
+                                value: this.value,
+                                listData: data.children,
                                 line: this.line,
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
@@ -450,17 +435,9 @@
             },
         },
         render(h) {
-            const path = this._c_tree_parent_id;
-            let theLvListData = this.copyListData || [];
-            if (path !== '') {
-                theLvListData = _.get(this.copyListData, path.split('-').join('.children.') + '.children', [])
-            }
-            if (!theLvListData.length) {
-                return null
-            }
             return h('ul',
                 [
-                    theLvListData.map((item, index) => {
+                    this.listData.map((item, index) => {
                         return h('li',
                             {
                                 class: classNames({
