@@ -23,7 +23,7 @@
             <div :class="getTreeBoxClass">
                 <div :class="getTreeFootBoxClass"></div>
                 <div class="search-box-wrap">
-                    <input type="text" v-model="searchStr" :placeholder="noticeTxt" autofocus>
+                    <CInput type="text" v-model="searchStr" :placeholder="noticeTxt" size="small"/>
                     <CButton size="small" v-if="addTreeNode" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
                     <CButton size="small" v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
                     <CButton size="small" v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
@@ -199,15 +199,15 @@
             addTreeNode: {
                 type: Function
             },
-            prefix:{
+            prefix: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
             },
-            className:{
+            className: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
             },
@@ -228,8 +228,8 @@
             this.list_data = _.cloneDeep(this.listData)
             this.cascadeList = _.cloneDeep(this.listData)
         },
-        computed:{
-            getTreeFootBoxClass(){
+        computed: {
+            getTreeFootBoxClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
                     {
@@ -237,7 +237,7 @@
                     }
                 )
             },
-            getTreeBoxClass(){
+            getTreeBoxClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
                     {
@@ -245,7 +245,7 @@
                     }
                 )
             },
-            getWrapBoxClass(){
+            getWrapBoxClass() {
                 const prefix = this.prefix ? this.prefix + '-' : ''
                 return classNames(
                     this.className,
@@ -256,7 +256,7 @@
             }
         },
         methods: {
-            openCascade(){
+            openCascade() {
                 this.isCascadeShow = true
             },
             confirmHandle() {
@@ -268,51 +268,51 @@
                 this.selectData = this.value
             },
             addTreeListHandle() {
-                const pId = this.cascadeData[this.cascadeData.length-1]?this.cascadeData[this.cascadeData.length-1][this.reflectKey['value']]: ''
+                const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : ''
                 this.addTreeNode({pId: pId || '', value: this.searchStr})
             },
             addBtnCancelHandle() {
                 this.isCascadeShow = false
                 this.searchStr = ''
             },
-            filterData(data,v){
+            filterData(data, v) {
                 let key = this.reflectKey['key']
-                for (let i = 0; i <data.length ; i++) {
+                for (let i = 0; i < data.length; i++) {
                     let item = data[i]
-                    item.expand= true
-                    if((item.children || []).length){
+                    item.expand = true
+                    if ((item.children || []).length) {
                         this.filterData(item.children, v)
                     }
-                    if(!(item.children || []).length){
+                    if (!(item.children || []).length) {
                         delete item.children
-                        if(item[key].indexOf(v)<0){
-                            data.splice(i,1)
+                        if (item[key].indexOf(v) < 0) {
+                            data.splice(i, 1)
                             i--
                         }
                     }
                 }
                 return data
             },
-            removeHandle(value){
-                if(this.multiple){
+            removeHandle(value) {
+                if (this.multiple) {
                     const index = this.selectData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']])
-                    if(index>-1){
-                        this.selectData.splice(index,1)
+                    if (index > -1) {
+                        this.selectData.splice(index, 1)
                     }
-                }else{
+                } else {
                     this.selectData = []
                 }
             }
         },
         watch: {
-            value:{
-              handler(v, old){
-                  if(!_.isEqual(v, old)) {
-                      this.$set(this, 'selectData', _.cloneDeep(v))
-                  }
-              },
-              deep: true,
-              immediate: true
+            value: {
+                handler(v, old) {
+                    if (!_.isEqual(v, old)) {
+                        this.$set(this, 'selectData', _.cloneDeep(v))
+                    }
+                },
+                deep: true,
+                immediate: true
             },
             isShow(v) {
                 this.isModalShow = v
@@ -338,14 +338,14 @@
                 if (!v) {
                     this.list_data = _.cloneDeep(this.listData)
                     this.cascadeList = _.cloneDeep(this.listData)
-                }else{
-                    const data =  _.cloneDeep(this.listData)
-                    this.list_data =this.filterData(data, v)
+                } else {
+                    const data = _.cloneDeep(this.listData)
+                    this.list_data = this.filterData(data, v)
                 }
             },
             listData: {
                 handler(v, old) {
-                    if(!_.isEqual(v, old)) {
+                    if (!_.isEqual(v, old)) {
                         this.$set(this, 'list_data', _.cloneDeep(v))
                         this.$set(this, 'cascadeList', _.cloneDeep(v))
                     }
@@ -375,19 +375,22 @@
         height: addPX($llg-height);
         line-height: addPX(llg-height);
     }
-    .tree{
+
+    .tree {
         &-box-wrap {
             height: 100%;
             display: flex;
             padding: 0 addPX($df-padding) 0 addPX($df-padding);
             box-sizing: border-box;
         }
+
         &-box {
             flex: 3;
             box-sizing: border-box;
             display: flex;
             flex-wrap: wrap;
             flex-direction: column;
+
             .search-box-wrap {
                 padding-right: addPX($lg-padding);
                 width: 100%;
@@ -410,6 +413,7 @@
                     }
                 }
             }
+
             .title-box {
                 width: 100%;
                 height: addPX($df-height);
@@ -421,6 +425,7 @@
                 letter-spacing: addPX($df-letterSp);
                 border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
             }
+
             .cascade-box {
                 padding: addPX($lg-padding) addPX($lg-padding) 0 0;
                 display: flex;
@@ -429,6 +434,7 @@
                 flex-wrap: wrap;
                 text-align: center;
             }
+
             .content-box {
                 margin: addPX($lg-padding* 1.5) 0;
                 width: 100%;
@@ -436,13 +442,15 @@
                 box-sizing: border-box;
                 overflow-y: auto;
                 display: flex;
-                .empty-box{
+
+                .empty-box {
                     width: 100%;
                     align-self: center;
                     text-align: center;
                 }
             }
         }
+
         &-footer-box {
             width: 100%;
             height: addPX($sm-height);
@@ -455,6 +463,7 @@
         }
 
     }
+
     .selected-box {
         flex: 2;
         word-break: break-all;
@@ -479,7 +488,7 @@
                 box-sizing: border-box;
                 text-align: left;
                 margin: addPX($sm-margin) 0 0 0;
-                padding-left:addPX($df-padding);
+                padding-left: addPX($df-padding);
                 display: flex;
                 font-size: addPX($df-fs);
                 align-items: center;
