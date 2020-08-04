@@ -13,7 +13,14 @@
     export default {
         name: 'CInput',
         props: {
-            value: {},
+            value: {
+                validate(v){
+                    return  typeof v === 'string' || typeof v === 'number'
+                },
+                default(){
+                    return ''
+                }
+            },
             // 高度
             size: {
                 validate(v) {
@@ -310,7 +317,7 @@
                         } else {
                             //
                             if (e.data === '-') {
-                                if (this.inputValue === undefined || this.inputValue === '') {
+                                if (this.inputValue === '') {
                                     this.inputValue = e.data
                                 }
 
@@ -370,6 +377,7 @@
                 // 触发change事件
                 if (this.value !== this.inputValue) {
                     this.$emit('change', this.inputValue)
+                    this.$emit('blur', this.inputValue)
                 }
             },
             // 清除
@@ -469,7 +477,9 @@
                             blur: (e) => {
                                 this.blurHandle(e)
                             },
-
+                            keydown: ()=>{
+                                this.$emit('keydown', this.inputValue)
+                            }
                         }
                     },
                 )
@@ -612,12 +622,7 @@
         watch: {
             value: {
                 handler(v) {
-                    // 初始化值
-                    if (typeof v === 'undefined') {
-                        this.inputValue = ""
-                    } else {
-                        this.inputValue = v
-                    }
+                    this.inputValue = v
                 },
                 immediate: true
             },
@@ -685,7 +690,7 @@
                             // 输入盒
                             this.createEditableBox(h),
                             // 输入提示
-                            this.inputValue === undefined || this.inputValue === '' ? h('span', {
+                            this.inputValue === '' ? h('span', {
                                     style: this.getPlaceholderStyle,
                                     on: {
                                         click: (e) => {
