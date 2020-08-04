@@ -343,7 +343,6 @@
                         this.setEndTextPos(obj);
                     },this.correctionTimeSpan * 1000);
                 }
-                console.log(this.inputValue)
                 if (this.value !== this.inputValue) {
                     // 触发input事件
                     this.$emit('input', this.inputValue)
