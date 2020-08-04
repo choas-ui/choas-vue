@@ -243,5 +243,9 @@ export default {
       background: $btnGstCr;
     }
   }
+  &-content{
+    word-break: keep-all;
+    white-space: nowrap;
+  }
 }
 </style>

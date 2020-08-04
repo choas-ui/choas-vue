@@ -17,14 +17,14 @@
                  version="1.1"
                  aria-hidden="true"
                  xmlns="http://www.w3.org/2000/svg">
-                <path v-for="(d,i) in svgLib.default[iconName]" :key="d+iconName+i" :fill="cl" :d="d" />
+                <path v-for="(d,i) in svgLib.default[iconName]" :key="d+iconName+i" :fill="cl" :d="d"/>
             </svg>
             <svg v-else aria-hidden="true">
                 <use :[xlinkHref]="`#${iconName}`"></use>
             </svg>
         </template>
         <template v-if="src">
-            <img :src="src"/>
+            <img :src="src" alt="icon"/>
         </template>
     </span>
 </template>
@@ -71,12 +71,6 @@
                     return '18'
                 }
             },
-            fontSize: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
             src: {
                 type: String,
                 default() {
@@ -117,16 +111,16 @@
                     width: this.width + 'px',
                     height: this.height + 'px',
                     lineHeight: this.height + 'px',
-                    fontSize: this.fontSize + 'px',
+                    fontSize: this.height + 'px',
                     color: this.cl,
-                    display:'inline-block',
+                    display: 'inline-block',
                     verticalAlign: 'middle'
                 }
             },
             getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
-                   this.className,
+                    this.className,
                     {
                         "pointer-cursor": this.$listeners.click,
                     },
@@ -137,11 +131,11 @@
             }
         },
         methods: {
-            clickHandle(e){
+            clickHandle(e) {
                 this.$listeners.click && this.$emit('click', e)
             },
-            turnColor(){
-                this.cl = this.$listeners.click && this.cl === this.color? this.activeColor: this.color
+            turnColor() {
+                this.cl = this.$listeners.click && this.cl === this.color ? this.activeColor : this.color
             }
         }
     }
@@ -152,15 +146,18 @@
     @import "../scss/normal-bg";
     @import "../scss/variable";
     @import "../scss/comm-class";
+
     .icon {
-        *{
+        * {
             box-sizing: border-box;
-            overflow:hidden;
+            overflow: hidden;
         }
+
         &-wrap {
             display: inline-block;
             overflow: hidden;
             vertical-align: middle;
+
             > i, svg, img {
                 box-sizing: border-box;
                 display: inline-block;

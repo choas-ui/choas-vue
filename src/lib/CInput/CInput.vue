@@ -13,6 +13,7 @@
     export default {
         name: 'CInput',
         props: {
+            value: {},
             // 高度
             size: {
                 validate(v) {
@@ -22,9 +23,9 @@
                     return 'default'
                 }
             },
-            width:{
+            width: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
             },
@@ -52,28 +53,39 @@
                     };
                 }
             },
-            // 自动完成格式 用于生成自动完成的列表
-            autocompleteFormat: {
-                validate(v) {
-                    return typeof v === "function" || typeof v === 'string';
-                },
-            },
             // 输入框类型
             type: {
                 validate(v) {
-                    return ['text', 'password'].includes(v)
+                    return ['text', 'password', 'number', 'search'].includes(v)
                 },
                 default() {
                     return 'text'
+                }
+            },
+            maxLength:{
+                validate(v){
+                    return typeof  v  === "number" && v >=0
+                }
+            },
+            min: {
+                type: Number,
+            },
+            max: {
+                type: Number
+            },
+            correctionTimeSpan:{
+                type: Number,
+                default(){
+                    return 1
                 }
             },
             // 是否显示清除按钮
             clearable: {
                 type: Boolean
             },
-            passwordReplacer:{
+            passwordReplacer: {
                 type: String,
-                default(){
+                default() {
                     return '&bull;'
                 }
             },
@@ -91,7 +103,14 @@
                     return ''
                 }
             },
-            value: {}
+            // 不显示searchBtn
+            noSearchBtn: {
+                type: Boolean
+            },
+            // 生成自定义搜索按钮
+            renderSearchBtn: {
+                type: Function
+            }
         },
         model: {
             prop: 'value',
@@ -101,7 +120,8 @@
             return {
                 inputFocus: false,
                 inputValue: '',
-                canPasswordSee: false
+                canPasswordSee: false,
+                timer: null
             };
         },
         mounted() {
@@ -117,10 +137,28 @@
                     let range = window.getSelection().getRangeAt(0);
                     // 删除默认选中文本
                     range.deleteContents();
-                    // 创建一个文本节点，用于替换选区文本
-                    let pasteTxt = document.createTextNode(txt);
                     // 插入文本节点
-                    range.insertNode(pasteTxt);
+                    if ( ['text', 'search'].includes(this.type)) {
+                        this.inputValue = txt;
+                        if(this.maxLength !==undefined && this.inputValue.length>this.maxLength){
+                            this.inputValue =this.inputValue.toString().slice(0, this.maxLength)
+                        }
+                    }
+                    // 插入文本节点
+                    if (this.type === 'number') {
+                        this.inputValue = parseFloat(txt);
+                        if (Number.isNaN(this.inputValue)) {
+                            this.inputValue = this.min
+                        } else {
+                            if (this.max !== undefined && this.inputValue > this.max) {
+                                this.inputValue = this.max
+                            }
+                            if (this.min !== undefined && this.inputValue < this.min) {
+                                this.inputValue = this.min
+                            }
+                        }
+                    }
+                    range.insertNode(document.createTextNode(this.inputValue));
                     // 将焦点移动到复制文本结尾
                     range.collapse(false);
                 });
@@ -155,19 +193,19 @@
                 }
                 return {
                     position: 'absolute',
-                    left: (paddingNum[this.size || 'default']/2).toFixed() + 'px',
+                    left: (paddingNum[this.size || 'default'] / 2).toFixed() + 'px',
                     top: 0,
                     color: '#aaa'
                 }
             },
             getContentStyle() {
                 let marginRight = 0;
-                if(this.clearable || this.type === 'password'){
-                    marginRight= 18+'px'
+                if (this.clearable || this.type === 'password' || this.type === 'password') {
+                    marginRight = 18 + 'px'
                 }
-                if(this.$slots['behind-icon']){
+                if (this.$slots['behind-icon']) {
                     const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    marginRight =behindWidth+'px'
+                    marginRight = behindWidth + 'px'
                 }
                 return {
                     marginRight
@@ -188,12 +226,14 @@
                 }
                 if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
                     const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    padding = `0 ${(behindWidth / 2).toFixed()}px 0 ${(paddingNum[this.size || 'default']/2).toFixed()}px`;
+                    padding = `0 ${(behindWidth / 2).toFixed()}px 0 ${(paddingNum[this.size || 'default'] / 2).toFixed()}px`;
                 }
                 return {
                     border: `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`,
                     position: 'relative',
                     padding,
+                    borderBottomRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
+                    borderTopRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
                 }
             },
             // input外框类
@@ -210,10 +250,10 @@
                     }
                 )
             },
-            getInputWrapStyle(){
-              return {
-                  width: this.width? this.width+ 'px' : '100%'
-              }
+            getInputWrapStyle() {
+                return {
+                    width: this.width ? this.width + 'px' : '100%',
+                }
             },
             // 组件外壳
             getInputWrapClass() {
@@ -228,25 +268,77 @@
         methods: {
             // 输入
             inputHandle(e) {
+                if(this.timer){
+                    clearTimeout(this.timer)
+                }
                 const obj = this.$refs.div;
                 if (e.inputType === 'insertCompositionText') {
-                    return
+                    returnblur
                 }
                 if (e.inputType === 'insertParagraph') {
                     // 回车键时阻止创建新的一行
                 }
                 if (e.inputType === 'deleteContentBackward') {
                     // TODO 后续需要测试ie浏览器兼容性问题
-                    const { anchorOffset: slicePos } = window.getSelection?
-                        window.getSelection(): document.selection.createRange();
+                    const {anchorOffset: slicePos} = window.getSelection ?
+                        window.getSelection() : document.selection.createRange();
                     // 防止副文本删除导致的光标上移问题
-                    this.inputValue = slicePos ? this.inputValue.slice(0, slicePos) : '';
+                    this.inputValue = slicePos ? this.inputValue.toString().slice(0, slicePos) : '';
                 }
                 if (e.inputType === 'insertText') {
-                    this.inputValue += e.data;
+                    if (this.type !== 'number') {
+                        this.inputValue += e.data;
+                        if(this.maxLength !==undefined && this.inputValue.length>this.maxLength){
+                            this.inputValue =this.inputValue.toString().slice(0, this.maxLength)
+                        }
+                    } else {
+                        // 无穷大值修正
+                        if(this.inputValue=== Infinity){
+                            this.inputValue = this.max
+                        }
+                        // 无穷小值修正
+                        if(this.inputValue=== -Infinity){
+                            this.inputValue = this.min
+                        }
+                        if (/[0-9]/.test(e.data)) {
+                            if(parseFloat(this.inputValue) === 0){
+                                this.inputValue = e.data
+                            }else{
+                                this.inputValue += e.data
+                            }
+                        } else {
+                            //
+                            if (e.data === '-') {
+                                if (this.inputValue === undefined || this.inputValue === '') {
+                                    this.inputValue = e.data
+                                }
+
+                            }
+                            if (e.data === '.') {
+                                const value = this.inputValue + e.data;
+                                if (!Number.isNaN(parseFloat(value)) && !this.inputValue.includes('.')) {
+                                    this.inputValue = value
+                                }
+                            }
+                        }
+                    }
+
                 }
                 this.setInputDomValue(obj);
                 this.setEndTextPos(obj);
+                // 校正
+                if(this.type === 'number'&& (this.max!== undefined || this.min!==undefined)){
+                    this.timer = setTimeout(()=>{
+                        if (this.max !== undefined && this.inputValue >= this.max) {
+                            this.inputValue = this.max
+                        }
+                        if (this.min !== undefined && this.inputValue <= this.min) {
+                            this.inputValue = this.min
+                        }
+                        this.setInputDomValue(obj);
+                        this.setEndTextPos(obj);
+                    },this.correctionTimeSpan * 1000);
+                }
                 if (this.value !== this.inputValue) {
                     // 触发input事件
                     this.$emit('input', this.inputValue)
@@ -288,8 +380,11 @@
             },
             // 设置值
             setInputDomValue(obj) {
-                if (this.inputValue) {
+                if (this.inputValue !== undefined) {
                     if (this.type === 'text') {
+                        obj.innerHTML = this.inputValue
+                    }
+                    if (this.type === 'number') {
                         obj.innerHTML = this.inputValue
                     }
                     if (this.type === 'password') {
@@ -333,7 +428,7 @@
                 if (!this.$slots['prefix-icon']) {
                     return null
                 }
-                const {propsData, propsData: {height}} = this.$slots['prefix-icon'][0].componentOptions;
+                const {propsData, propsData: {height}, listeners} = this.$slots['prefix-icon'][0].componentOptions;
                 return h('CIcon',
                     {
                         props: propsData,
@@ -342,6 +437,7 @@
                             left: '2px',
                             top: `calc(50% - ${(height / 2).toFixed(0)}px)`
                         },
+                        on: listeners
                     },
                 )
             },
@@ -379,10 +475,86 @@
             },
             // 后置图标
             createBehindIcon(h) {
+                if (this.type === 'password') {
+                    return h('CIcon',
+                        {
+                            props: {
+                                iconName: this.canPasswordSee ? 'choas-close-eye' : 'choas-eye',
+                                color: '#aaa'
+                            },
+                            class: this.getClearableClass,
+                            style: this.getClearableStyle,
+                            on: {
+                                click: (e) => {
+                                    this.seePasswordHandle(e);
+                                }
+                            }
+                        })
+                }
+                if (this.type === 'number') {
+                    let width = (paddingNum[this.size || 'default'] * 0.6).toFixed();
+                    let height = (paddingNum[this.size || 'default'] * 0.6).toFixed();
+                    width = width > 8 ? width : '8';
+                    height = height > 8 ? height : '8';
+                    return [
+                        h('CIcon',
+                            {
+                                props: {
+                                    iconName: 'choas-add',
+                                    width,
+                                    height,
+                                },
+                                style: {
+                                    position: 'absolute',
+                                    right: `${paddingNum[this.size || 'default'] / 2}px`,
+                                    top: `calc(50% - ${height / 1 + 1}px)`,
+                                    background: '#eee'
+                                },
+                                on: {
+                                    click: () => {
+                                        const obj = this.$refs.div;
+                                        this.inputValue = this.inputValue / 1 + 1;
+                                        if (this.max !== undefined && this.inputValue >= this.max) {
+                                            this.inputValue = this.max
+                                        }
+                                        this.setInputDomValue(obj);
+                                        this.setEndTextPos(obj);
+                                    }
+                                },
+                            }
+                        ),
+                        h('CIcon',
+                            {
+                                props: {
+                                    iconName: 'choas-min',
+                                    width,
+                                    height,
+                                },
+                                style: {
+                                    position: 'absolute',
+                                    right: `${paddingNum[this.size || 'default'] / 2}px`,
+                                    bottom: `calc(50% - ${height / 1 + 1}px)`,
+                                    background: '#eee'
+                                },
+                                on: {
+                                    click: () => {
+                                        const obj = this.$refs.div;
+                                        this.inputValue = this.inputValue / 1 - 1;
+                                        if (this.min !== undefined && this.inputValue <= this.min) {
+                                            this.inputValue = this.min
+                                        }
+                                        this.setInputDomValue(obj);
+                                        this.setEndTextPos(obj);
+                                    }
+                                },
+                            }
+                        )
+                    ]
+                }
                 if (!this.$slots['behind-icon']) {
                     return null
                 }
-                const {propsData, propsData: {height}} = this.$slots['behind-icon'][0].componentOptions;
+                const {propsData, propsData: {height}, listeners} = this.$slots['behind-icon'][0].componentOptions;
                 return h('CIcon',
                     {
                         props: propsData,
@@ -391,9 +563,50 @@
                             right: `${paddingNum[this.size || 'default'] / 2}px`,
                             top: `calc(50% - ${(height / 2).toFixed(0)}px)`
                         },
+                        on: listeners
                     },
                 )
             },
+            createSearchBtn(h){
+                if(this.type!== 'search'){
+                    return  null
+                }
+                if(this.type === 'search' && this.noSearchBtn){
+                    return null
+                }
+                if(typeof this.renderSearchBtn === 'function'){
+                    return this.renderSearchBtn(h);
+                }
+                return h('CButton',
+                    {
+                        props: {
+                            size: this.size
+                        },
+                        style: {
+                            borderBottomLeftRadius: !this.noSearchBtn ? 0 : null,
+                            borderTopLeftRadius: !this.noSearchBtn ? 0 : null,
+                            display: 'inline-flex'
+                        },
+                        on: {
+                            click: () => {
+                                alert('search')
+                            }
+                        }
+                    },
+                    [
+                        h('CIcon',
+                            {
+                                slot: 'left',
+                                props: {
+                                    iconName: 'choas-search',
+                                    color: '#fff',
+                                }
+                            }
+                        ),
+                        '搜 索'
+                    ]
+                )
+            }
         },
         watch: {
             value: {
@@ -411,7 +624,8 @@
             inputValue: {
                 handler(v) {
                     if (!_.isEqual(v, this.value)) {
-                        this.$emit('changeValue', v)
+                        const emitValue = this.type === 'number' ? Number.isNaN(parseFloat(v))? '': parseFloat(v) : v;
+                        this.$emit('changeValue', emitValue)
                     }
                 },
                 immediate: true
@@ -470,18 +684,21 @@
                             // 输入盒
                             this.createEditableBox(h),
                             // 输入提示
-                            !this.inputValue ? h('span', {
+                            this.inputValue === undefined || this.inputValue === '' ? h('span', {
                                     style: this.getPlaceholderStyle,
                                     on: {
                                         click: (e) => {
-                                            this.focusHandle(e)
+                                            this.focusHandle(e);
                                         }
                                     }
                                 },
                                 [this.placeholder]
                             ) : null,
                             // 清除输入按钮 仅仅在文本模式显示
-                            this.clearable && this.type === 'text' && !this.$slots['behind-icon'] && h('CIcon',
+                            this.clearable && this.type === 'text' &&
+                            this.type !== 'number' &&
+                            !this.$slots['behind-icon'] &&
+                            h('CIcon',
                                 {
                                     props: {
                                         iconName: 'choas-fill-danger',
@@ -491,36 +708,15 @@
                                     style: this.getClearableStyle,
                                     on: {
                                         click: (e) => {
-                                            this.clearHandle(e)
-                                        }
-                                    }
-                                }),
-                            // 查看密码按钮
-                            this.type === 'password' && h('CIcon',
-                                {
-                                    props: {
-                                        iconName: this.canPasswordSee ? 'choas-close-eye' : 'choas-eye',
-                                        color: '#aaa'
-                                    },
-                                    class: this.getClearableClass,
-                                    style: this.getClearableStyle,
-                                    on: {
-                                        click: (e) => {
-                                            this.seePasswordHandle(e)
+                                            this.clearHandle(e);
                                         }
                                     }
                                 }),
                             // 后置图标
                             this.createBehindIcon(h),
-                            // 下拉列表
-                            (this.listData || []).length ? h('ul',
-                                {},
-                                [
-                                    h('li', ['li'])
-                                ]
-                            ) : null
                         ]
-                    )
+                    ),
+                    this.createSearchBtn(h)
                 ]
             )
         }
@@ -534,7 +730,7 @@
     @import "../scss/functions";
 
     .input-wrap {
-        display: inline-block;
+        display: inline-flex;
     }
 
     .input {
