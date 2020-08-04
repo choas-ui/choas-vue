@@ -42,7 +42,7 @@
                                 :multiple="multiple"
                                 :checkbox="checkbox"
                                 :line="line"
-                                v-model="selectData"
+                                v-model="selectedData"
                                 :list-data="list_data"
                                 :reflect-key="reflectKey"
                                 :search-str="searchStr"
@@ -57,10 +57,10 @@
             </div>
             <div class="selected-box">
                 <div :class="getTreeFootBoxClass">
-                    已选{{selectData.length}}项
+                    已选{{selectedData.length}}项
                 </div>
                 <div class="selected-content">
-                    <p v-for="item of selectData"
+                    <p v-for="item of selectedData"
                        :key="item[reflectKey['value']]"
                     >
                         <b>{{item[reflectKey['key']]}}</b>
@@ -216,7 +216,7 @@
             return {
                 isCascadeShow: false,
                 isModalShow: this.isShow,
-                selectData: [],
+                selectedData: [],
                 searchStr: '',
                 list_data: [],
                 cascadeData: [],
@@ -261,11 +261,11 @@
             },
             confirmHandle() {
                 this.$emit('toggleShow', false)
-                this.$emit('input', this.selectData)
+                this.$emit('input', this.selectedData)
             },
             cancelHandle() {
                 this.$emit('toggleShow', false)
-                this.selectData = this.value
+                this.selectedData = this.value
             },
             addTreeListHandle() {
                 const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : ''
@@ -295,21 +295,19 @@
             },
             removeHandle(value) {
                 if (this.multiple) {
-                    const index = this.selectData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']])
+                    const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']])
                     if (index > -1) {
-                        this.selectData.splice(index, 1)
+                        this.selectedData.splice(index, 1)
                     }
                 } else {
-                    this.selectData = []
+                    this.selectedData = []
                 }
             }
         },
         watch: {
             value: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$set(this, 'selectData', _.cloneDeep(v))
-                    }
+                handler(v) {
+                    this.$set(this, 'selectedData', v)
                 },
                 deep: true,
                 immediate: true
@@ -331,7 +329,7 @@
                     this.isCascadeShow = false
                     this.$emit('toggleShow', false)
                     this.searchStr = ''
-                    this.$set(this, 'selectData', this.value)
+                    this.$set(this, 'selectedData', this.value)
                 }
             },
             searchStr(v) {

@@ -86,15 +86,11 @@
             },
             editTreeNode: {
                 type: Function
-            }
-        },
-        model: {
-            props: 'value',
-            event: 'change'
+            },
+            value:{}
         },
         data() {
             return {
-                copyListData: {}, // 备份数据
                 treeUlData: {}, // 渲染list
                 copySelectedData: {}, // 渲染已选数据
                 editItemId: '', // 在编辑元素位置编码
@@ -180,19 +176,30 @@
                 });
                 return res
             },
+            // 初始化
+            initTreeValue(){
+                this.markIdentifyAndSyncData(this.listData, this.listData, _.cloneDeep(this.value));
+                this.$set(this, 'treeUlData', this.listData);
+                // 同步已选值统一设置checked属性
+                const value = _.cloneDeep(this.getAllCheckedValue(this.listData));
+                value.forEach(item => {
+                    delete item.children;
+                });
+                this.$emit('input', value)
+            },
             // 筛选数据
-            filterData(data,v){
+            filterData(data, v) {
                 let key = this.reflectKey['key'];
-                for (let i = 0; i <data.length ; i++) {
+                for (let i = 0; i < data.length; i++) {
                     let item = data[i];
-                    item.expand= true;
-                    if((item.children || []).length){
+                    item.expand = true;
+                    if ((item.children || []).length) {
                         this.filterData(item.children, v)
                     }
-                    if(!(item.children || []).length){
+                    if (!(item.children || []).length) {
                         delete item.children;
-                        if(item[key].indexOf(v)<0){
-                            data.splice(i,1);
+                        if (item[key].indexOf(v) < 0) {
+                            data.splice(i, 1);
                             i--
                         }
                     }
@@ -202,39 +209,34 @@
         },
         watch: {
             listData: {
-                handler(v) {
-                    if (!_.isEqual(v, this.copyListData)) {
-                        // 同步listData已选值设置checked属性,向上递归设置父节点属性
-                        // TODO 该操作比较耗费性能 以后优化
-                        this.markIdentifyAndSyncData(v, v, _.cloneDeep(this.$attrs.value));
-                        this.$set(this, 'copyListData', _.cloneDeep(v));
-                        this.$set(this, 'treeUlData', _.cloneDeep(v));
-                        // 同步已选值统一设置checked属性
-                        const value = _.cloneDeep(this.getAllCheckedValue(v));
-                        value.forEach(item => {
-                            delete item.children;
-                            delete item._c_tree_self_id
-                        });
-                        this.$emit('change', value)
+                handler(v, old) {
+                    if(!_.isEqual(v,old)){
+                        this.initTreeValue()
                     }
                 },
                 deep: true,
                 immediate: true
             },
-            searchStr(v){
-                if(v){
+            searchStr(v) {
+                if (v) {
                     this.$set(this, 'treeUlData', this.filterData(this.treeUlData, v))
-                }else{
-                    this.$set(this, 'treeUlData', _.cloneDeep(this.copyListData))
-
+                } else {
+                    this.initTreeValue()
                 }
+            },
+            value:{
+                handler(v){
+                    console.log(v)
+                },
+                immediate: true,
+                deep: true
             }
         },
         render(h) {
             return h('CTreeUl',
                 {
                     attrs: {
-                        ...this.$attrs
+                        value: this.value
                     },
                     props: {
                         lineStartLv: 0,
