@@ -380,22 +380,27 @@
             // 点击关联元素
             clickHandle(data) {
                 if (!data.disabled) {
-                    if(!data[this.conditionProps]){
-                        const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
-                        delete v.halfChecked;
-                        this.$set(v, 'checked', !data.checked);
-                        if (!this.multiple) {
-                            if(this.copyValue.length){
+
+                    if (!this.multiple) {
+                        if (!data[this.conditionProps]) {
+
+                            const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
+                            delete v.halfChecked;
+                            this.$set(v, 'checked', !data.checked);
+                            if (this.copyValue.length) {
                                 const v = _.get(this.copyListData, this.copyValue[0]._c_tree_self_id.split('-').join('.children.'), {});
                                 delete v.halfChecked;
                                 this.$set(v, 'checked', false)
                             }
-                        }else{
-                            this.changeChildrenNodeStatus(data, data.checked);
-                            this.changeParentNodeStatus(this.copyListData, data._c_tree_parent_id);
                         }
-                    }
+                    } else {
 
+                        const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
+                        delete v.halfChecked;
+                        this.$set(v, 'checked', !data.checked);
+                        this.changeChildrenNodeStatus(data, data.checked);
+                        this.changeParentNodeStatus(this.copyListData, data._c_tree_parent_id);
+                    }
                 }
             },
             async selfEditTreeNode(data, type) {
