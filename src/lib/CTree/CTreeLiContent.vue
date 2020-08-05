@@ -6,10 +6,10 @@
         name: 'CTreeLiContent',
         function: true,
         props: {
-            listData: {
-                type: Array,
+            itemData: {
+                type: Object,
                 default() {
-                    return []
+                    return {}
                 }
             },
             reflectKey: {
@@ -57,16 +57,6 @@
                     return 'node'
                 }
             },
-            // 本条数据
-            selfData: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            setParentNodeValue: {
-                type: Function,
-            },
             // 在编辑数据位置
             editItemId: {
                 type: String,
@@ -103,16 +93,28 @@
             editTreeNode: {
                 type: Function
             },
-            value:{
-
+            // 总列表
+            copyListData: {
+                type: Array,
+                default() {
+                    return []
+                }
+            },
+            changeChildrenNodeStatus: {
+                type: Function,
+            },
+            changeParentNodeStatus: {
+                type: Function,
+            },
+            copyValue: {
+                type: Array,
+                default() {
+                    return []
+                }
             }
-        },
-        model: {
-            event: 'input'
         },
         data() {
             return {
-                copyListData: {},
                 copySelectedData: {},
                 isControllersShow: false,
                 isEditModel: false,
@@ -120,6 +122,8 @@
                 editContent: '',
                 addContent: ''
             }
+        },
+        mounted() {
         },
         methods: {
             // 创建标题
@@ -169,8 +173,8 @@
                                 width: '200',
                                 size: 'ssmall'
                             },
-                            style:{
-                              verticalAlign: 'middle'
+                            style: {
+                                verticalAlign: 'middle'
                             },
                             on: {
                                 change: (v) => {
@@ -202,11 +206,9 @@
                         }),
                         on: {
                             click: () => {
-                                this.$set(data, 'checked', !data.checked);
                                 this.clickHandle(data)
                             }
                         },
-
                     }, [
 
                         this.multiple && this.checkbox && h('CCheckbox',
@@ -232,7 +234,7 @@
             },
             // 生成子节点并存储子节点位置
             createNewNodeValue(data) {
-                const clickValue = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), []);
+                const clickValue = _.get(this.itemData, data._c_tree_self_id.split('-').join('.children.'), []);
                 const _c_tree_self_id = data._c_tree_self_id + '-' + (data.children || []).length;
                 clickValue.children = clickValue.children || [];
                 clickValue.children.push({
@@ -249,7 +251,7 @@
                     let path = this.addItemId.split('-');
                     const [last, ...others] = [...path].reverse();
                     path = [...others].reverse().join('.children.');
-                    const pNodeValue = _.get(this.copyListData, path, null);
+                    const pNodeValue = _.get(this.itemData, path, null);
                     pNodeValue && pNodeValue.children.splice(last, 1);
                     this.$emit('changeAddItemId', '');
                     this.addContent = ''
@@ -345,7 +347,7 @@
                             on: {
                                 confirm: async () => {
                                     let data = {
-                                        id: this.selfData[this.reflectKey['value']],
+                                        id: this.itemData[this.reflectKey['value']],
                                         title: this.editContent
                                     };
                                     const type = 'delete';
@@ -377,65 +379,24 @@
             },
             // 点击关联元素
             clickHandle(data) {
-                // TODO  直接改变copyValue
-                let {value} = this.$attrs;
-                let res = [];
                 if (!data.disabled) {
-                    // 点击尾端结点
-                    if (!data[this.conditionProps]) {
-                        if (this.multiple) {
-                            // 多选模式,点击由尾节点(当前值)向上递归父节点
-                            this.setParentNodeValue(this.copyListData, data._c_tree_parent_id, !data.checked)
-                        } else {
-                            // 单选模式
-                            const path = _.get(value, '0._c_tree_self_id', '').split('-').join('.children.');
-                            const lastData = _.get(this.copyListData, path, null);
-                            // 取消上次选中
-                            lastData && this.$set(lastData, 'checked', false);
-                            // 隔离数据
-                            res = _.cloneDeep(data);
-                            delete res.children;
-                            // 本次选中
-                            res = [res]
-                        }
-                    } else {
-                        // 多选模式,点击包含子节点的父节点
-                        if (this.multiple) {
-                            // 设置子节点值
-                            this.setAllChildrenNodeValue(data, !data.checked);
-                            // 设置父节点值
-                            this.setParentNodeValue(this.copyListData, data._c_tree_parent_id, !data.checked)
-                        } else {
-                            res = [...this.$attrs.value]
+                    if(!data[this.conditionProps]){
+                        const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
+                        delete v.halfChecked;
+                        this.$set(v, 'checked', !data.checked);
+                        if (!this.multiple) {
+                            if(this.copyValue.length){
+                                const v = _.get(this.copyListData, this.copyValue[0]._c_tree_self_id.split('-').join('.children.'), {});
+                                delete v.halfChecked;
+                                this.$set(v, 'checked', false)
+                            }
+                        }else{
+                            this.changeChildrenNodeStatus(data, data.checked);
+                            this.changeParentNodeStatus(this.copyListData, data._c_tree_parent_id);
                         }
                     }
+
                 }
-                if (this.multiple) {
-                    this.getAllCheckedValue(_.cloneDeep(this.copyListData), res)
-                }
-                this.$emit('input', res.filter(item => item.checked))
-            },
-            // 获取所有被选取的子节点
-            setAllChildrenNodeValue(data, isCancel) {
-                (data.children || []).forEach(item => {
-                    this.$set(item, 'checked', !isCancel);
-                    this.setAllChildrenNodeValue(item, isCancel)
-                });
-                delete data.halfChecked
-            },
-            // 获取当前选择值 返回给双向绑定
-            getAllCheckedValue(copyListData, res = []) {
-                (copyListData || []).forEach(item => {
-                    if (item.checked || item.halfChecked) {
-                        this.getAllCheckedValue(item.children, res);
-                        if (item.checked && !item[this.conditionProps]) {
-                            delete item.children;
-                            delete item._c_tree_self_id;
-                            res.push(item)
-                        }
-                    }
-                });
-                return res
             },
             async selfEditTreeNode(data, type) {
                 if (typeof this.editTreeNode !== 'function') {
@@ -444,12 +405,11 @@
                 return this.editTreeNode(data, type).then((res) => {
                     if (parseInt(res.code, 10) === 200) {
                         // 取消在编辑状态
-                        // 自动更新数据
                         this.cancelEditValue();
                         // 移除未添加的新增值
                         this.removeNoAddNodeValue();
                         // 树形重选
-                        this.clickHandle(this.selfData);
+                        this.clickHandle(data);
                         this.isEditModel = false;
                         this.$cMessage.info({
                             message: '操作成功!',
@@ -465,10 +425,10 @@
             }
         },
         watch: {
-            listData: {
+            itemData: {
                 handler(v) {
-                    if (!_.isEqual(v, this.copyListData)) {
-                        this.$set(this, 'copyListData', v)
+                    if (!_.isEqual(v, this.itemData)) {
+                        this.$set(this, 'itemData', v)
                     }
                 },
                 deep: true,
@@ -476,7 +436,7 @@
             },
             editItemId: {
                 handler() {
-                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
+                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.itemData._c_tree_self_id);
                     this.isControllersShow = false;
                     this.editContent = '';
                     this.addContent = ''
@@ -486,7 +446,7 @@
             },
             addItemId: {
                 handler() {
-                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.selfData._c_tree_self_id);
+                    this.isEditModel = [this.editItemId, this.addItemId].includes(this.itemData._c_tree_self_id);
                     this.isControllersShow = false;
                     this.editContent = '';
                     this.addContent = '';
@@ -516,10 +476,10 @@
                     }
                 },
                 [
-                    this.createTitle(h, this.selfData),
+                    this.createTitle(h, this.itemData),
                     this.isControllersShow && !this.isEditModel && h('span',
                         [
-                            this.createControllersIcon(h, this.selfData),
+                            this.createControllersIcon(h, this.itemData),
                         ]
                     ),
                     this.isControllersShow && this.isEditModel && h('span',
@@ -543,9 +503,9 @@
                                                     this.removeNoAddNodeValue();
                                                     return
                                                 }
-                                                const path = this.selfData._c_tree_self_id.split('-');
+                                                const path = this.itemData._c_tree_self_id.split('-');
                                                 const [, ...pPath] = [...path].reverse();
-                                                const pNode = _.get(this.copyListData, pPath.reverse().join('.children.'), {});
+                                                const pNode = _.get(this.itemData, pPath.reverse().join('.children.'), {});
                                                 data = {
                                                     pId: pNode[this.reflectKey['value']],
                                                     value: this.addContent
@@ -560,7 +520,7 @@
                                                     return
                                                 }
                                                 data = {
-                                                    id: this.selfData[this.reflectKey['value']],
+                                                    id: this.itemData[this.reflectKey['value']],
                                                     value: this.editContent
                                                 };
                                                 type = 'edit'

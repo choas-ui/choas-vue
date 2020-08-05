@@ -9,6 +9,24 @@
             CTreeLiContent
         },
         props: {
+            copyValue:{
+                type: Array,
+                default(){
+                    return []
+                }
+            },
+            copyListData:{
+                type: Array,
+                default(){
+                    return []
+                }
+            },
+            changeChildrenNodeStatus:{
+                type: Function,
+            },
+            changeParentNodeStatus:{
+                type: Function,
+            },
             listData: {
                 type: Array,
                 default() {
@@ -91,9 +109,6 @@
                     return 'node'
                 }
             },
-            setParentNodeValue:{
-                type:Function
-            },
             // 在添加数据位置
             editItemId:{
                 type: String,
@@ -111,15 +126,10 @@
             // 编辑节点
             editTreeNode: {
                 type: Function
-            }
-        },
-        model: {
-            props: 'value',
-            event: 'input'
+            },
         },
         data() {
             return {
-                copyListData: {},
                 copySelectedData: {},
                 fixedPrefix: '',
                 markIconWidth: 18,
@@ -134,7 +144,7 @@
                 _.result(this.$slots, "'mark-icon'.0.componentOptions.Ctor.extendOptions.props.height.default", 0) || 18;
         },
         methods: {
-            createdLiContent(h, item) {
+            createdLiContent(h, data) {
                 return h('div',
                     [
                         h('div',
@@ -143,27 +153,27 @@
                                     height: this.markIconHeight * 1.5 + 'px'
                                 }
                             },
-                            this.createLine(h,item._c_tree_self_id.split('-').length-1)
+                            this.createLine(h,data._c_tree_self_id.split('-').length-1)
                         ),
                         h('div',
                             [
-                                this.createIconMark(h, item),
-                                this.createFileIcon(h, item),
+                                this.createIconMark(h, data),
+                                this.createFileIcon(h, data),
                                 h('CTreeLiContent',
                                     {
                                         props: {
-                                            value: this.value,
-                                            selfData: item,
-                                            listData: this.listData,
+                                            copyValue: this.copyValue,
+                                            itemData: data,
+                                            copyListData: this.copyListData,
                                             reflectKey: this.reflectKey,
                                             searchStr: this.searchStr,
                                             controllers: this.controllers,
                                             multiple: this.multiple, // 多选
                                             checkbox: this.checkbox, // 显示选择框
                                             conditionProps: this.conditionProps, // 不可选条件
-                                            setParentNodeValue: this.setParentNodeValue, // 设置父元素属性函数
                                             editItemId: this.editItemId, // 记录编辑数据位置
-                                            changeCopyListData: this.changeCopyListData, // 修改列表
+                                            changeChildrenNodeStatus: this.changeChildrenNodeStatus, // 修改列表
+                                            changeParentNodeStatus: this.changeParentNodeStatus, // 修改列表
                                             changeEditItemId: this.changeEditItemId, // 设置编辑数据位置
                                             addItemId: this.addItemId, //  记录添加数据位置
                                             changeAddItemId: this.changeAddItemId, // 设置编辑数据位置
@@ -171,9 +181,6 @@
                                         },
                                         on: {
                                             ...this.$listeners,
-                                            changeCopyListData:(v)=>{
-                                                this.$emit('changeCopyListData', v)
-                                            },
                                             changeEditItemId:(v)=>{
                                                 this.$emit('changeEditItemId', v)
                                             },
@@ -356,8 +363,9 @@
                     return h('CTreeUl',
                         {
                             props: {
-                                value: this.value,
+                                copyValue: this.copyValue,
                                 listData: data.children,
+                                copyListData: this.copyListData,
                                 line: this.line,
                                 reflectKey: this.reflectKey,
                                 searchStr: this.searchStr,
@@ -367,11 +375,12 @@
                                 multiple: this.multiple, // 多选
                                 checkbox: this.checkbox, // 显示选择框
                                 conditionProps: this.conditionProps, // 不可选条件
+                                changeChildrenNodeStatus: this.changeChildrenNodeStatus, // 修改总节点
+                                changeParentNodeStatus: this.changeParentNodeStatus, // 修改总节点
                                 editItemId: this.editItemId, // 记录编辑数据位置
                                 changeEditItemId: this.changeEditItemId, // 设置编辑数据位置
                                 addItemId: this.addItemId, // 记录添加数据位置
                                 changeAddItemId: this.changeAddItemId, // 设置添加数据位置
-                                setParentNodeValue: this.setParentNodeValue, // 设置父节点属性
                                 editTreeNode: this.editTreeNode, // 编辑节点
 
                             },
@@ -423,21 +432,10 @@
                 return null
             },
         },
-        watch: {
-            listData: {
-                handler(v) {
-                    if (!_.isEqual(v, this.copyListData)) {
-                        this.$set(this, 'copyListData', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-        },
         render(h) {
             return h('ul',
                 [
-                    this.listData.map((item, index) => {
+                    this.listData.map((data) => {
                         return h('li',
                             {
                                 class: classNames({
@@ -445,8 +443,8 @@
                                 }),
                             },
                             [
-                                this.createdLiContent(h, item, index),
-                                this.createTree(h, item, index)
+                                this.createdLiContent(h, data),
+                                this.createTree(h, data)
                             ]
                         )
                     })
