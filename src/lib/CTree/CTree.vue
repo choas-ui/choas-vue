@@ -179,15 +179,15 @@
             // 获取当前选择的值
             getAllCheckedValue(copyListData, res = []) {
                 (copyListData || []).forEach(item => {
-                    if(this.multiple){
+                    if (this.multiple) {
                         if (item.checked || item.halfChecked) {
                             this.getAllCheckedValue(item.children, res);
                             if (item.checked && !item[this.conditionProps]) {
                                 res.push(item);
                             }
                         }
-                    }else{
-                        if(!res.length){
+                    } else {
+                        if (!res.length) {
                             this.getAllCheckedValue(item.children, res);
                             if (item.checked && !item[this.conditionProps]) {
                                 res.push(item);
@@ -208,9 +208,26 @@
                     delete item.children;
                 });
                 return pureCopyValue;
-            }
+            },
+            // 筛选数据
+            filterData(data, v, key) {
+                for(let  i = 0; i< data.length;++i){
+                    const item = data[i];
+                    data[i].expand = true;
+                    if ((item.children || []).length) {
+                        this.filterData(item.children, v, key);
+                    }
+                    if (!(item.children || []).length) {
+                        delete item.children;
+                        if (item[key].indexOf(v) < 0) {
+                            data.splice(i, 1);
+                            --i;
+                        }
+                    }
+                }
+            },
         },
-        model:{
+        model: {
             props: 'value',
             event: 'input'
         },
@@ -236,7 +253,7 @@
             copyValue: {
                 handler(v) {
                     const pureCopyValue = this.removeAppendKey(_.cloneDeep(v));
-                    if (!_.isEqual(this.value, pureCopyValue)){
+                    if (!_.isEqual(this.value, pureCopyValue)) {
                         this.$emit('input', pureCopyValue);
                     }
                 },
@@ -245,9 +262,11 @@
             // 搜索
             searchStr(v) {
                 if (v) {
-                    this.$set(this, 'searchList', this.filterData(this.copyListData, v))
+                    const listData = _.cloneDeep(this.copyListData);
+                    this.filterData(listData, v, this.reflectKey['key']);
+                    this.$set(this, 'searchList', listData);
                 } else {
-                    this.$set(this, 'searchList', _.cloneDeep(this.listDataOfIdentify));
+                    this.$set(this, 'searchList', _.cloneDeep(this.copyListData));
                 }
             },
         },

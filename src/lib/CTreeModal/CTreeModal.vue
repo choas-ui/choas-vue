@@ -225,12 +225,12 @@
             }
         },
         mounted() {
-            this.list_data = _.cloneDeep(this.listData)
+            this.list_data = _.cloneDeep(this.listData);
             this.cascadeList = _.cloneDeep(this.listData)
         },
         computed: {
             getTreeFootBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [prefix + 'tree-footer-box']: true
@@ -238,7 +238,7 @@
                 )
             },
             getTreeBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [prefix + 'tree-box']: true
@@ -246,7 +246,7 @@
                 )
             },
             getWrapBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     this.className,
                     {
@@ -260,42 +260,24 @@
                 this.isCascadeShow = true
             },
             confirmHandle() {
-                this.$emit('toggleShow', false)
+                this.$emit('toggleShow', false);
                 this.$emit('input', this.selectedData)
             },
             cancelHandle() {
-                this.$emit('toggleShow', false)
+                this.$emit('toggleShow', false);
                 this.selectedData = this.value
             },
             addTreeListHandle() {
-                const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : ''
+                const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : '';
                 this.addTreeNode({pId: pId || '', value: this.searchStr})
             },
             addBtnCancelHandle() {
-                this.isCascadeShow = false
+                this.isCascadeShow = false;
                 this.searchStr = ''
-            },
-            filterData(data, v) {
-                let key = this.reflectKey['key']
-                for (let i = 0; i < data.length; i++) {
-                    let item = data[i]
-                    item.expand = true
-                    if ((item.children || []).length) {
-                        this.filterData(item.children, v)
-                    }
-                    if (!(item.children || []).length) {
-                        delete item.children
-                        if (item[key].indexOf(v) < 0) {
-                            data.splice(i, 1)
-                            i--
-                        }
-                    }
-                }
-                return data
             },
             removeHandle(value) {
                 if (this.multiple) {
-                    const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']])
+                    const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
                     if (index > -1) {
                         this.selectedData.splice(index, 1)
                     }
@@ -325,26 +307,17 @@
             isModalShow(v) {
                 if (!v) {
                     // 关闭清空
-                    this.cascadeData = []
-                    this.isCascadeShow = false
-                    this.$emit('toggleShow', false)
-                    this.searchStr = ''
+                    this.cascadeData = [];
+                    this.isCascadeShow = false;
+                    this.$emit('toggleShow', false);
+                    this.searchStr = '';
                     this.$set(this, 'selectedData', this.value)
-                }
-            },
-            searchStr(v) {
-                if (!v) {
-                    this.list_data = _.cloneDeep(this.listData)
-                    this.cascadeList = _.cloneDeep(this.listData)
-                } else {
-                    const data = _.cloneDeep(this.listData)
-                    this.list_data = this.filterData(data, v)
                 }
             },
             listData: {
                 handler(v, old) {
                     if (!_.isEqual(v, old)) {
-                        this.$set(this, 'list_data', _.cloneDeep(v))
+                        this.$set(this, 'list_data', _.cloneDeep(v));
                         this.$set(this, 'cascadeList', _.cloneDeep(v))
                     }
                 },
