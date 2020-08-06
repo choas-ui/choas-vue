@@ -265,7 +265,7 @@
             },
             cancelHandle() {
                 this.$emit('toggleShow', false);
-                this.selectedData = this.value
+                this.$set(this, 'selectedData', this.value)
             },
             addTreeListHandle() {
                 const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : '';
