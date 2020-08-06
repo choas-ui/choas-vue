@@ -14,10 +14,10 @@
         name: 'CInput',
         props: {
             value: {
-                validate(v){
-                    return  typeof v === 'string' || typeof v === 'number'
+                validate(v) {
+                    return typeof v === 'string' || typeof v === 'number'
                 },
-                default(){
+                default() {
                     return ''
                 }
             },
@@ -69,9 +69,9 @@
                     return 'text'
                 }
             },
-            maxLength:{
-                validate(v){
-                    return typeof  v  === "number" && v >=0
+            maxLength: {
+                validate(v) {
+                    return typeof v === "number" && v >= 0
                 }
             },
             min: {
@@ -80,21 +80,15 @@
             max: {
                 type: Number
             },
-            correctionTimeSpan:{
+            correctionTimeSpan: {
                 type: Number,
-                default(){
+                default() {
                     return 1
                 }
             },
             // 是否显示清除按钮
             clearable: {
                 type: Boolean
-            },
-            passwordReplacer: {
-                type: String,
-                default() {
-                    return '&bull;'
-                }
             },
             // 类名
             className: {
@@ -128,52 +122,18 @@
             };
         },
         mounted() {
-            const obj = this.$refs.div;
-            if (obj) {
-                // 禁止复制富文本
-                obj.addEventListener('paste', e => {
-                    // 阻止默认的复制事件
-                    e.preventDefault();
-                    // 获取页面文本选区
-                    let txt = e.clipboardData.getData('text/plain');
-                    // 获取复制的文本
-                    let range = window.getSelection().getRangeAt(0);
-                    // 删除默认选中文本
-                    range.deleteContents();
-                    // 插入文本节点
-                    if ( ['text', 'search'].includes(this.type)) {
-                        this.inputValue = txt;
-                        if(this.maxLength !==undefined && this.inputValue.length>this.maxLength){
-                            this.inputValue =this.inputValue.toString().slice(0, this.maxLength)
-                        }
-                    }
-                    // 插入文本节点
-                    if (this.type === 'number') {
-                        this.inputValue = parseFloat(txt);
-                        if (Number.isNaN(this.inputValue)) {
-                            this.inputValue = this.min
-                        } else {
-                            if (this.max !== undefined && this.inputValue > this.max) {
-                                this.inputValue = this.max
-                            }
-                            if (this.min !== undefined && this.inputValue < this.min) {
-                                this.inputValue = this.min
-                            }
-                        }
-                    }
-                    range.insertNode(document.createTextNode(this.inputValue));
-                    // 将焦点移动到复制文本结尾
-                    range.collapse(false);
-                });
-                // 设置密码样式
-                this.setInputDomValue(obj)
-            }
         },
         computed: {
             getClearableStyle() {
+                let right = paddingNum[this.size || 'default'] / 2;
+                if (this.$slots['behind-icon']) {
+                    const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
+                    right = right +  behindWidth / 1 + 2
+
+                }
                 return {
                     top: `calc(50% - 8px)`,
-                    right: (paddingNum[this.size || 'default'] / 2).toFixed() + 'px',
+                    right: (right).toFixed() + 'px',
                 }
             },
             // 清除按钮的类
@@ -183,59 +143,37 @@
                     [prefix + 'input-clearable']: true
                 })
             },
-            // 提示
-            getPlaceholderStyle() {
-                if (this.$slots['prefix-icon']) {
-                    const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
-                    return {
-                        position: 'absolute',
-                        left: prefixWidth / 1 + 4 + 'px',
-                        top: 0,
-                        color: '#aaa'
-                    }
-                }
-                return {
-                    position: 'absolute',
-                    left: (paddingNum[this.size || 'default'] / 2).toFixed() + 'px',
-                    top: 0,
-                    color: '#aaa'
-                }
-            },
-            getContentStyle() {
-                let marginRight = 0;
-                if (this.clearable || this.type === 'password' || this.type === 'password') {
-                    marginRight = 18 + 'px'
-                }
-                if (this.$slots['behind-icon']) {
-                    const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    marginRight = behindWidth + 'px'
-                }
-                return {
-                    outerLine: 'none',
-                    marginRight
-                }
-            },
             // input外框样式
             getInputStyle() {
                 // 默认值
-                let padding = `0 ${(paddingNum[this.size || 'default'] / 2).toFixed()}px`;
-                if (this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
+                let paddingRight = (paddingNum[this.size || 'default'] / 2);
+                let paddingLeft = (paddingNum[this.size || 'default'] / 2);
+                if (this.$slots['prefix-icon'] && (this.$slots['behind-icon'])) {
                     const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
                     const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    padding = `0 ${behindWidth / 1 + 4}px 0 ${prefixWidth / 1 + 2}px`;
+                    paddingRight = behindWidth / 1 + 4;
+                    paddingLeft = prefixWidth / 1 + 6;
                 }
                 if (this.$slots['prefix-icon'] && !this.$slots['behind-icon']) {
                     const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
-                    padding = `0 ${(paddingNum[this.size || 'default'] / 2).toFixed()}px 0 ${prefixWidth / 1 + 4}px`;
+                    paddingRight = paddingNum[this.size || 'default'] / 2;
+                    paddingLeft = prefixWidth / 1 + 6;
                 }
                 if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
                     const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    padding = `0 ${(behindWidth / 2).toFixed()}px 0 ${(paddingNum[this.size || 'default'] / 2).toFixed()}px`;
+                    paddingRight = behindWidth / 2;
+                    paddingLeft = paddingNum[this.size || 'default'] / 2;
+                }
+                if (this.clearable) {
+                    paddingRight = paddingRight + 22
+                }
+                if (this.type === 'password') {
+                    paddingRight = paddingRight + 22
                 }
                 return {
                     border: `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`,
                     position: 'relative',
-                    padding,
+                    padding: `0 ${paddingRight.toFixed()}px 0 ${paddingLeft.toFixed()}px`,
                     borderBottomRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
                     borderTopRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
                 }
@@ -270,102 +208,6 @@
             }
         },
         methods: {
-            // 输入
-            inputHandle(e) {
-                if(this.timer){
-                    clearTimeout(this.timer)
-                }
-                const obj = this.$refs.div;
-                if (e.inputType === 'insertCompositionText') {
-                    return
-                }
-                if (e.inputType === 'insertParagraph') {
-                    // 回车键时阻止创建新的一行
-                }
-                if (e.inputType === 'deleteContentBackward') {
-                    // TODO 后续需要测试ie浏览器兼容性问题
-                    const {anchorOffset: slicePos} = window.getSelection ?
-                        window.getSelection() : document.selection.createRange();
-                    // 防止副文本删除导致的光标上移问题
-                    this.inputValue = slicePos ? this.inputValue.toString().slice(0, slicePos) : '';
-                }
-                if (e.inputType === 'insertText') {
-                    if (this.type !== 'number') {
-                        this.inputValue += e.data;
-                        if(this.maxLength !==undefined && this.inputValue.length>this.maxLength){
-                            this.inputValue =this.inputValue.toString().slice(0, this.maxLength)
-                        }
-                    } else {
-                        // 无穷大值修正
-                        if(this.inputValue=== Infinity){
-                            this.inputValue = this.max
-                        }
-                        // 无穷小值修正
-                        if(this.inputValue=== -Infinity){
-                            this.inputValue = this.min
-                        }
-                        if (/[0-9]/.test(e.data)) {
-                            if(parseFloat(this.inputValue) === 0){
-                                this.inputValue = e.data
-                            }else{
-                                this.inputValue += e.data
-                            }
-                        } else {
-                            //
-                            if (e.data === '-') {
-                                if (this.inputValue === '') {
-                                    this.inputValue = e.data
-                                }
-
-                            }
-                            if (e.data === '.') {
-                                const value = this.inputValue + e.data;
-                                if (!Number.isNaN(parseFloat(value)) && !this.inputValue.includes('.')) {
-                                    this.inputValue = value
-                                }
-                            }
-                        }
-                    }
-
-                }
-                this.setInputDomValue(obj);
-                this.setEndTextPos(obj);
-                // 校正
-                if(this.type === 'number'&& (this.max!== undefined || this.min!==undefined)){
-                    this.timer = setTimeout(()=>{
-                        if (this.max !== undefined && this.inputValue >= this.max) {
-                            this.inputValue = this.max
-                        }
-                        if (this.min !== undefined && this.inputValue <= this.min) {
-                            this.inputValue = this.min
-                        }
-                        this.setInputDomValue(obj);
-                        this.setEndTextPos(obj);
-                    },this.correctionTimeSpan * 1000);
-                }
-                if (this.value !== this.inputValue) {
-                    // 触发input事件
-                    this.$emit('input', this.inputValue)
-                }
-
-            },
-            // 中文输入
-            changeHandleEnd(e) {
-                const obj = this.$refs.div;
-                if (this.type === 'text') {
-                    this.inputValue += e.data;
-                } else {
-                    this.setInputDomValue(obj);
-                    this.setEndTextPos(obj)
-                }
-            },
-            // 焦点
-            focusHandle() {
-                // 设置焦点
-                this.inputFocus = true;
-                let obj = this.$refs.div;
-                this.setEndTextPos(obj)
-            },
             // 失焦
             blurHandle() {
                 // 取消焦点
@@ -378,27 +220,7 @@
             },
             // 清除
             clearHandle() {
-                let obj = this.$refs.div;
                 this.inputValue = '';
-                obj.innerHTML = '&#8203';
-                this.setEndTextPos(obj)
-            },
-            // 设置值
-            setInputDomValue(obj) {
-                if (this.inputValue !== undefined) {
-                    if (this.type === 'text') {
-                        obj.innerHTML = this.inputValue
-                    }
-                    if (this.type === 'number') {
-                        obj.innerHTML = this.inputValue
-                    }
-                    if (this.type === 'password') {
-                        obj.innerHTML = this.inputValue.replace(/./ig, this.passwordReplacer)
-                    }
-                } else {
-                    obj.innerHTML = "&#8203";
-
-                }
             },
             // 查看密码
             seePasswordHandle() {
@@ -413,21 +235,6 @@
                     }, 2000)
                 }
             },
-            // 设置光标位置
-            setEndTextPos(obj) {
-                // 解决浏览器的兼容问题，做如下条件判断
-                if (window.getSelection) {
-                    obj.focus();
-                    let range = window.getSelection();
-                    range.selectAllChildren(obj);
-                    range.collapseToEnd();//光标移至最后
-                } else if (document.selection) {
-                    let range = document.selection.createRange();
-                    range.moveToElementText(obj);
-                    range.collapse(false);//光标移至最后
-                    range.select();
-                }
-            },
             // 前置图标
             createPrefixIcon(h) {
                 if (!this.$slots['prefix-icon']) {
@@ -436,47 +243,16 @@
                 const {propsData, propsData: {height}, listeners} = this.$slots['prefix-icon'][0].componentOptions;
                 return h('CIcon',
                     {
-                        props: propsData,
+                        props: {
+                            ...propsData,
+                        },
                         style: {
                             position: 'absolute',
-                            left: '2px',
-                            top: `calc(50% - ${(height / 2).toFixed(0)}px)`
+                            left: '6px',
+                            top: `calc(50% - ${(height / 2 + 1).toFixed(0)}px)`,
+                            zIndex: 10
                         },
                         on: listeners
-                    },
-                )
-            },
-            // 输入盒
-            createEditableBox(h) {
-                return h('div',
-                    {
-                        style: this.getContentStyle,
-                        ref: 'div',
-                        props: {
-                            placeholder: this.placeholder,
-                            contenteditable: true
-                        },
-                        domProps: {},
-                        attrs: {
-                            contenteditable: true,
-                        },
-                        on: {
-                            input: (e) => {
-                                this.inputHandle(e)
-                            },
-                            compositionend: (e) => {
-                                this.changeHandleEnd(e)
-                            },
-                            focus: (e) => {
-                                this.focusHandle(e)
-                            },
-                            blur: (e) => {
-                                this.blurHandle(e)
-                            },
-                            keydown: ()=>{
-                                this.$emit('keydown', this.inputValue)
-                            }
-                        }
                     },
                 )
             },
@@ -515,17 +291,15 @@
                                     position: 'absolute',
                                     right: `${paddingNum[this.size || 'default'] / 2}px`,
                                     top: `calc(50% - ${height / 1 + 1}px)`,
-                                    background: '#eee'
+                                    background: '#eee',
+                                    width:  `${width < 16 ? 16 : width}px`
                                 },
                                 on: {
                                     click: () => {
-                                        const obj = this.$refs.div;
                                         this.inputValue = this.inputValue / 1 + 1;
                                         if (this.max !== undefined && this.inputValue >= this.max) {
                                             this.inputValue = this.max
                                         }
-                                        this.setInputDomValue(obj);
-                                        this.setEndTextPos(obj);
                                     }
                                 },
                             }
@@ -541,17 +315,15 @@
                                     position: 'absolute',
                                     right: `${paddingNum[this.size || 'default'] / 2}px`,
                                     bottom: `calc(50% - ${height / 1 + 1}px)`,
-                                    background: '#eee'
+                                    background: '#eee',
+                                    width:  `${width < 16 ? 16 : width}px`
                                 },
                                 on: {
                                     click: () => {
-                                        const obj = this.$refs.div;
                                         this.inputValue = this.inputValue / 1 - 1;
                                         if (this.min !== undefined && this.inputValue <= this.min) {
                                             this.inputValue = this.min
                                         }
-                                        this.setInputDomValue(obj);
-                                        this.setEndTextPos(obj);
                                     }
                                 },
                             }
@@ -568,20 +340,20 @@
                         style: {
                             position: 'absolute',
                             right: `${paddingNum[this.size || 'default'] / 2}px`,
-                            top: `calc(50% - ${(height / 2).toFixed(0)}px)`
+                            top: `calc(50% - ${(height / 2 + 1).toFixed(0)}px)`
                         },
                         on: listeners
                     },
                 )
             },
-            createSearchBtn(h){
-                if(this.type!== 'search'){
-                    return  null
-                }
-                if(this.type === 'search' && this.noSearchBtn){
+            createSearchBtn(h) {
+                if (this.type !== 'search') {
                     return null
                 }
-                if(typeof this.renderSearchBtn === 'function'){
+                if (this.type === 'search' && this.noSearchBtn) {
+                    return null
+                }
+                if (typeof this.renderSearchBtn === 'function') {
                     return this.renderSearchBtn(h);
                 }
                 return h('CButton',
@@ -626,99 +398,75 @@
             inputValue: {
                 handler(v) {
                     if (!_.isEqual(v, this.value)) {
-                        const emitValue = this.type === 'number' ? Number.isNaN(parseFloat(v))? '': parseFloat(v) : v;
-                        this.$emit('input', emitValue)
+                        this.$emit('input', v);
                     }
                 },
                 immediate: true
             },
-            // 监听密码是否可见 修改内容区
-            canPasswordSee: {
-                handler(v) {
-                    const obj = this.$refs.div;
-                    if (obj) {
-                        if (v) {
-                            obj.innerHTML = this.inputValue
-                        } else {
-                            this.setInputDomValue(obj)
-                        }
-                        this.setEndTextPos(obj)
-                    }
-                },
-                immediate: true
-            }
-
         },
         render(h) {
-            return h('div',
+            return h('label',
                 {
                     class: this.getInputWrapClass,
                     style: this.getInputWrapStyle,
                 },
                 [
-                    h('label',
-                        {
-                            style: {
-                                display: 'none'
-                            }
-                        },
-                        [
-                            h('input',
-                                {
-                                    props: {
-                                        type: this.type
-                                    },
-                                    domProps: {
-                                        value: this.inputValue
-                                    }
-                                }
-                            )
-                        ]
-                    ),
-                    h('div',
+                    // 前置图标
+                    this.createPrefixIcon(h),
+                    ['search', 'text', 'number', 'password'].includes(this.type) && h('input',
                         {
                             class: this.getInputClass,
                             style: this.getInputStyle,
-                        },
-                        [
-                            // 前置图标
-                            this.createPrefixIcon(h),
-                            // 输入盒
-                            this.createEditableBox(h),
-                            // 输入提示
-                            this.inputValue === '' ? h('span', {
-                                    style: this.getPlaceholderStyle,
-                                    on: {
-                                        click: (e) => {
-                                            this.focusHandle(e);
-                                        }
-                                    }
+                            ref: 'input',
+                            attrs: {
+                                type: ['search', 'text',].includes(this.type) ?
+                                    'text' : this.type === 'number' ?
+                                        'number' : this.canPasswordSee ?
+                                            'text' : 'password'
+                            },
+                            domProps: {
+                                value: this.inputValue,
+                                placeholder: this.placeholder
+                            },
+                            on: {
+                                paste: (e) => {
+                                    this.inputValue = e.target.value
                                 },
-                                [this.placeholder]
-                            ) : null,
-                            // 清除输入按钮 仅仅在文本模式显示
-                            this.clearable && this.type === 'text' &&
-                            this.type !== 'number' &&
-                            !this.$slots['behind-icon'] &&
-                            h('CIcon',
-                                {
-                                    props: {
-                                        iconName: 'choas-fill-danger',
-                                        color: '#aaa'
-                                    },
-                                    class: this.getClearableClass,
-                                    style: this.getClearableStyle,
-                                    on: {
-                                        click: (e) => {
-                                            this.clearHandle(e);
-                                        }
-                                    }
-                                }),
-                            // 后置图标
-                            this.createBehindIcon(h),
-                        ]
+                                cut: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+                                input: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+                                change: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+                                blur: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+
+                            }
+                        }
                     ),
-                    this.createSearchBtn(h)
+                    // 清除输入按钮 仅仅在文本模式显示
+                    this.clearable &&
+                    h('CIcon',
+                        {
+                            props: {
+                                iconName: 'choas-fill-danger',
+                                color: '#aaa'
+                            },
+                            class: this.getClearableClass,
+                            style: this.getClearableStyle,
+                            on: {
+                                click: (e) => {
+                                    this.clearHandle(e);
+                                }
+                            }
+                        }),
+                    // 后置图标
+                    this.createBehindIcon(h),
+                    this.createSearchBtn(h),
                 ]
             )
         }
@@ -733,6 +481,7 @@
 
     .input-wrap {
         display: inline-flex;
+        position: relative;
     }
 
     .input {
