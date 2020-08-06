@@ -147,10 +147,12 @@
                             }
                         });
                         res.push(itemInListData);
-                        // 向上修改父类
-                        this.changeParentNodeStatus(copyListData, item._c_tree_parent_id);
-                        // 向下修改子类
-                        this.changeChildrenNodeStatus(item, item.checked);
+                        if(this.multiple){
+                            // 向上修改父类
+                            this.changeParentNodeStatus(copyListData, item._c_tree_parent_id);
+                            // 向下修改子类
+                            this.changeChildrenNodeStatus(item, item.checked);
+                        }
                     }
                     if (selectData.length) {
                         this.syncCopyListData(copyListData, item.children, selectData, valueKey, res);
