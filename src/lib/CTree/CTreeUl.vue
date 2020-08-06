@@ -116,6 +116,12 @@
                     return ''
                 }
             },
+            changeEditItemId:{
+                type: Function
+            },
+            changeAddItemId:{
+                type: Function
+            },
             // 在添加数据位置
             addItemId: {
                 type: String,
@@ -174,9 +180,7 @@
                                             editItemId: this.editItemId, // 记录编辑数据位置
                                             changeChildrenNodeStatus: this.changeChildrenNodeStatus, // 修改列表
                                             changeParentNodeStatus: this.changeParentNodeStatus, // 修改列表
-                                            changeEditItemId: this.changeEditItemId, // 设置编辑数据位置
                                             addItemId: this.addItemId, //  记录添加数据位置
-                                            changeAddItemId: this.changeAddItemId, // 设置编辑数据位置
                                             editTreeNode: this.editTreeNode, // 编辑节点
                                         },
                                         on: {

@@ -98,7 +98,9 @@
             return {
                 copyListData: [], // 备份数据
                 copyValue: [], // 内部选中值
-                searchList: []
+                searchList: [],
+                editItemId: '',
+                addItemId: ''
             }
         },
         mounted() {
@@ -115,6 +117,12 @@
                 this.syncCopyListData(copyListData, copyListData, value, this.reflectKey['value'], copyValue);
                 this.$set(this, 'copyValue', copyValue);
                 this.$set(this, 'copyListData', copyListData);
+            },
+            changeEditItemId(v) {
+                this.editItemId = v;
+            },
+            changeAddItemId(v) {
+                this.addItemId = v
             },
             // 同步数据
             syncCopyListData(copyListData, listData, selectData, valueKey, res = []) {
@@ -211,7 +219,7 @@
             },
             // 筛选数据
             filterData(data, v, key) {
-                for(let  i = 0; i< data.length;++i){
+                for (let i = 0; i < data.length; ++i) {
                     const item = data[i];
                     data[i].expand = true;
                     if ((item.children || []).length) {
@@ -291,6 +299,8 @@
                         editTreeNode: this.editTreeNode, // 编辑节点
                         editItemId: this.editItemId, // 在编辑状态的id
                         addItemId: this.addItemId, // 在添加状态的id
+                        changeEditItemId: this.changeEditItemId, // 在添加状态的id
+                        changeAddItemId: this.changeAddItemId, // 在添加状态的id
                     },
                     on: {
                         ...this.$listeners,

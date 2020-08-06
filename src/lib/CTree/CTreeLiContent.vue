@@ -177,7 +177,7 @@
                                 verticalAlign: 'middle'
                             },
                             on: {
-                                change: (v) => {
+                                input: (v) => {
                                     if (this.addItemId) {
                                         this.addContent = v
                                     } else {
@@ -234,7 +234,7 @@
             },
             // 生成子节点并存储子节点位置
             createNewNodeValue(data) {
-                const clickValue = _.get(this.itemData, data._c_tree_self_id.split('-').join('.children.'), []);
+                const clickValue = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), []);
                 const _c_tree_self_id = data._c_tree_self_id + '-' + (data.children || []).length;
                 clickValue.children = clickValue.children || [];
                 clickValue.children.push({
@@ -251,10 +251,12 @@
                     let path = this.addItemId.split('-');
                     const [last, ...others] = [...path].reverse();
                     path = [...others].reverse().join('.children.');
-                    const pNodeValue = _.get(this.itemData, path, null);
-                    pNodeValue && pNodeValue.children.splice(last, 1);
-                    this.$emit('changeAddItemId', '');
-                    this.addContent = ''
+                    const pNodeValue = _.get(this.copyListData, path, null);
+                    if(pNodeValue){
+                        pNodeValue.children.splice(last, 1);
+                        this.$emit('changeAddItemId', '');
+                        this.addContent = ''
+                    }
                 }
             },
             // 移除编辑状态和值
@@ -380,10 +382,8 @@
             // 点击关联元素
             clickHandle(data) {
                 if (!data.disabled) {
-
                     if (!this.multiple) {
                         if (!data[this.conditionProps]) {
-
                             const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
                             delete v.halfChecked;
                             this.$set(v, 'checked', !data.checked);
@@ -394,7 +394,6 @@
                             }
                         }
                     } else {
-
                         const v = _.get(this.copyListData, data._c_tree_self_id.split('-').join('.children.'), {});
                         delete v.halfChecked;
                         this.$set(v, 'checked', !data.checked);
@@ -530,7 +529,7 @@
                                                 };
                                                 type = 'edit'
                                             }
-                                            await this.selfEditTreeNode(data, type)
+                                            await this.selfEditTreeNode(this.itemData, type)
                                         },
                                         cancel: () => {
                                             this.isDeleteModel = false;
