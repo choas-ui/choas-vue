@@ -90,6 +90,18 @@
             clearable: {
                 type: Boolean
             },
+            rows: {
+                type: String,
+                default() {
+                    return '3'
+                }
+            },
+            lineHeight: {
+                type: String,
+                default() {
+                    return null
+                }
+            },
             // 类名
             className: {
                 type: String,
@@ -122,15 +134,27 @@
             };
         },
         mounted() {
+            this.$nextTick(() => {
+                document.addEventListener('click', ({target}) => {
+                    if (this.$refs.label && !this.$refs.label.contains(target)) {
+                        this.inputFocus = false
+                    }
+                })
+            })
         },
         computed: {
             getClearableStyle() {
                 let right = paddingNum[this.size || 'default'] / 2;
-                if (this.$slots['behind-icon']) {
-                    const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    right = right +  behindWidth / 1 + 2
-
+                if (this.type == 'number') {
+                    right = right + 18
+                } else {
+                    if (this.$slots['behind-icon']) {
+                        const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
+                        right = right + behindWidth / 1 + 2
+                    }
                 }
+
+
                 return {
                     top: `calc(50% - 8px)`,
                     right: (right).toFixed() + 'px',
@@ -292,7 +316,7 @@
                                     right: `${paddingNum[this.size || 'default'] / 2}px`,
                                     top: `calc(50% - ${height / 1 + 1}px)`,
                                     background: '#eee',
-                                    width:  `${width < 16 ? 16 : width}px`
+                                    width: `${width < 16 ? 16 : width}px`
                                 },
                                 on: {
                                     click: () => {
@@ -316,7 +340,7 @@
                                     right: `${paddingNum[this.size || 'default'] / 2}px`,
                                     bottom: `calc(50% - ${height / 1 + 1}px)`,
                                     background: '#eee',
-                                    width:  `${width < 16 ? 16 : width}px`
+                                    width: `${width < 16 ? 16 : width}px`
                                 },
                                 on: {
                                     click: () => {
@@ -340,7 +364,7 @@
                         style: {
                             position: 'absolute',
                             right: `${paddingNum[this.size || 'default'] / 2}px`,
-                            top: `calc(50% - ${(height / 2 + 1).toFixed(0)}px)`
+                            top: `calc(50% - ${(height / 2).toFixed(0)}px)`
                         },
                         on: listeners
                     },
@@ -409,6 +433,12 @@
                 {
                     class: this.getInputWrapClass,
                     style: this.getInputWrapStyle,
+                    ref: 'label',
+                    on: {
+                        click: () => {
+                            this.inputFocus = true
+                        }
+                    }
                 },
                 [
                     // 前置图标
@@ -420,13 +450,66 @@
                             ref: 'input',
                             attrs: {
                                 type: ['search', 'text',].includes(this.type) ?
-                                    'text' : this.type === 'number' ?
-                                        'number' : this.canPasswordSee ?
+                                    'text' : ['number'].includes(this.type) ?
+                                        this.type : this.canPasswordSee ?
                                             'text' : 'password'
                             },
                             domProps: {
                                 value: this.inputValue,
-                                placeholder: this.placeholder
+                                placeholder: this.placeholder,
+                                maxLength: this.maxLength
+                            },
+                            on: {
+                                paste: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+                                cut: (e) => {
+                                    this.inputValue = e.target.value;
+                                },
+                                input: (e) => {
+                                    this.inputValue = e.target.value;
+                                    if (this.type === 'number') {
+
+                                        clearTimeout(this.timer);
+                                        this.timer = setTimeout(() => {
+                                            if (this.max !== undefined && this.inputValue >= this.max) {
+                                                this.inputValue = this.max
+                                            }
+                                            if (this.min !== undefined && this.inputValue <= this.min) {
+                                                this.inputValue = this.min
+                                            }
+                                        }, this.correctionTimeSpan * 1000);
+                                    }
+                                },
+                                change: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+                                blur: (e) => {
+                                    this.inputValue = e.target.value
+                                },
+
+                            }
+                        }
+                    ),
+                    ['textArea'].includes(this.type) && h('textArea',
+                        {
+                            class: this.getInputClass,
+                            style: {
+                                ...this.getInputStyle,
+                                height: 'auto',
+                                lineHeight: this.lineHeight ? `${this.lineHeight}px` : null
+                            },
+                            ref: 'input',
+                            attrs: {
+                                type: ['search', 'text',].includes(this.type) ?
+                                    'text' : ['number'].includes(this.type) ?
+                                        this.type : this.canPasswordSee ?
+                                            'text' : 'password',
+                            },
+                            domProps: {
+                                value: this.inputValue,
+                                placeholder: this.placeholder,
+                                rows: this.rows,
                             },
                             on: {
                                 paste: (e) => {
@@ -466,7 +549,7 @@
                         }),
                     // 后置图标
                     this.createBehindIcon(h),
-                    this.createSearchBtn(h),
+                    this.createSearchBtn(h)
                 ]
             )
         }
@@ -533,5 +616,15 @@
         &-clearable {
             position: absolute;
         }
+    }
+    // 移除input number的加减样式
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+    }
+    // 移除input number的加减样式
+    /* chrome */
+    input[type="number"] {
+        -moz-appearance: textfield; /* firefox */
+
     }
 </style>
