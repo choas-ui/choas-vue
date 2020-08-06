@@ -123,6 +123,10 @@
             // 生成自定义搜索按钮
             renderSearchBtn: {
                 type: Function
+            },
+            // 取消边框
+            noBorder:{
+                type: Boolean
             }
         },
         data() {
@@ -137,41 +141,41 @@
             this.$nextTick(() => {
                 document.addEventListener('click', ({target}) => {
                     if (this.$refs.label && !this.$refs.label.contains(target)) {
-                        this.inputFocus = false
+                        this.inputFocus = false;
                     }
-                })
-            })
+                });
+            });
         },
         computed: {
             getClearableStyle() {
                 let right = paddingNum[this.size || 'default'] / 2;
-                if (this.type == 'number') {
-                    right = right + 18
+                if (this.type === 'number') {
+                    right = right + 18;
                 } else {
                     if (this.$slots['behind-icon']) {
                         const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                        right = right + behindWidth / 1 + 2
+                        right = right + behindWidth / 1 + 2;
                     }
                 }
-
-
                 return {
                     top: `calc(50% - 8px)`,
                     right: (right).toFixed() + 'px',
-                }
+                };
             },
             // 清除按钮的类
             getClearableClass() {
                 const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames({
                     [prefix + 'input-clearable']: true
-                })
+                });
             },
             // input外框样式
             getInputStyle() {
                 // 默认值
                 let paddingRight = (paddingNum[this.size || 'default'] / 2);
                 let paddingLeft = (paddingNum[this.size || 'default'] / 2);
+                let border= `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`;
+
                 if (this.$slots['prefix-icon'] && (this.$slots['behind-icon'])) {
                     const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
                     const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
@@ -194,8 +198,11 @@
                 if (this.type === 'password') {
                     paddingRight = paddingRight + 22
                 }
+                if(this.noBorder){
+                    border ='none'
+                }
                 return {
-                    border: `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`,
+                    border,
                     position: 'relative',
                     padding: `0 ${paddingRight.toFixed()}px 0 ${paddingLeft.toFixed()}px`,
                     borderBottomRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
@@ -232,16 +239,6 @@
             }
         },
         methods: {
-            // 失焦
-            blurHandle() {
-                // 取消焦点
-                this.inputFocus = false;
-                // 触发change事件
-                if (this.value !== this.inputValue) {
-                    this.$emit('change', this.inputValue);
-                    this.$emit('blur', this.inputValue)
-                }
-            },
             // 清除
             clearHandle() {
                 this.inputValue = '';
@@ -391,8 +388,8 @@
                             display: 'inline-flex'
                         },
                         on: {
-                            click: () => {
-                                alert('search')
+                            click: (e) => {
+                                this.$emit('search', e)
                             }
                         }
                     },
@@ -484,6 +481,12 @@
                                 change: (e) => {
                                     this.inputValue = e.target.value
                                 },
+                                keyup: (e) => {
+                                    this.$emit('keyup', e.code)
+                                },
+                                focus:(e)=>{
+                                  this.$emit('focus', e)
+                                },
                                 blur: (e) => {
                                     this.inputValue = e.target.value
                                 },
@@ -500,12 +503,6 @@
                                 lineHeight: this.lineHeight ? `${this.lineHeight}px` : null
                             },
                             ref: 'input',
-                            attrs: {
-                                type: ['search', 'text',].includes(this.type) ?
-                                    'text' : ['number'].includes(this.type) ?
-                                        this.type : this.canPasswordSee ?
-                                            'text' : 'password',
-                            },
                             domProps: {
                                 value: this.inputValue,
                                 placeholder: this.placeholder,
@@ -523,6 +520,9 @@
                                 },
                                 change: (e) => {
                                     this.inputValue = e.target.value
+                                },
+                                focus:(e)=>{
+                                    this.$emit('focus', e)
                                 },
                                 blur: (e) => {
                                     this.inputValue = e.target.value
@@ -565,10 +565,11 @@
     .input-wrap {
         display: inline-flex;
         position: relative;
+        width: 100%;
+        height: 100%;
     }
 
     .input {
-        border: 1px solid $lineColor;
         outline: none;
         box-sizing: border-box;
         width: 100%;
