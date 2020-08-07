@@ -20,6 +20,15 @@
             multiple: {
                 type: Boolean
             },
+            splitText: {
+                type: String,
+                default() {
+                    return ' '
+                }
+            },
+            splitHandle: {
+                type: Function,
+            },
             reflectKey: {
                 type: Object,
                 default() {
@@ -27,6 +36,12 @@
                         key: 'key',
                         value: 'value'
                     }
+                }
+            },
+            placeholder:{
+                type: String,
+                default(){
+                    return ''
                 }
             },
             // 高度
@@ -37,15 +52,6 @@
                 default() {
                     return 'default'
                 }
-            },
-            splitText:{
-                type: String,
-                default(){
-                    return ' '
-                }
-            },
-            splitHandle:{
-                type: Function,
             },
         },
         data() {
@@ -69,18 +75,15 @@
                 const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
-                        [prefix + 'selection-llarge']: this.size==='llarge',
-                        [prefix + 'selection-large']: this.size==='large',
-                        [prefix + 'selection-default']: this.size==='default',
-                        [prefix + 'selection-small']: this.size==='small',
-                        [prefix + 'selection-ssmall']: this.size==='ssmall',
+                        [prefix + 'selection-llarge']: this.size === 'llarge',
+                        [prefix + 'selection-large']: this.size === 'large',
+                        [prefix + 'selection-default']: this.size === 'default',
+                        [prefix + 'selection-small']: this.size === 'small',
+                        [prefix + 'selection-ssmall']: this.size === 'ssmall',
                         [prefix + 'selection-wrap']: true,
                     }
                 );
             },
-            getSelectedValue() {
-                return _.get(this.value, '0.' + [this.reflectKey['value']], '');
-            }
         },
         mounted() {
             this.$nextTick(() => {
@@ -112,12 +115,14 @@
         },
         watch: {
             value: {
-                handler(v) {
+                handler(v, old) {
                     if (!_.isEqual(v, this.copyValue)) {
                         this.$set(this, 'copyValue', _.cloneDeep(v));
                         // 单选条件下 选择框初始化
-                        if(!this.multiple){
-                            this.newOptionStr= v[0][this.reflectKey['key']]
+                    }
+                    if (!_.isEqual(v, old)) {
+                        if (!this.multiple) {
+                            this.newOptionStr = v[0][this.reflectKey['key']]
                         }
                     }
                 },
@@ -173,34 +178,35 @@
                                         noBorder: this.multiple,
                                         size: 'small'
                                     },
-                                    attrs:{
+                                    attrs: {
                                         value: this.newOptionStr
                                     },
                                     ref: 'cInput',
                                     style: {
                                         border: this.multiple ? 'none' : null,
+                                        minWidth: '100px'
                                     },
                                     on: {
                                         focus: this.showDropDown,
-                                        input: (v)=>{
+                                        input: (v) => {
                                             this.newOptionStr = v
                                         },
-                                        keyup: (keyCode)=>{
-                                            if(keyCode === 'Enter' && this.newOptionStr){
-                                                if(this.multiple){
-                                                    if(this.splitText){
-                                                        this.copyValue.push(...this.newOptionStr.split(this.splitText).map(v=>{
+                                        keyup: (keyCode) => {
+                                            if (keyCode === 'Enter' && this.newOptionStr) {
+                                                if (this.multiple) {
+                                                    if (this.splitText) {
+                                                        this.copyValue.push(...this.newOptionStr.split(this.splitText).map(v => {
                                                             return {
                                                                 [this.reflectKey['key']]: v,
                                                                 [this.reflectKey['value']]: v,
                                                             };
                                                         }));
-                                                    }else if(typeof this.splitHandle === 'function'){
+                                                    } else if (typeof this.splitHandle === 'function') {
                                                         const arr = this.splitHandle(this.newOptionStr);
                                                         this.copyValue.push(...arr);
                                                     }
-                                                }else{
-                                                    this.$set(this, 'copyValue',[
+                                                } else {
+                                                    this.$set(this, 'copyValue', [
                                                         {
                                                             [this.reflectKey['key']]: this.newOptionStr,
                                                             [this.reflectKey['value']]: this.newOptionStr,
@@ -248,7 +254,6 @@
                                 return h('li',
                                     {
                                         key: item[this.reflectKey['value']],
-                                        class: item[this.reflectKey['value']] === this.getSelectedValue ? 'active' : '',
                                         on: {
                                             click: () => {
                                                 this.multipleSelected(item)
@@ -256,7 +261,14 @@
                                         }
                                     },
                                     [
-                                        item[this.reflectKey['key']]
+                                        h('span',[item[this.reflectKey['key']]]),
+                                        this.copyValue.find(v=> v[this.reflectKey['value']] === item[this.reflectKey['value']]) &&
+                                        h('CIcon', {
+                                            props:{
+                                                iconName: 'choas-selected',
+                                                color: '#1890FF'
+                                            },
+                                        })
                                     ]
                                 )
                             }),
@@ -283,6 +295,7 @@
             position: relative;
             box-sizing: content-box;
             align-items: center;
+
             ul {
                 position: absolute;
                 left: 0;
@@ -299,29 +312,34 @@
 
                 > li {
                     list-style: none;
-                    height: addPX($df-height);
-                    line-height: addPX($df-height);
+                    line-height: addPX($sm-height);
                     font-size: addPX($df-fs);
+                    margin: 2px;
                     cursor: pointer;
                     box-sizing: border-box;
                     padding-left: addPX($lg-padding);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
 
                     &:hover {
                         background: $info;
                         color: #fff;
                     }
 
-                    .active {
+                    &.active {
                         background: $info;
                         color: #fff;
                     }
                 }
             }
         }
+
         &-input-wrap {
             display: block;
             flex: 1;
             position: relative;
+
             > input {
                 height: 100%;
                 width: 100%;
@@ -336,23 +354,28 @@
                 }
             }
         }
-        &-llarge{
+
+        &-llarge {
             line-height: addPX($llg-height);
             border-radius: addPX($sm-radius);
         }
-        &-large{
+
+        &-large {
             line-height: addPX($lg-height);
             border-radius: addPX($sm-radius);
         }
-        &-default{
+
+        &-default {
             line-height: addPX($df-height);
             border-radius: addPX($sm-radius);
         }
-        &-small{
+
+        &-small {
             line-height: addPX($sm-height);
             border-radius: addPX($sm-radius);
         }
-        &-ssmall{
+
+        &-ssmall {
             line-height: addPX($ssm-height);
             border-radius: addPX($ssm-radius);
         }

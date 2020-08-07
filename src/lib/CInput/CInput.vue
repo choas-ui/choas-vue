@@ -125,7 +125,7 @@
                 type: Function
             },
             // 取消边框
-            noBorder:{
+            noBorder: {
                 type: Boolean
             }
         },
@@ -174,7 +174,7 @@
                 // 默认值
                 let paddingRight = (paddingNum[this.size || 'default'] / 2);
                 let paddingLeft = (paddingNum[this.size || 'default'] / 2);
-                let border= `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`;
+                let border = `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`;
 
                 if (this.$slots['prefix-icon'] && (this.$slots['behind-icon'])) {
                     const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
@@ -198,8 +198,8 @@
                 if (this.type === 'password') {
                     paddingRight = paddingRight + 22
                 }
-                if(this.noBorder){
-                    border ='none'
+                if (this.noBorder) {
+                    border = 'none'
                 }
                 return {
                     border,
@@ -449,11 +449,11 @@
                                 type: ['search', 'text',].includes(this.type) ?
                                     'text' : ['number'].includes(this.type) ?
                                         this.type : this.canPasswordSee ?
-                                            'text' : 'password'
+                                            'text' : 'password',
+                                placeholder: this.placeholder,
                             },
                             domProps: {
                                 value: this.inputValue,
-                                placeholder: this.placeholder,
                                 maxLength: this.maxLength
                             },
                             on: {
@@ -484,8 +484,8 @@
                                 keyup: (e) => {
                                     this.$emit('keyup', e.code)
                                 },
-                                focus:(e)=>{
-                                  this.$emit('focus', e)
+                                focus: (e) => {
+                                    this.$emit('focus', e)
                                 },
                                 blur: (e) => {
                                     this.inputValue = e.target.value
@@ -521,7 +521,7 @@
                                 change: (e) => {
                                     this.inputValue = e.target.value
                                 },
-                                focus:(e)=>{
+                                focus: (e) => {
                                     this.$emit('focus', e)
                                 },
                                 blur: (e) => {
@@ -618,10 +618,12 @@
             position: absolute;
         }
     }
+
     // 移除input number的加减样式
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         -webkit-appearance: none !important;
     }
+
     // 移除input number的加减样式
     /* chrome */
     input[type="number"] {
