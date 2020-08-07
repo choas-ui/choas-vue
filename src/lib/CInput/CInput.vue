@@ -102,20 +102,7 @@
                     return null
                 }
             },
-            // 类名
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 前缀名
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
+
             // 不显示searchBtn
             noSearchBtn: {
                 type: Boolean
@@ -127,7 +114,32 @@
             // 取消边框
             noBorder: {
                 type: Boolean
-            }
+            },
+            // 自动补全
+            autocomplete: {
+                type: String,
+                default(){
+                    return '';
+                }
+            },
+            // 自动补全函数
+            autocompleteHandle: {
+                type: Function,
+            },
+            // 前缀名
+            prefix: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            // 类名
+            className: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
         },
         data() {
             return {
@@ -277,6 +289,189 @@
                     },
                 )
             },
+            // 创建input
+            createInput(h) {
+                if (!['search', 'text', 'number', 'password'].includes(this.type)) {
+                    return null
+                }
+                return h('input',
+                    {
+                        class: this.getInputClass,
+                        style: this.getInputStyle,
+                        ref: 'input',
+                        attrs: {
+                            type: ['search', 'text',].includes(this.type) ?
+                                'text' : ['number'].includes(this.type) ?
+                                    this.type : this.canPasswordSee ?
+                                        'text' : 'password',
+                            placeholder: this.placeholder,
+                        },
+                        domProps: {
+                            value: this.inputValue,
+                            maxLength: this.maxLength,
+                        },
+                        on: {
+                            paste: (e) => {
+                                this.inputValue = e.target.value
+                            },
+                            cut: (e) => {
+                                this.inputValue = e.target.value;
+                            },
+                            input: (e) => {
+                                this.inputValue = e.target.value;
+                                if (this.type === 'number') {
+                                    clearTimeout(this.timer);
+                                    this.timer = setTimeout(() => {
+                                        if (this.max !== undefined && this.inputValue >= this.max) {
+                                            this.inputValue = this.max;
+                                        }
+                                        if (this.min !== undefined && this.inputValue <= this.min) {
+                                            this.inputValue = this.min;
+                                        }
+                                    }, this.correctionTimeSpan * 1000);
+                                }
+                            },
+                            change: (e) => {
+                                this.inputValue = e.target.value;
+                            },
+                            keyup: (e) => {
+                                this.$emit('keyup', e.code);
+                            },
+                            focus: (e) => {
+                                this.$emit('focus', e);
+                                this.isDropUlShow = true;
+                            },
+                            blur: (e) => {
+                                this.inputValue = e.target.value;
+                            },
+
+                        }
+                    }
+                )
+            },
+            // 创建文本域
+            createTextArea(h) {
+                if (!['textArea'].includes(this.type)) {
+                    return null
+                }
+                return h('textArea',
+                    {
+                        class: this.getInputClass,
+                        style: {
+                            ...this.getInputStyle,
+                            height: 'auto',
+                            lineHeight: this.lineHeight ? `${this.lineHeight}px` : null
+                        },
+                        ref: 'input',
+                        domProps: {
+                            value: this.inputValue,
+                            placeholder: this.placeholder,
+                            rows: this.rows,
+                        },
+                        on: {
+                            paste: (e) => {
+                                this.inputValue = e.target.value
+                            },
+                            cut: (e) => {
+                                this.inputValue = e.target.value
+                            },
+                            input: (e) => {
+                                this.inputValue = e.target.value
+                            },
+                            change: (e) => {
+                                this.inputValue = e.target.value
+                            },
+                            focus: (e) => {
+                                this.$emit('focus', e)
+                            },
+                            blur: (e) => {
+                                this.inputValue = e.target.value
+                            },
+
+                        }
+                    }
+                )
+            },
+            // 下拉列表
+            createDropList(h) {
+                if (['search', 'text'].includes(this.type) && this.listData.length) {
+                    return h('ul',
+                        {
+                            style:{
+                                display: this.inputFocus? 'block' : 'none'
+                            }
+                        },
+                        [
+                            this.listData.map(item => {
+                                return h('li',
+                                    {
+                                        on: {
+                                            click: () => {
+                                                this.inputValue = item;
+                                            }
+                                        }
+                                    },
+                                    [item]
+                                )
+                            })
+                        ]
+                    )
+                }
+            },
+            // 自动完成
+            autocompleteBox(h){
+                if(!this.autocomplete && typeof this.autocompleteHandle !== 'function'){
+                    return  null;
+                }
+                if(this.autocomplete){
+                    const str = this.inputValue&& this.inputValue.indexOf(this.autocomplete)<0?
+                        this.inputValue + this.autocomplete: this.inputValue;
+                    return h('ul',
+                        {
+                            style:{
+                                display: this.inputFocus && this.inputValue? 'block' : 'none'
+                            },
+                        },
+                        [
+                            h('li',
+                                {
+                                    on: {
+                                        click: () => {
+                                            this.inputValue = str;
+                                        }
+                                    }
+                                },
+                                [str]
+                            )
+                        ]
+                    )
+                }
+                if(typeof this.autocompleteHandle === 'function'){
+                    const arr = this.inputValue?
+                        this.autocompleteHandle(this.inputValue): [];
+                    return h('ul',
+                        {
+                            style:{
+                                display: this.inputFocus && this.inputValue? 'block' : 'none'
+                            },
+                        },
+                        [
+                            arr.map(item => {
+                                return h('li',
+                                    {
+                                        on: {
+                                            click: () => {
+                                                this.inputValue = item;
+                                            }
+                                        }
+                                    },
+                                    [item]
+                                )
+                            })
+                        ]
+                    )
+                }
+            },
             // 后置图标
             createBehindIcon(h) {
                 if (this.type === 'password') {
@@ -367,6 +562,7 @@
                     },
                 )
             },
+            // 搜索按钮
             createSearchBtn(h) {
                 if (this.type !== 'search') {
                     return null
@@ -440,97 +636,14 @@
                 [
                     // 前置图标
                     this.createPrefixIcon(h),
-                    ['search', 'text', 'number', 'password'].includes(this.type) && h('input',
-                        {
-                            class: this.getInputClass,
-                            style: this.getInputStyle,
-                            ref: 'input',
-                            attrs: {
-                                type: ['search', 'text',].includes(this.type) ?
-                                    'text' : ['number'].includes(this.type) ?
-                                        this.type : this.canPasswordSee ?
-                                            'text' : 'password',
-                                placeholder: this.placeholder,
-                            },
-                            domProps: {
-                                value: this.inputValue,
-                                maxLength: this.maxLength
-                            },
-                            on: {
-                                paste: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                cut: (e) => {
-                                    this.inputValue = e.target.value;
-                                },
-                                input: (e) => {
-                                    this.inputValue = e.target.value;
-                                    if (this.type === 'number') {
-
-                                        clearTimeout(this.timer);
-                                        this.timer = setTimeout(() => {
-                                            if (this.max !== undefined && this.inputValue >= this.max) {
-                                                this.inputValue = this.max
-                                            }
-                                            if (this.min !== undefined && this.inputValue <= this.min) {
-                                                this.inputValue = this.min
-                                            }
-                                        }, this.correctionTimeSpan * 1000);
-                                    }
-                                },
-                                change: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                keyup: (e) => {
-                                    this.$emit('keyup', e.code)
-                                },
-                                focus: (e) => {
-                                    this.$emit('focus', e)
-                                },
-                                blur: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-
-                            }
-                        }
-                    ),
-                    ['textArea'].includes(this.type) && h('textArea',
-                        {
-                            class: this.getInputClass,
-                            style: {
-                                ...this.getInputStyle,
-                                height: 'auto',
-                                lineHeight: this.lineHeight ? `${this.lineHeight}px` : null
-                            },
-                            ref: 'input',
-                            domProps: {
-                                value: this.inputValue,
-                                placeholder: this.placeholder,
-                                rows: this.rows,
-                            },
-                            on: {
-                                paste: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                cut: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                input: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                change: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-                                focus: (e) => {
-                                    this.$emit('focus', e)
-                                },
-                                blur: (e) => {
-                                    this.inputValue = e.target.value
-                                },
-
-                            }
-                        }
-                    ),
+                    // 创建input框
+                    this.createInput(h),
+                    // 创建文本域
+                    this.createTextArea(h),
+                    // 创建下拉列表
+                    this.createDropList(h),
+                    // 创建自动完成列表
+                    this.autocompleteBox(h),
                     // 清除输入按钮 仅仅在文本模式显示
                     this.clearable &&
                     h('CIcon',
@@ -567,6 +680,45 @@
         position: relative;
         width: 100%;
         height: 100%;
+
+        & > ul {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            border: 1px solid $lineColor;
+            box-sizing: border-box;
+            margin: 0;
+            z-index: 999;
+            background: #fff;
+            padding: addPX($sm-padding) 0;
+            text-align: left;
+            max-height: addPX($lg-height*5);
+            overflow-y: auto;
+            top: calc(100% + 4px);
+
+            > li {
+                list-style: none;
+                line-height: addPX($sm-height);
+                font-size: addPX($df-fs);
+                margin: 2px;
+                cursor: pointer;
+                box-sizing: border-box;
+                padding-left: addPX($lg-padding);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                &:hover {
+                    background: $info;
+                    color: #fff;
+                }
+
+                &.active {
+                    background: $info;
+                    color: #fff;
+                }
+            }
+        }
     }
 
     .input {
