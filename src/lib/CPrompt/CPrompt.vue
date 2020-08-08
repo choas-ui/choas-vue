@@ -65,7 +65,8 @@
             return {
                 isPromptShow: false,
                 arrowPos: {},
-                copyPlaceSetting: this.placeSetting
+                copyPlaceSetting: this.placeSetting,
+                hasReset: false
             };
         },
         mounted() {
@@ -75,7 +76,7 @@
                         this.isPromptShow = false
                     }
                 })
-            })
+            });
         },
         computed: {
             getBtnBox() {
@@ -192,27 +193,51 @@
                         return
                     }
                     // 根据位置重置异常位置
-                    // 距离圆点的位置
-                    const top = promptContent.getBoundingClientRect().top;
-                    const right = promptContent.getBoundingClientRect().right;
-                    const bottom = promptContent.getBoundingClientRect().bottom;
-                    const left = promptContent.getBoundingClientRect().left;
-                    const clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
-                    const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-                    if (top < 0) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('top', 'bottom')
+                    if(!this.hasReset){
+                        // 弹窗位置
+                        const promptContentHeight = promptContent.getBoundingClientRect().height;
+                        const promptContentWidth = promptContent.getBoundingClientRect().width;
+                        // 包装元素位置
+                        const top = promptWrap.getBoundingClientRect().top;
+                        const right = promptWrap.getBoundingClientRect().right;
+                        const bottom = promptWrap.getBoundingClientRect().bottom;
+                        const left = promptWrap.getBoundingClientRect().left;
+                        // 元素父元素的位置
+                        const promptWrapOffsetParent = promptWrap.offsetParent;
+                        const promptWrapOffsetParentTop = promptWrapOffsetParent.getBoundingClientRect().top;
+                        const promptWrapOffsetParentRight = promptWrapOffsetParent.getBoundingClientRect().right;
+                        const promptWrapOffsetParentBottom = promptWrapOffsetParent.getBoundingClientRect().bottom;
+                        const promptWrapOffsetParentLeft = promptWrapOffsetParent.getBoundingClientRect().left;
+
+                        if (promptWrapOffsetParentTop - top < promptContentHeight) {
+                            this.copyPlaceSetting = this.copyPlaceSetting.replace('top', 'bottom')
+                        }
+
+                        if (promptWrapOffsetParentRight - right < promptContentWidth) {
+                            this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right')
+                        }
+                        if(promptWrapOffsetParentBottom - bottom < promptContentHeight){
+                            this.copyPlaceSetting = this.copyPlaceSetting.replace('bottom', 'top')
+                        }
+                        if(promptWrapOffsetParentLeft - left > -promptContentWidth){
+                            this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left')
+                        }
+                        this.hasReset = true
                     }
-                    if (bottom > clientHeight) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('bottom', 'top')
-                    }
-                    if (left < 0) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left');
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'left')
-                    }
-                    if (right > clientWidth) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right');
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'right')
-                    }
+
+
+                    console.log(promptContent.getBoundingClientRect())
+                    // // if (promptContent.offsetTop - bottom > clientHeight) {
+                    // //     this.copyPlaceSetting = this.copyPlaceSetting.replace('bottom', 'top')
+                    // // }
+                    // if (left < 0) {
+                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left');
+                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'left')
+                    // }
+                    // if (right > clientWidth) {
+                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right');
+                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'right')
+                    // }
                 })
             }
         },

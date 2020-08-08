@@ -535,7 +535,6 @@
                                             await this.selfEditTreeNode(this.itemData, type)
                                         },
                                         cancel: () => {
-
                                             this.isDeleteModel = false;
                                             this.isControllersShow = false
                                         }
@@ -567,7 +566,8 @@
                                         key: 'close'
                                     },
                                     on: {
-                                        click: () => {
+                                        click: (e) => {
+                                            e.stopPropagation();
                                             // 取消在编辑状态
                                             this.cancelEditValue();
                                             // 移除未添加的新增值

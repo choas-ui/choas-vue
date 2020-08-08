@@ -163,7 +163,12 @@
                                     this.$set(this, 'newOptionStr', '');
                                 }
                             }
-                        }
+                        },
+                        [
+                            ...Object.keys(this.$slots).map(key=>{
+                                return this.$slots[key]
+                            })
+                        ]
                     )
                 }
                 return h('ul',
