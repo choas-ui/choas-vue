@@ -355,7 +355,9 @@
                     h('CPrompt',
                         {
                             props: {
-                                dialog: '正在删除，请确认！'
+                                dialog: '正在删除，请确认!',
+                                iconName: 'choas-error',
+                                iconColor: '#ff5e5c',
                             },
                             on: {
                                 confirm: async () => {
@@ -507,7 +509,9 @@
                             h('CPrompt',
                                 {
                                     props: {
-                                        dialog: this.editContent ? '正在修改数据，请确认！' : this.addContent ? '正在新增数据，请确认' : '当前未发生改变'
+                                        dialog: this.editContent ? '正在修改数据，请确认！' : this.addContent ? '正在新增数据，请确认' : '当前未发生改变',
+                                        iconName: this.editContent ? 'choas-edit' : this.addContent ? 'choas-add' : 'choas-forbid',
+                                        iconColor: this.editContent ? '#1890FF' : this.addContent ? '#1AC756' : '#FF5E5C',
                                     },
                                     on: {
                                         confirm: async () => {

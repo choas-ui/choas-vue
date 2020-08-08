@@ -20,6 +20,20 @@
                     return ''
                 }
             },
+            // icon名
+            iconName:{
+              type: String,
+              default(){
+                  return ''
+              }
+            },
+            // icon颜色
+            iconColor:{
+                type: String,
+                default(){
+                    return ''
+                }
+            },
             // 函数生成对话
             renderDialog: {
                 type: Function
@@ -224,20 +238,6 @@
                         }
                         this.hasReset = true
                     }
-
-
-                    console.log(promptContent.getBoundingClientRect())
-                    // // if (promptContent.offsetTop - bottom > clientHeight) {
-                    // //     this.copyPlaceSetting = this.copyPlaceSetting.replace('bottom', 'top')
-                    // // }
-                    // if (left < 0) {
-                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left');
-                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'left')
-                    // }
-                    // if (right > clientWidth) {
-                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right');
-                    //     this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'right')
-                    // }
                 })
             }
         },
@@ -281,7 +281,17 @@
                                 },
                             ),
                             h('span',
-                                [typeof this.renderDialog ==='function' ? this.renderDialog(h): this.dialog]
+                                [
+                                    this.iconName ? h('CIcon',
+                                        {
+                                            props:{
+                                                iconName: this.iconName,
+                                                color: this.iconColor
+                                            }
+                                        }
+                                    ): null,
+                                    typeof this.renderDialog ==='function' ? this.renderDialog(h): this.dialog
+                                ]
                             ),
                             h('span',
                                 {
