@@ -4,7 +4,6 @@
 
     export default {
         name: 'CTreeLiContent',
-        function: true,
         props: {
             itemData: {
                 type: Object,
@@ -201,7 +200,6 @@
                             title: content,
                         },
                         class: classNames({
-                            'active': data.checked,
                             [`${this.fixedPrefix}tree-title-wrap`]: true
                         }),
                         on: {
@@ -228,7 +226,17 @@
                                 }
                             },
                         ),
-                        childrenVnode
+                        h('span',
+                            {
+                                class: classNames({
+                                    'active': data.checked,
+                                })
+                            },
+                            [
+                                childrenVnode
+
+                            ]
+                        )
                     ]
                 )
             },
@@ -252,7 +260,7 @@
                     const [last, ...others] = [...path].reverse();
                     path = [...others].reverse().join('.children.');
                     const pNodeValue = _.get(this.copyListData, path, null);
-                    if(pNodeValue){
+                    if (pNodeValue) {
                         pNodeValue.children.splice(last, 1);
                         this.$emit('changeAddItemId', '');
                         this.addContent = ''
@@ -309,7 +317,8 @@
                                 marginRight: '4px'
                             },
                             on: {
-                                click: () => {
+                                click: (e) => {
+                                    e.stopPropagation();
                                     // 取消在编辑状态
                                     this.cancelEditValue();
                                     // 移除未添加的新增值
@@ -330,13 +339,15 @@
                                 marginRight: '4px',
                             },
                             on: {
-                                click: () => {
+                                click: (e) => {
+                                    e.stopPropagation();
+
                                     // 取消在编辑状态
                                     this.cancelEditValue();
                                     // 移除未添加的新增值
                                     this.removeNoAddNodeValue();
                                     // 生成子节点信息并记录子节点位置
-                                    this.createNewNodeValue(data)
+                                    this.createNewNodeValue(data);
                                 }
                             }
                         }
@@ -370,7 +381,8 @@
                                         iconName: 'choas-delete',
                                     },
                                     on: {
-                                        click: () => {
+                                        click: (e) => {
+                                            e.stopPropagation();
                                             this.isDeleteModel = true
                                         },
                                     }
@@ -404,9 +416,12 @@
             },
             async selfEditTreeNode(data, type) {
                 if (typeof this.editTreeNode !== 'function') {
-                    throw new Error('editTreeNode type Error!')
+                    throw new TypeError('编辑类型错误函数!')
                 }
-                return this.editTreeNode(data, type).then((res) => {
+                return this.editTreeNode({
+                    [this.reflectKey['key']]: data[this.reflectKey['key']],
+                    [this.reflectKey['value']]: data[this.reflectKey['value']],
+                }, type).then((res) => {
                     if (parseInt(res.code, 10) === 200) {
                         // 取消在编辑状态
                         this.cancelEditValue();
@@ -496,7 +511,6 @@
                                     },
                                     on: {
                                         confirm: async () => {
-                                            let data = {};
                                             let type = '';
                                             if (this.addItemId) {
                                                 // 需要获取父节点id
@@ -507,13 +521,6 @@
                                                     this.removeNoAddNodeValue();
                                                     return
                                                 }
-                                                const path = this.itemData._c_tree_self_id.split('-');
-                                                const [, ...pPath] = [...path].reverse();
-                                                const pNode = _.get(this.itemData, pPath.reverse().join('.children.'), {});
-                                                data = {
-                                                    pId: pNode[this.reflectKey['value']],
-                                                    value: this.addContent
-                                                };
                                                 type = 'add'
                                             } else {
                                                 if (!this.editContent) {
@@ -523,15 +530,12 @@
                                                     this.removeNoAddNodeValue();
                                                     return
                                                 }
-                                                data = {
-                                                    id: this.itemData[this.reflectKey['value']],
-                                                    value: this.editContent
-                                                };
                                                 type = 'edit'
                                             }
                                             await this.selfEditTreeNode(this.itemData, type)
                                         },
                                         cancel: () => {
+
                                             this.isDeleteModel = false;
                                             this.isControllersShow = false
                                         }
@@ -594,9 +598,12 @@
             }
         }
 
-        &-title-wrap.active {
-            color: $primary;
-            font-weight: bold;
+        &-title-wrap{
+            .active {
+                background: $primary;
+                color: #fff;
+                font-weight: bold;
+            }
         }
     }
 </style>

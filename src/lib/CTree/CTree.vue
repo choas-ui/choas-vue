@@ -15,31 +15,10 @@
                     return []
                 }
             },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
             markColor: {
                 type: String,
                 default() {
                     return '#ff5e5c'
-                }
-            },
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
                 }
             },
             // 显示连线
@@ -92,7 +71,28 @@
                 default() {
                     return []
                 }
-            }
+            },
+            reflectKey: {
+                type: Object,
+                default() {
+                    return {
+                        key: 'key',
+                        value: 'value'
+                    }
+                }
+            },
+            className: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            prefix: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
         },
         data() {
             return {
@@ -216,6 +216,7 @@
                     delete item.checked;
                     delete item.halfChecked;
                     delete item.children;
+                    delete item.expand;
                 });
                 return pureCopyValue;
             },

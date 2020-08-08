@@ -29,6 +29,31 @@
             splitHandle: {
                 type: Function,
             },
+            mode: {
+                type: String,
+                default() {
+                    return ''
+                }
+            },
+            checkbox:{
+                type:Boolean
+            },
+            line:{
+                type:Boolean
+            },
+            conditionProps: {
+                type: String,
+                default() {
+                    return 'node'
+                }
+            },
+            controllers:{
+              type: Boolean
+            },
+            // 编辑树形函数
+            editTreeNode:{
+              type: Function
+            },
             reflectKey: {
                 type: Object,
                 default() {
@@ -38,9 +63,9 @@
                     }
                 }
             },
-            placeholder:{
+            placeholder: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
             },
@@ -111,6 +136,70 @@
                 } else {
                     this.$set(this, 'copyValue', [data]);
                 }
+            },
+            createDropUl(h) {
+                if (this.mode === 'tree') {
+                    return h('CTree',
+                        {
+                            props: {
+                                listData: this.listData,
+                                value: this.copyValue,
+                                multiple: this.multiple,
+                                checkbox: this.checkbox,
+                                line: this.line,
+                                searchStr: this.newOptionStr,
+                                conditionProps: this.conditionProps,
+                                controllers: this.controllers,
+                                editTreeNode: this.editTreeNode,
+                                reflectKey: this.reflectKey,
+                            },
+                            style: {
+                                display: this.isDropUlShow ? 'inline-block' : 'none',
+                                top: `calc(100% + 4px)`
+                            },
+                            on:{
+                                input: (v)=>{
+                                    this.$set(this, 'copyValue', v);
+                                    this.$set(this, 'newOptionStr', '');
+                                }
+                            }
+                        }
+                    )
+                }
+                return h('ul',
+                    {
+                        style: {
+                            display: this.isDropUlShow ? 'inline-block' : 'none',
+                            top: `calc(100% + 4px)`
+                        },
+                        ref: 'dropUl',
+                    },
+                    [
+                        this.listData.length && this.listData.map(item => {
+                            return h('li',
+                                {
+                                    key: item[this.reflectKey['value']],
+                                    on: {
+                                        click: () => {
+                                            this.multipleSelected(item)
+                                        }
+                                    }
+                                },
+                                [
+                                    h('span', [item[this.reflectKey['key']]]),
+                                    this.copyValue.find(v => v[this.reflectKey['value']] === item[this.reflectKey['value']]) &&
+                                    h('CIcon', {
+                                        props: {
+                                            iconName: 'choas-selected',
+                                            color: '#1890FF'
+                                        },
+                                    })
+                                ]
+                            )
+                        }),
+                        !this.listData.length && h('li', ['暂无数据'])
+                    ]
+                )
             }
         },
         watch: {
@@ -241,40 +330,7 @@
                             )
                         ]
                     ),
-                    h('ul',
-                        {
-                            style: {
-                                display: this.isDropUlShow ? 'inline-block' : 'none',
-                                top: `calc(100% + 4px)`
-                            },
-                            ref: 'dropUl',
-                        },
-                        [
-                            this.listData.length && this.listData.map(item => {
-                                return h('li',
-                                    {
-                                        key: item[this.reflectKey['value']],
-                                        on: {
-                                            click: () => {
-                                                this.multipleSelected(item)
-                                            }
-                                        }
-                                    },
-                                    [
-                                        h('span',[item[this.reflectKey['key']]]),
-                                        this.copyValue.find(v=> v[this.reflectKey['value']] === item[this.reflectKey['value']]) &&
-                                        h('CIcon', {
-                                            props:{
-                                                iconName: 'choas-selected',
-                                                color: '#1890FF'
-                                            },
-                                        })
-                                    ]
-                                )
-                            }),
-                            !this.listData.length && h('li', ['暂无数据'])
-                        ]
-                    )
+                    this.createDropUl(h)
                 ]
             )
         }

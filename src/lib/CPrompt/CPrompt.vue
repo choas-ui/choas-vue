@@ -8,7 +8,7 @@
         'bottom': 'bottom',
         'left': 'left',
         'center': 'center',
-    }
+    };
 
     export default {
         name: 'CPrompt',
@@ -79,7 +79,7 @@
         },
         computed: {
             getBtnBox() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [prefix + 'prompt-content-btn-box']: true
@@ -87,7 +87,7 @@
                 )
             },
             getContentClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [prefix + 'prompt-content']: true
@@ -95,7 +95,7 @@
                 )
             },
             getPromptWrap() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     this.className,
                     {
@@ -110,31 +110,31 @@
             },
             confirmHandle(e) {
                 e.stopPropagation();
-                this.showPrompt(false)
+                this.showPrompt(false);
                 this.$emit('confirm')
             },
             cancelHandle(e) {
                 e.stopPropagation();
-                this.showPrompt(false)
+                this.showPrompt(false);
                 this.$emit('cancel')
             },
             setContentStyle() {
-                const sqrt2 = Math.sqrt(2)
+                const sqrt2 = Math.sqrt(2);
                 setTimeout(() => {
-                    const placeArr = this.copyPlaceSetting.split('-')
-                    const {promptWrap ={}, promptContent = {}} = this.$refs
-                    const topMoveDistance = promptWrap.offsetHeight + promptContent.offsetHeight
-                    const bottomMoveDistance = (promptWrap.offsetHeight + 10 * sqrt2).toFixed(0)
-                    const leftMoveDistance = (promptWrap.offsetWidth / 2 - promptContent.offsetWidth / 2).toFixed(0)
+                    const placeArr = this.copyPlaceSetting.split('-');
+                    const {promptWrap ={}, promptContent = {}} = this.$refs;
+                    const topMoveDistance = promptWrap.offsetHeight + promptContent.offsetHeight;
+                    const bottomMoveDistance = (promptWrap.offsetHeight + 10 * sqrt2).toFixed(0);
+                    const leftMoveDistance = (promptWrap.offsetWidth / 2 - promptContent.offsetWidth / 2).toFixed(0);
                     this.arrowPos = {
                         position: 'absolute',
                         zIndex: 1000,
                         transform: 'rotateZ(45deg)',
-                    }
+                    };
                     while (placeArr.length) {
-                        const posStr = positionStr[placeArr[0]]
+                        const posStr = positionStr[placeArr[0]];
                         if (posStr === 'top') {
-                            promptContent.style.top = -topMoveDistance + 'px'
+                            promptContent.style.top = -topMoveDistance + 'px';
                             this.arrowPos = {
                                 ...this.arrowPos,
                                 borderTop: '5px solid transparent',
@@ -146,7 +146,7 @@
                             }
                         }
                         if (posStr === 'bottom') {
-                            promptContent.style.top = bottomMoveDistance + 'px'
+                            promptContent.style.top = bottomMoveDistance + 'px';
                             this.arrowPos = {
                                 ...this.arrowPos,
                                 top: -(5 * sqrt2 / 2).toFixed(0) + 'px',
@@ -162,8 +162,8 @@
                                 ...this.arrowPos,
                                 left: (promptWrap.offsetWidth / 2 - 5 * sqrt2 / 2).toFixed(0) + 'px',
                                 right: ''
-                            }
-                            promptContent.style.right = ''
+                            };
+                            promptContent.style.right = '';
                             promptContent.style.left = 0
                         }
                         if (posStr === 'right') {
@@ -171,8 +171,8 @@
                                 ...this.arrowPos,
                                 left: '',
                                 right: (promptWrap.offsetWidth / 2 - 5 * sqrt2 / 2).toFixed(0) + 'px',
-                            }
-                            promptContent.style.left = ''
+                            };
+                            promptContent.style.left = '';
                             promptContent.style.right = 0
                         }
                         if (posStr === 'center') {
@@ -180,25 +180,25 @@
                                 ...this.arrowPos,
                                 left: (promptContent.clientWidth/2 -5*sqrt2).toFixed(0) + 'px',
                                 right: ''
-                            }
-                            promptContent.style.right = ''
+                            };
+                            promptContent.style.right = '';
                             promptContent.style.left = leftMoveDistance + 'px'
                         }
                         placeArr.shift()
                     }
-                    this.$set(this, 'arrowPos', this.arrowPos)
+                    this.$set(this, 'arrowPos', this.arrowPos);
 
                     if(this.noAutoSetting){
                         return
                     }
                     // 根据位置重置异常位置
                     // 距离圆点的位置
-                    const top = promptContent.getBoundingClientRect().top
-                    const right = promptContent.getBoundingClientRect().right
-                    const bottom = promptContent.getBoundingClientRect().bottom
-                    const left = promptContent.getBoundingClientRect().left
-                    const clientWidth = document.documentElement.clientWidth || document.body.clientWidth
-                    const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+                    const top = promptContent.getBoundingClientRect().top;
+                    const right = promptContent.getBoundingClientRect().right;
+                    const bottom = promptContent.getBoundingClientRect().bottom;
+                    const left = promptContent.getBoundingClientRect().left;
+                    const clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+                    const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
                     if (top < 0) {
                         this.copyPlaceSetting = this.copyPlaceSetting.replace('top', 'bottom')
                     }
@@ -206,11 +206,11 @@
                         this.copyPlaceSetting = this.copyPlaceSetting.replace('bottom', 'top')
                     }
                     if (left < 0) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left')
+                        this.copyPlaceSetting = this.copyPlaceSetting.replace('right', 'left');
                         this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'left')
                     }
                     if (right > clientWidth) {
-                        this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right')
+                        this.copyPlaceSetting = this.copyPlaceSetting.replace('left', 'right');
                         this.copyPlaceSetting = this.copyPlaceSetting.replace('center', 'right')
                     }
                 })
