@@ -284,6 +284,7 @@
                                 [
                                     this.iconName ? h('CIcon',
                                         {
+                                            key: this.iconName + this.iconColor,
                                             props:{
                                                 iconName: this.iconName,
                                                 color: this.iconColor
