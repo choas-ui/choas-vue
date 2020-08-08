@@ -4,6 +4,7 @@ import CButtonGroup from './CButtonGroup'
 import CCascade from './CCascade'
 import CCheckbox from "./CCheckbox";
 import CCheckboxGroup from "./CCheckboxGroup";
+import CDatePicker from "./CDatePicker";
 import CIcon from './CIcon'
 import CInput from './CInput'
 import CInputTreeModal from './CInputTreeModal'
@@ -28,6 +29,7 @@ const components = [
     CCascade,
     CCheckbox,
     CCheckboxGroup,
+    CDatePicker,
     CIcon,
     CInput,
     CInputTreeModal,
@@ -59,6 +61,7 @@ export default {
     CCascade,
     CCheckbox,
     CCheckboxGroup,
+    CDatePicker,
     CIcon,
     CInput,
     CInputTreeModal,

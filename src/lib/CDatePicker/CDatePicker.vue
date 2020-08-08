@@ -1,27 +1,39 @@
 <template>
     <div>
-        aaaa
+        CDatePicker
     </div>
 </template>
 
 <script>
     import classNames from 'classnames'
+
     export default {
-        name: 'Button',
+        name: 'CDatePicker',
         props:{
+            log:{}
         },
         data() {
-            return {
-            };
+            return {};
         },
-        computed:{
-            xClass(){
-                const prefix =  this.prefix? this.prefix + '-': ''
+        mounted() {
+        },
+        computed: {
+            xClass() {
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                 )
             }
         },
-        methods: {
+        methods: {},
+        watch: {
+            log:{
+                handler(v){
+                    v && v()
+                },
+                deep: true,
+                immediate: true
+            },
+
         }
     }
 </script>
