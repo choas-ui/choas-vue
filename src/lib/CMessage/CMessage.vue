@@ -86,10 +86,10 @@
                 }
             },
             // 宽度
-            width: {
+            widthPercent: {
                 type: String,
                 default() {
-                    return '500';
+                    return '30';
                 }
             },
             prefix: {
@@ -141,8 +141,9 @@
                         {
                             class: this.getMessageWrapClass,
                             style: {
-                                width: this.width + 'px',
-                                marginLeft: `calc(50vw - ${(this.width / 2).toFixed(0)}px)`,
+                                width: this.widthPercent + 'vw',
+                                marginLeft: `${(50 - this.widthPercent / 2).toFixed(0)}vw`,
+                                maxWidth: '100vw',
                                 color: this.txtColor || defaultIconColor[this.noticeType],
                             },
                             on: {

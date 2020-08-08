@@ -204,11 +204,10 @@
                     paddingRight = behindWidth / 2;
                     paddingLeft = paddingNum[this.size || 'default'] / 2;
                 }
-                if (this.clearable) {
-                    paddingRight = paddingRight + 22
-                }
-                if (this.type === 'password') {
-                    paddingRight = paddingRight + 22
+                if (this.clearable || this.type === 'password') {
+                    const propsData = _.get(this.$slots, 'behind-icon.0.componentOptions.propsData', {});
+                    const {width: behindWidth = 0} = propsData;
+                    paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10) +  22;
                 }
                 if (this.noBorder) {
                     border = 'none'
@@ -216,7 +215,7 @@
                 return {
                     border,
                     position: 'relative',
-                    padding: `0 ${paddingRight.toFixed()}px 0 ${paddingLeft.toFixed()}px`,
+                    padding: `0 ${parseInt(paddingRight, 10).toFixed()}px 0 ${parseInt(paddingLeft, 10).toFixed()}px`,
                     borderBottomRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
                     borderTopRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
                 }

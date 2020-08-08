@@ -36,6 +36,7 @@
                 default() {
                     return {
                         color: ['green', '#fff'],
+                        type: 'stripe',
                         deg: 45,
                         completeColor: '#1ac756',
                         errorColor: '#ff5e5c',
@@ -86,9 +87,9 @@
         },
         computed: {
             getSpanText() {
-                const {barConfig : bc} = this
-                let color =  bc.color[0] || bc.color[1]
-                color =  this.color || color
+                const {barConfig : bc} = this;
+                let color =  bc.color[0] || bc.color[1];
+                color =  this.color || color;
                 if (this.status === 'complete') {
                     color = bc.completeColor
                 }
@@ -112,16 +113,22 @@
                 }
             },
             getInnerStyle() {
-                const {barConfig: bc} = this
-                let backgroundSize = ''
-                let background = ''
-                let animationDuration = ''
+                const {barConfig: bc} = this;
+                let backgroundSize = '';
+                let background = '';
+                let animationDuration = '';
                 if (bc.color.length) {
                     if (bc.color[0] && bc.color[1]) {
-                        background = `linear-gradient(${bc.deg || 45}deg, ${bc.color[0]} 25%, ${bc.color[1]} 0%,${bc.color[1]} 50%,${bc.color[0]}
-                0%,${bc.color[0]} 75%,${bc.color[1]} 0%)`
-                        backgroundSize = `${Math.round(this.height / Math.tan(((bc.deg || 45) / 180) * 3.14))}px`
+                        if(bc.type && bc.type === 'stripe'){
+                            background = `linear-gradient(${bc.deg || 45}deg, ${bc.color[0]} 25%, ${bc.color[1]} 0%,${bc.color[1]} 50%,${bc.color[0]}
+                0%,${bc.color[0]} 75%,${bc.color[1]} 0%)`;
+                            backgroundSize = `${Math.round(this.height / Math.tan(((bc.deg || 45) / 180) * 3.14))}px`;
+                        }else{
+                            background = `linear-gradient(to left,${bc.color[0]}, ${bc.color[1]})`;
+                            backgroundSize = `100% 100%`;
+                        }
                         animationDuration = `${this.timeSpan}s`
+
                     } else {
                         background = bc.color[0] || bc.color[1]
                     }
@@ -156,7 +163,7 @@
                 }
             },
             getBarClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}progress-content`]: true
@@ -170,7 +177,7 @@
                 }
             },
             getBgBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}progress-bg-box`]: true
@@ -178,7 +185,7 @@
                 )
             },
             getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
+                const prefix = this.prefix ? this.prefix + '-' : '';
                 return classNames(
                     {
                         [`${prefix}progress-wrap`]: true
