@@ -438,6 +438,11 @@
         },
         render(h) {
             return h('ul',
+                {
+                    class: classNames({
+                        [`${this.fixedPrefix}tree-ul`]: true
+                    }),
+                },
                 [
                     this.listData.map((data) => {
                         return h('li',
@@ -463,19 +468,19 @@
     @import "../scss/variable";
     @import "../scss/functions";
 
-    ul {
-        padding: 0;
-        margin: 0;
-        font-size: addPX($df-fs);
-        li {
-            list-style: none;
-            & > div {
-                display: flex;
-                align-items: center;
+    .tree {
+        &-ul{
+            padding: 0;
+            margin: 0;
+            font-size: addPX($df-fs);
+            li {
+                list-style: none;
+                & > div {
+                    display: flex;
+                    align-items: center;
+                }
             }
         }
-    }
-    .tree {
         &-li {
             display: flex;
             flex-wrap: wrap;

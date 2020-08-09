@@ -165,7 +165,7 @@
                     right = right + 18;
                 } else {
                     if (this.$slots['behind-icon']) {
-                        const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
+                        const {propsData: {width: behindWidth = '18'}} = this.$slots['behind-icon'][0].componentOptions;
                         right = right + behindWidth / 1 + 2;
                     }
                 }
@@ -188,26 +188,24 @@
                 let paddingLeft = (paddingNum[this.size || 'default'] / 2);
                 let border = `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`;
 
-                if (this.$slots['prefix-icon'] && (this.$slots['behind-icon'])) {
-                    const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
-                    const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    paddingRight = behindWidth / 1 + 4;
-                    paddingLeft = prefixWidth / 1 + 6;
+                if (this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
+                    const {propsData: {width: prefixWidth = '18'}} = this.$slots['prefix-icon'][0].componentOptions;
+                    const {propsData: {width: behindWidth = '18'}} = this.$slots['behind-icon'][0].componentOptions;
+                    paddingRight = parseInt(behindWidth, 10) + 4;
+                    paddingLeft = parseInt(prefixWidth, 10) + 6;
                 }
                 if (this.$slots['prefix-icon'] && !this.$slots['behind-icon']) {
-                    const {propsData: {width: prefixWidth}} = this.$slots['prefix-icon'][0].componentOptions;
-                    paddingRight = paddingNum[this.size || 'default'] / 2;
-                    paddingLeft = prefixWidth / 1 + 6;
+                    const {propsData: {width: prefixWidth = '18'}} = this.$slots['prefix-icon'][0].componentOptions;
+                    paddingLeft = parseInt(paddingLeft, 10) + parseInt(prefixWidth, 10);
                 }
                 if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
-                    const {propsData: {width: behindWidth}} = this.$slots['behind-icon'][0].componentOptions;
-                    paddingRight = behindWidth / 2;
-                    paddingLeft = paddingNum[this.size || 'default'] / 2;
+                    const {propsData: {width: behindWidth = '18'}} = this.$slots['behind-icon'][0].componentOptions;
+                    paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10);
                 }
                 if (this.clearable || this.type === 'password') {
                     const propsData = _.get(this.$slots, 'behind-icon.0.componentOptions.propsData', {});
-                    const {width: behindWidth = 0} = propsData;
-                    paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10) +  22;
+                    const {width: behindWidth = '18'} = propsData;
+                    paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10);
                 }
                 if (this.noBorder) {
                     border = 'none'
@@ -272,7 +270,7 @@
                 if (!this.$slots['prefix-icon']) {
                     return null
                 }
-                const {propsData, propsData: {height}, listeners} = this.$slots['prefix-icon'][0].componentOptions;
+                const {propsData, propsData: {height = '18'}, listeners} = this.$slots['prefix-icon'][0].componentOptions;
                 return h('CIcon',
                     {
                         props: {
@@ -548,7 +546,7 @@
                 if (!this.$slots['behind-icon']) {
                     return null
                 }
-                const {propsData, propsData: {height}, listeners} = this.$slots['behind-icon'][0].componentOptions;
+                const {propsData, propsData: {height = '18'}, listeners} = this.$slots['behind-icon'][0].componentOptions;
                 return h('CIcon',
                     {
                         props: propsData,

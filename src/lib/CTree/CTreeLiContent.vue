@@ -203,7 +203,8 @@
                             [`${this.fixedPrefix}tree-title-wrap`]: true
                         }),
                         on: {
-                            click: () => {
+                            click: (e) => {
+                                e.stopPropagation();
                                 this.clickHandle(data)
                             }
                         },
