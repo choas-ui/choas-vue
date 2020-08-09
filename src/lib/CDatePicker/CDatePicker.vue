@@ -5,10 +5,17 @@
     export default {
         name: 'CDatePicker',
         props: {
-            log: {}
+            width:{
+                type: String,
+                default(){
+                    return ''
+                }
+            }
         },
         data() {
-            return {};
+            return {
+                isDropUlShow: false
+            };
         },
         mounted() {
         },
@@ -42,6 +49,9 @@
                 {
                     ref: 'date-wrap',
                     class: this.getDateWrapClass,
+                    style:{
+                        width: this.width? this.width+ 'px': '100%',
+                    }
                 },
                 [
                     h('CInput',
@@ -49,6 +59,11 @@
                             size: this.size,
                             style: {
                                 position: 'relative'
+                            },
+                            on:{
+                                focus: ()=>{
+                                    this.isDropUlShow = true
+                                }
                             }
                         },
                         [
@@ -63,9 +78,27 @@
                             )
                         ]
                     ),
-                    h('ul',
-                        {},
-                        [123]
+                    h('div',
+                        {
+                            class:['date-dropdown'],
+                            style:{
+                                display: this.isDropUlShow? 'block': 'none'
+                            }
+                        },
+                        [
+                            h('div',
+                                {},
+                                ['title-box']
+                            ),
+                            h('div',
+                                {},
+                                ['content-box']
+                            ),
+                            h('div',
+                                {},
+                                ['foot-box']
+                            )
+                        ]
                     )
                 ]
             )
@@ -79,4 +112,23 @@
     @import "../scss/normal-bg";
     @import "../scss/variable";
     @import "../scss/comm-class";
+
+    .date{
+        &-wrap{
+            position: relative;
+        }
+        &-dropdown{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            background: #fff;
+            position: absolute;
+            border-radius: addPX($sm-borderWt);
+            width: 100%;
+            min-width: 200px;
+            top: calc(100% + 4px);
+            z-index: 90;
+            border: 1px solid $lineColor;
+        }
+    }
 </style>
