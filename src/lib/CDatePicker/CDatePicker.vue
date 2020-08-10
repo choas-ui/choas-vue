@@ -5,19 +5,27 @@
     export default {
         name: 'CDatePicker',
         props: {
-            width:{
+            width: {
                 type: String,
-                default(){
+                default() {
                     return ''
                 }
             }
         },
         data() {
             return {
-                isDropUlShow: false
+                isDropUlShow: false,
+                date: new Date()
             };
         },
         mounted() {
+            this.$nextTick(() => {
+                document.addEventListener('click', ({target}) => {
+                    if (this.$refs.dateWrap && !this.$refs.dateWrap.contains(target)) {
+                        this.isDropUlShow = false;
+                    }
+                });
+            });
         },
         computed: {
             xClass() {
@@ -33,7 +41,92 @@
                 })
             },
         },
-        methods: {},
+        methods: {
+            createWeekdayTitle(h) {
+                const wrapWidth = this.$refs.dateWrap.clientWidth- 18 - 14;
+                let width = Math.floor((wrapWidth/7));
+                width= width<=34 ? 34: width
+                return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
+                    return h('div',
+                        {
+                            class: ['weekday-title'],
+                            style: {
+                                width: width+'px',
+                                height: width+'px',
+                                lineHeight: width+'px',
+                                background:!index || index === 6 ?'#aaa':'#fff',
+                                color:!index || index === 6 ?'#fff':'#666',
+                            }
+                        },
+                        [item]
+                    )
+                })
+
+            },
+            createArrowBtns(h, args) {
+                return h('div', [
+                    h('CIcon',
+                        {
+                            props: {
+                                iconName: 'choas-double-' + args,
+                            }
+                        }
+                    ),
+                    h('CIcon',
+                        {
+                            props: {
+                                iconName: 'choas-arrow-' + args
+                            }
+                        }
+                    )
+                ])
+            },
+            createTitleInputs(h) {
+                return h('div', [
+                    h('CInput',
+                        {
+                            props: {
+                                noBorder: true,
+                                width: '50',
+                                maxLength: 4,
+                            }
+                        }
+                    ),
+                    h('CIcon',
+                        {
+                            props: {
+                                iconName: 'choas-min'
+                            }
+                        }
+                    ),
+                    h('CInput',
+                        {
+                            props: {
+                                noBorder: true,
+                                width: '50',
+                                maxLength: 2,
+                            }
+                        }
+                    ),
+                    h('CIcon',
+                        {
+                            props: {
+                                iconName: 'choas-min'
+                            }
+                        }
+                    ),
+                    h('CInput',
+                        {
+                            props: {
+                                noBorder: true,
+                                width: '50',
+                                maxLength: 2,
+                            },
+                        }
+                    )
+                ])
+            }
+        },
         watch: {
             log: {
                 handler(v) {
@@ -47,10 +140,10 @@
         render(h) {
             return h('div',
                 {
-                    ref: 'date-wrap',
+                    ref: 'dateWrap',
                     class: this.getDateWrapClass,
-                    style:{
-                        width: this.width? this.width+ 'px': '100%',
+                    style: {
+                        width: this.width ? this.width + 'px' : '100%',
                     }
                 },
                 [
@@ -60,8 +153,8 @@
                             style: {
                                 position: 'relative'
                             },
-                            on:{
-                                focus: ()=>{
+                            on: {
+                                focus: () => {
                                     this.isDropUlShow = true
                                 }
                             }
@@ -80,19 +173,29 @@
                     ),
                     h('div',
                         {
-                            class:['date-dropdown'],
-                            style:{
-                                display: this.isDropUlShow? 'block': 'none'
+                            class: ['date-dropdown'],
+                            style: {
+                                display: this.isDropUlShow ? 'block' : 'none'
                             }
                         },
                         [
                             h('div',
-                                {},
-                                ['title-box']
+                                {
+                                    class: ['date-dropdown-title-box']
+                                },
+                                [
+                                    this.createArrowBtns(h, 'left'),
+                                    this.createTitleInputs(h),
+                                    this.createArrowBtns(h, 'right'),
+                                ]
                             ),
-                            h('div',
-                                {},
-                                ['content-box']
+                            this.isDropUlShow && h('div',
+                                {
+                                    class: ['date-dropdown-content-box']
+                                },
+                                [
+                                    this.createWeekdayTitle(h)
+                                ]
                             ),
                             h('div',
                                 {},
@@ -113,22 +216,40 @@
     @import "../scss/variable";
     @import "../scss/comm-class";
 
-    .date{
-        &-wrap{
+    .date {
+        &-wrap {
             position: relative;
         }
-        &-dropdown{
-            padding: 0;
+
+        &-dropdown {
             margin: 0;
             box-sizing: border-box;
             background: #fff;
             position: absolute;
             border-radius: addPX($sm-borderWt);
+            padding: addPX($ssm-padding);
             width: 100%;
-            min-width: 200px;
+            min-width: 280px;
             top: calc(100% + 4px);
             z-index: 90;
             border: 1px solid $lineColor;
+
+            &-title-box {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            &-content-box {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: addPX($ssm-margin);
+                .weekday-title{
+                    text-align: center;
+                    border: 1px solid #ccc;
+                    font-size: 16px;
+                }
+            }
         }
     }
 </style>
