@@ -1,211 +1,223 @@
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames'
+  import _ from 'lodash'
 
-    export default {
-        name: 'CDatePicker',
-        props: {
-            width: {
-                type: String,
-                default() {
-                    return ''
+  export default {
+    name: 'CDatePicker',
+    props: {
+      width: {
+        type: String,
+        default() {
+          return ''
+        }
+      }
+    },
+    data() {
+      return {
+        isDropUlShow: false,
+        date: null,
+        year: null,
+        month: null,
+        weekday: null,
+        today: null,
+
+      };
+    },
+    mounted() {
+      this.date = new Date();
+      this.year = this.date.getFullYear();
+      this.month = this.date.getMonth();
+      this.today = this.date.getDate();
+      this.weekday = this.date.getDay();
+
+      this.$nextTick(() => {
+        document.addEventListener('click', ({target}) => {
+          if (this.$refs.dateWrap && !this.$refs.dateWrap.contains(target)) {
+            this.isDropUlShow = false;
+          }
+        });
+      });
+    },
+    computed: {
+      xClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+        )
+      },
+
+      getDateWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames({
+          [prefix + 'date-wrap']: true
+        })
+      },
+    },
+    methods: {
+      createWeekdayTitle(h) {
+        const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
+        let width = Math.floor((wrapWidth / 7));
+        width = width <= 34 ? 34 : width;
+        return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
+          return h('div',
+              {
+                class: ['weekday-title'],
+                style: {
+                  width: width + 'px',
+                  height: width + 'px',
+                  lineHeight: width + 'px',
+                  background: !index || index === 6 ? '#aaa' : '#fff',
+                  color: !index || index === 6 ? '#fff' : '#666',
                 }
-            }
-        },
-        data() {
-            return {
-                isDropUlShow: false,
-                year: '',
-                month: '',
-                day: ''
-            };
-        },
-        mounted() {
-            this.$nextTick(() => {
-                document.addEventListener('click', ({target}) => {
-                    if (this.$refs.dateWrap && !this.$refs.dateWrap.contains(target)) {
-                        this.isDropUlShow = false;
-                    }
-                });
-            });
-            this.setDateData()
-        },
-        computed: {
-            xClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                )
-            },
 
-            getDateWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames({
-                    [prefix + 'date-wrap']: true
-                })
-            },
-        },
-        methods: {
-            setDateData(){
-                const date = new Date();
-                this.year = date.getFullYear();
-                this.month = date.getMonth();
-            },
-            createWeekdayTitle(h) {
-                const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
-                let width = Math.floor((wrapWidth / 7));
-                width = width <= 34 ? 34 : width;
-                return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
-                    return h('div',
-                        {
-                            class: ['weekday-title'],
-                            style: {
-                                width: width + 'px',
-                                height: width + 'px',
-                                lineHeight: width + 'px',
-                                background: !index || index === 6 ? '#aaa' : '#fff',
-                                color: !index || index === 6 ? '#fff' : '#666',
-                            }
-                        },
-                        [item]
-                    )
-                })
-
-            },
-            createArrowBtns(h, args) {
-                return h('div', [
-                    h('CIcon',
-                        {
-                            props: {
-                                iconName: 'choas-double-' + args,
-                            }
-                        }
-                    ),
-                    h('CIcon',
-                        {
-                            props: {
-                                iconName: 'choas-arrow-' + args
-                            }
-                        }
-                    )
-                ])
-            },
-            createTitleInputs(h) {
-                return h('div',
-                    [
-                        h('CInput',
-                            {
-                                props: {
-                                    noBorder: true,
-                                    width: '50',
-                                    maxLength: 4,
-                                    value: this.year,
-                                },
-                            }
-                        ),
-                        '年',
-                        h('CInput',
-                            {
-                                props: {
-                                    noBorder: true,
-                                    width: '50',
-                                    maxLength: 2,
-                                }
-                            }
-                        ),
-                        '月',
-                        h('CInput',
-                            {
-                                props: {
-                                    noBorder: true,
-                                    width: '50',
-                                    maxLength: 2,
-                                },
-                            }
-                        ),
-                        '日'
-                    ])
-            }
-        },
-        watch: {
-            log: {
-                handler(v) {
-                    v && v()
+              },
+              [item]
+          )
+        })
+      },
+      createArrowBtns(h, args) {
+        return h('div', [
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-double-' + args,
+                }
+              }
+          ),
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-arrow-' + args
+                }
+              }
+          )
+        ])
+      },
+      createTitleInputs(h) {
+        return h('div', [
+          h('CInput',
+              {
+                props: {
+                  noBorder: true,
+                  width: '50',
+                  maxLength: 4,
+                }
+              }
+          ),
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-min'
+                }
+              }
+          ),
+          h('CInput',
+              {
+                props: {
+                  noBorder: true,
+                  width: '50',
+                  maxLength: 2,
+                }
+              }
+          ),
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-min'
+                }
+              }
+          ),
+          h('CInput',
+              {
+                props: {
+                  noBorder: true,
+                  width: '50',
+                  maxLength: 2,
                 },
-                deep: true,
-                immediate: true
-            },
-
+              }
+          )
+        ])
+      }
+    },
+    watch: {
+      log: {
+        handler(v) {
+          v && v()
         },
-        render(h) {
-            return h('div',
+        deep: true,
+        immediate: true
+      },
+
+    },
+    render(h) {
+      return h('div',
+          {
+            ref: 'dateWrap',
+            class: this.getDateWrapClass,
+            style: {
+              width: this.width ? this.width + 'px' : '100%',
+            }
+          },
+          [
+            h('CInput',
                 {
-                    ref: 'dateWrap',
-                    class: this.getDateWrapClass,
-                    style: {
-                        width: this.width ? this.width + 'px' : '100%',
+                  size: this.size,
+                  style: {
+                    position: 'relative'
+                  },
+                  on: {
+                    focus: () => {
+                      this.isDropUlShow = true
                     }
+                  }
                 },
                 [
-                    h('CInput',
-                        {
-                            size: this.size,
-                            style: {
-                                position: 'relative'
-                            },
-                            on: {
-                                focus: () => {
-                                    this.isDropUlShow = true
-                                }
-                            }
+                  h('CIcon',
+                      {
+                        slot: 'behind-icon',
+                        props: {
+                          iconName: 'choas-clock',
+                          color: '#aaa',
                         },
-                        [
-                            h('CIcon',
-                                {
-                                    slot: 'behind-icon',
-                                    props: {
-                                        iconName: 'choas-clock',
-                                        color: '#aaa',
-                                    },
-                                }
-                            )
-                        ]
-                    ),
-                    h('div',
-                        {
-                            class: ['date-dropdown'],
-                            style: {
-                                display: this.isDropUlShow ? 'block' : 'none'
-                            }
-                        },
-                        [
-                            h('div',
-                                {
-                                    class: ['date-dropdown-title-box']
-                                },
-                                [
-                                    this.createArrowBtns(h, 'left'),
-                                    this.createTitleInputs(h),
-                                    this.createArrowBtns(h, 'right'),
-                                ]
-                            ),
-                            this.isDropUlShow && h('div',
-                                {
-                                    class: ['date-dropdown-content-box']
-                                },
-                                [
-                                    this.createWeekdayTitle(h)
-                                ]
-                            ),
-                            h('div',
-                                {},
-                                ['foot-box']
-                            )
-                        ]
-                    )
+                      }
+                  )
+                ]
+            ),
+            h('div',
+                {
+                  class: ['date-dropdown'],
+                  style: {
+                    display: this.isDropUlShow ? 'block' : 'none'
+                  }
+                },
+                [
+                  h('div',
+                      {
+                        class: ['date-dropdown-title-box']
+                      },
+                      [
+                        this.createArrowBtns(h, 'left'),
+                        this.createTitleInputs(h),
+                        this.createArrowBtns(h, 'right'),
+                      ]
+                  ),
+                  this.isDropUlShow && h('div',
+                      {
+                        class: ['date-dropdown-content-box']
+                      },
+                      [
+                        this.createWeekdayTitle(h)
+                      ]
+                  ),
+                  h('div',
+                      {},
+                      ['foot-box']
+                  )
                 ]
             )
-        }
+          ]
+      )
     }
+  }
 </script>
 
 <style lang="scss" scoped>

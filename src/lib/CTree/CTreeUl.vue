@@ -159,7 +159,7 @@
                                     height: this.markIconHeight * 1.5 + 'px'
                                 }
                             },
-                            this.createLine(h,data._c_tree_self_id.split('-').length-1)
+                            this.createLine(h,data._c_tree_self_id.split('-').length-1,data)
                         ),
                         h('div',
                             [
@@ -296,6 +296,10 @@
                         )
                     } else if (index === arr.length - 1) {
                         // 水平线
+                      let width = (this.markIconWidth / 2);
+                      if(!(data.children || []).length){
+                        width+=this.markIconWidth
+                      }
                         return h('span',
                             {
                                 class: classNames({
@@ -303,7 +307,7 @@
                                     [`${this.fixedPrefix}tree-align-line`]: this.line
                                 }),
                                 style: {
-                                    width: (this.markIconWidth / 2) + this.markIconWidth + 'px',
+                                    width: width + 'px',
                                 }
                             },
                             [h('span')]
