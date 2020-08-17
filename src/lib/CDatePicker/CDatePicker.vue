@@ -15,7 +15,9 @@
         data() {
             return {
                 isDropUlShow: false,
-                date: new Date()
+                year: '',
+                month: '',
+                day: ''
             };
         },
         mounted() {
@@ -26,6 +28,7 @@
                     }
                 });
             });
+            this.setDateData()
         },
         computed: {
             xClass() {
@@ -42,20 +45,25 @@
             },
         },
         methods: {
+            setDateData(){
+                const date = new Date();
+                this.year = date.getFullYear();
+                this.month = date.getMonth();
+            },
             createWeekdayTitle(h) {
-                const wrapWidth = this.$refs.dateWrap.clientWidth- 18 - 14;
-                let width = Math.floor((wrapWidth/7));
-                width= width<=34 ? 34: width
+                const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
+                let width = Math.floor((wrapWidth / 7));
+                width = width <= 34 ? 34 : width;
                 return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
                     return h('div',
                         {
                             class: ['weekday-title'],
                             style: {
-                                width: width+'px',
-                                height: width+'px',
-                                lineHeight: width+'px',
-                                background:!index || index === 6 ?'#aaa':'#fff',
-                                color:!index || index === 6 ?'#fff':'#666',
+                                width: width + 'px',
+                                height: width + 'px',
+                                lineHeight: width + 'px',
+                                background: !index || index === 6 ? '#aaa' : '#fff',
+                                color: !index || index === 6 ? '#fff' : '#666',
                             }
                         },
                         [item]
@@ -82,49 +90,40 @@
                 ])
             },
             createTitleInputs(h) {
-                return h('div', [
-                    h('CInput',
-                        {
-                            props: {
-                                noBorder: true,
-                                width: '50',
-                                maxLength: 4,
+                return h('div',
+                    [
+                        h('CInput',
+                            {
+                                props: {
+                                    noBorder: true,
+                                    width: '50',
+                                    maxLength: 4,
+                                    value: this.year,
+                                },
                             }
-                        }
-                    ),
-                    h('CIcon',
-                        {
-                            props: {
-                                iconName: 'choas-min'
+                        ),
+                        '年',
+                        h('CInput',
+                            {
+                                props: {
+                                    noBorder: true,
+                                    width: '50',
+                                    maxLength: 2,
+                                }
                             }
-                        }
-                    ),
-                    h('CInput',
-                        {
-                            props: {
-                                noBorder: true,
-                                width: '50',
-                                maxLength: 2,
+                        ),
+                        '月',
+                        h('CInput',
+                            {
+                                props: {
+                                    noBorder: true,
+                                    width: '50',
+                                    maxLength: 2,
+                                },
                             }
-                        }
-                    ),
-                    h('CIcon',
-                        {
-                            props: {
-                                iconName: 'choas-min'
-                            }
-                        }
-                    ),
-                    h('CInput',
-                        {
-                            props: {
-                                noBorder: true,
-                                width: '50',
-                                maxLength: 2,
-                            },
-                        }
-                    )
-                ])
+                        ),
+                        '日'
+                    ])
             }
         },
         watch: {
@@ -229,7 +228,7 @@
             border-radius: addPX($sm-borderWt);
             padding: addPX($ssm-padding);
             width: 100%;
-            min-width: 280px;
+            min-width: 320px;
             top: calc(100% + 4px);
             z-index: 90;
             border: 1px solid $lineColor;
@@ -244,7 +243,8 @@
                 display: flex;
                 flex-wrap: wrap;
                 margin-top: addPX($ssm-margin);
-                .weekday-title{
+
+                .weekday-title {
                     text-align: center;
                     border: 1px solid #ccc;
                     font-size: 16px;
