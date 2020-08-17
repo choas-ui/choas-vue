@@ -15,7 +15,7 @@
     data() {
       return {
         isDropUlShow: false,
-        dayInfo:{
+        dayInfo: {
           date: null,
           year: null,
           month: null,
@@ -91,10 +91,11 @@
         let width = Math.floor((wrapWidth / 7));
         width = width <= 40 ? 40 : width;
 
-        return this.dayList.map(item => {
+        return this.dayList.map((item, index) => {
           return h('div',
               {
                 class: ['day-list-item'],
+                key: index,
                 style: {
                   width: width + 'px',
                   height: width + 'px',
@@ -129,21 +130,51 @@
         })
       },
       createArrowBtns(h, args) {
+        if (args === 'left') {
+          return h('div', [
+            h('CIcon',
+                {
+                  props: {
+                    iconName: 'choas-double-' + args,
+                  },
+                  on: {
+                    click: () => {
+                      let year = this.dayInfo.year;
+                      year--;
+                      this.$set(this.dayInfo, 'year', year);
+                    }
+                  }
+                }
+            ),
+            h('CIcon',
+                {
+                  props: {
+                    iconName: 'choas-arrow-' + args,
+                  },
+                  on: {
+                    click: () => {
+                      let month = this.dayInfo.month;
+                      month--;
+                      this.$set(this.dayInfo, 'month', month);
+                    }
+                  }
+                }
+            )
+          ])
+
+        }
         return h('div', [
+
           h('CIcon',
               {
                 props: {
-                  iconName: 'choas-double-' + args,
+                  iconName: 'choas-arrow-' + args
                 },
-                on:{
-                  click:()=>{
-                    let year =  this.dayInfo.year;
-                    if(args ==='left'){
-                      year++;
-                    }else{
-                      year--;
-                    }
-                    this.$set(this.dayInfo,'year',year);
+                on: {
+                  click: () => {
+                    let month = this.dayInfo.month;
+                    month++;
+                    this.$set(this.dayInfo, 'month', month);
                   }
                 }
               }
@@ -151,21 +182,17 @@
           h('CIcon',
               {
                 props: {
-                  iconName: 'choas-arrow-' + args
+                  iconName: 'choas-double-' + args,
                 },
-                on:{
-                  click:()=>{
-                    let month = this.dayInfo.month;
-                    if(args ==='left'){
-                      month++;
-                    }else{
-                      month --
-                    }
-                    this.$set(this.dayInfo,'month',month);
+                on: {
+                  click: () => {
+                    let year = this.dayInfo.year;
+                    year++;
+                    this.$set(this.dayInfo, 'year', year);
                   }
                 }
               }
-          )
+          ),
         ])
       },
       createTitleInputs(h) {
@@ -176,18 +203,20 @@
                   noBorder: true,
                   width: '50',
                   maxLength: 4,
+                },
+                attrs:{
                   value: this.dayInfo.year
                 },
                 on: {
                   input: (v) => {
                     let year = parseInt(v, 10);
-                    if(year<=1970){
+                    if (year <= 1970) {
                       year = 1970;
                     }
-                    if(year>2100){
-                      year =2100;
+                    if (year > 2100) {
+                      year = 2100;
                     }
-                    this.$set(this.dayInfo,'year',year);
+                    this.$set(this.dayInfo, 'year', year);
                   }
                 }
               }
@@ -205,18 +234,20 @@
                   noBorder: true,
                   width: '50',
                   maxLength: 2,
-                  value: this.dayInfo.month
+                },
+                attrs:{
+                  value: this.dayInfo.month+1
                 },
                 on: {
                   input: (v) => {
                     let month = parseInt(v, 10);
-                    if(month<=0){
+                    if (month <= 0) {
                       month = 1;
                     }
-                    if(month>12){
-                      month =12;
+                    if (month > 12) {
+                      month = 12;
                     }
-                    this.$set(this.dayInfo,'month',month);
+                    this.$set(this.dayInfo, 'month', month-1);
                   }
                 }
               }
@@ -239,13 +270,13 @@
                 on: {
                   input: (v) => {
                     let day = parseInt(v, 10);
-                    if(day<=0){
+                    if (day <= 0) {
                       day = 1;
                     }
-                    if(day>31){
-                      day =31;
+                    if (day > 31) {
+                      day = 31;
                     }
-                    this.$set(this.dayInfo,'day',day);
+                    this.$set(this.dayInfo, 'day', day);
                   }
                 }
               }
@@ -261,9 +292,10 @@
         deep: true,
         immediate: true
       },
-      dayInfo:{
-        handler(v){
-          this.setDayListData(v.year,v.month);
+      dayInfo: {
+        handler(v) {
+          this.dayList = [];
+          this.setDayListData(v.year, v.month+1);
         },
         deep: true
       },
