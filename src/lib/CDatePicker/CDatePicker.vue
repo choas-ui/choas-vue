@@ -15,21 +15,22 @@
     data() {
       return {
         isDropUlShow: false,
-        date: null,
-        year: null,
-        month: null,
-        weekday: null,
-        today: null,
-
+        dayInfo:{
+          date: null,
+          year: null,
+          month: null,
+          day: null,
+          today: null,
+        },
+        dayList: [],
       };
     },
     mounted() {
-      this.date = new Date();
-      this.year = this.date.getFullYear();
-      this.month = this.date.getMonth();
-      this.today = this.date.getDate();
-      this.weekday = this.date.getDay();
-
+      this.dayInfo.date = new Date();
+      this.dayInfo.year = this.dayInfo.date.getFullYear();
+      this.dayInfo.month = this.dayInfo.date.getMonth();
+      this.dayInfo.day = this.dayInfo.date.getDate();
+      this.dayInfo.today = this.dayInfo.day;
       this.$nextTick(() => {
         document.addEventListener('click', ({target}) => {
           if (this.$refs.dateWrap && !this.$refs.dateWrap.contains(target)) {
@@ -40,7 +41,7 @@
     },
     computed: {
       xClass() {
-        const prefix = this.prefix ? this.prefix + '-' : '';
+        // const prefix = this.prefix ? this.prefix + '-' : '';
         return classNames(
         )
       },
@@ -51,12 +52,63 @@
           [prefix + 'date-wrap']: true
         })
       },
+
     },
     methods: {
+      setDayListData(year, month) {
+        const preMonth = new Date(year, month, 0); // 上月
+        let preMonthLastDayWeekDay = preMonth.getDay(); // 上月最后一天的星期数
+        const preMonthLastDay = preMonth.getDate(); // 上月的最后一天
+        let count = preMonthLastDayWeekDay;
+        while (count >= 0) {
+          this.dayList.push({
+            value: preMonthLastDay - count,
+            type: 'preMonth'
+          });
+          count--;
+        }
+        const selectedMonth = new Date(year, month + 1, 0);
+        const selectedMonthDay = selectedMonth.getDate();
+        count = 1;
+        while (count <= selectedMonthDay) {
+          this.dayList.push({
+            value: count++,
+            type: 'selectedMonth'
+          });
+        }
+        let nextMonthDay = 6 * 7 - this.dayList.length;
+        count = 1;
+        while (count <= nextMonthDay) {
+          this.dayList.push({
+            value: count++,
+            type: 'nextMonth'
+          });
+        }
+
+      },
+      createDayList(h) {
+        const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
+        let width = Math.floor((wrapWidth / 7));
+        width = width <= 40 ? 40 : width;
+
+        return this.dayList.map(item => {
+          return h('div',
+              {
+                class: ['day-list-item'],
+                style: {
+                  width: width + 'px',
+                  height: width + 'px',
+                  lineHeight: width + 'px',
+                }
+              },
+              [item['value']]
+          )
+        })
+      },
       createWeekdayTitle(h) {
         const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
         let width = Math.floor((wrapWidth / 7));
-        width = width <= 34 ? 34 : width;
+        width = width <= 40 ? 40 : width;
         return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
           return h('div',
               {
@@ -70,7 +122,9 @@
                 }
 
               },
-              [item]
+              [
+                h('span', [item])
+              ]
           )
         })
       },
@@ -80,6 +134,17 @@
               {
                 props: {
                   iconName: 'choas-double-' + args,
+                },
+                on:{
+                  click:()=>{
+                    let year =  this.dayInfo.year;
+                    if(args ==='left'){
+                      year++;
+                    }else{
+                      year--;
+                    }
+                    this.$set(this.dayInfo,'year',year);
+                  }
                 }
               }
           ),
@@ -87,6 +152,17 @@
               {
                 props: {
                   iconName: 'choas-arrow-' + args
+                },
+                on:{
+                  click:()=>{
+                    let month = this.dayInfo.month;
+                    if(args ==='left'){
+                      month++;
+                    }else{
+                      month --
+                    }
+                    this.$set(this.dayInfo,'month',month);
+                  }
                 }
               }
           )
@@ -100,39 +176,78 @@
                   noBorder: true,
                   width: '50',
                   maxLength: 4,
-                }
-              }
-          ),
-          h('CIcon',
-              {
-                props: {
-                  iconName: 'choas-min'
-                }
-              }
-          ),
-          h('CInput',
-              {
-                props: {
-                  noBorder: true,
-                  width: '50',
-                  maxLength: 2,
-                }
-              }
-          ),
-          h('CIcon',
-              {
-                props: {
-                  iconName: 'choas-min'
-                }
-              }
-          ),
-          h('CInput',
-              {
-                props: {
-                  noBorder: true,
-                  width: '50',
-                  maxLength: 2,
+                  value: this.dayInfo.year
                 },
+                on: {
+                  input: (v) => {
+                    let year = parseInt(v, 10);
+                    if(year<=1970){
+                      year = 1970;
+                    }
+                    if(year>2100){
+                      year =2100;
+                    }
+                    this.$set(this.dayInfo,'year',year);
+                  }
+                }
+              }
+          ),
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-min'
+                },
+              }
+          ),
+          h('CInput',
+              {
+                props: {
+                  noBorder: true,
+                  width: '50',
+                  maxLength: 2,
+                  value: this.dayInfo.month
+                },
+                on: {
+                  input: (v) => {
+                    let month = parseInt(v, 10);
+                    if(month<=0){
+                      month = 1;
+                    }
+                    if(month>12){
+                      month =12;
+                    }
+                    this.$set(this.dayInfo,'month',month);
+                  }
+                }
+              }
+          ),
+          h('CIcon',
+              {
+                props: {
+                  iconName: 'choas-min'
+                }
+              }
+          ),
+          h('CInput',
+              {
+                props: {
+                  noBorder: true,
+                  width: '50',
+                  maxLength: 2,
+                  value: this.dayInfo.day,
+                },
+                on: {
+                  input: (v) => {
+                    let day = parseInt(v, 10);
+                    if(day<=0){
+                      day = 1;
+                    }
+                    if(day>31){
+                      day =31;
+                    }
+                    this.$set(this.dayInfo,'day',day);
+                  }
+                }
               }
           )
         ])
@@ -146,7 +261,12 @@
         deep: true,
         immediate: true
       },
-
+      dayInfo:{
+        handler(v){
+          this.setDayListData(v.year,v.month);
+        },
+        deep: true
+      },
     },
     render(h) {
       return h('div',
@@ -205,7 +325,8 @@
                         class: ['date-dropdown-content-box']
                       },
                       [
-                        this.createWeekdayTitle(h)
+                        this.createWeekdayTitle(h),
+                        this.createDayList(h),
                       ]
                   ),
                   h('div',
@@ -257,6 +378,12 @@
                 margin-top: addPX($ssm-margin);
 
                 .weekday-title {
+                    text-align: center;
+                    border: 1px solid #ccc;
+                    font-size: 16px;
+                }
+
+                .day-list-item {
                     text-align: center;
                     border: 1px solid #ccc;
                     font-size: 16px;
