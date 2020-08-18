@@ -26,11 +26,6 @@
       };
     },
     mounted() {
-      this.dayInfo.date = new Date();
-      this.dayInfo.year = this.dayInfo.date.getFullYear();
-      this.dayInfo.month = this.dayInfo.date.getMonth();
-      this.dayInfo.day = this.dayInfo.date.getDate();
-      this.dayInfo.today = this.dayInfo.day;
       this.$nextTick(() => {
         document.addEventListener('click', ({target}) => {
           if (this.$refs.dateWrap && !this.$refs.dateWrap.contains(target)) {
@@ -84,25 +79,62 @@
             type: 'nextMonth'
           });
         }
+        this.dayList = this.dayList.map(item => {
+          return {
+            value: item.value < 10 ? '0' + item.value : item.value + '',
+            type: item.type
+          }
+        })
 
+      },
+      getTodayDate() {
+        this.dayInfo.date = new Date();
+        this.dayInfo.year = this.dayInfo.date.getFullYear();
+        this.dayInfo.month = this.dayInfo.date.getMonth();
+        this.dayInfo.day = this.dayInfo.date.getDate();
+        this.dayInfo.today = this.dayInfo.day;
       },
       createDayList(h) {
         const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
         let width = Math.floor((wrapWidth / 7));
         width = width <= 40 ? 40 : width;
+        let spanWidth = parseInt(width * 0.8, 10);
 
         return this.dayList.map((item, index) => {
           return h('div',
               {
-                class: ['day-list-item'],
+                class: classNames({
+                  'day-list-item': true,
+                  ['pre-month']: item.type === 'preMonth',
+                  ['selected-month']: item.type === 'selectedMonth',
+                  ['next-month']: item.type === 'nextMonth',
+                  ['active']: this.dayInfo.today === parseInt(item.value, 10)
+                }),
                 key: index,
                 style: {
                   width: width + 'px',
                   height: width + 'px',
-                  lineHeight: width + 'px',
+                },
+                on: {
+                  click: () => {
+                    console.log(item.value)
+                  }
                 }
               },
-              [item['value']]
+              [
+                h('span',
+                    {
+                      style: {
+                        width: spanWidth + 'px',
+                        height: spanWidth + 'px',
+                        lineHeight: spanWidth + 'px',
+                      }
+                    },
+                    [
+                      item['value']
+                    ]
+                )
+              ]
           )
         })
       },
@@ -118,8 +150,8 @@
                   width: width + 'px',
                   height: width + 'px',
                   lineHeight: width + 'px',
-                  background: !index || index === 6 ? '#aaa' : '#fff',
-                  color: !index || index === 6 ? '#fff' : '#666',
+                  background: !index || index === 6 ? '#aaa' : '#ccc',
+                  color: !index || index === 6 ? '#fff' : '#fff',
                 }
 
               },
@@ -164,7 +196,6 @@
 
         }
         return h('div', [
-
           h('CIcon',
               {
                 props: {
@@ -199,12 +230,14 @@
         return h('div', [
           h('CInput',
               {
+
                 props: {
+                  className: 'date-input',
                   noBorder: true,
                   width: '50',
                   maxLength: 4,
                 },
-                attrs:{
+                attrs: {
                   value: this.dayInfo.year
                 },
                 on: {
@@ -223,6 +256,7 @@
           ),
           h('CIcon',
               {
+
                 props: {
                   iconName: 'choas-min'
                 },
@@ -231,23 +265,25 @@
           h('CInput',
               {
                 props: {
+                  className: 'date-input',
                   noBorder: true,
                   width: '50',
                   maxLength: 2,
                 },
-                attrs:{
-                  value: this.dayInfo.month+1
+                attrs: {
+                  value: this.dayInfo.month + 1,
                 },
                 on: {
                   input: (v) => {
                     let month = parseInt(v, 10);
-                    if (month <= 0) {
-                      month = 1;
+                    month--;
+                    if (month < 0) {
+                      month = 0;
                     }
                     if (month > 12) {
                       month = 12;
                     }
-                    this.$set(this.dayInfo, 'month', month-1);
+                    this.$set(this.dayInfo, 'month', month);
                   }
                 }
               }
@@ -262,6 +298,7 @@
           h('CInput',
               {
                 props: {
+                  className: 'date-input',
                   noBorder: true,
                   width: '50',
                   maxLength: 2,
@@ -295,9 +332,15 @@
       dayInfo: {
         handler(v) {
           this.dayList = [];
-          this.setDayListData(v.year, v.month+1);
+          this.setDayListData(v.year, v.month);
         },
         deep: true
+      },
+      isDropUlShow: {
+        handler() {
+          this.getTodayDate();
+        },
+        immediate: true,
       },
     },
     render(h) {
@@ -411,16 +454,49 @@
 
                 .weekday-title {
                     text-align: center;
-                    border: 1px solid #ccc;
+                    border: 1px solid $lineColor;
                     font-size: 16px;
+                    background: $lightLineColor;
                 }
 
                 .day-list-item {
                     text-align: center;
-                    border: 1px solid #ccc;
+                    border: 1px solid $lineColor;
                     font-size: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+                    cursor: pointer;
+
+                    > span {
+                        display: inline-block;
+                    }
+
+                    &.pre-month {
+                        background: $lightLineColor;
+                        color: #fff;
+                    }
+
+                    &.next-month {
+                        background: $lightLineColor;
+                        color: #fff;
+                    }
+
+                    &.active {
+                        & > span {
+                            border-radius: 100%;
+                            border: 2px solid $primary;
+                        }
+                    }
                 }
             }
         }
+
+        /deep/ &-input {
+            input {
+                text-align: center;
+            }
+        }
     }
+
 </style>
