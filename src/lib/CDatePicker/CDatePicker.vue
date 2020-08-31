@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
@@ -11,19 +10,32 @@
         default() {
           return ''
         }
-      }
+      },
+      // 高度
+      size: {
+        validate(v) {
+          return !v || ['ssmall', 'small', 'default', 'large', 'llarge'].includes(v)
+        },
+        default() {
+          return 'default'
+        }
+      },
+      quickSelectBox: {
+        type: Boolean
+      },
+
     },
     data() {
       return {
         isDropUlShow: false,
         dayInfo: {
-          date: null,
           year: null,
           month: null,
           day: null,
           today: null,
         },
         dayList: [],
+        selectValue:'',
       };
     },
     mounted() {
@@ -38,8 +50,7 @@
     computed: {
       xClass() {
         // const prefix = this.prefix ? this.prefix + '-' : '';
-        return classNames(
-        )
+        return classNames({})
       },
 
       getDateWrapClass() {
@@ -89,15 +100,16 @@
 
       },
       getTodayDate() {
-        this.dayInfo.date = new Date();
-        this.dayInfo.year = this.dayInfo.date.getFullYear();
-        this.dayInfo.month = this.dayInfo.date.getMonth();
-        this.dayInfo.day = this.dayInfo.date.getDate();
+        const date = new Date();
+        this.dayInfo.year = date.getFullYear();
+        this.dayInfo.month =date.getMonth();
+        this.dayInfo.day = date.getDate();
         this.dayInfo.today = this.dayInfo.day;
       },
       createDayList(h) {
-        const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
-        let width = Math.floor((wrapWidth / 7));
+        // const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
+        // let width = Math.floor((wrapWidth / 7));
+        let width = 40;
         width = width <= 40 ? 40 : width;
         let spanWidth = parseInt((width * 0.8).toString(), 10);
 
@@ -109,7 +121,7 @@
                   ['pre-month']: item.type === 'preMonth',
                   ['selected-month']: item.type === 'selectedMonth',
                   ['next-month']: item.type === 'nextMonth',
-                  ['active']: this.dayInfo.today === parseInt(item.value, 10) && item.type ==='selectedMonth',
+                  ['active']: this.dayInfo.today === parseInt(item.value, 10) && item.type === 'selectedMonth',
                 }),
                 key: index,
                 style: {
@@ -118,7 +130,29 @@
                 },
                 on: {
                   click: () => {
-                    console.log(item.value)
+                    let {year, month} = this.dayInfo;
+                    const {today} = this.dayInfo;
+                    let day = parseInt(item.value, 10);
+                    if(item.type === 'preMonth'){
+                      month--;
+                      if(month<0){
+                        month = 11;
+                        year--;
+                      }
+                    }
+                    if(item.type === 'nextMonth'){
+                      month++;
+                      if(month>11){
+                        month = 0;
+                        year++;
+                      }
+                    }
+                    this.$set(this,'dayInfo', {
+                      year,
+                      month,
+                      day,
+                      today,
+                    });
                   }
                 }
               },
@@ -140,8 +174,9 @@
         })
       },
       createWeekdayTitle(h) {
-        const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
-        let width = Math.floor((wrapWidth / 7));
+        // const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
+        // let width = Math.floor((wrapWidth / 7));
+        let width = 40;
         width = width <= 40 ? 40 : width;
         return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
           return h('div',
@@ -332,7 +367,7 @@
       dayInfo: {
         handler(v) {
           this.dayList = [];
-          this.setDayListData(v.year, v.month);
+          this.setDayListData(v.year, v.month, v.day);
         },
         deep: true
       },
@@ -355,7 +390,9 @@
           [
             h('CInput',
                 {
-                  size: this.size,
+                  props:{
+                    size: this.size,
+                  },
                   style: {
                     position: 'relative'
                   },
@@ -405,8 +442,66 @@
                       ]
                   ),
                   h('div',
-                      {},
-                      ['foot-box']
+                      {
+                        class: ['date-footer-box'],
+                      },
+                      [
+                        h('div',
+                            {
+                              class: ['quickly-box'],
+                            },
+                            [
+                              this.quickSelectBox ? h('CButton',
+                                  {
+                                    props: {
+                                      size: 'ssmall',
+                                    }
+                                  },
+                                  ['本周']
+                              ) : null,
+                              this.quickSelectBox ? h('CButton',
+                                  {
+                                    props: {
+                                      size: 'ssmall',
+                                    }
+                                  },
+                                  ['本月']
+                              ) : null,
+                              this.quickSelectBox ? h('CButton',
+                                  {
+                                    props: {
+                                      size: 'ssmall',
+                                    }
+                                  },
+                                  ['本季度']
+                              ) : null,
+                            ]
+                        ),
+                        h('div',
+                            {
+                              class: ['confirm-box'],
+                            },
+                            [
+                              h('CButton',
+                                  {
+                                    props: {
+                                      size: 'ssmall',
+                                    }
+                                  },
+                                  ['确认']
+                              ),
+                              h('CButton',
+                                  {
+                                    props: {
+                                      type: 'danger',
+                                      size: 'ssmall',
+                                    },
+                                  },
+                                  ['取消']
+                              ),
+                            ]
+                        ),
+                      ]
                   )
                 ]
             )
@@ -435,8 +530,7 @@
             position: absolute;
             border-radius: addPX($sm-borderWt);
             padding: addPX($ssm-padding);
-            width: 100%;
-            min-width: 320px;
+            width: 300px;
             top: calc(100% + 4px);
             z-index: 90;
             border: 1px solid $lineColor;
@@ -450,18 +544,15 @@
             &-content-box {
                 display: flex;
                 flex-wrap: wrap;
-                margin-top: addPX($ssm-margin);
 
                 .weekday-title {
                     text-align: center;
-                    border: 1px solid $lineColor;
                     font-size: 16px;
                     font-weight: bold;
                 }
 
                 .day-list-item {
                     text-align: center;
-                    border: 1px solid #fff;
                     font-size: 16px;
                     display: flex;
                     align-items: center;
@@ -473,13 +564,11 @@
                     }
 
                     &.pre-month {
-                        background: $lightLineColor;
-                        color: #fff;
+                        color: #aaa;
                     }
 
                     &.next-month {
-                        background: $lightLineColor;
-                        color: #fff;
+                        color: #aaa;
                     }
 
                     &.active {
@@ -488,6 +577,23 @@
                             border: 2px solid $primary;
                         }
                     }
+                }
+            }
+
+            .date-footer-box {
+                display: flex;
+                justify-content: space-between;
+
+                & > .quickly-box {
+                    width: calc(100% - 110px);
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+
+                & > .confirm-box {
+                    width: 100px;
+                    display: flex;
+                    justify-content: space-between;
                 }
             }
         }
