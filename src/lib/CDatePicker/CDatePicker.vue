@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
@@ -98,7 +99,7 @@
         const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
         let width = Math.floor((wrapWidth / 7));
         width = width <= 40 ? 40 : width;
-        let spanWidth = parseInt(width * 0.8, 10);
+        let spanWidth = parseInt((width * 0.8).toString(), 10);
 
         return this.dayList.map((item, index) => {
           return h('div',
@@ -108,7 +109,7 @@
                   ['pre-month']: item.type === 'preMonth',
                   ['selected-month']: item.type === 'selectedMonth',
                   ['next-month']: item.type === 'nextMonth',
-                  ['active']: this.dayInfo.today === parseInt(item.value, 10)
+                  ['active']: this.dayInfo.today === parseInt(item.value, 10) && item.type ==='selectedMonth',
                 }),
                 key: index,
                 style: {
@@ -150,8 +151,7 @@
                   width: width + 'px',
                   height: width + 'px',
                   lineHeight: width + 'px',
-                  background: !index || index === 6 ? '#aaa' : '#ccc',
-                  color: !index || index === 6 ? '#fff' : '#fff',
+                  color: !index || index === 6 ? '#666' : '#aaa',
                 }
 
               },
@@ -456,12 +456,12 @@
                     text-align: center;
                     border: 1px solid $lineColor;
                     font-size: 16px;
-                    background: $lightLineColor;
+                    font-weight: bold;
                 }
 
                 .day-list-item {
                     text-align: center;
-                    border: 1px solid $lineColor;
+                    border: 1px solid #fff;
                     font-size: 16px;
                     display: flex;
                     align-items: center;
