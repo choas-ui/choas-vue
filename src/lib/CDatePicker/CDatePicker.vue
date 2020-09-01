@@ -496,6 +496,11 @@
                                       type: 'danger',
                                       size: 'ssmall',
                                     },
+                                    on:{
+                                      click: ()=>{
+                                        this.isDropUlShow = false;
+                                      }
+                                    }
                                   },
                                   ['取消']
                               ),
