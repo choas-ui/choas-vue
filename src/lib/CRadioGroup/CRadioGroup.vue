@@ -131,7 +131,6 @@
     .radio-wrap {
         .radio-item {
             display: inline-flex;
-
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;

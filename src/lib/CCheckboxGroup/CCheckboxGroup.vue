@@ -129,11 +129,13 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-
+    .checkbox-group-wrap{
+        display: flex;
+        flex-wrap: wrap;
+    }
     .checkbox-wrap {
         .checkbox-item {
             display: inline-flex;
-
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;
