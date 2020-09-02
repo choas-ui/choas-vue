@@ -70,7 +70,6 @@
     export default {
         name: 'CRadio',
         props: {
-
             value: {
                 validate(v) {
                     return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
@@ -117,7 +116,8 @@
                 default() {
                     return ''
                 }
-            }
+            },
+          checkedData: {}
         },
         model: {
             prop: 'checkedData',
