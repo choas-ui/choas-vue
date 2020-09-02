@@ -275,7 +275,7 @@
                 })
             },
             // 创建树形连线
-            createLine(h, lineStartLv) {
+            createLine(h, lineStartLv,data) {
                 if (!lineStartLv) {
                     return []
                 }
