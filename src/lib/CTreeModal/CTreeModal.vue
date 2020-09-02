@@ -289,7 +289,10 @@
         watch: {
             value: {
                 handler(v) {
-                    this.$set(this, 'selectedData', v)
+                    this.$set(this, 'selectedData', v);
+                    if(!_.isEqual(v, this.selectedData)){
+                      this.$emit('input', v);
+                    }
                 },
                 deep: true,
                 immediate: true
