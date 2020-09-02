@@ -1,6 +1,6 @@
 <script>
   import classNames from 'classnames'
-  import _ from 'lodash'
+  import {addZero} from "../../utils";
 
   export default {
     name: 'CDatePicker',
@@ -35,7 +35,7 @@
           today: null,
         },
         dayList: [],
-        selectValue:'',
+        selectValue: '',
       };
     },
     mounted() {
@@ -69,7 +69,7 @@
         let count = preMonthLastDayWeekDay;
         while (count >= 0) {
           this.dayList.push({
-            value: preMonthLastDay - count,
+            value: addZero(preMonthLastDay - count),
             type: 'preMonth'
           });
           count--;
@@ -79,7 +79,7 @@
         count = 1;
         while (count <= selectedMonthDay) {
           this.dayList.push({
-            value: count++,
+            value: addZero(count++),
             type: 'selectedMonth'
           });
         }
@@ -87,13 +87,13 @@
         count = 1;
         while (count <= nextMonthDay) {
           this.dayList.push({
-            value: count++,
+            value: addZero(count++),
             type: 'nextMonth'
           });
         }
         this.dayList = this.dayList.map(item => {
           return {
-            value: item.value < 10 ? '0' + item.value : item.value + '',
+            value: item.value,
             type: item.type
           }
         })
@@ -102,17 +102,13 @@
       getTodayDate() {
         const date = new Date();
         this.dayInfo.year = date.getFullYear();
-        this.dayInfo.month =date.getMonth();
+        this.dayInfo.month = date.getMonth();
         this.dayInfo.day = date.getDate();
         this.dayInfo.today = this.dayInfo.day;
       },
       createDayList(h) {
-        // const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
-        // let width = Math.floor((wrapWidth / 7));
         let width = 40;
-        width = width <= 40 ? 40 : width;
         let spanWidth = parseInt((width * 0.8).toString(), 10);
-
         return this.dayList.map((item, index) => {
           return h('div',
               {
@@ -133,21 +129,21 @@
                     let {year, month} = this.dayInfo;
                     const {today} = this.dayInfo;
                     let day = parseInt(item.value, 10);
-                    if(item.type === 'preMonth'){
+                    if (item.type === 'preMonth') {
                       month--;
-                      if(month<0){
+                      if (month < 0) {
                         month = 11;
                         year--;
                       }
                     }
-                    if(item.type === 'nextMonth'){
+                    if (item.type === 'nextMonth') {
                       month++;
-                      if(month>11){
+                      if (month > 11) {
                         month = 0;
                         year++;
                       }
                     }
-                    this.$set(this,'dayInfo', {
+                    this.$set(this, 'dayInfo', {
                       year,
                       month,
                       day,
@@ -174,10 +170,7 @@
         })
       },
       createWeekdayTitle(h) {
-        // const wrapWidth = this.$refs.dateWrap.clientWidth - 18 - 14;
-        // let width = Math.floor((wrapWidth / 7));
         let width = 40;
-        width = width <= 40 ? 40 : width;
         return ['日', '一', '二', '三', '四', '五', '六'].map((item, index) => {
           return h('div',
               {
@@ -306,7 +299,7 @@
                   maxLength: 2,
                 },
                 attrs: {
-                  value: this.dayInfo.month + 1,
+                  value: addZero(this.dayInfo.month + 1),
                 },
                 on: {
                   input: (v) => {
@@ -337,7 +330,7 @@
                   noBorder: true,
                   width: '50',
                   maxLength: 2,
-                  value: this.dayInfo.day,
+                  value: addZero(this.dayInfo.day),
                 },
                 on: {
                   input: (v) => {
@@ -390,8 +383,9 @@
           [
             h('CInput',
                 {
-                  props:{
+                  props: {
                     size: this.size,
+                    value: this.selectValue,
                   },
                   style: {
                     position: 'relative'
@@ -486,6 +480,14 @@
                                   {
                                     props: {
                                       size: 'ssmall',
+                                    },
+                                    on: {
+                                      click: () => {
+                                        this.selectValue = this.dayInfo.year + '-' +
+                                            addZero(this.dayInfo.month + 1) + '-' +
+                                            addZero(this.dayInfo.day);
+                                        this.isDropUlShow = false;
+                                      }
                                     }
                                   },
                                   ['确认']
@@ -496,8 +498,8 @@
                                       type: 'danger',
                                       size: 'ssmall',
                                     },
-                                    on:{
-                                      click: ()=>{
+                                    on: {
+                                      click: () => {
                                         this.isDropUlShow = false;
                                       }
                                     }
@@ -593,6 +595,9 @@
                     width: calc(100% - 110px);
                     display: flex;
                     flex-wrap: wrap;
+                    &>button{
+                        margin-right: 10px;
+                    }
                 }
 
                 & > .confirm-box {

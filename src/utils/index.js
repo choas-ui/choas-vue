@@ -17,3 +17,11 @@ export const markListDataIdentify = (data, startId = '')=> {
     });
     return  data;
 };
+
+/**
+ * @name addZero 字符加零
+ * @param value 数据源
+ * */
+export const addZero = (value) =>{
+    return  value>9? value+'': '0'+value;
+};
