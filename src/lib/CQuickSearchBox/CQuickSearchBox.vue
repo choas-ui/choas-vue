@@ -1,70 +1,10 @@
-<template>
-    <div :class="quickSearchBox">
-        <div v-for="(options, index) in getCopyOptionsData"
-             :key="index" :style="{width: ((100/col).toFixed(2))+'%'}"
-        >
-            <span class="search-title">{{options.label}}:</span>
-            <template v-if="options.tagName ==='CInput'">
-                <CInput :size="size"
-                        v-model="options.value"
-                        :placeholder="options.placeholder"
-                />
-            </template>
-            <template v-if="options.tagName ==='CSelection'">
-                <CSelection :size="size"
-                            :list-data="options.listData"
-                            v-model="options.value"
-                            :placeholder="options.placeholder"
-                            :reflect-key="options.reflectKey"
-                />
-            </template>
-            <template v-if="options.tagName ==='CCheckboxGroup'">
-                <CCheckboxGroup :size="size"
-                                :list-data="options.listData"
-                                v-model="options.value"
-                                :placeholder="options.placeholder"
-                                :reflect-key="options.reflectKey"
-                />
-            </template>
-            <template v-if="options.tagName ==='CRadioGroup'">
-                <CRadioGroup :size="size"
-                             :list-data="options.listData"
-                             v-model="options.value"
-                             :placeholder="options.placeholder"
-                             :reflect-key="options.reflectKey"
-                />
-            </template>
-        </div>
-        <div :style="{
-          width: (col - (getCopyOptionsData || []).length%col) *(100/col).toFixed(2) + '%',
-        }">
-            <CButton @click="searchHandle"
-                     type="primary"
-                     :size="size"
-            >
-                查询
-            </CButton>
-            <CButton @click="toggleAdvance"
-                     :type="advanceSearchModel?'ghost':'success'"
-                     :size="size"
-                     :style="{marginLeft: '10px'}"
-            >
-                高级搜索
-                <CIcon :icon-name="advanceSearchModel?'choas-arrow-top':'choas-arrow-down'"
-                       :color="advanceSearchModel? '#aaa': '#fff'" />
-            </CButton>
-        </div>
-    </div>
-</template>
-
 <script>
   import classNames from 'classnames';
-  import _ from 'lodash';
 
   export default {
     name: 'CQuickSearchBox',
     props: {
-      optionsData: {
+      listData: {
         type: Array,
         default() {
           return []
@@ -76,6 +16,9 @@
         default() {
           return 3
         }
+      },
+      isAdvance: {
+        type: Boolean
       },
       // 高度
       size: {
@@ -112,37 +55,148 @@
     },
     methods: {
       searchHandle() {
-        console.log(this.copyOptionsData);
-        const params = {};
-        this.$emit('@searchHandle', params)
+        const params = this.getCopyOptionsData.map(item => {
+          let value;
+          if (typeof item.value === 'object') {
+            value = (item.value || []).map(v => v.value).filter(v => v !== undefined)
+          } else {
+            value = item.value;
+          }
+          return {
+            [item.key]: value
+          }
+        });
+        this.$emit('searchHandle', params)
+      },
+      resetHandle() {
+        this.$set(this, 'copyOptionsData', this.listData);
+
       },
       toggleAdvance() {
         this.advanceSearchModel = !this.advanceSearchModel
+      },
+      renderComponent(h, options) {
+        return h(options.tagName, {
+          props: {
+            size: this.size,
+            listData: options.listData,
+            value: options.value,
+            placeholder: options.placeholder,
+            reflectKey: options.reflectKey
+          }
+        })
+      },
+      renderControlBtn(h) {
+        if (this.$slots['btn-box']) {
+          Object.keys(this.$slots['btn-box'][0].data.on).forEach(key=>{
+            this.$slots['btn-box'][0].data.on[key] = this.$slots['btn-box'][0].data.on[key].bind(this,this.getCopyOptionsData)
+          });
+          return [this.$slots['btn-box']]
+        }
+        return [
+          h('CButton',
+              {
+                props: {
+                  type: 'primary',
+                  size: 'ssmall',
+                },
+                on: {
+                  click: () => {
+                    this.searchHandle()
+                  }
+                }
+              },
+              ['查询']
+          ),
+          h('CButton',
+              {
+                props: {
+                  type: 'ghost',
+                  size: 'ssmall',
+                },
+                style: {
+                  marginLeft: '10px'
+                },
+                on: {
+                  click: () => {
+                    this.resetHandle()
+                  }
+                }
+              },
+              ['重置']
+          ),
+          this.isAdvance ? h('CButton',
+              {
+                props: {
+                  type: 'link',
+                  size: 'ssmall',
+                },
+                style: {
+                  marginLeft: '10px'
+                },
+                on: {
+                  click: () => {
+                    this.toggleAdvance()
+                  }
+                }
+              },
+              [
+                '高级搜索',
+                h('CIcon',
+                    {
+                      props: {
+                        iconName: this.advanceSearchModel ? 'choas-arrow-top' : 'choas-arrow-down',
+                        color: 'blue'
+                      }
+                    }
+                )
+              ]
+          ) : null
+        ]
       }
     },
     watch: {
-      optionsData: {
+      listData: {
         handler(v) {
-          const copyValue = _.cloneDeep(v || []).map(item => {
-            if (item.tagName === 'CInput' && !item.value) {
-              item.value = ''
-            }
-            if (item.tagName === 'CSelection' && !item.value) {
-              item.value = [{}]
-            }
-            if (item.tagName === 'CCheckboxGroup' && !item.value) {
-              item.value = [{}]
-            }
-            if (item.tagName === 'CRadioGroup' && !item.value) {
-              item.value = [{}]
-            }
-            return item;
-          });
-          this.$set(this, 'copyOptionsData', copyValue);
+          this.$set(this, 'copyOptionsData', v);
         },
         deep: true,
         immediate: true
       }
+    },
+    render(h) {
+      return h('div',
+          {
+            class: this.quickSearchBox
+          },
+          [
+            ...this.getCopyOptionsData.map((options) => {
+              return h('div',
+                  {
+                    style: {width: ((100 / this.col).toFixed(2)) + '%'}
+                  },
+                  [
+                    h('span', {
+                      class: 'search-title'
+                    }, [
+                      options.label + ':'
+                    ]),
+                    this.renderComponent(h, options),
+                  ]
+              )
+            }),
+            h('div',
+                {
+                  style: {
+                    width: (this.col - (this.getCopyOptionsData || []).length % this.col) * (100 / this.col).toFixed(2) + '%',
+                  }
+                },
+                [
+                  ...this.renderControlBtn(h)
+                ]
+            ),
+          ]
+      )
     }
   }
 </script>

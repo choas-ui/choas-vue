@@ -31,7 +31,7 @@ export default {
       type: String,
       validator: function (value) {
         // 这个值必须匹配下列字符串中的一个
-        return !value || ['primary', 'success', 'warning', 'danger', 'disabled', 'ghost'].indexOf(value) !== -1
+        return !value || ['primary', 'success', 'warning', 'danger', 'disabled', 'ghost', 'link'].indexOf(value) !== -1
       },
       default() {
         return 'primary'
@@ -63,6 +63,7 @@ export default {
             [`${prefix}btn`]: true,
             [`${prefix}btn-block`]: this.block,
             [`not-allowed-cursor`]: this.type === 'disabled',
+            [`btn-shadow`]: this.type !== 'link',
           },
           {
             [`${prefix}btn-primary`]: this.type === 'primary' || !(this.type),
@@ -70,7 +71,8 @@ export default {
             [`${prefix}btn-warning`]: this.type === 'warning',
             [`${prefix}btn-danger`]: this.type === 'danger',
             [`${prefix}btn-disabled`]: this.type === 'disabled',
-            [`${prefix}btn-ghost`]: this.type === 'ghost'
+            [`${prefix}btn-ghost`]: this.type === 'ghost',
+            [`${prefix}btn-link`]: this.type === 'link'
           },
           {
             [`${prefix}btn-llg`]: this.size === 'llarge',
@@ -82,13 +84,13 @@ export default {
       )
     },
     iconClass() {
-      const prefix = this.prefix ? this.prefix + '-' : ''
+      const prefix = this.prefix ? this.prefix + '-' : '';
       return classNames(
           `${prefix}btn-icon`
       )
     },
     btnContentClass() {
-      const prefix = this.prefix ? this.prefix + '-' : ''
+      const prefix = this.prefix ? this.prefix + '-' : '';
       return classNames(
           `${prefix}btn-content`
       )
@@ -117,11 +119,13 @@ export default {
   outline: none;
   color: #666;
   line-height: normal;
-  box-shadow: 1px 2px 10px $shadowCr;
-
-  &:active {
-    box-shadow: 0 0 4px $shadowCr inset;
+  &-shadow{
+    box-shadow: 1px 2px 10px $shadowCr;
+    &:active {
+      box-shadow: 0 0 4px $shadowCr inset;
+    }
   }
+
 
   &-block {
     display: block;
@@ -241,6 +245,12 @@ export default {
     &:hover {
       color: $btnFtCr;
       background: $btnGstCr;
+    }
+  }
+  &-link{
+    color: $primary;
+    &:active{
+      color: red;
     }
   }
   &-content{
