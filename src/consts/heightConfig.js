@@ -7,18 +7,18 @@ export const heightSizeConfig={
 };
 
 export const paddingSizeConfig={
-  llarge: 32,
-  large: 26,
-  default: 20,
-  small: 14,
+  llarge: 24,
+  large: 20,
+  default: 16,
+  small: 12,
   ssmall: 8,
 };
 
 export const marginSizeConfig={
-  llarge: 32,
-  large: 26,
-  default: 20,
-  small: 14,
+  llarge: 24,
+  large: 20,
+  default: 16,
+  small: 12,
   ssmall: 8,
 };
 
