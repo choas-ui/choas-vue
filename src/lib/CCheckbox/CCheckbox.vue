@@ -251,8 +251,8 @@
             },
             checkedArr: {
                 handler(v) {
-                    if (!_.isEqual(v, this.checkedData)) {
-                        this.$emit('checkedDataChange', v)
+                  if (!_.isEqual(v, this.checkedData)) {
+                    this.$emit('checkedDataChange', v)
                     }
                 },
                 deep: true,

@@ -1,5 +1,6 @@
 <script>
   import classNames from 'classnames';
+  import _ from 'lodash'
 
   export default {
     name: 'CQuickSearchBox',
@@ -70,7 +71,7 @@
       },
       resetHandle() {
         this.$set(this, 'copyOptionsData', this.listData);
-
+        console.log(this.copyOptionsData)
       },
       toggleAdvance() {
         this.advanceSearchModel = !this.advanceSearchModel
@@ -83,13 +84,19 @@
             value: options.value,
             placeholder: options.placeholder,
             reflectKey: options.reflectKey
+          },
+          key: options.tagName+options.key,
+          on: {
+            input: (v) => {
+              this.$set(options,'value', v)
+            },
           }
         })
       },
       renderControlBtn(h) {
         if (this.$slots['btn-box']) {
-          Object.keys(this.$slots['btn-box'][0].data.on).forEach(key=>{
-            this.$slots['btn-box'][0].data.on[key] = this.$slots['btn-box'][0].data.on[key].bind(this,this.getCopyOptionsData)
+          Object.keys(this.$slots['btn-box'][0].data.on).forEach(key => {
+            this.$slots['btn-box'][0].data.on[key] = this.$slots['btn-box'][0].data.on[key].bind(this, this.getCopyOptionsData)
           });
           return [this.$slots['btn-box']]
         }
@@ -158,7 +165,7 @@
     watch: {
       listData: {
         handler(v) {
-          this.$set(this, 'copyOptionsData', v);
+          this.$set(this, 'copyOptionsData', _.cloneDeep(v));
         },
         deep: true,
         immediate: true

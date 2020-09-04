@@ -341,6 +341,7 @@
                 },
                 blur: (e) => {
                   this.inputValue = e.target.value;
+                  this.$emit('change', e.target.value);
                 },
 
               }
@@ -368,22 +369,22 @@
               },
               on: {
                 paste: (e) => {
-                  this.inputValue = e.target.value
+                  this.inputValue = e.target.value;
                 },
                 cut: (e) => {
-                  this.inputValue = e.target.value
+                  this.inputValue = e.target.value;
                 },
                 input: (e) => {
-                  this.inputValue = e.target.value
+                  this.inputValue = e.target.value;
                 },
                 change: (e) => {
                   this.inputValue = e.target.value
                 },
                 focus: (e) => {
-                  this.$emit('focus', e)
+                  this.$emit('focus', e);
                 },
                 blur: (e) => {
-                  this.inputValue = e.target.value
+                  this.inputValue = e.target.value;
                 },
 
               }
