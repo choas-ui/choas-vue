@@ -196,16 +196,16 @@
         }
         if (this.$slots['prefix-icon'] && !this.$slots['behind-icon']) {
           const {propsData: {width: prefixWidth = '18'}} = this.$slots['prefix-icon'][0].componentOptions;
-          paddingLeft = parseInt(paddingLeft, 10) + parseInt(prefixWidth, 10);
+          paddingLeft = paddingRight.toFixed(0) + parseInt(prefixWidth, 10);
         }
         if (!this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
           const {propsData: {width: behindWidth = '18'}} = this.$slots['behind-icon'][0].componentOptions;
-          paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10);
+          paddingRight = paddingRight.toFixed(0) + parseInt(behindWidth, 10);
         }
         if (this.clearable || this.type === 'password') {
           const propsData = _.get(this.$slots, 'behind-icon.0.componentOptions.propsData', {});
           const {width: behindWidth = '18'} = propsData;
-          paddingRight = parseInt(paddingRight, 10) + parseInt(behindWidth, 10);
+          paddingRight = paddingRight.toFixed(0) + parseInt(behindWidth, 10);
         }
         if (this.noBorder) {
           border = 'none'
@@ -213,7 +213,7 @@
         return {
           border,
           position: 'relative',
-          padding: `0 ${parseInt(paddingRight, 10).toFixed()}px 0 ${parseInt(paddingLeft, 10).toFixed()}px`,
+          padding: `0 ${paddingRight.toFixed(0)}px 0 ${paddingLeft.toFixed(0)}px`,
           borderBottomRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
           borderTopRightRadius: this.type === 'search' && !this.noSearchBtn ? 0 : null,
         }
@@ -337,7 +337,6 @@
                 },
                 focus: (e) => {
                   this.$emit('focus', e);
-                  this.isDropUlShow = true;
                 },
                 blur: (e) => {
                   this.inputValue = e.target.value;
