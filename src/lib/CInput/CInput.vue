@@ -2,14 +2,7 @@
   import classNames from 'classnames'
   import _ from 'lodash'
   import {classNameProps, placeholderProps, prefixProps, reflectKeyProps, sizeProps} from "../../consts/mixins";
-
-  const paddingNum = {
-    llarge: 32,
-    large: 26,
-    default: 20,
-    small: 14,
-    ssmall: 8,
-  };
+  import {paddingSizeConfig} from "../../consts/heightConfig";
 
   export default {
     name: 'CInput',
@@ -123,7 +116,7 @@
     },
     computed: {
       getClearableStyle() {
-        let right = paddingNum[this.size || 'default'] / 2;
+        let right = paddingSizeConfig[this.size || 'default'] / 2;
         if (this.type === 'number') {
           right = right + 18;
         } else {
@@ -147,8 +140,8 @@
       // input外框样式
       getInputStyle() {
         // 默认值
-        let paddingRight = (paddingNum[this.size || 'default'] / 2).toString();
-        let paddingLeft = (paddingNum[this.size || 'default'] / 2).toFixed();
+        let paddingRight = (paddingSizeConfig[this.size || 'default'] / 2).toString();
+        let paddingLeft = (paddingSizeConfig[this.size || 'default'] / 2).toFixed();
         let border = `1px solid ${this.inputFocus ? "#1890ff" : "#aaa"}`;
 
         if (this.$slots['prefix-icon'] && this.$slots['behind-icon']) {
@@ -452,8 +445,8 @@
               })
         }
         if (this.type === 'number') {
-          let width = (paddingNum[this.size || 'default'] * 0.6).toFixed();
-          let height = (paddingNum[this.size || 'default'] * 0.6).toFixed();
+          let width = (paddingSizeConfig[this.size || 'default'] * 0.6).toFixed();
+          let height = (paddingSizeConfig[this.size || 'default'] * 0.6).toFixed();
           width = width > 8 ? width : '8';
           height = height > 8 ? height : '8';
           return [
@@ -466,7 +459,7 @@
                   },
                   style: {
                     position: 'absolute',
-                    right: `${paddingNum[this.size || 'default'] / 2}px`,
+                    right: `${paddingSizeConfig[this.size || 'default'] / 2}px`,
                     top: `calc(50% - ${height / 1 + 1}px)`,
                     background: '#eee',
                     width: `${width < 16 ? 16 : width}px`
@@ -490,7 +483,7 @@
                   },
                   style: {
                     position: 'absolute',
-                    right: `${paddingNum[this.size || 'default'] / 2}px`,
+                    right: `${paddingSizeConfig[this.size || 'default'] / 2}px`,
                     bottom: `calc(50% - ${height / 1 + 1}px)`,
                     background: '#eee',
                     width: `${width < 16 ? 16 : width}px`
@@ -516,7 +509,7 @@
               props: propsData,
               style: {
                 position: 'absolute',
-                right: `${paddingNum[this.size || 'default'] / 2}px`,
+                right: `${paddingSizeConfig[this.size || 'default'] / 2}px`,
                 top: `calc(50% - ${(height / 2).toFixed(0)}px)`
               },
               on: listeners
