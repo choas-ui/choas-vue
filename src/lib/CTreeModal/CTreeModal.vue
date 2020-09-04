@@ -88,247 +88,247 @@
 </template>
 
 <script>
-    import _ from 'lodash'
-    import classNames from 'classnames'
-    import defaultImg from './imgs/header.png'
+  import _ from 'lodash'
+  import classNames from 'classnames'
+  import defaultImg from './imgs/header.png'
 
-    export default {
-        name: 'CTreeModal',
-        components: {},
-        props: {
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
-            line: {
-                type: Boolean
-            },
-            multiple: {
-                type: Boolean
-            },
-            checkbox: {
-                type: Boolean
-            },
-            width: {
-                type: String,
-                default() {
-                    return '800'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '600'
-                }
-            },
-            title: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            cancel: {
-                type: Boolean
-            },
-            isShow: {
-                type: Boolean
-            },
-            controllers: {
-                type: Boolean
-            },
-            titleImg: {
-                default() {
-                    return defaultImg
-                }
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            controllerColor: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            activeColor: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            mask: {
-                type: Boolean
-            },
-            draggable: {
-                type: Boolean
-            },
-            value: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            // 不可选条件
-            conditionProps: {
-                type: String,
-                default() {
-                    return 'node'
-                }
-            },
-            // 级联不可选条件
-            cascadeConditionProps: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            addTreeNode: {
-                type: Function
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-        },
-        data() {
-            return {
-                isCascadeShow: false,
-                isModalShow: this.isShow,
-                selectedData: [],
-                searchStr: '',
-                list_data: [],
-                cascadeData: [],
-                cascadeList: [],
-                noticeTxt: '搜索节点'
-            }
-        },
-        mounted() {
-            this.list_data = _.cloneDeep(this.listData);
-            this.cascadeList = _.cloneDeep(this.listData)
-        },
-        computed: {
-            getTreeFootBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [prefix + 'tree-footer-box']: true
-                    }
-                )
-            },
-            getTreeBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [prefix + 'tree-box']: true
-                    }
-                )
-            },
-            getWrapBoxClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    this.className,
-                    {
-                        [prefix + 'tree-box-wrap']: true
-                    }
-                )
-            }
-        },
-        methods: {
-            openCascade() {
-                this.isCascadeShow = true
-            },
-            confirmHandle() {
-                this.$emit('toggleShow', false);
-                this.$emit('input', this.selectedData)
-            },
-            cancelHandle() {
-                this.$emit('toggleShow', false);
-                this.$set(this, 'selectedData', this.value)
-            },
-            addTreeListHandle() {
-                const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : '';
-                this.addTreeNode({pId: pId || '', value: this.searchStr})
-            },
-            addBtnCancelHandle() {
-                this.isCascadeShow = false;
-                this.searchStr = ''
-            },
-            removeHandle(value) {
-                if (this.multiple) {
-                    const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
-                    if (index > -1) {
-                        this.selectedData.splice(index, 1)
-                    }
-                } else {
-                    this.selectedData = []
-                }
-            }
-        },
-        watch: {
-            value: {
-                handler(v) {
-                    this.$set(this, 'selectedData', v);
-                    if(!_.isEqual(v, this.selectedData)){
-                      this.$emit('input', v);
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            isShow(v) {
-                this.isModalShow = v
-            },
-            isCascadeShow(v) {
-                if (v) {
-                    this.noticeTxt = '请输入新增节点名称'
-                } else {
-                    this.noticeTxt = '搜索节点'
-                }
-            },
-            isModalShow(v) {
-                if (!v) {
-                    // 关闭清空
-                    this.cascadeData = [];
-                    this.isCascadeShow = false;
-                    this.$emit('toggleShow', false);
-                    this.searchStr = '';
-                    this.$set(this, 'selectedData', this.value)
-                }
-            },
-            listData: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$set(this, 'list_data', _.cloneDeep(v));
-                        this.$set(this, 'cascadeList', _.cloneDeep(v))
-                    }
-                },
-                deep: true,
-                immediate: true
-            }
+  export default {
+    name: 'CTreeModal',
+    components: {},
+    props: {
+      listData: {
+        type: Array,
+        default() {
+          return []
         }
+      },
+      reflectKey: {
+        type: Object,
+        default() {
+          return {
+            key: 'key',
+            value: 'value'
+          }
+        }
+      },
+      line: {
+        type: Boolean
+      },
+      multiple: {
+        type: Boolean
+      },
+      checkbox: {
+        type: Boolean
+      },
+      width: {
+        type: String,
+        default() {
+          return '800'
+        }
+      },
+      height: {
+        type: String,
+        default() {
+          return '600'
+        }
+      },
+      title: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      cancel: {
+        type: Boolean
+      },
+      isShow: {
+        type: Boolean
+      },
+      controllers: {
+        type: Boolean
+      },
+      titleImg: {
+        default() {
+          return defaultImg
+        }
+      },
+      placeholder: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      controllerColor: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      activeColor: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      mask: {
+        type: Boolean
+      },
+      draggable: {
+        type: Boolean
+      },
+      value: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      // 不可选条件
+      conditionProps: {
+        type: String,
+        default() {
+          return 'node'
+        }
+      },
+      // 级联不可选条件
+      cascadeConditionProps: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      addTreeNode: {
+        type: Function
+      },
+      prefix: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      className: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+    },
+    data() {
+      return {
+        isCascadeShow: false,
+        isModalShow: this.isShow,
+        selectedData: [],
+        searchStr: '',
+        list_data: [],
+        cascadeData: [],
+        cascadeList: [],
+        noticeTxt: '搜索节点'
+      }
+    },
+    mounted() {
+      this.list_data = _.cloneDeep(this.listData);
+      this.cascadeList = _.cloneDeep(this.listData)
+    },
+    computed: {
+      getTreeFootBoxClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [prefix + 'tree-footer-box']: true
+            }
+        )
+      },
+      getTreeBoxClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [prefix + 'tree-box']: true
+            }
+        )
+      },
+      getWrapBoxClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            this.className,
+            {
+              [prefix + 'tree-box-wrap']: true
+            }
+        )
+      }
+    },
+    methods: {
+      openCascade() {
+        this.isCascadeShow = true
+      },
+      confirmHandle() {
+        this.$emit('toggleShow', false);
+        this.$emit('input', this.selectedData)
+      },
+      cancelHandle() {
+        this.$emit('toggleShow', false);
+        this.$set(this, 'selectedData', this.value)
+      },
+      addTreeListHandle() {
+        const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : '';
+        this.addTreeNode({pId: pId || '', value: this.searchStr})
+      },
+      addBtnCancelHandle() {
+        this.isCascadeShow = false;
+        this.searchStr = ''
+      },
+      removeHandle(value) {
+        if (this.multiple) {
+          const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
+          if (index > -1) {
+            this.selectedData.splice(index, 1)
+          }
+        } else {
+          this.selectedData = []
+        }
+      }
+    },
+    watch: {
+      value: {
+        handler(v) {
+          this.$set(this, 'selectedData', v);
+          if (!_.isEqual(v, this.selectedData)) {
+            this.$emit('input', v);
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      isShow(v) {
+        this.isModalShow = v
+      },
+      isCascadeShow(v) {
+        if (v) {
+          this.noticeTxt = '请输入新增节点名称'
+        } else {
+          this.noticeTxt = '搜索节点'
+        }
+      },
+      isModalShow(v) {
+        if (!v) {
+          // 关闭清空
+          this.cascadeData = [];
+          this.isCascadeShow = false;
+          this.$emit('toggleShow', false);
+          this.searchStr = '';
+          this.$set(this, 'selectedData', this.value)
+        }
+      },
+      listData: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$set(this, 'list_data', _.cloneDeep(v));
+            this.$set(this, 'cascadeList', _.cloneDeep(v))
+          }
+        },
+        deep: true,
+        immediate: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>
