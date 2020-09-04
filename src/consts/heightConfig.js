@@ -1,9 +1,9 @@
 export const heightSizeConfig={
-  llarge: 50,
-  large: 44,
-  default: 38,
-  small: 32,
-  ssmall: 26,
+  llarge: 44,
+  large: 38,
+  default: 32,
+  small: 26,
+  ssmall: 20,
 };
 
 export const paddingSizeConfig={
