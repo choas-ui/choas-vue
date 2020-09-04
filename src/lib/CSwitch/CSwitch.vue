@@ -1,29 +1,49 @@
 <script>
   import classNames from 'classnames';
-  import {classNameProps, prefixProps,sizeProps} from "../../consts/mixins";
+  import {classNameProps, prefixProps, sizeProps} from "../../consts/mixins";
   import {heightSizeConfig} from "../../consts/heightConfig";
 
   export default {
     name: 'CSwitch',
-    mixins:[
-        prefixProps,classNameProps,sizeProps
+    mixins: [
+      prefixProps, classNameProps, sizeProps
     ],
     props: {
-      bgColor:{
-        type: String,
+      value:{
+        validate(v) {
+          return ['opening','closing','pending'].includes(v);
+        },
         default(){
-          return '#aaa'
+          return 'opening';
         }
       },
-      width: {
-
+      bgColor: {
+        type: String,
+        default() {
+          return '#ccc'
+        }
       },
-      height: {
-
+      shape: {
+        validate(v) {
+          return ['rect', 'circle'].includes(v)
+        },
+        default() {
+          return 'rect'
+        }
       },
+      borderRadius: {
+        type: String,
+        default() {
+          return "4";
+        }
+      },
+      width: {},
+      height: {},
     },
     data() {
-      return {};
+      return {
+        status: this.value
+      };
     },
     computed: {
       xClass() {
@@ -33,30 +53,47 @@
       getWrapClass() {
         const prefix = this.prefix ? this.prefix + '-' : '';
         return classNames({
-          [prefix+'switch-wrap']: true,
-          [prefix+'switch-llarge']: this.size === 'llarge',
-          [prefix+'switch-large']: this.size === 'large',
-          [prefix+'switch-default']: this.size === 'default' || !this.size,
-          [prefix+'switch-small']: this.size === 'small',
-          [prefix+'switch-ssmall']: this.size === 'ssmall',
+          [prefix + 'switch-wrap']: true,
+          [prefix + 'switch-llarge']: this.size === 'llarge',
+          [prefix + 'switch-large']: this.size === 'large',
+          [prefix + 'switch-default']: this.size === 'default' || !this.size,
+          [prefix + 'switch-small']: this.size === 'small',
+          [prefix + 'switch-ssmall']: this.size === 'ssmall',
         });
       }
     },
     methods: {},
     mounted() {
-      console.log(this.size)
     },
     render(h) {
+      const heightSize = heightSizeConfig[this.size || 'default'];
+      const widthSize = (heightSize / 0.4).toFixed();
+      const addNum = 4;
+      const widthBtnSize = this.shape === 'rect' ? heightSize + addNum: (heightSize*0.9).toFixed(0);
       return h('div',
           {
             class: this.getWrapClass,
-            style:{
-              width: (heightSizeConfig[this.size || 'default']/0.4).toFixed()+'px',
+            style: {
+              width: widthSize + 'px',
+              borderRadius: this.shape === 'rect' ? this.borderRadius + 'px' : heightSize.toFixed(0) + 'px',
               background: this.bgColor,
-              boxShadow: '0 0 5px #aaa inset',
-            }
+              boxShadow: '0 0 5px #aaa inset ,0 0 5px #aaa',
+            },
           },
-          []
+          [
+            h('div',
+                {
+                  class: ['switch-btn'],
+                  style: {
+                    width: widthBtnSize+'px',
+                    height: widthBtnSize+'px',
+                    top:this.shape === 'rect' ? -addNum/2+'px' : '5%',
+                    borderRadius: this.shape === 'rect' ? this.borderRadius + 'px' : heightSize.toFixed(0) + 'px',
+                    boxShadow: '0 0 5px #aaa',
+                  }
+                },
+            )
+          ]
       );
     }
   }
@@ -69,23 +106,33 @@
     @import "../scss/variable";
     @import "../scss/comm-class";
 
-    .switch{
-        &-wrap{
-
+    .switch {
+        &-wrap {
+            position: relative;
         }
-        &-llarge{
+        &-btn{
+            position: absolute;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        &-llarge {
             height: addPX($llg-height);
         }
-        &-large{
+
+        &-large {
             height: addPX($lg-height);
         }
-        &-default{
+
+        &-default {
             height: addPX($df-height);
         }
-        &-small{
+
+        &-small {
             height: addPX($sm-height);
         }
-        &-ssmall{
+
+        &-ssmall {
             height: addPX($ssm-height);
         }
     }
