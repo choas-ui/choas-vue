@@ -11,7 +11,7 @@ import CInputTreeModal from './CInputTreeModal'
 import CModal from './CModal'
 import CProgress from './CProgress'
 import CPrompt from "./CPrompt/CPrompt";
-import CQuickSearchBox from "./CQuickSearchBox/CQuickSearchBox";
+import CQuickSearchBox from "./CQuickSearchBox";
 import CRadio from './CRadio'
 import CRadioGroup from './CRadioGroup'
 import CSelection from './CSelection'
