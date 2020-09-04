@@ -1,3 +1,4 @@
+// 定义五种大小
 export const sizeProps = {
   props: {
     size: {
@@ -188,3 +189,26 @@ export const controllersProps = {
     },
   },
 };
+
+export const normalStyleProps = {
+  props: {
+    normalStyle: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+  },
+};
+
+export const activeStyleProps = {
+  props: {
+    activeStyle: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+  },
+};
+

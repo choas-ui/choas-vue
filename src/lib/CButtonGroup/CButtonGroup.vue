@@ -22,12 +22,19 @@
 
 <script>
   import classNames from 'classnames';
-  import {classNameProps, placeholderProps, prefixProps, sizeProps,reflectKeyProps} from "../../consts/mixins";
+  import {
+    classNameProps,
+    placeholderProps,
+    prefixProps,
+    sizeProps,
+    reflectKeyProps,
+    normalStyleProps, activeStyleProps, multipleProps
+  } from "../../consts/mixins";
   import _ from 'lodash';
 
   export default {
     name: 'CButtonGroup',
-    mixins: [sizeProps, prefixProps, classNameProps, placeholderProps,reflectKeyProps],
+    mixins: [sizeProps, prefixProps, classNameProps, placeholderProps,reflectKeyProps,normalStyleProps,activeStyleProps,multipleProps],
     props: {
       checkedData: {
         type: Array,
@@ -40,21 +47,6 @@
         default() {
           return []
         }
-      },
-      normalStyle: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      activeStyle: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      multiple: {
-        type: Boolean
       },
       halfChecked: {
         type: Boolean

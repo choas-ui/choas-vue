@@ -12,7 +12,7 @@
             <template v-else>
                 <CRadio v-for="(list, index) in listData"
                         v-model="copySelectedData"
-                        :value="copySelectedData.find(v=>{
+                        :option="copySelectedData.find(v=>{
                                if(typeof v !== 'object'){
                                    return v === list
                                }
@@ -32,11 +32,11 @@
 <script>
   import classNames from 'classnames';
   import _ from 'lodash';
-  import {reflectKeyProps} from "../../consts/mixins";
+  import {activeStyleProps, normalStyleProps, reflectKeyProps} from "../../consts/mixins";
 
   export default {
     name: 'CRadioGroup',
-    mixins:[reflectKeyProps],
+    mixins:[reflectKeyProps,normalStyleProps,activeStyleProps],
     props: {
       listData: {
         type: Array,
@@ -48,18 +48,6 @@
         type: Array,
         default() {
           return []
-        }
-      },
-      normalStyle: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      activeStyle: {
-        type: Object,
-        default() {
-          return {}
         }
       },
       type: {

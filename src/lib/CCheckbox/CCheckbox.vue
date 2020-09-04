@@ -3,7 +3,7 @@
           @click="selectHandle"
     >
         <label style="display: none">
-            <input type="checkbox" :value="value" v-model="checkedArr">
+            <input type="checkbox" :value="option" v-model="checkedArr">
         </label>
         <span :class="getFakeIconClass"
               :style="{
@@ -90,7 +90,7 @@
           return []
         }
       },
-      value: {
+      option: {
         validate(v) {
           return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
         },
@@ -120,15 +120,15 @@
     },
     mounted() {
       if (!this.isSimpleModel) {
-        const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
+        const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.option[this.reflectKey['value']]);
         if (index > -1) {
-          if (!this.value.checked) {
+          if (!this.option.checked) {
             this.checkedArr.splice(index, 1)
           }
         }
         if (index < 0) {
-          if (this.value.checked) {
-            this.checkedArr.push(_.cloneDeep(this.value))
+          if (this.option.checked) {
+            this.checkedArr.push(_.cloneDeep(this.option))
           }
         }
       }
@@ -136,27 +136,27 @@
     computed: {
       getChecked() {
         if (this.isSimpleModel) {
-          return this.checkedArr.includes(this.value)
+          return this.checkedArr.includes(this.option)
         } else {
-          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.option[this.reflectKey['value']]) || {}).checked
         }
       },
       getDisabled() {
         if (this.isSimpleModel) {
           return this.disabled
         } else {
-          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.option[this.reflectKey['value']]) || {}).disabled
         }
       },
       getHalfChecked() {
         if (this.isSimpleModel) {
           return this.halfChecked
         } else {
-          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).halfChecked
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.option[this.reflectKey['value']]) || {}).halfChecked
         }
       },
       getKey() {
-        return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
+        return this.isSimpleModel ? this.option : this.option[this.reflectKey['key']]
       },
       getFakeIconClass() {
         const prefix = this.prefix ? this.prefix + '-' : '';
@@ -182,9 +182,9 @@
         }
         let index = -1;
         if (this.isSimpleModel) {
-          index = this.checkedArr.findIndex(v => v === this.value)
+          index = this.checkedArr.findIndex(v => v === this.option)
         } else {
-          index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
+          index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.option[this.reflectKey['value']])
         }
         if (index > -1) {
           if (!this.isSimpleModel) {
@@ -193,7 +193,7 @@
           this.checkedArr.splice(index, 1)
         }
         if (index < 0) {
-          this.checkedArr.push(_.cloneDeep(this.value));
+          this.checkedArr.push(_.cloneDeep(this.option));
           if (!this.isSimpleModel) {
             this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true);
             this.$set(this.checkedArr[this.checkedArr.length - 1], 'halfChecked', false)
@@ -202,7 +202,7 @@
       }
     },
     watch: {
-      value: {
+      option: {
         handler(v) {
           this.isSimpleModel = ['string', 'number'].includes(typeof v)
         },

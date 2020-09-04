@@ -14,7 +14,7 @@
             <template v-else>
                 <CCheckbox v-for="(list, index) in listData"
                            v-model="copySelectedData"
-                           :value="copySelectedData.find(v=>{
+                           :option="copySelectedData.find(v=>{
                                if(typeof v !== 'object'){
                                    return v === list
                                }
@@ -33,12 +33,12 @@
 
 <script>
   import classNames from 'classnames';
-  import {reflectKeyProps} from "../../consts/mixins";
+  import {activeStyleProps, normalStyleProps, reflectKeyProps} from "../../consts/mixins";
   import _ from 'lodash';
 
   export default {
     name: 'CCheckboxGroup',
-    mixins: [reflectKeyProps],
+    mixins: [reflectKeyProps,normalStyleProps,activeStyleProps],
     props: {
       listData: {
         type: Array,
@@ -46,22 +46,10 @@
           return []
         }
       },
-      value: {
+      option: {
         type: Array,
         default() {
           return []
-        }
-      },
-      normalStyle: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      activeStyle: {
-        type: Object,
-        default() {
-          return {}
         }
       },
       type: {
@@ -98,7 +86,7 @@
       }
     },
     watch: {
-      value: {
+      option: {
         handler(v) {
           if (!_.isEqual(v, this.copySelectedData)) {
             this.$set(this, 'copySelectedData', _.cloneDeep(v))
