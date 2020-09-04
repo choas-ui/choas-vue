@@ -1,10 +1,19 @@
 <script>
-  import classNames from 'classnames'
-  import _ from 'lodash'
+  import classNames from 'classnames';
+  import _ from 'lodash';
   import CTreeLiContent from "./CTreeLiContent";
+  import {
+    checkboxProps,
+    classNameProps, conditionPropsMix, controllersProps,
+    lineProps,
+    multipleProps,
+    prefixProps,
+    reflectKeyProps
+  } from "../../consts/mixins";
 
   export default {
     name: 'CTreeUl',
+    mixins:[reflectKeyProps,prefixProps,classNameProps, lineProps,multipleProps,checkboxProps, controllersProps,conditionPropsMix],
     components: {
       CTreeLiContent
     },
@@ -33,31 +42,10 @@
           return []
         }
       },
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          }
-        }
-      },
       markColor: {
         type: String,
         default() {
           return '#ff5e5c'
-        }
-      },
-      className: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      prefix: {
-        type: String,
-        default() {
-          return ''
         }
       },
       // 内部标线层级
@@ -66,18 +54,6 @@
         default() {
           return 0
         }
-      },
-      // 显示连线
-      line: {
-        type: Boolean
-      },
-      // 多选模式
-      multiple: {
-        type: Boolean
-      },
-      // 显示checkbox
-      checkbox: {
-        type: Boolean
       },
       // 展开图标左间距
       markIconFixMarginRight: {
@@ -93,20 +69,10 @@
           return 0
         }
       },
-      // 是否显示尾部控制
-      controllers: {
-        type: Boolean,
-      },
       searchStr: {
         type: String,
         default() {
           return ''
-        }
-      },
-      conditionProps: {
-        type: String,
-        default() {
-          return 'node'
         }
       },
       // 在添加数据位置

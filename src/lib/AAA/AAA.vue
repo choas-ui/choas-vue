@@ -1,11 +1,6 @@
-<template>
-    <div>
-        aaaa
-    </div>
-</template>
-
 <script>
-    import classNames from 'classnames'
+    import classNames from 'classnames';
+    import _ from 'lodash';
     export default {
         name: 'Button',
         props:{
@@ -16,13 +11,16 @@
         },
         computed:{
             xClass(){
-                const prefix =  this.prefix? this.prefix + '-': ''
+                const prefix =  this.prefix? this.prefix + '-': '';
                 return classNames(
-                )
+                );
             }
         },
         methods: {
-        }
+        },
+      render(h){
+          return h('div',{},['AAA']);
+      }
     }
 </script>
 

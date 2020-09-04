@@ -15,6 +15,7 @@ import CQuickSearchBox from "./CQuickSearchBox/CQuickSearchBox";
 import CRadio from './CRadio'
 import CRadioGroup from './CRadioGroup'
 import CSelection from './CSelection'
+import CSwitch from './CSwitch'
 import CTag from './CTag'
 import CTree from './CTree'
 import CTreeModal from './CTreeModal'
@@ -41,6 +42,7 @@ const components = [
     CRadio,
     CRadioGroup,
     CSelection,
+    CSwitch,
     CTag,
     CTree,
     CTreeModal
@@ -74,6 +76,7 @@ export default {
     CRadio,
     CRadioGroup,
     CSelection,
+    CSwitch,
     CTag,
     CTree,
     CTreeModal

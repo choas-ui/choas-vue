@@ -1,23 +1,19 @@
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
+  import {checkboxProps, controllersProps, multipleProps, prefixProps, reflectKeyProps} from "../../consts/mixins";
 
   export default {
     name: 'CTreeLiContent',
+    mixins: [
+      reflectKeyProps, prefixProps, multipleProps,
+      checkboxProps, controllersProps, controllersProps
+    ],
     props: {
       itemData: {
         type: Object,
         default() {
           return {}
-        }
-      },
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          }
         }
       },
       markColor: {
@@ -26,34 +22,10 @@
           return '#ff5e5c'
         }
       },
-      prefix: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      // 多选模式
-      multiple: {
-        type: Boolean
-      },
-      // 显示checkbox
-      checkbox: {
-        type: Boolean
-      },
-      // 是否显示尾部控制
-      controllers: {
-        type: Boolean,
-      },
       searchStr: {
         type: String,
         default() {
           return ''
-        }
-      },
-      conditionProps: {
-        type: String,
-        default() {
-          return 'node'
         }
       },
       // 在编辑数据位置

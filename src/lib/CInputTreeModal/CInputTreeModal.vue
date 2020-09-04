@@ -72,172 +72,140 @@
     </span>
 </template>
 <script>
-    import _ from 'lodash'
+  import _ from 'lodash';
+  import {
+    classNameProps,
+    conditionPropsMix,
+    placeholderProps,
+    prefixProps,
+    reflectKeyProps,
+    maskProps,
+    lineProps,
+    multipleProps,
+    checkboxProps,
+    draggableProps,
+    cancelProps,
+    canBeEditedProps,
+    controllerColorProps,
+    activeColorProps,
+    controllersProps
+  } from "../../consts/mixins";
 
-    export default {
-        name: 'CInputTreeModal',
-        props: {
-            conditionProps: {
-                type: String,
-                default() {
-                    return 'node'
-                }
-            },
-            cascadeConditionProps: {
-                type: String,
-                default() {
-                    return 'node'
-                }
-            },
-            width: {
-                type: String,
-                default() {
-                    return '800'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '600'
-                }
-            },
-            top: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            left: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            mask: {
-                type: Boolean
-            },
-            line: {
-                type: Boolean
-            },
-            cancel: {
-                type: Boolean
-            },
-            canBeEdited: {
-                type: Boolean
-            },
-            draggable: {
-                type: Boolean
-            },
-            controllerColor: {
-                type: String,
-                default() {
-                    return '#fff'
-                }
-            },
-            activeColor: {
-                type: String,
-                default() {
-                    return '#fff'
-                }
-            },
-            multiple: {
-                type: Boolean
-            },
-            checkbox: {
-                type: Boolean
-            },
-            controllers: {
-                type: Boolean
-            },
-            buttonTxt: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'title',
-                        value: 'value'
-                    }
-                }
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            title: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            titleImg: {
-                default() {
-                    return null
-                }
-            },
-            listData: {
-                type: Array,
-                required: true,
-                default() {
-                    return []
-                }
-            },
-            value: {
-                type: Array,
-                default() {
-                    return []
-                }
-            }
-        },
-        data() {
-            return {
-                isModalShow: false,
-                selectedData: [],
-            }
-        },
-        methods: {
-            inputClick() {
-                if (!this.buttonTxt) {
-                    this.isModalShow = true
-                }
-            },
-            addTreeNode(v) {
-                this.$emit('addTreeNode', v)
-            },
-            removeHandle(item, $event) {
-                const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']]);
-                this.$set(this, 'selectedData', t);
-                $event.stopPropagation();
-                $event.preventDefault();
-            }
-        },
-        watch: {
-            selectedData: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$emit('input', _.cloneDeep(v))
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            value: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$set(this, 'selectedData', _.cloneDeep(v))
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
+
+  export default {
+    name: 'CInputTreeModal',
+    mixins: [
+      conditionPropsMix, prefixProps, classNameProps,
+      reflectKeyProps, placeholderProps, maskProps,
+      lineProps, multipleProps, checkboxProps,
+      draggableProps, cancelProps, canBeEditedProps,
+      controllerColorProps, activeColorProps,controllersProps
+    ],
+    props: {
+      cascadeConditionProps: {
+        type: String,
+        default() {
+          return 'node'
         }
+      },
+      width: {
+        type: String,
+        default() {
+          return '800'
+        }
+      },
+      height: {
+        type: String,
+        default() {
+          return '600'
+        }
+      },
+      top: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      left: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      buttonTxt: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      title: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      titleImg: {
+        default() {
+          return null
+        }
+      },
+      listData: {
+        type: Array,
+        required: true,
+        default() {
+          return []
+        }
+      },
+      value: {
+        type: Array,
+        default() {
+          return []
+        }
+      }
+    },
+    data() {
+      return {
+        isModalShow: false,
+        selectedData: [],
+      }
+    },
+    methods: {
+      inputClick() {
+        if (!this.buttonTxt) {
+          this.isModalShow = true
+        }
+      },
+      addTreeNode(v) {
+        this.$emit('addTreeNode', v)
+      },
+      removeHandle(item, $event) {
+        const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']]);
+        this.$set(this, 'selectedData', t);
+        $event.stopPropagation();
+        $event.preventDefault();
+      }
+    },
+    watch: {
+      selectedData: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$emit('input', _.cloneDeep(v))
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      value: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$set(this, 'selectedData', _.cloneDeep(v))
+          }
+        },
+        deep: true,
+        immediate: true
+      },
     }
+  }
 </script>
 
 <style lang="scss" scoped>

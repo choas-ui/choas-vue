@@ -21,159 +21,134 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import {classNameProps, placeholderProps, prefixProps, sizeProps,reflectKeyProps} from "../../consts/mixins";
+  import _ from 'lodash';
 
-    export default {
-        name: 'CButtonGroup',
-        props: {
-            checkedData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            normalStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            activeStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            multiple: {
-                type: Boolean
-            },
-            halfChecked: {
-                type: Boolean
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value',
-                    }
-                }
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            }
-        },
-        data() {
-            return {
-                // 需要在左右加两个半圆
-                isDataModel: true,
-                copyValue: [],
-                checkedArr: []
-            };
-        },
-        model: {
-            prop: 'checkedData',
-            event: 'checkedDataChange'
-        },
-        mounted() {
-            this.$set(this, 'copyValue', _.cloneDeep(this.checkedData))
-            if (Object.keys(this.$slots).length) {
-                this.isDataModel = false
-            }
-            if (this.isDataModel) {
-                for (let i = 0; i < this.copyValue.length; i++) {
-                    const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[i][this.reflectKey['value']])
-                    if (index > -1) {
-                        if (!this.copyValue[i].checked) {
-                            this.copyValue[i].checked = false
-                            this.checkedArr.splice(index, 1)
-                        }
-                    }
-                    if (index < 0) {
-                        if (this.copyValue[i].checked) {
-                            this.copyValue[i].checked = true
-                            this.checkedArr.push(this.copyValue[i])
-                        }
-                    }
-                }
-            }
-        },
-        computed: {
-            getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames(
-                    {
-                        [this.className]: true,
-                        [`${prefix}btn-group-wrap`]: true
-                    }
-                )
-            }
-        },
-        methods: {
-            setClickKey(item, e) {
-                let index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === item[this.reflectKey['value']])
-                // 单选模式下不取消自身
-                if (index > -1 && this.multiple) {
-                    this.$set(item, 'checked', false)
-                    this.checkedArr.splice(index, 1)
-                }
-                if (index < 0) {
-                    this.$set(item, 'checked', true)
-                    if (this.multiple) {
-                        if (this.halfChecked) {
-                            this.$set(item, 'halfChecked', true)
-                        }
-                        this.checkedArr.push(item)
-                    } else {
-                        this.$set(this, 'checkedArr', [item])
-                    }
-                }
-                this.$emit('click', item[this.reflectKey['value']], item, e)
-            }
-        },
-        watch: {
-            checkedData: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$set(this, 'checkedArr', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            checkedArr: {
-                handler(v, old) {
-                    if (!_.isEqual(v, old)) {
-                        this.$emit('checkedDataChange', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            }
+  export default {
+    name: 'CButtonGroup',
+    mixins: [sizeProps, prefixProps, classNameProps, placeholderProps,reflectKeyProps],
+    props: {
+      checkedData: {
+        type: Array,
+        default() {
+          return []
         }
+      },
+      listData: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      normalStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      activeStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      multiple: {
+        type: Boolean
+      },
+      halfChecked: {
+        type: Boolean
+      },
+    },
+    data() {
+      return {
+        // 需要在左右加两个半圆
+        isDataModel: true,
+        copyValue: [],
+        checkedArr: []
+      };
+    },
+    model: {
+      prop: 'checkedData',
+      event: 'checkedDataChange'
+    },
+    mounted() {
+      this.$set(this, 'copyValue', _.cloneDeep(this.checkedData))
+      if (Object.keys(this.$slots).length) {
+        this.isDataModel = false
+      }
+      if (this.isDataModel) {
+        for (let i = 0; i < this.copyValue.length; i++) {
+          const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.copyValue[i][this.reflectKey['value']])
+          if (index > -1) {
+            if (!this.copyValue[i].checked) {
+              this.copyValue[i].checked = false
+              this.checkedArr.splice(index, 1)
+            }
+          }
+          if (index < 0) {
+            if (this.copyValue[i].checked) {
+              this.copyValue[i].checked = true
+              this.checkedArr.push(this.copyValue[i])
+            }
+          }
+        }
+      }
+    },
+    computed: {
+      getWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : ''
+        return classNames(
+            {
+              [this.className]: true,
+              [`${prefix}btn-group-wrap`]: true
+            }
+        )
+      }
+    },
+    methods: {
+      setClickKey(item, e) {
+        let index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === item[this.reflectKey['value']])
+        // 单选模式下不取消自身
+        if (index > -1 && this.multiple) {
+          this.$set(item, 'checked', false)
+          this.checkedArr.splice(index, 1)
+        }
+        if (index < 0) {
+          this.$set(item, 'checked', true)
+          if (this.multiple) {
+            if (this.halfChecked) {
+              this.$set(item, 'halfChecked', true)
+            }
+            this.checkedArr.push(item)
+          } else {
+            this.$set(this, 'checkedArr', [item])
+          }
+        }
+        this.$emit('click', item[this.reflectKey['value']], item, e)
+      }
+    },
+    watch: {
+      checkedData: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$set(this, 'checkedArr', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      checkedArr: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$emit('checkedDataChange', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>

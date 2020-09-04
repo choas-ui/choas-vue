@@ -8,55 +8,19 @@
 
 <script>
 import classNames from 'classnames'
+import {sizeProps, typeProps, prefixProps, classNameProps, placeholderProps} from "../../consts/mixins";
 
 export default {
   name: 'CButton',
+  mixins: [sizeProps, typeProps, prefixProps,classNameProps, placeholderProps],
   props: {
-    prefix: {
-      type: String,
-      default() {
-        return ''
-      }
-    },
-    className: {
-      type: String,
-      default() {
-        return ''
-      }
-    },
     block: {
       type: Boolean
-    },
-    type: {
-      type: String,
-      validator: function (value) {
-        // 这个值必须匹配下列字符串中的一个
-        return !value || ['primary', 'success', 'warning', 'danger', 'disabled', 'ghost', 'link'].indexOf(value) !== -1
-      },
-      default() {
-        return 'primary'
-      }
-    },
-    size: {
-      type: String,
-      validator: function (value) {
-        // 这个值必须匹配下列字符串中的一个
-        return !value || ['llarge', 'large', 'default', 'small', 'ssmall'].indexOf(value) !== -1
-      },
-      default() {
-        return 'default'
-      }
-    },
-    placeholder: {
-      type: String,
-      default() {
-        return ''
-      }
     },
   },
   computed: {
     buttonClass() {
-      const prefix = this.prefix ? this.prefix + '-' : ''
+      const prefix = this.prefix ? this.prefix + '-' : '';
       return classNames(
           this.className,
           {

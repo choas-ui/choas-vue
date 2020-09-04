@@ -1,6 +1,7 @@
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
+  import {classNameProps, placeholderProps, prefixProps, reflectKeyProps, sizeProps} from "../../consts/mixins";
 
   const paddingNum = {
     llarge: 32,
@@ -12,6 +13,7 @@
 
   export default {
     name: 'CInput',
+    mixins: [sizeProps, placeholderProps, reflectKeyProps, prefixProps, classNameProps],
     props: {
       value: {
         validate(v) {
@@ -21,43 +23,18 @@
           return ''
         }
       },
-      // 高度
-      size: {
-        validate(v) {
-          return !v || ['ssmall', 'small', 'default', 'large', 'llarge'].includes(v)
-        },
-        default() {
-          return 'default'
-        }
-      },
       width: {
         type: String,
         default() {
           return ''
         }
       },
-      // 提示
-      placeholder: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
+
       // 列表
       listData: {
         type: Array,
         default() {
           return [];
-        }
-      },
-      // 列表映射
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          };
         }
       },
       // 输入框类型
@@ -125,20 +102,6 @@
       // 自动补全函数
       autocompleteHandle: {
         type: Function,
-      },
-      // 前缀名
-      prefix: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      // 类名
-      className: {
-        type: String,
-        default() {
-          return ''
-        }
       },
     },
     data() {

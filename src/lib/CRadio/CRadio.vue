@@ -64,175 +64,144 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import _ from 'lodash';
+  import {classNameProps, height18Props, prefixProps, reflectKeyProps, width18Props} from "../../consts/mixins";
 
-    export default {
-        name: 'CRadio',
-        props: {
-            value: {
-                validate(v) {
-                    return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
-                },
-                default() {
-                    return ''
-                }
-            },
-            disabled: {
-                type: Boolean
-            },
-            noText: {
-                type: Boolean
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
-            width: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            classNames: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-          checkedData: {}
+  export default {
+    name: 'CRadio',
+    mixins: [reflectKeyProps, width18Props, height18Props, prefixProps, classNameProps],
+    props: {
+      value: {
+        validate(v) {
+          return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
         },
-        model: {
-            prop: 'checkedData',
-            event: 'checkedDataChange'
-        },
-        data() {
-            return {
-                checkedArr: [],
-                isSimpleModel: true
-            }
-        },
-        mounted() {
-            if (!this.isSimpleModel) {
-                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
-                if (index > -1) {
-                    if (!this.value.checked) {
-                        this.checkedArr.splice(index, 1)
-                    }
-                }
-                if (index < 0) {
-                    if (this.value.checked) {
-                        this.checkedArr.push(_.cloneDeep(this.value))
-                    }
-                }
-            }
-        },
-        computed: {
-            getChecked() {
-                if (this.isSimpleModel) {
-                    return this.checkedArr.includes(this.value)
-                } else {
-                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
-                }
-            },
-            getDisabled() {
-                if (this.isSimpleModel) {
-                    return this.disabled
-                } else {
-                    return (this.checkedArr.find(v=>v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
-                }
-            },
-            getKey() {
-                return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
-            },
-            getFakeIconClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [`${prefix}radio-item-fake-icon`]: true
-                    }
-                )
-            },
-            getItemClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [`${prefix}radio-item`]: true
-                    }
-                )
-            }
-        },
-        methods: {
-            selectHandle() {
-                if (this.isSimpleModel ? this.disabled : this.value.disabled) {
-                    return
-                }
-                let index = -1;
-                if (this.isSimpleModel) {
-                    index = this.checkedArr.findIndex(v => v === this.value)
-                } else {
-                    index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
-                }
-                if (index > -1) {
-                    if (!this.isSimpleModel && this.multiple) {
-                        this.$set(this.checkedArr[index], 'checked', false)
-                    }else{
-                        this.checkedArr.splice(index, 1)
-                    }
-                }
-                if (index < 0) {
-                    this.$set(this, 'checkedArr', [_.cloneDeep(this.value)]);
-                    if (!this.isSimpleModel) {
-                        this.$set(this.checkedArr[0], 'checked', true)
-                    }
-                }
-            }
-        },
-        watch: {
-            value: {
-                handler(v) {
-                    this.isSimpleModel = ['string', 'number'].includes(typeof v)
-                },
-                deep: true,
-                immediate: true
-            },
-            checkedData: {
-                handler(v) {
-                    if (v && !_.isEqual(v, this.checkedArr)) {
-                        this.$set(this, 'checkedArr', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            checkedArr: {
-                handler(v) {
-                    if (!_.isEqual(v, this.checkedData)) {
-                        this.$emit('checkedDataChange', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            }
+        default() {
+          return ''
         }
+      },
+      disabled: {
+        type: Boolean
+      },
+      noText: {
+        type: Boolean
+      },
+      checkedData: {}
+    },
+    model: {
+      prop: 'checkedData',
+      event: 'checkedDataChange'
+    },
+    data() {
+      return {
+        checkedArr: [],
+        isSimpleModel: true
+      }
+    },
+    mounted() {
+      if (!this.isSimpleModel) {
+        const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
+        if (index > -1) {
+          if (!this.value.checked) {
+            this.checkedArr.splice(index, 1)
+          }
+        }
+        if (index < 0) {
+          if (this.value.checked) {
+            this.checkedArr.push(_.cloneDeep(this.value))
+          }
+        }
+      }
+    },
+    computed: {
+      getChecked() {
+        if (this.isSimpleModel) {
+          return this.checkedArr.includes(this.value)
+        } else {
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
+        }
+      },
+      getDisabled() {
+        if (this.isSimpleModel) {
+          return this.disabled
+        } else {
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
+        }
+      },
+      getKey() {
+        return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
+      },
+      getFakeIconClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}radio-item-fake-icon`]: true
+            }
+        )
+      },
+      getItemClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}radio-item`]: true
+            }
+        )
+      }
+    },
+    methods: {
+      selectHandle() {
+        if (this.isSimpleModel ? this.disabled : this.value.disabled) {
+          return
+        }
+        let index = -1;
+        if (this.isSimpleModel) {
+          index = this.checkedArr.findIndex(v => v === this.value)
+        } else {
+          index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
+        }
+        if (index > -1) {
+          if (!this.isSimpleModel && this.multiple) {
+            this.$set(this.checkedArr[index], 'checked', false)
+          } else {
+            this.checkedArr.splice(index, 1)
+          }
+        }
+        if (index < 0) {
+          this.$set(this, 'checkedArr', [_.cloneDeep(this.value)]);
+          if (!this.isSimpleModel) {
+            this.$set(this.checkedArr[0], 'checked', true)
+          }
+        }
+      }
+    },
+    watch: {
+      value: {
+        handler(v) {
+          this.isSimpleModel = ['string', 'number'].includes(typeof v)
+        },
+        deep: true,
+        immediate: true
+      },
+      checkedData: {
+        handler(v) {
+          if (v && !_.isEqual(v, this.checkedArr)) {
+            this.$set(this, 'checkedArr', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      checkedArr: {
+        handler(v) {
+          if (!_.isEqual(v, this.checkedData)) {
+            this.$emit('checkedDataChange', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>

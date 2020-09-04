@@ -11,17 +11,17 @@
             </template>
             <template v-else>
                 <CRadio v-for="(list, index) in listData"
-                           v-model="copySelectedData"
-                           :value="copySelectedData.find(v=>{
+                        v-model="copySelectedData"
+                        :value="copySelectedData.find(v=>{
                                if(typeof v !== 'object'){
                                    return v === list
                                }
                                return v[reflectKey['value']] === list[reflectKey['value']]
 
                            }) || list"
-                           :key="index"
-                           :reflect-key="reflectKey"
-                           :no-text="noText"
+                        :key="index"
+                        :reflect-key="reflectKey"
+                        :no-text="noText"
                 />
             </template>
         </template>
@@ -30,96 +30,89 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import _ from 'lodash';
+  import {reflectKeyProps} from "../../consts/mixins";
 
-    export default {
-        name: 'CRadioGroup',
-        props: {
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            value: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
-            normalStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            activeStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            type: {
-                variable(value) {
-                    return value === 'button'
-                },
-                default() {
-                    return ''
-                }
-            },
-            noText: {
-                type: Boolean
+  export default {
+    name: 'CRadioGroup',
+    mixins:[reflectKeyProps],
+    props: {
+      listData: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      value: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      normalStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      activeStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      type: {
+        variable(value) {
+          return value === 'button'
+        },
+        default() {
+          return ''
+        }
+      },
+      noText: {
+        type: Boolean
+      }
+    },
+    data() {
+      return {
+        copySelectedData: [],
+        isDataModel: true
+      };
+    },
+    mounted() {
+      if (Object.keys(this.$slots).length) {
+        this.isDataModel = false
+      }
+    },
+    computed: {
+      getWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}radio-group-wrap`]: true
             }
-        },
-        data() {
-            return {
-                copySelectedData: [],
-                isDataModel: true
-            };
-        },
-        mounted(){
-          if(Object.keys(this.$slots).length){
-              this.isDataModel =false
+        )
+      }
+    },
+    watch: {
+      value: {
+        handler(v) {
+          if (!_.isEqual(v, this.copySelectedData)) {
+            this.$set(this, 'copySelectedData', v)
           }
         },
-        computed: {
-            getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames(
-                    {
-                        [`${prefix}radio-group-wrap`]: true
-                    }
-                )
-            }
+        deep: true,
+        immediate: true
+      },
+      copySelectedData: {
+        handler(v) {
+          this.$emit('input', v)
         },
-        watch: {
-            value: {
-                handler(v) {
-                    if (!_.isEqual(v, this.copySelectedData)) {
-                        this.$set(this, 'copySelectedData', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            copySelectedData: {
-                handler(v) {
-                    this.$emit('input', v)
-                },
-                deep: true
-            }
-        }
+        deep: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -131,6 +124,7 @@
     .radio-wrap {
         .radio-item {
             display: inline-flex;
+
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;

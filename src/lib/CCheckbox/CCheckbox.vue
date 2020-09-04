@@ -76,190 +76,159 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import {reflectKeyProps, prefixProps, classNameProps, width18Props, height18Props} from "../../consts/mixins";
+  import _ from 'lodash';
 
-    export default {
-        name: 'CCheckbox',
-        props: {
-            checkedData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            value: {
-                validate(v) {
-                    return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
-                },
-                default() {
-                    return ''
-                }
-            },
-            disabled: {
-                type: Boolean
-            },
-            halfChecked: {
-                type: Boolean
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
-            width: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            classNames: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            noText: {
-                type: Boolean
-            }
-        },
-        model: {
-            prop: 'checkedData',
-            event: 'checkedDataChange'
-        },
-        data() {
-            return {
-                checkedArr: [],
-                isSimpleModel: true
-            }
-        },
-        mounted() {
-            if (!this.isSimpleModel) {
-                const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
-                if (index > -1) {
-                    if (!this.value.checked) {
-                        this.checkedArr.splice(index, 1)
-                    }
-                }
-                if (index < 0) {
-                    if (this.value.checked) {
-                        this.checkedArr.push(_.cloneDeep(this.value))
-                    }
-                }
-            }
-        },
-        computed: {
-            getChecked() {
-                if (this.isSimpleModel) {
-                    return this.checkedArr.includes(this.value)
-                } else {
-                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
-                }
-            },
-            getDisabled() {
-                if (this.isSimpleModel) {
-                    return this.disabled
-                } else {
-                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
-                }
-            },
-            getHalfChecked() {
-                if (this.isSimpleModel) {
-                    return this.halfChecked
-                } else {
-                    return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).halfChecked
-                }
-            },
-            getKey() {
-                return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
-            },
-            getFakeIconClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [`${prefix}checkbox-item-fake-icon`]: true
-                    }
-                )
-            },
-            getItemClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [`${prefix}checkbox-item`]: true
-                    }
-                )
-            }
-        },
-        methods: {
-            selectHandle() {
-                if (this.getDisabled) {
-                    return
-                }
-                let index = -1;
-                if (this.isSimpleModel) {
-                    index = this.checkedArr.findIndex(v => v === this.value)
-                } else {
-                    index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
-                }
-                if (index > -1) {
-                    if (!this.isSimpleModel) {
-                        this.$set(this.checkedArr[index], 'checked', false)
-                    }
-                    this.checkedArr.splice(index, 1)
-                }
-                if (index < 0) {
-                    this.checkedArr.push(_.cloneDeep(this.value));
-                    if (!this.isSimpleModel) {
-                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true);
-                        this.$set(this.checkedArr[this.checkedArr.length - 1], 'halfChecked', false)
-                    }
-                }
-            }
-        },
-        watch: {
-            value: {
-                handler(v) {
-                    this.isSimpleModel = ['string', 'number'].includes(typeof v)
-                },
-                deep: true,
-                immediate: true
-            },
-            checkedData: {
-                handler(v) {
-                    if (v && !_.isEqual(v, this.checkedArr)) {
-                        this.$set(this, 'checkedArr', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            checkedArr: {
-                handler(v) {
-                  if (!_.isEqual(v, this.checkedData)) {
-                    this.$emit('checkedDataChange', v)
-                    }
-                },
-                deep: true,
-                immediate: true
-            }
+  export default {
+    name: 'CCheckbox',
+    mixins: [reflectKeyProps, prefixProps, classNameProps, width18Props, height18Props],
+    props: {
+      checkedData: {
+        type: Array,
+        default() {
+          return []
         }
+      },
+      value: {
+        validate(v) {
+          return typeof v === 'string' || typeof v === 'number' || typeof v === 'object'
+        },
+        default() {
+          return ''
+        }
+      },
+      disabled: {
+        type: Boolean
+      },
+      halfChecked: {
+        type: Boolean
+      },
+      noText: {
+        type: Boolean
+      }
+    },
+    model: {
+      prop: 'checkedData',
+      event: 'checkedDataChange'
+    },
+    data() {
+      return {
+        checkedArr: [],
+        isSimpleModel: true
+      }
+    },
+    mounted() {
+      if (!this.isSimpleModel) {
+        const index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]);
+        if (index > -1) {
+          if (!this.value.checked) {
+            this.checkedArr.splice(index, 1)
+          }
+        }
+        if (index < 0) {
+          if (this.value.checked) {
+            this.checkedArr.push(_.cloneDeep(this.value))
+          }
+        }
+      }
+    },
+    computed: {
+      getChecked() {
+        if (this.isSimpleModel) {
+          return this.checkedArr.includes(this.value)
+        } else {
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).checked
+        }
+      },
+      getDisabled() {
+        if (this.isSimpleModel) {
+          return this.disabled
+        } else {
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).disabled
+        }
+      },
+      getHalfChecked() {
+        if (this.isSimpleModel) {
+          return this.halfChecked
+        } else {
+          return (this.checkedArr.find(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']]) || {}).halfChecked
+        }
+      },
+      getKey() {
+        return this.isSimpleModel ? this.value : this.value[this.reflectKey['key']]
+      },
+      getFakeIconClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}checkbox-item-fake-icon`]: true
+            }
+        )
+      },
+      getItemClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}checkbox-item`]: true
+            }
+        )
+      }
+    },
+    methods: {
+      selectHandle() {
+        if (this.getDisabled) {
+          return
+        }
+        let index = -1;
+        if (this.isSimpleModel) {
+          index = this.checkedArr.findIndex(v => v === this.value)
+        } else {
+          index = this.checkedArr.findIndex(v => v[this.reflectKey['value']] === this.value[this.reflectKey['value']])
+        }
+        if (index > -1) {
+          if (!this.isSimpleModel) {
+            this.$set(this.checkedArr[index], 'checked', false)
+          }
+          this.checkedArr.splice(index, 1)
+        }
+        if (index < 0) {
+          this.checkedArr.push(_.cloneDeep(this.value));
+          if (!this.isSimpleModel) {
+            this.$set(this.checkedArr[this.checkedArr.length - 1], 'checked', true);
+            this.$set(this.checkedArr[this.checkedArr.length - 1], 'halfChecked', false)
+          }
+        }
+      }
+    },
+    watch: {
+      value: {
+        handler(v) {
+          this.isSimpleModel = ['string', 'number'].includes(typeof v)
+        },
+        deep: true,
+        immediate: true
+      },
+      checkedData: {
+        handler(v) {
+          if (v && !_.isEqual(v, this.checkedArr)) {
+            this.$set(this, 'checkedArr', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      checkedArr: {
+        handler(v) {
+          if (!_.isEqual(v, this.checkedData)) {
+            this.$emit('checkedDataChange', v)
+          }
+        },
+        deep: true,
+        immediate: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>

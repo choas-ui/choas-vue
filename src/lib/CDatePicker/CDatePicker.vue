@@ -1,23 +1,16 @@
 <script>
-  import classNames from 'classnames'
+  import classNames from 'classnames';
+  import {classNameProps,prefixProps,sizeProps} from "../../consts/mixins";
   import {addZero} from "../../utils";
 
   export default {
     name: 'CDatePicker',
+    mixins:[classNameProps,prefixProps,sizeProps],
     props: {
       width: {
         type: String,
         default() {
           return ''
-        }
-      },
-      // 高度
-      size: {
-        validate(v) {
-          return !v || ['ssmall', 'small', 'default', 'large', 'llarge'].includes(v)
-        },
-        default() {
-          return 'default'
         }
       },
       quickSelectBox: {

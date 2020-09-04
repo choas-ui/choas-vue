@@ -1,9 +1,11 @@
 <script>
   import classNames from 'classnames';
-  import _ from 'lodash'
+  import _ from 'lodash';
+  import {sizeProps} from "../../consts/mixins";
 
   export default {
     name: 'CQuickSearchBox',
+    mixins:[sizeProps],
     props: {
       listData: {
         type: Array,
@@ -20,15 +22,6 @@
       },
       isAdvance: {
         type: Boolean
-      },
-      // 高度
-      size: {
-        validate(v) {
-          return !v || ['ssmall', 'small', 'default', 'large', 'llarge'].includes(v)
-        },
-        default() {
-          return 'small'
-        }
       },
     },
     data() {
@@ -85,10 +78,10 @@
             placeholder: options.placeholder,
             reflectKey: options.reflectKey
           },
-          key: options.tagName+options.key,
+          key: options.tagName + options.key,
           on: {
             input: (v) => {
-              this.$set(options,'value', v)
+              this.$set(options, 'value', v)
             },
           }
         })

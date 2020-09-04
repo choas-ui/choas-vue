@@ -1,9 +1,22 @@
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
+  import {
+    checkboxProps,
+    conditionPropsMix,
+    controllersProps,
+    lineProps,
+    multipleProps, placeholderProps, prefixProps,
+    reflectKeyProps, sizeProps
+  } from "../../consts/mixins";
 
   export default {
     name: 'CSelection',
+    mixins: [
+      multipleProps, checkboxProps, lineProps,
+      conditionPropsMix, controllersProps, reflectKeyProps,
+      prefixProps, placeholderProps, sizeProps
+    ],
     props: {
       listData: {
         type: Array,
@@ -16,9 +29,6 @@
         default() {
           return []
         }
-      },
-      multiple: {
-        type: Boolean
       },
       splitText: {
         type: String,
@@ -35,48 +45,9 @@
           return ''
         }
       },
-      checkbox: {
-        type: Boolean
-      },
-      line: {
-        type: Boolean
-      },
-      conditionProps: {
-        type: String,
-        default() {
-          return 'node'
-        }
-      },
-      controllers: {
-        type: Boolean
-      },
       // 编辑树形函数
       editTreeNode: {
         type: Function
-      },
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          }
-        }
-      },
-      placeholder: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      // 高度
-      size: {
-        validate(v) {
-          return !v || ['ssmall', 'small', 'default', 'large', 'llarge'].includes(v)
-        },
-        default() {
-          return 'default'
-        }
       },
     },
     data() {

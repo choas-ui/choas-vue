@@ -65,155 +65,141 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import {reflectKeyProps, prefixProps} from "../../consts/mixins";
+  import _ from 'lodash';
 
-    export default {
-        name: 'CCascade',
-        components: {},
-        props: {
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            value: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        timer: null,
-                        key: 'title',
-                        value: 'value'
-                    }
-                }
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return '请要新增到的机构'
-                }
-            },
-            conditionProps: {
-                type: String,
-                default() {
-                    return 'node'
-                }
-            }
-        },
-        data() {
-            return {
-                isDropUlShow: false,
-                copyData: [],
-                selectedArr: [],
-                result: []
-            };
-        },
-        mounted() {
-            this.$nextTick(()=>{
-                document.addEventListener('click',({target})=>{
-                    if(this.$refs.cascade && !this.$refs.cascade.contains(target)){
-                        this.isDropUlShow=false
-                        this.selectedArr=[]
-                    }
-                })
-            })
-        },
-        computed: {
-            getSelectWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : ''
-                return classNames(
-                    {
-                        [prefix + 'cascade-wrap']: true
-                    }
-                )
-            },
-            getSelectedTitle() {
-                return [...this.result].reverse().reduce((a, b) => {
-                    return b[this.reflectKey['key']] + (a ? ' / ' + a : '')
-                }, '')
-            }
-        },
-        methods: {
-            addInfo(data, parentId) {
-                data.forEach((item, index) => {
-                    if (!item[this.conditionProps]) {
-                        data[index] = undefined
-                    }
-                    item._c_cascade_parentId = parentId;
-                    item._c_cascade_id = parentId + '-' + index;
-                    if ((item.children || []).length) {
-                        this.addInfo(item.children, item._c_cascade_id)
-                        item.children = item.children.filter(Boolean)
-                    }
-                })
-                return data
-            },
-            iconClick() {
-                if (this.selectedArr.length) {
-                    this.selectedArr = []
-                    this.isDropUlShow=false
-                } else {
-                    this.selectedArr.push(this.copyData)
-                    this.isDropUlShow=true
-                }
-            },
-            focusHandle() {
-                if(!this.selectedArr.length){
-                    this.selectedArr.push(this.copyData)
-                }
-                this.isDropUlShow = true
-            },
-            operateCopyData(data) {
-                data.forEach((item, index) => {
-                    this.$set(data, index, {...item, isOpen: false})
-                    if ((item.children || []).length) {
-                        this.operateCopyData(item.children)
-                    }
-                })
-            },
-            addSelectedDataHandle(data) {
-                const index = data._c_cascade_parentId.split('-').length
-                this.selectedArr.splice(index, this.selectedArr.length)
-                if ((data.children || []).length) {
-                    this.selectedArr.push([...data.children])
-                }
-                this.result.splice(index - 1, this.result.length)
-                this.result.push(data)
-            }
-        },
-        watch: {
-            result: {
-                handler(v, old) {
-                    if(!_.isEqual(v, old)){
-                        this.$emit('input', _.cloneDeep(v))
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            listData: {
-                handler(v, old) {
-                    if(!_.isEqual(v, old)){
-                        this.copyData = this.addInfo(_.clone(v), '0').filter(Boolean)
-                        this.copyData = this.addInfo(this.copyData, '0')
-                        this.copyData.forEach((item, index) => {
-                            this.$set(this.copyData, index, {...item, isOpen: true})
-                        })
-                        this.operateCopyData(this.copyData)
-                        this.$set(this, 'copyData',this.copyData)
-                    }
-                },
-                immediate: true
-            }
+  export default {
+    name: 'CCascade',
+    mixins: [reflectKeyProps, prefixProps],
+    components: {},
+    props: {
+      listData: {
+        type: Array,
+        default() {
+          return []
         }
+      },
+      value: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      conditionProps: {
+        type: String,
+        default() {
+          return 'node'
+        }
+      }
+    },
+    data() {
+      return {
+        isDropUlShow: false,
+        copyData: [],
+        selectedArr: [],
+        result: []
+      };
+    },
+    mounted() {
+      this.$nextTick(() => {
+        document.addEventListener('click', ({target}) => {
+          if (this.$refs.cascade && !this.$refs.cascade.contains(target)) {
+            this.isDropUlShow = false
+            this.selectedArr = []
+          }
+        })
+      })
+    },
+    computed: {
+      getSelectWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : ''
+        return classNames(
+            {
+              [prefix + 'cascade-wrap']: true
+            }
+        )
+      },
+      getSelectedTitle() {
+        return [...this.result].reverse().reduce((a, b) => {
+          return b[this.reflectKey['key']] + (a ? ' / ' + a : '')
+        }, '')
+      }
+    },
+    methods: {
+      addInfo(data, parentId) {
+        data.forEach((item, index) => {
+          if (!item[this.conditionProps]) {
+            data[index] = undefined
+          }
+          item._c_cascade_parentId = parentId;
+          item._c_cascade_id = parentId + '-' + index;
+          if ((item.children || []).length) {
+            this.addInfo(item.children, item._c_cascade_id)
+            item.children = item.children.filter(Boolean)
+          }
+        })
+        return data
+      },
+      iconClick() {
+        if (this.selectedArr.length) {
+          this.selectedArr = []
+          this.isDropUlShow = false
+        } else {
+          this.selectedArr.push(this.copyData)
+          this.isDropUlShow = true
+        }
+      },
+      focusHandle() {
+        if (!this.selectedArr.length) {
+          this.selectedArr.push(this.copyData)
+        }
+        this.isDropUlShow = true
+      },
+      operateCopyData(data) {
+        data.forEach((item, index) => {
+          this.$set(data, index, {...item, isOpen: false})
+          if ((item.children || []).length) {
+            this.operateCopyData(item.children)
+          }
+        })
+      },
+      addSelectedDataHandle(data) {
+        const index = data._c_cascade_parentId.split('-').length
+        this.selectedArr.splice(index, this.selectedArr.length)
+        if ((data.children || []).length) {
+          this.selectedArr.push([...data.children])
+        }
+        this.result.splice(index - 1, this.result.length)
+        this.result.push(data)
+      }
+    },
+    watch: {
+      result: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.$emit('input', _.cloneDeep(v))
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      listData: {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            this.copyData = this.addInfo(_.clone(v), '0').filter(Boolean)
+            this.copyData = this.addInfo(this.copyData, '0')
+            this.copyData.forEach((item, index) => {
+              this.$set(this.copyData, index, {...item, isOpen: true})
+            })
+            this.operateCopyData(this.copyData)
+            this.$set(this, 'copyData', this.copyData)
+          }
+        },
+        immediate: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -248,6 +234,7 @@
                     border: 1px solid $primary;
                 }
             }
+
             .cascade-icon {
                 position: absolute;
                 right: 10px;

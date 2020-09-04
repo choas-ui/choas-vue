@@ -1,179 +1,175 @@
 <script>
-    import classNames from 'classnames'
-    // 默认图标
-    const defaultIconName ={
-        info: 'choas-fill-info',
-        success: 'choas-fill-success',
-        warning: 'choas-fill-warning',
-        danger: 'choas-fill-danger',
-    };
-    // 默认颜色
-    const defaultIconColor={
-        info: '#0198de',
-        success: '#159f45',
-        warning: '#ffa10d',
-        danger: '#ff1917',
-    };
+  import classNames from 'classnames'
+  import {prefixProps} from "../../consts/mixins";
+  // 默认图标
+  const defaultIconName = {
+    info: 'choas-fill-info',
+    success: 'choas-fill-success',
+    warning: 'choas-fill-warning',
+    danger: 'choas-fill-danger',
+  };
+  // 默认颜色
+  const defaultIconColor = {
+    info: '#0198de',
+    success: '#159f45',
+    warning: '#ffa10d',
+    danger: '#ff1917',
+  };
 
-    export default {
-        name: 'CMessage',
-        props: {
-            // 提示类型
-            noticeType: {
-                validate(v) {
-                    return ['info', 'success', 'warning', 'danger'].indexOf(v) > 0
-                },
-                default() {
-                    return 'info'
-                }
-            },
-            message: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            txtColor: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 间隔
-            timeSpan: {
-                type: Number,
-                default() {
-                    return 2
-                }
-            },
-            // 回调
-            callback: {
-                type: Function
-            },
-            // message标识
-            id: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 图标
-            iconName: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 图标
-            fontClass: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 图标
-            src: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 图标颜色
-            iconColor: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            // 宽度
-            widthPercent: {
-                type: String,
-                default() {
-                    return '30';
-                }
-            },
-            prefix: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
+  export default {
+    name: 'CMessage',
+    mixins: [prefixProps],
+    props: {
+      // 提示类型
+      noticeType: {
+        validate(v) {
+          return ['info', 'success', 'warning', 'danger'].indexOf(v) > 0
         },
-        data() {
-            return {
-                timer: null,
+        default() {
+          return 'info'
+        }
+      },
+      message: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      txtColor: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 间隔
+      timeSpan: {
+        type: Number,
+        default() {
+          return 2
+        }
+      },
+      // 回调
+      callback: {
+        type: Function
+      },
+      // message标识
+      id: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 图标
+      iconName: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 图标
+      fontClass: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 图标
+      src: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 图标颜色
+      iconColor: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      // 宽度
+      widthPercent: {
+        type: String,
+        default() {
+          return '30';
+        }
+      },
+    },
+    data() {
+      return {
+        timer: null,
+      }
+    },
+    computed: {
+      getMessageWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [prefix + 'message-wrap']: true,
+              [prefix + 'message-info']: this.noticeType === 'info',
+              [prefix + 'message-success']: this.noticeType === 'success',
+              [prefix + 'message-warning']: this.noticeType === 'warning',
+              [prefix + 'message-danger']: this.noticeType === 'danger',
             }
-        },
-        computed: {
-            getMessageWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [prefix + 'message-wrap']: true,
-                        [prefix + 'message-info']: this.noticeType === 'info',
-                        [prefix + 'message-success']: this.noticeType === 'success',
-                        [prefix + 'message-warning']: this.noticeType === 'warning',
-                        [prefix + 'message-danger']: this.noticeType === 'danger',
-                    }
-                )
-            },
-        },
-        methods: {
-            removeHandle() {
-                this.timer = setTimeout(() => {
-                    this.$emit('changeListData', this.id);
-                    this.callback && this.callback()
-                }, this.timeSpan * 1000)
+        )
+      },
+    },
+    methods: {
+      removeHandle() {
+        this.timer = setTimeout(() => {
+          this.$emit('changeListData', this.id);
+          this.callback && this.callback()
+        }, this.timeSpan * 1000)
+      }
+    },
+    mounted() {
+      this.removeHandle()
+    },
+    render(h) {
+      return h('transition',
+          {
+            props: {
+              name: 'slide-fade'
             }
-        },
-        mounted() {
-            this.removeHandle()
-        },
-        render(h) {
-            return h('transition',
+          },
+          [
+            h('div',
                 {
-                    props: {
-                        name: 'slide-fade'
+                  class: this.getMessageWrapClass,
+                  style: {
+                    width: this.widthPercent + 'vw',
+                    marginLeft: `${(50 - this.widthPercent / 2).toFixed(0)}vw`,
+                    maxWidth: '100vw',
+                    color: this.txtColor || defaultIconColor[this.noticeType],
+                  },
+                  on: {
+                    mouseenter: () => {
+                      clearTimeout(this.timer)
+                    },
+                    mouseleave: () => {
+                      this.removeHandle()
                     }
+                  },
                 },
                 [
-                    h('div',
-                        {
-                            class: this.getMessageWrapClass,
-                            style: {
-                                width: this.widthPercent + 'vw',
-                                marginLeft: `${(50 - this.widthPercent / 2).toFixed(0)}vw`,
-                                maxWidth: '100vw',
-                                color: this.txtColor || defaultIconColor[this.noticeType],
-                            },
-                            on: {
-                                mouseenter: () => {
-                                    clearTimeout(this.timer)
-                                },
-                                mouseleave: () => {
-                                    this.removeHandle()
-                                }
-                            },
+                  h('CIcon',
+                      {
+                        props: {
+                          iconName: this.fontClass || this.src || this.iconName || defaultIconName[this.noticeType],
+                          color: this.iconColor || defaultIconColor[this.noticeType]
                         },
-                        [
-                            h('CIcon',
-                                {
-                                    props:{
-                                        iconName: this.fontClass || this.src ||this.iconName || defaultIconName[this.noticeType],
-                                        color: this.iconColor || defaultIconColor[this.noticeType]
-                                    },
-                                    style:{
-                                        marginRight: '14px'
-                                    }
-                                }
-                            ),
-                            this.message
-                        ]
-                    )
+                        style: {
+                          marginRight: '14px'
+                        }
+                      }
+                  ),
+                  this.message
                 ]
             )
-        }
+          ]
+      )
     }
+  }
 </script>
 <style lang="scss" scoped>
     @import "../scss/functions";

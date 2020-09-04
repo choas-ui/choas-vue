@@ -91,34 +91,31 @@
   import _ from 'lodash'
   import classNames from 'classnames'
   import defaultImg from './imgs/header.png'
+  import {
+    activeColorProps,
+    cancelProps,
+    checkboxProps, classNameProps, conditionPropsMix, controllerColorProps,
+    controllersProps, draggableProps,
+    lineProps, maskProps,
+    multipleProps, placeholderProps, prefixProps,
+    reflectKeyProps
+  } from "../../consts/mixins";
 
   export default {
     name: 'CTreeModal',
-    components: {},
+    mixins: [
+      reflectKeyProps, lineProps, multipleProps,
+      checkboxProps, cancelProps, controllersProps,
+      placeholderProps, controllerColorProps, maskProps,
+      conditionPropsMix, prefixProps, classNameProps,
+      activeColorProps, draggableProps
+    ],
     props: {
       listData: {
         type: Array,
         default() {
           return []
         }
-      },
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          }
-        }
-      },
-      line: {
-        type: Boolean
-      },
-      multiple: {
-        type: Boolean
-      },
-      checkbox: {
-        type: Boolean
       },
       width: {
         type: String,
@@ -138,13 +135,7 @@
           return ''
         }
       },
-      cancel: {
-        type: Boolean
-      },
       isShow: {
-        type: Boolean
-      },
-      controllers: {
         type: Boolean
       },
       titleImg: {
@@ -152,41 +143,10 @@
           return defaultImg
         }
       },
-      placeholder: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      controllerColor: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      activeColor: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      mask: {
-        type: Boolean
-      },
-      draggable: {
-        type: Boolean
-      },
       value: {
         type: Array,
         default() {
           return []
-        }
-      },
-      // 不可选条件
-      conditionProps: {
-        type: String,
-        default() {
-          return 'node'
         }
       },
       // 级联不可选条件
@@ -198,18 +158,6 @@
       },
       addTreeNode: {
         type: Function
-      },
-      prefix: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      className: {
-        type: String,
-        default() {
-          return ''
-        }
       },
     },
     data() {

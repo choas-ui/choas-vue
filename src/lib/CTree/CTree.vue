@@ -2,9 +2,22 @@
   import _ from 'lodash'
   import CTreeUl from "./CTreeUl";
   import {markListDataIdentify} from '../../utils'
+  import {
+    checkboxProps,
+    classNameProps,
+    controllersProps,
+    lineProps,
+    multipleProps, prefixProps,
+    reflectKeyProps
+  } from "../../consts/mixins";
 
   export default {
     name: 'CTree',
+    mixins: [
+      lineProps, multipleProps, checkboxProps,
+      controllersProps, controllersProps, reflectKeyProps,
+      classNameProps, prefixProps
+    ],
     components: {
       CTreeUl
     },
@@ -21,18 +34,6 @@
           return '#ff5e5c'
         }
       },
-      // 显示连线
-      line: {
-        type: Boolean
-      },
-      // 多选模式
-      multiple: {
-        type: Boolean
-      },
-      // 显示checkbox
-      checkbox: {
-        type: Boolean
-      },
       // 展开图标左间距
       markIconFixMarginRight: {
         type: Number,
@@ -47,20 +48,10 @@
           return 0
         }
       },
-      // 是否显示尾部控制
-      controllers: {
-        type: Boolean,
-      },
       searchStr: {
         type: String,
         default() {
           return ''
-        }
-      },
-      conditionProps: {
-        type: String,
-        default() {
-          return 'node'
         }
       },
       editTreeNode: {
@@ -70,27 +61,6 @@
         type: Array,
         default() {
           return []
-        }
-      },
-      reflectKey: {
-        type: Object,
-        default() {
-          return {
-            key: 'key',
-            value: 'value'
-          }
-        }
-      },
-      className: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      prefix: {
-        type: String,
-        default() {
-          return ''
         }
       },
     },

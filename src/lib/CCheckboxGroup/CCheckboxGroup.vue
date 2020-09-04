@@ -32,96 +32,89 @@
 </template>
 
 <script>
-    import classNames from 'classnames'
-    import _ from 'lodash'
+  import classNames from 'classnames';
+  import {reflectKeyProps} from "../../consts/mixins";
+  import _ from 'lodash';
 
-    export default {
-        name: 'CCheckboxGroup',
-        props: {
-            listData: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            value: {
-                type: Array,
-                default() {
-                    return []
-                }
-            },
-            reflectKey: {
-                type: Object,
-                default() {
-                    return {
-                        key: 'key',
-                        value: 'value'
-                    }
-                }
-            },
-            normalStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            activeStyle: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            type: {
-                variable(value) {
-                    return value === 'button'
-                },
-                default() {
-                    return ''
-                }
-            },
-            noText:{
-                type: Boolean
-            }
-        },
-        data() {
-            return {
-                copySelectedData: [],
-                isDataModel: true
-            };
-        },
-        mounted(){
-            if(Object.keys(this.$slots).length){
-                this.isDataModel =false
-            }
-        },
-        computed: {
-            getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    {
-                        [`${prefix}checkbox-group-wrap`]: true
-                    }
-                )
-            }
-        },
-        watch: {
-            value: {
-                handler(v) {
-                    if (!_.isEqual(v, this.copySelectedData)) {
-                        this.$set(this, 'copySelectedData', _.cloneDeep(v))
-                    }
-                },
-                deep: true,
-                immediate: true
-            },
-            copySelectedData: {
-                handler(v) {
-                    this.$emit('input', v)
-                },
-                deep: true
-            }
+  export default {
+    name: 'CCheckboxGroup',
+    mixins: [reflectKeyProps],
+    props: {
+      listData: {
+        type: Array,
+        default() {
+          return []
         }
+      },
+      value: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      normalStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      activeStyle: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      type: {
+        variable(value) {
+          return value === 'button'
+        },
+        default() {
+          return ''
+        }
+      },
+      noText: {
+        type: Boolean
+      }
+    },
+    data() {
+      return {
+        copySelectedData: [],
+        isDataModel: true
+      };
+    },
+    mounted() {
+      if (Object.keys(this.$slots).length) {
+        this.isDataModel = false
+      }
+    },
+    computed: {
+      getWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            {
+              [`${prefix}checkbox-group-wrap`]: true
+            }
+        )
+      }
+    },
+    watch: {
+      value: {
+        handler(v) {
+          if (!_.isEqual(v, this.copySelectedData)) {
+            this.$set(this, 'copySelectedData', _.cloneDeep(v))
+          }
+        },
+        deep: true,
+        immediate: true
+      },
+      copySelectedData: {
+        handler(v) {
+          this.$emit('input', v)
+        },
+        deep: true
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -129,13 +122,16 @@
     @import "../scss/size";
     @import "../scss/variable";
     @import "../scss/functions";
-    .checkbox-group-wrap{
+
+    .checkbox-group-wrap {
         display: flex;
         flex-wrap: wrap;
     }
+
     .checkbox-wrap {
         .checkbox-item {
             display: inline-flex;
+
             &-fake-icon {
                 border: 1px solid $darkLineColor;
                 border-radius: 2px;

@@ -29,116 +29,95 @@
     </span>
 </template>
 <script>
-    import * as svgLib from '../iconLib'
-    import classNames from 'classnames'
+  import * as svgLib from '../iconLib';
+  import classNames from 'classnames';
+  import {
+    classNameProps,
+    prefixProps,
+    width18Props,
+    height18Props,
+    placeholderProps,
+     activeColorProps
+  } from "../../consts/mixins";
 
-    export default {
-        name: 'CIcon',
-        props: {
-            iconName: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            iconContent: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            color: {
-                type: String || Array,
-                default() {
-                    return ''
-                }
-            },
-            activeColor: {
-                type: String || Array,
-                default() {
-                    return ''
-                }
-            },
-            width: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            height: {
-                type: String,
-                default() {
-                    return '18'
-                }
-            },
-            src: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            fontClass: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            className: {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return ''
-                }
-            }
-        },
-        data() {
-            return {
-                xlinkHref: "xlink:href",
-                svgLib,
-                cl: this.color
-            }
-        },
-        mounted() {
-        },
-        computed: {
-            getWrapStyle() {
-                return {
-                    width: this.width + 'px',
-                    height: this.height + 'px',
-                    lineHeight: this.height + 'px',
-                    fontSize: this.height + 'px',
-                    color: this.cl,
-                    display: 'inline-block',
-                    verticalAlign: 'middle'
-                }
-            },
-            getWrapClass() {
-                const prefix = this.prefix ? this.prefix + '-' : '';
-                return classNames(
-                    this.className,
-                    {
-                        "pointer-cursor": this.$listeners.click,
-                    },
-                    {
-                        [`${prefix}icon-wrap`]: true,
-                    }
-                )
-            }
-        },
-        methods: {
-            clickHandle(e) {
-                this.$listeners.click && this.$emit('click', e)
-            },
-            turnColor() {
-                this.cl = this.$listeners.click && this.cl === this.color ? this.activeColor : this.color
-            }
+  export default {
+    name: 'CIcon',
+    mixins: [classNameProps, prefixProps,width18Props,height18Props,placeholderProps,activeColorProps],
+    props: {
+      iconName: {
+        type: String,
+        default() {
+          return ''
         }
+      },
+      iconContent: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      color: {
+        type: String || Array,
+        default() {
+          return ''
+        }
+      },
+      src: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+      fontClass: {
+        type: String,
+        default() {
+          return ''
+        }
+      },
+    },
+    data() {
+      return {
+        xlinkHref: "xlink:href",
+        svgLib,
+        cl: this.color
+      }
+    },
+    mounted() {
+    },
+    computed: {
+      getWrapStyle() {
+        return {
+          width: this.width + 'px',
+          height: this.height + 'px',
+          lineHeight: this.height + 'px',
+          fontSize: this.height + 'px',
+          color: this.cl,
+          display: 'inline-block',
+          verticalAlign: 'middle'
+        }
+      },
+      getWrapClass() {
+        const prefix = this.prefix ? this.prefix + '-' : '';
+        return classNames(
+            this.className,
+            {
+              "pointer-cursor": this.$listeners.click,
+            },
+            {
+              [`${prefix}icon-wrap`]: true,
+            }
+        )
+      }
+    },
+    methods: {
+      clickHandle(e) {
+        this.$listeners.click && this.$emit('click', e)
+      },
+      turnColor() {
+        this.cl = this.$listeners.click && this.cl === this.color ? this.activeColor : this.color
+      }
     }
+  }
 </script>
 <style scoped lang="scss">
     @import "../scss/functions";
