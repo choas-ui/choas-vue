@@ -185,7 +185,7 @@
               this.multiple && this.checkbox && h('CCheckbox',
                   {
                     props: {
-                      value: _.cloneDeep(data),
+                      option: _.cloneDeep(data),
                       reflectKey: this.reflectKey,
                       width: '16',
                       height: '16',
