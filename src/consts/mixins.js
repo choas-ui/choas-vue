@@ -14,6 +14,17 @@ export const sizeProps = {
   },
 };
 
+export const heightProps={
+  props: {
+    height: {
+      type: String,
+      default(){
+        return '0';
+      },
+    },
+  },
+};
+
 export const typeProps = {
   props: {
     type: {
