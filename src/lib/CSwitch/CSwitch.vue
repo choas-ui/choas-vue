@@ -67,9 +67,8 @@
     },
     render(h) {
       const heightSize = heightSizeConfig[this.size || 'default'];
-      const widthSize = (heightSize / 0.4).toFixed();
-      const addNum = 4;
-      const widthBtnSize = this.shape === 'rect' ? heightSize + addNum: (heightSize*0.9).toFixed(0);
+      const widthSize = (heightSize *2).toFixed(2);
+      const widthBtnSize = (heightSize*0.9).toFixed(2);
       return h('div',
           {
             class: this.getWrapClass,
@@ -87,9 +86,16 @@
                   style: {
                     width: widthBtnSize+'px',
                     height: widthBtnSize+'px',
-                    top:this.shape === 'rect' ? -addNum/2+'px' : '5%',
+                    // top:this.shape === 'rect' ? -addNum/2+'px' : '5%',
+                    top:'5%',
+                    left: this.status === 'opening'?'2%':'98%',
                     borderRadius: this.shape === 'rect' ? this.borderRadius + 'px' : heightSize.toFixed(0) + 'px',
                     boxShadow: '0 0 5px #aaa',
+                  },
+                  on:{
+                    click: ()=>{
+
+                    }
                   }
                 },
             )
