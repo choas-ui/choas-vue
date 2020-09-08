@@ -188,7 +188,10 @@ export const controllerColorProps = {
 export const activeColorProps = {
   props: {
     activeColor: {
-      type: Boolean
+      type: String,
+      default(){
+        return '#fff';
+      }
     },
   },
 };
