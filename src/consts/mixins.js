@@ -180,7 +180,10 @@ export const canBeEditedProps = {
 export const controllerColorProps = {
   props: {
     controllerColor: {
-      type: Boolean
+      type: String,
+      default(){
+        return '#666';
+      }
     },
   },
 };

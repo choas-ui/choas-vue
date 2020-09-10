@@ -111,7 +111,13 @@
       },
       value: {
         type: Boolean
-      }
+      },
+      activeColor: {
+        type: String,
+        default(){
+          return '#ff5e5c';
+        }
+      },
     },
     data() {
       return {

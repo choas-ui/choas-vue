@@ -48,6 +48,7 @@
                                 :search-str="searchStr"
                                 :condition-props="conditionProps"
                                 :controllers="controllers"
+                                @getDirtyData="getDirtyData"
                         />
                     </div>
                     <div v-else class="empty-box">
@@ -57,10 +58,10 @@
             </div>
             <div class="selected-box">
                 <div :class="getTreeFootBoxClass">
-                    已选{{selectedData.length}}项
+                    已选{{dirtyData.length}}项
                 </div>
                 <div class="selected-content">
-                    <p v-for="item of selectedData"
+                    <p v-for="item of dirtyData"
                        :key="item[reflectKey['value']]"
                     >
                         <b>{{item[reflectKey['key']]}}</b>
@@ -89,6 +90,7 @@
 
 <script>
   import _ from 'lodash'
+  import { findDirtyValue } from "../../utils";
   import classNames from 'classnames'
   import defaultImg from './imgs/header.png'
   import {
@@ -165,6 +167,7 @@
         isCascadeShow: false,
         isModalShow: this.isShow,
         selectedData: [],
+        dirtyData: [],
         searchStr: '',
         list_data: [],
         cascadeData: [],
@@ -204,6 +207,9 @@
       }
     },
     methods: {
+      getDirtyData(v) {
+        this.$set(this, 'dirtyData', v);
+      },
       openCascade() {
         this.isCascadeShow = true
       },
@@ -223,27 +229,89 @@
         this.isCascadeShow = false;
         this.searchStr = ''
       },
-      removeHandle(value) {
+      // 右侧移除按钮
+      removeHandle(value,sign) {
+        if(sign){
+          // 按照父元素传来的值没有附带属性,需要查找
+          value = findDirtyValue(value, this.list_data, this.reflectKey['value']) || {};
+          console.log(value)
+        }
         if (this.multiple) {
-          const index = this.selectedData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
+          const index = this.dirtyData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
           if (index > -1) {
-            this.selectedData.splice(index, 1)
+            // 删自己
+            const data = this.dirtyData.splice(index, 1);
+            // 移除选中节点的父节点 及子节点选中
+            const targetItem = data[0];
+            let listData = this.dirtyData;
+            // 删父元素
+            listData = this.removeParents(targetItem._c_tree_self_id, listData);
+            // 删子元素
+            listData = this.removeChildrenItem(targetItem.children, listData);
+            this.$set(this, 'dirtyData', listData);
           }
         } else {
-          this.selectedData = []
+          this.dirtyData = []
         }
-      }
+      },
+      // 递归移除父元素
+      removeParents(pId='', listData=[]){
+        if(!pId.length){
+          return listData;
+        }
+        listData = listData.filter(list => list._c_tree_self_id !== pId);
+        const arr = pId.split('-');
+        arr.pop();
+        return this.removeParents(arr.join('-'),listData);
+      },
+      // 逐级移除子元素
+      removeChildrenItem(data= [], listData=[]) {
+        for (let i = 0; i < data.length; i++) {
+          let item = data[i];
+          listData = listData.filter(list => list._c_tree_self_id !== item._c_tree_self_id) || [];
+          if ((item.children || []).length) {
+            listData = this.removeChildrenItem(item.children, listData);
+          }
+        }
+        return listData;
+      },
+      // 移除脏数据
+      removeAppendKey(value) {
+        const pureCopyValue = _.cloneDeep(value);
+        pureCopyValue.forEach(item => {
+          delete item._c_tree_parent_id;
+          delete item._c_tree_self_id;
+          delete item.checked;
+          delete item.halfChecked;
+          delete item.children;
+          delete item.expand;
+        });
+        return pureCopyValue;
+      },
     },
     watch: {
       value: {
         handler(v) {
-          this.$set(this, 'selectedData', v);
           if (!_.isEqual(v, this.selectedData)) {
-            this.$emit('input', v);
+            this.$set(this, 'selectedData', v);
           }
         },
         deep: true,
         immediate: true
+      },
+      selectedData: {
+        handler(v) {
+          this.$emit('input', _.cloneDeep(v))
+        },
+        deep: true,
+      },
+      dirtyData: {
+        handler(v) {
+          // 返回脏数据
+          const pureCopyValue = this.removeAppendKey(_.cloneDeep(v));
+          this.$set(this, 'selectedData', pureCopyValue);
+        },
+        deep: true,
       },
       isShow(v) {
         this.isModalShow = v
@@ -266,8 +334,8 @@
         }
       },
       listData: {
-        handler(v, old) {
-          if (!_.isEqual(v, old)) {
+        handler(v) {
+          if (!_.isEqual(v, this.list_data)) {
             this.$set(this, 'list_data', _.cloneDeep(v));
             this.$set(this, 'cascadeList', _.cloneDeep(v))
           }

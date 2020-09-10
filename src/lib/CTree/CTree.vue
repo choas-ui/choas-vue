@@ -175,6 +175,7 @@
         });
         return res
       },
+      // 移除脏数据
       removeAppendKey(value) {
         const pureCopyValue = _.cloneDeep(value);
         pureCopyValue.forEach(item => {
@@ -211,10 +212,9 @@
     },
     watch: {
       value: {
-        handler(v) {
+        handler(v, old) {
           // 获取原始格式值
-          const pureCopyValue = this.removeAppendKey(_.cloneDeep(this.copyValue));
-          if (!_.isEqual(v, pureCopyValue)) {
+          if (!_.isEqual(v, old)) {
             const copyListData = markListDataIdentify(_.cloneDeep(this.listData));
             const value = _.cloneDeep(v);
             // 同步列表数据
@@ -238,12 +238,14 @@
       },
       copyValue: {
         handler(v) {
+          this.$emit('getDirtyData', v);
           const pureCopyValue = this.removeAppendKey(_.cloneDeep(v));
           if (!_.isEqual(this.value, pureCopyValue)) {
             this.$emit('input', pureCopyValue);
           }
         },
-        deep: true
+        deep: true,
+        immediate: true
       },
       // 搜索
       searchStr(v) {

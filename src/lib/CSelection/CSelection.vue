@@ -184,8 +184,8 @@
         handler(v, old) {
           if (!_.isEqual(v, this.copyValue)) {
             this.$set(this, 'copyValue', _.cloneDeep(v));
-            // 单选条件下 选择框初始化
           }
+          // 单选条件下 选择框初始化
           if (!_.isEqual(v, old)) {
             if (!this.multiple) {
               this.newOptionStr = v[0][this.reflectKey['key']]

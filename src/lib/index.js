@@ -21,6 +21,7 @@ import CTree from './CTree'
 import CTreeModal from './CTreeModal'
 
 import cMessage from './CMessage'
+import CInputCascade from "./CInputCascade/CInputCascade";
 
 
 
@@ -34,6 +35,7 @@ const components = [
     CDatePicker,
     CIcon,
     CInput,
+    CInputCascade,
     CInputTreeModal,
     CModal,
     CProgress,
@@ -68,6 +70,7 @@ export default {
     CDatePicker,
     CIcon,
     CInput,
+    CInputCascade,
     CInputTreeModal,
     CModal,
     CProgress,

@@ -44,7 +44,8 @@
                        @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
           </div>
         </template>
-        <CTreeModal :list-data="listData"
+        <CTreeModal ref="cTreeModal"
+                    :list-data="listData"
                     v-model="selectedData"
                     :title="title"
                     :is-show="isModalShow"
@@ -161,6 +162,18 @@
         default() {
           return []
         }
+      },
+      controllerColor: {
+        type: String,
+        default(){
+          return '#fff';
+        }
+      },
+      activeColor:{
+        type: String,
+        default(){
+          return '#ff5e5c';
+        }
       }
     },
     data() {
@@ -179,25 +192,23 @@
         this.$emit('addTreeNode', v)
       },
       removeHandle(item, $event) {
-        const t = this.selectedData.filter(data => data[this.reflectKey['value']] !== item[this.reflectKey['value']]);
-        this.$set(this, 'selectedData', t);
+        // 调用子元素的方法
+        this.$refs['cTreeModal'].removeHandle(item, true);
         $event.stopPropagation();
         $event.preventDefault();
-      }
+      },
     },
     watch: {
       selectedData: {
-        handler(v, old) {
-          if (!_.isEqual(v, old)) {
+        handler(v) {
             this.$emit('input', _.cloneDeep(v))
-          }
         },
         deep: true,
         immediate: true
       },
       value: {
-        handler(v, old) {
-          if (!_.isEqual(v, old)) {
+        handler(v) {
+          if (!_.isEqual(v, this.selectedData)) {
             this.$set(this, 'selectedData', _.cloneDeep(v))
           }
         },

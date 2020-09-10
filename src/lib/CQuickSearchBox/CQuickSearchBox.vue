@@ -64,7 +64,6 @@
       },
       resetHandle() {
         this.$set(this, 'copyOptionsData', this.listData);
-        console.log(this.copyOptionsData)
       },
       toggleAdvance() {
         this.advanceSearchModel = !this.advanceSearchModel
