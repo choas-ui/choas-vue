@@ -5,20 +5,20 @@ export const sizeProps = {
       type: String,
       validator: function (value) {
         // 这个值必须匹配下列字符串中的一个
-        return !value || ['llarge', 'large', 'default', 'small', 'ssmall'].indexOf(value) !== -1
+        return !value || ['llarge', 'large', 'default', 'small', 'ssmall'].indexOf(value) !== -1;
       },
       default() {
-        return 'default'
-      }
+        return 'default';
+      },
     },
   },
 };
 
-export const heightProps={
+export const heightProps = {
   props: {
     height: {
       type: String,
-      default(){
+      default() {
         return '0';
       },
     },
@@ -31,11 +31,11 @@ export const typeProps = {
       type: String,
       validator: function (value) {
         // 这个值必须匹配下列字符串中的一个
-        return !value || ['primary', 'success', 'warning', 'danger', 'disabled', 'ghost', 'link'].indexOf(value) !== -1
+        return !value || ['primary', 'success', 'warning', 'danger', 'disabled', 'ghost', 'link'].indexOf(value) !== -1;
       },
       default() {
-        return 'primary'
-      }
+        return 'primary';
+      },
     },
   },
 };
@@ -45,8 +45,8 @@ export const prefixProps = {
     prefix: {
       type: String,
       default() {
-        return ''
-      }
+        return '';
+      },
     },
   },
 };
@@ -56,8 +56,8 @@ export const classNameProps = {
     className: {
       type: String,
       default() {
-        return ''
-      }
+        return '';
+      },
     },
   },
 };
@@ -67,8 +67,8 @@ export const placeholderProps = {
     placeholder: {
       type: String,
       default() {
-        return ''
-      }
+        return '';
+      },
     },
   },
 };
@@ -81,8 +81,8 @@ export const reflectKeyProps = {
         return {
           key: 'key',
           value: 'value',
-        }
-      }
+        };
+      },
     },
   },
 };
@@ -92,8 +92,8 @@ export const width18Props = {
     width: {
       type: String,
       default() {
-        return '18'
-      }
+        return '18';
+      },
     },
   }
 };
@@ -103,8 +103,8 @@ export const height18Props = {
     height: {
       type: String,
       default() {
-        return '18'
-      }
+        return '18';
+      },
     },
   }
 };
@@ -114,8 +114,8 @@ export const conditionPropsMix = {
     conditionProps: {
       type: String,
       default() {
-        return 'node'
-      }
+        return 'node';
+      },
     },
   }
 };
@@ -124,7 +124,7 @@ export const conditionPropsMix = {
 export const maskProps = {
   props: {
     mask: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -132,7 +132,7 @@ export const maskProps = {
 export const lineProps = {
   props: {
     line: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -140,7 +140,7 @@ export const lineProps = {
 export const multipleProps = {
   props: {
     multiple: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -148,7 +148,7 @@ export const multipleProps = {
 export const checkboxProps = {
   props: {
     checkbox: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -156,7 +156,7 @@ export const checkboxProps = {
 export const draggableProps = {
   props: {
     draggable: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -164,7 +164,7 @@ export const draggableProps = {
 export const cancelProps = {
   props: {
     cancel: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -172,7 +172,7 @@ export const cancelProps = {
 export const canBeEditedProps = {
   props: {
     canBeEdited: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -181,9 +181,9 @@ export const controllerColorProps = {
   props: {
     controllerColor: {
       type: String,
-      default(){
+      default() {
         return '#666';
-      }
+      },
     },
   },
 };
@@ -192,9 +192,9 @@ export const activeColorProps = {
   props: {
     activeColor: {
       type: String,
-      default(){
+      default() {
         return '#fff';
-      }
+      },
     },
   },
 };
@@ -202,7 +202,7 @@ export const activeColorProps = {
 export const controllersProps = {
   props: {
     controllers: {
-      type: Boolean
+      type: Boolean,
     },
   },
 };
@@ -212,8 +212,8 @@ export const normalStyleProps = {
     normalStyle: {
       type: Object,
       default() {
-        return {}
-      }
+        return {};
+      },
     },
   },
 };
@@ -223,8 +223,27 @@ export const activeStyleProps = {
     activeStyle: {
       type: Object,
       default() {
-        return {}
+        return {};
       }
+    },
+  },
+};
+
+export const searchStrProps = {
+  props: {
+    searchStr: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
+  },
+};
+
+export const fileIconProps = {
+  props: {
+    fileIcon: {
+      type: Boolean,
     },
   },
 };

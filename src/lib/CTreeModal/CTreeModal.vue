@@ -90,7 +90,7 @@
 
 <script>
   import _ from 'lodash'
-  import { findDirtyValue } from "../../utils";
+  import {markIdentifyIfNotHave, removeDirtyKey} from "../../utils";
   import classNames from 'classnames'
   import defaultImg from './imgs/header.png'
   import {
@@ -230,12 +230,7 @@
         this.searchStr = ''
       },
       // 右侧移除按钮
-      removeHandle(value,sign) {
-        if(sign){
-          // 按照父元素传来的值没有附带属性,需要查找
-          value = findDirtyValue(value, this.list_data, this.reflectKey['value']) || {};
-          console.log(value)
-        }
+      removeHandle(value) {
         if (this.multiple) {
           const index = this.dirtyData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
           if (index > -1) {
@@ -254,18 +249,80 @@
           this.dirtyData = []
         }
       },
+      // 同步数据
+      syncCopyListData(copyListData, listData, selectData, valueKey, res = []) {
+        if (Object.prototype.toString.call(listData) !== '[object Array]') {
+          return;
+        }
+        if (Object.prototype.toString.call(selectData) !== '[object Array]') {
+          return;
+        }
+        listData.forEach(item => {
+          const index = selectData.findIndex(selected => selected[valueKey] === item[valueKey]);
+          if (index > -1) {
+            // 移除选中副本 减少遍历次数
+            selectData.splice(index, 1);
+            item.checked = true;
+            delete item.halfChecked;
+            // 修改当前值
+            const itemInListData = _.cloneDeepWith(item, (v, k) => {
+              // 不复制子元素
+              if (k !== 'children') {
+                return v
+              }
+            });
+            res.push(itemInListData);
+            if (this.multiple) {
+              // 向上修改父类
+              this.changeParentNodeStatus(copyListData, item._c_tree_parent_id);
+              // 向下修改子类
+              this.changeChildrenNodeStatus(item, item.checked);
+            }
+          }
+          if (selectData.length) {
+            this.syncCopyListData(copyListData, item.children, selectData, valueKey, res);
+          }
+        })
+      },
+      // 修改子节点属性
+      changeChildrenNodeStatus(data, checked) {
+        (data.children || []).forEach(item => {
+          delete item.halfChecked;
+          this.$set(item, 'checked', checked);
+          this.changeChildrenNodeStatus(item, checked)
+        })
+      },
+      // 修改父节点属性
+      changeParentNodeStatus(lisData, parentPath, deep = true) {
+        const parentValue = _.get(lisData, parentPath.split('-').join('.children.'), null);
+        if (parentValue) {
+          if (parentValue.children.every(item => !item.checked && !item.halfChecked)) {
+            delete parentValue.checked;
+            delete parentValue.halfChecked;
+          } else if (parentValue.children.every(item => item.checked)) {
+            delete parentValue.halfChecked;
+            this.$set(parentValue, 'checked', true)
+          } else {
+            delete parentValue.checked;
+            this.$set(parentValue, 'halfChecked', true)
+          }
+          if (deep) {
+            this.changeParentNodeStatus(lisData, parentValue._c_tree_parent_id, deep)
+          }
+        }
+      },
       // 递归移除父元素
-      removeParents(pId='', listData=[]){
-        if(!pId.length){
+      removeParents(pId = '', listData = []) {
+        if (!pId.length) {
           return listData;
         }
         listData = listData.filter(list => list._c_tree_self_id !== pId);
         const arr = pId.split('-');
         arr.pop();
-        return this.removeParents(arr.join('-'),listData);
+        return this.removeParents(arr.join('-'), listData);
       },
       // 逐级移除子元素
-      removeChildrenItem(data= [], listData=[]) {
+      removeChildrenItem(data = [], listData = []) {
         for (let i = 0; i < data.length; i++) {
           let item = data[i];
           listData = listData.filter(list => list._c_tree_self_id !== item._c_tree_self_id) || [];
@@ -274,19 +331,6 @@
           }
         }
         return listData;
-      },
-      // 移除脏数据
-      removeAppendKey(value) {
-        const pureCopyValue = _.cloneDeep(value);
-        pureCopyValue.forEach(item => {
-          delete item._c_tree_parent_id;
-          delete item._c_tree_self_id;
-          delete item.checked;
-          delete item.halfChecked;
-          delete item.children;
-          delete item.expand;
-        });
-        return pureCopyValue;
       },
     },
     watch: {
@@ -308,8 +352,18 @@
       dirtyData: {
         handler(v) {
           // 返回脏数据
-          const pureCopyValue = this.removeAppendKey(_.cloneDeep(v));
+          const keys = [
+            '_c_tree_parent_id',
+            '_c_tree_self_id',
+            'checked',
+            'halfChecked',
+            'children',
+            'expand',
+          ];
+
+          const pureCopyValue = removeDirtyKey(_.cloneDeep(v), keys);
           this.$set(this, 'selectedData', pureCopyValue);
+          this.$emit('getDirtyData', v)
         },
         deep: true,
       },
@@ -335,10 +389,9 @@
       },
       listData: {
         handler(v) {
-          if (!_.isEqual(v, this.list_data)) {
-            this.$set(this, 'list_data', _.cloneDeep(v));
-            this.$set(this, 'cascadeList', _.cloneDeep(v))
-          }
+          let copyListData = markIdentifyIfNotHave(v);
+          this.$set(this, 'list_data', copyListData);
+          this.$set(this, 'cascadeList', copyListData);
         },
         deep: true,
         immediate: true
