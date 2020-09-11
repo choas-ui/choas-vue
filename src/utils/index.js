@@ -191,3 +191,43 @@ export const changeParentNodeStatus = (lisData, parentPath, dirtySelectedData,de
     }
   }
 };
+
+/**
+ * @name createSingleIcon 向上修改父节点
+ * @param data slotsData
+ * @param h $createElement
+ * @param obj 追加属性
+ * @param args 追加参数
+ * */
+
+export const createSingleIcon=(data,h,obj= {}, args)=>{
+  if (!data) {
+    return null
+  }
+  const {tag, listeners = {}, propsData} = data[0].componentOptions || {};
+  const {slot} = data[0].data || {};
+  if (tag) {
+    const bindListener = {...listeners};
+    // 绑定值
+    if(args){
+      Object.keys(listeners).forEach(key=>{
+        bindListener[key]= listeners[key].bind(null,args)
+      });
+    }
+    return h(tag,
+        {
+          props: {
+            ...propsData,
+            ...obj.props
+          },
+          slot,
+          ...data.data,
+          on: {
+            ...bindListener,
+            ...obj.on
+          }
+        }
+    );
+  }
+  return null
+}

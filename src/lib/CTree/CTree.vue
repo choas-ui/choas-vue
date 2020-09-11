@@ -1,7 +1,14 @@
 <script>
   import classNames from 'classnames';
   import _ from 'lodash';
-  import {fileIconProps, lineProps, multipleProps, reflectKeyProps, searchStrProps} from "../../consts/mixins";
+  import {
+    controllersProps,
+    fileIconProps,
+    lineProps,
+    multipleProps,
+    reflectKeyProps,
+    searchStrProps
+  } from "../../consts/mixins";
   import {markListDataIdentify, removeDirtyKey, syncTreeListData} from "../../utils";
   import {treeDirtyKeys} from "../../consts/consts";
   import CTreeItem from "./CTreeItem";
@@ -17,6 +24,7 @@
       searchStrProps,
       lineProps,
       fileIconProps,
+      controllersProps,
     ],
     props: {
       // 外层组件已经同步,阻止tree标记同步数据,提升性能.
@@ -99,7 +107,14 @@
       }
     },
     render(h) {
-      const {markDownListData = [], reflectKey, line, fileIcon, dirtySelectedData} = this;
+      const {
+        markDownListData = [],
+        reflectKey,
+        line,
+        fileIcon,
+        controllers,
+        dirtySelectedData
+      } = this;
       let {lineHeight} = this;
       if (!lineHeight) {
         lineHeight = _.get(this.$slots, 'expand-icon.0.componentOptions.propsData.height', '18');
@@ -118,6 +133,7 @@
                     reflectKey, // 映射
                     lineHeight, // 行高
                     fileIcon, // 显示文件
+                    controllers,
                   }
                 },
                 [

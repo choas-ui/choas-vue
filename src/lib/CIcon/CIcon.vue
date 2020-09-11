@@ -37,12 +37,11 @@
     width18Props,
     height18Props,
     placeholderProps,
-     activeColorProps
   } from "../../consts/mixins";
 
   export default {
     name: 'CIcon',
-    mixins: [classNameProps, prefixProps,width18Props,height18Props,placeholderProps,activeColorProps],
+    mixins: [classNameProps, prefixProps,width18Props,height18Props,placeholderProps],
     props: {
       iconName: {
         type: String,
@@ -57,6 +56,12 @@
         }
       },
       color: {
+        type: String || Array,
+        default() {
+          return ''
+        }
+      },
+      activeColor: {
         type: String || Array,
         default() {
           return ''

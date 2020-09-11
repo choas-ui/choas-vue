@@ -1,9 +1,8 @@
 <script>
-  import classNames from 'classnames';
-  import _ from 'lodash';
+  import {createSingleIcon} from "../../utils";
 
   export default {
-    name: 'Button',
+    name: 'CTreeFileIcon',
     props: {
       hasChildren: {
         type: Boolean
@@ -17,26 +16,31 @@
     },
     methods: {},
     render(h) {
-      const {hasChildren,expand} = this;
+      const {hasChildren, expand} = this;
       if (!hasChildren) {
         return null
       }
+      const on ={
+        click: ()=>{
+            this.$emit('click');
+        }
+      };
+      const props={
+        activeColor: '#333'
+      };
       if (this.$slots['expand-icon'] && this.$slots['pick-up-icon']) {
-        return  expand ? this.$slots['expand-icon'] : this.$slots['pick-up-icon'];
+        return !expand ? createSingleIcon(this.$slots['expand-icon'], h , {on,props}) :
+            createSingleIcon(this.$slots['pick-up-icon'], h,{on,props});
       }
       return h('CIcon',
           {
             props: {
-              iconName: expand?'choas-fill-arrow-down':'choas-fill-arrow-right',
-              activeColor: '#666'
+              iconName: expand ? 'choas-fill-arrow-down' : 'choas-fill-arrow-right',
+              activeColor: '#333'
             },
-            on:{
-              click :()=>{
-                this.$emit('click');
-              }
-            }
+            on,
           }
-          )
+      )
     }
   }
 </script>

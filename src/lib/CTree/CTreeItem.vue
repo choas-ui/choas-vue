@@ -1,22 +1,24 @@
 <script>
-  import classNames from 'classnames';
-  import _ from 'lodash';
-  import {fileIconProps, lineProps, reflectKeyProps} from "../../consts/mixins";
+  import {controllersProps, fileIconProps, lineProps, reflectKeyProps} from "../../consts/mixins";
   import CTreeItemLine from "./CTreeItemLine";
   import CTreeExpandIcon from "./CTreeExpandIcon";
   import CTreeFileIcon from "./CTreeFileIcon";
+  import CTreeControllerBox from "./CTreeControllerBox";
+  import {createSingleIcon} from "../../utils";
 
   export default {
     name: 'CTreeItem',
     components: {
       CTreeItemLine,
       CTreeExpandIcon,
-      CTreeFileIcon
+      CTreeFileIcon,
+      CTreeControllerBox
     },
     mixins: [
       reflectKeyProps,
       lineProps,
       fileIconProps,
+      controllersProps,
     ],
     props: {
       markDownListData: {
@@ -38,31 +40,20 @@
     data() {
       return {};
     },
-    methods: {
-      createSingleIcon(data,h){
-        if(!data){
-          return null
-        }
-        const {tag, listeners = {}, propsData} = data[0].componentOptions || {};
-        const {slot} = data[0].data || {};
-        if (tag)
-          return h(tag,
-              {
-                props: {
-                  ...propsData,
-                },
-                slot,
-                ...data.data,
-                on: listeners
-              }
-          );
-      }
-    },
+    methods: {},
     render(h) {
-      const {markDownListData = [], reflectKey, levelNum, line, fileIcon, dirtySelectedData, lineHeight} = this;
+      const {
+        markDownListData = [],
+        reflectKey,
+        levelNum,
+        line,
+        fileIcon,
+        controllers,
+        dirtySelectedData,
+        lineHeight
+      } = this;
       const keyName = reflectKey['key'];
       const lastItemIndex = markDownListData.length - 1;
-
       return h('ul',
           {
             class: ['tree-ul']
@@ -85,48 +76,69 @@
                           }
                         },
                         [
-                          h('CTreeItemLine',
+                          h('span',
                               {
-                                props: {
-                                  line,
-                                  levelNum,
-                                  lineHeight,
-                                  isLast: lastItemIndex === index,
-                                  hasChildren: Boolean((item.children || []).length),
-                                  hasFileIcon: Boolean(fileIcon && this.$slots['file-icon']),
-                                }
-                              }
-                          ),
-                          h('CTreeExpandIcon',
-                              {
-                                props: {
-                                  hasChildren: Boolean((item.children || []).length),
-                                  expand: item.expand,
+                                style: {
+                                  display: 'flex'
                                 },
-                                on: {
-                                  click: ()=>{
-                                    this.$set(item, 'expand', !item.expand)
-                                  }
-                                }
                               },
                               [
-                                  this.createSingleIcon(this.$slots['expand-icon'],h),
-                                  this.createSingleIcon(this.$slots['pick-up-icon'],h),
-
+                                h('CTreeItemLine',
+                                    {
+                                      props: {
+                                        line,
+                                        levelNum,
+                                        lineHeight,
+                                        isLast: lastItemIndex === index,
+                                        hasChildren: Boolean((item.children || []).length),
+                                        hasFileIcon: Boolean(fileIcon && this.$slots['file-icon']),
+                                      }
+                                    }
+                                ),
+                                h('CTreeExpandIcon',
+                                    {
+                                      props: {
+                                        hasChildren: Boolean((item.children || []).length),
+                                        expand: item.expand,
+                                      },
+                                      on: {
+                                        click: () => {
+                                          this.$set(item, 'expand', !item.expand)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      createSingleIcon(this.$slots['expand-icon'], h),
+                                      createSingleIcon(this.$slots['pick-up-icon'], h),
+                                    ]
+                                ),
+                                h('CTreeFileIcon',
+                                    {
+                                      props: {
+                                        fileIcon,
+                                      }
+                                    },
+                                    [
+                                      createSingleIcon(this.$slots['file-icon'], h),
+                                    ]
+                                ),
+                                h('span', [item[keyName]])
                               ]
                           ),
-                          h('CTreeFileIcon',
+                          /* */
+                          h('CTreeControllerBox',
                               {
                                 props: {
-                                  fileIcon,
+                                  controllers,
+                                  itemData: item
                                 }
                               },
                               [
-                                this.createSingleIcon(this.$slots['file-icon'],h),
+                                (this.$slots['controllers'] || []).map(item => {
+                                  return createSingleIcon([item], h)
+                                })
                               ]
                           ),
-
-                          h('span', [item[keyName]])
                         ]
                     ),
                     item.expand ? h('CTreeItem',
@@ -139,13 +151,16 @@
                             lineHeight,
                             reflectKey,
                             fileIcon,
+                            controllers,
                           }
                         },
                         [
-                          this.createSingleIcon(this.$slots['expand-icon'],h),
-                          this.createSingleIcon(this.$slots['pick-up-icon'],h),
-                          this.createSingleIcon(this.$slots['file-icon'],h),
-                          this.$slots['controllers'],
+                          createSingleIcon(this.$slots['expand-icon'], h),
+                          createSingleIcon(this.$slots['pick-up-icon'], h),
+                          createSingleIcon(this.$slots['file-icon'], h),
+                          (this.$slots['controllers'] || []).map(item => {
+                            return createSingleIcon([item], h)
+                          })
                         ]
                     ) : null
                   ]
@@ -179,10 +194,12 @@
 
         &-p {
             display: flex;
+            justify-content: space-between;
             flex-wrap: nowrap;
             align-items: center;
             width: 100%;
-            margin:0;
+            margin: 0;
+            font-size: 14px;
         }
     }
 </style>

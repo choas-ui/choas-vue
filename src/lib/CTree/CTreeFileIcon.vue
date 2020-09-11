@@ -1,6 +1,4 @@
 <script>
-  import classNames from 'classnames';
-  import _ from 'lodash';
   import {fileIconProps} from "../../consts/mixins";
 
   export default {
@@ -12,13 +10,6 @@
     data() {
       return {};
     },
-    computed: {
-      xClass() {
-        const prefix = this.prefix ? this.prefix + '-' : '';
-        return classNames(
-        );
-      }
-    },
     methods: {},
     render(h) {
       const { fileIcon } = this;
@@ -26,7 +17,7 @@
         return null
       }
       if(this.$slots['file-icon']){
-        console.log(this.$slots['file-icon'])
+        return  this.$slots['file-icon']
       }
       return h('CIcon', {
         props:{
