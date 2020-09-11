@@ -13,7 +13,7 @@
     methods: {},
     render(h) {
       const { fileIcon } = this;
-      if(!fileIcon){
+      if(!fileIcon && !(this.$slots['file-icon'] || []).length){
         return null
       }
       if(this.$slots['file-icon']){
