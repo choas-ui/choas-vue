@@ -244,3 +244,16 @@ export const isInArray =(listData,value,key)=>{
   }
   return !!listData.find(list=>list[key] === value[key]);
 };
+
+/**
+ * @name findIndexInArray 上否在数组中
+ * @param listData 列表
+ * @param value 值
+ * @param key 属性
+ * */
+export const findIndexInArray =(listData,value,key)=>{
+  if(!key){
+    return listData.find(list=>list===value);
+  }
+  return listData.find(list=>list[key] === value[key]);
+};

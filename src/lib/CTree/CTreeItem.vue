@@ -11,7 +11,7 @@
   import CTreeExpandIcon from "./CTreeExpandIcon";
   import CTreeFileIcon from "./CTreeFileIcon";
   import CTreeControllerBox from "./CTreeControllerBox";
-  import {createSingleIcon,isInArray} from "../../utils";
+  import {createSingleIcon, isInArray} from "../../utils";
   import _ from 'lodash'
 
   export default {
@@ -78,7 +78,7 @@
       },
       deleteItemHandle(value, selfMarkId) {
         this.$emit('deleteItemHandle', value, selfMarkId);
-      }
+      },
     },
 
     render(h) {
@@ -109,6 +109,7 @@
           },
           [
             markDownListData.map((item, index) => {
+              const cloneItem = _.cloneDeep(item);
               return h('li',
                   {
                     class: ['tree-li'],
@@ -136,6 +137,7 @@
                           h('span',
                               {
                                 class: ['content-wrap'],
+
                               },
                               [
                                 h('CTreeItemLine',
@@ -174,13 +176,14 @@
                                       createSingleIcon(this.$slots['file-icon'], h),
                                     ]
                                 ),
-                                multiple && checkbox ? h('CCheckbox',{
+                                multiple && checkbox ? h('CCheckbox', {
                                   props: {
-                                    option: _.cloneDeep(item),
+                                    option: cloneItem,
                                     reflectKey: this.reflectKey,
                                     width: '16',
                                     height: '16',
                                     noText: true,
+                                    checkedData: [cloneItem],
                                   },
                                   style: {
                                     marginRight: '8px',
@@ -203,15 +206,12 @@
                                     }
                                 ) : h('span',
                                     {
-                                      class:[isInArray(dirtySelectedData,item,valueName)?'active':null, 'text-content'],
-                                      on:{
-                                        click: ()=>{
-                                          const list = dirtySelectedData.filter(listData=>{
-                                            return listData[valueName]!==item[valueName]
-                                          });
-                                          this.$emit('listChangeHandle',list);
-                                        }
-                                      }
+                                      class: [isInArray(dirtySelectedData, item, valueName) ? 'active' : null, 'text-content'],
+                                      on: {
+                                        click: () => {
+                                          this.$emit('listChangeHandle', item);
+                                        },
+                                      },
                                     },
                                     [item[keyName]]
                                 )
@@ -233,6 +233,7 @@
                                   cancelEditModelHandle,
                                   editItemHandle,
                                   deleteItemHandle,
+                                  listChangeHandle: this.$listeners.listChangeHandle,
                                 }
                               },
                               [
@@ -310,20 +311,25 @@
       width: 100%;
       margin: 0;
       font-size: 14px;
-      .content-wrap{
+
+      .content-wrap {
         display: flex;
         flex: 1;
         align-items: center;
       }
-      span.active{
+
+      span.active {
         color: $info;
       }
-      .text-content{
+
+      .text-content {
         flex: 1;
       }
+
       &:hover {
         background: lighten($info, 10%);
-        span.active{
+
+        span.active {
           color: #fff;
         }
       }

@@ -1,7 +1,7 @@
 <script>
   import _ from 'lodash'
   import CTreeUl from "./CTreeUl";
-  import {markListDataIdentify, markIdentifyIfNotHave} from '../../utils'
+  import {markListDataIdentify, markIdentifyIfNotHave} from '../../../utils'
   import {
     checkboxProps,
     classNameProps,
@@ -9,7 +9,7 @@
     lineProps,
     multipleProps, prefixProps,
     reflectKeyProps
-  } from "../../consts/mixins";
+  } from "../../../consts/mixins";
 
   export default {
     name: 'CTree',
@@ -339,8 +339,8 @@
   }
 </script>
 <style scoped lang="scss">
-    @import "../scss/normal-bg";
-    @import "../scss/size";
-    @import "../scss/variable";
-    @import "../scss/functions";
+    @import "src/lib/scss/normal-bg";
+    @import "src/lib/scss/size";
+    @import "src/lib/scss/variable";
+    @import "src/lib/scss/functions";
 </style>

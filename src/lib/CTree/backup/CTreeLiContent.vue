@@ -1,7 +1,7 @@
 <script>
   import classNames from 'classnames'
   import _ from 'lodash'
-  import {checkboxProps, controllersProps, multipleProps, prefixProps, reflectKeyProps} from "../../consts/mixins";
+  import {checkboxProps, controllersProps, multipleProps, prefixProps, reflectKeyProps} from "../../../consts/mixins";
 
   export default {
     name: 'CTreeLiContent',
@@ -561,10 +561,10 @@
   }
 </script>
 <style scoped lang="scss">
-    @import "../scss/normal-bg";
-    @import "../scss/size";
-    @import "../scss/variable";
-    @import "../scss/functions";
+    @import "src/lib/scss/normal-bg";
+    @import "src/lib/scss/size";
+    @import "src/lib/scss/variable";
+    @import "src/lib/scss/functions";
 
     .tree {
         &-title-wrap {
