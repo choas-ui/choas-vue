@@ -248,3 +248,25 @@ export const fileIconProps = {
   },
 };
 
+export const activeIndexProps = {
+  props: {
+    activeIndex: {
+      type: Number,
+      default
+          () {
+        return -1;
+      }
+    }
+  }
+};
+export const componentIndexProps = {
+  props: {
+    componentIndex: {
+      type: Number,
+      default() {
+        return 0;
+      }
+    }
+  }
+};
+

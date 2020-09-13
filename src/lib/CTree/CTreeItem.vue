@@ -1,10 +1,18 @@
 <script>
-  import {controllersProps, fileIconProps, lineProps, reflectKeyProps} from "../../consts/mixins";
+  import {
+    checkboxProps,
+    conditionPropsMix,
+    controllersProps,
+    fileIconProps,
+    lineProps, multipleProps,
+    reflectKeyProps
+  } from "../../consts/mixins";
   import CTreeItemLine from "./CTreeItemLine";
   import CTreeExpandIcon from "./CTreeExpandIcon";
   import CTreeFileIcon from "./CTreeFileIcon";
   import CTreeControllerBox from "./CTreeControllerBox";
-  import {createSingleIcon} from "../../utils";
+  import {createSingleIcon,isInArray} from "../../utils";
+  import _ from 'lodash'
 
   export default {
     name: 'CTreeItem',
@@ -12,15 +20,24 @@
       CTreeItemLine,
       CTreeExpandIcon,
       CTreeFileIcon,
-      CTreeControllerBox
+      CTreeControllerBox,
     },
     mixins: [
       reflectKeyProps,
       lineProps,
       fileIconProps,
       controllersProps,
+      conditionPropsMix,
+      checkboxProps,
+      multipleProps
     ],
     props: {
+      dirtySelectedData: {
+        type: Array,
+        default() {
+          return [];
+        }
+      },
       markDownListData: {
         type: Array,
         default() {
@@ -38,9 +55,32 @@
       }
     },
     data() {
-      return {};
+      return {
+        activeIndex: -1,
+        editContent: ''
+      };
     },
-    methods: {},
+    methods: {
+      removeLastChildrenHandle() {
+        this.markDownListData.pop();
+        this.editContent = '';
+      },
+      cancelEditModelHandle(itemData) {
+        this.$set(itemData, 'status', '');
+        this.editContent = '';
+      },
+      editItemHandle(params, itemData) {
+        const keyName = this.reflectKey['key'];
+        if (this.editContent !== itemData[keyName]) {
+          this.$emit('editItemHandle', params);
+        }
+        this.cancelEditModelHandle(itemData)
+      },
+      deleteItemHandle(value, selfMarkId) {
+        this.$emit('deleteItemHandle', value, selfMarkId);
+      }
+    },
+
     render(h) {
       const {
         markDownListData = [],
@@ -50,10 +90,19 @@
         fileIcon,
         controllers,
         dirtySelectedData,
-        lineHeight
+        lineHeight,
+        activeIndex, // 操作按钮显示
+        conditionProps,
+        checkbox,
+        multiple,
+
+        removeLastChildrenHandle, // 移除添加的末尾函数
+        cancelEditModelHandle, // 取消编辑状体
+        editItemHandle, // 编辑按钮
+        deleteItemHandle, // 删除按钮
       } = this;
       const keyName = reflectKey['key'];
-      const lastItemIndex = markDownListData.length - 1;
+      const valueName = reflectKey['value'];
       return h('ul',
           {
             class: ['tree-ul']
@@ -73,14 +122,20 @@
                           class: ['tree-p'],
                           style: {
                             lineHeight: parseInt(lineHeight, 10) + 'px',
+                          },
+                          on: {
+                            mouseenter: () => {
+                              this.$set(this, 'activeIndex', index)
+                            },
+                            mouseleave: () => {
+                              this.$set(this, 'activeIndex', -1)
+                            }
                           }
                         },
                         [
                           h('span',
                               {
-                                style: {
-                                  display: 'flex'
-                                },
+                                class: ['content-wrap'],
                               },
                               [
                                 h('CTreeItemLine',
@@ -89,9 +144,6 @@
                                         line,
                                         levelNum,
                                         lineHeight,
-                                        isLast: lastItemIndex === index,
-                                        hasChildren: Boolean((item.children || []).length),
-                                        hasFileIcon: Boolean(fileIcon && this.$slots['file-icon']),
                                       }
                                     }
                                 ),
@@ -122,7 +174,47 @@
                                       createSingleIcon(this.$slots['file-icon'], h),
                                     ]
                                 ),
-                                h('span', [item[keyName]])
+                                multiple && checkbox ? h('CCheckbox',{
+                                  props: {
+                                    option: _.cloneDeep(item),
+                                    reflectKey: this.reflectKey,
+                                    width: '16',
+                                    height: '16',
+                                    noText: true,
+                                  },
+                                  style: {
+                                    marginRight: '8px',
+                                  }
+                                }) : null,
+                                item.status === 'edit' ? h('CInput',
+                                    {
+                                      props: {
+                                        size: 'ssmall',
+                                        value: this.editContent || [item[keyName]],
+                                      },
+                                      on: {
+                                        input: (v) => {
+                                          this.editContent = v
+                                        },
+                                        focus: () => {
+                                          this.editContent = item[keyName]
+                                        },
+                                      }
+                                    }
+                                ) : h('span',
+                                    {
+                                      class:[isInArray(dirtySelectedData,item,valueName)?'active':null, 'text-content'],
+                                      on:{
+                                        click: ()=>{
+                                          const list = dirtySelectedData.filter(listData=>{
+                                            return listData[valueName]!==item[valueName]
+                                          });
+                                          this.$emit('listChangeHandle',list);
+                                        }
+                                      }
+                                    },
+                                    [item[keyName]]
+                                )
                               ]
                           ),
                           /* */
@@ -130,7 +222,17 @@
                               {
                                 props: {
                                   controllers,
-                                  itemData: item
+                                  itemData: item,
+                                  componentIndex: index,
+                                  activeIndex,
+                                  conditionProps,
+                                  markDownListData,
+                                },
+                                on: {
+                                  removeLastChildrenHandle,
+                                  cancelEditModelHandle,
+                                  editItemHandle,
+                                  deleteItemHandle,
                                 }
                               },
                               [
@@ -152,6 +254,14 @@
                             reflectKey,
                             fileIcon,
                             controllers,
+                            conditionProps,
+                            checkbox,
+                            multiple,
+                          },
+                          on: {
+                            editItemHandle: this.$listeners.editItemHandle,
+                            deleteItemHandle: this.$listeners.deleteItemHandle,
+                            listChangeHandle: this.$listeners.listChangeHandle,
                           }
                         },
                         [
@@ -173,33 +283,50 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/functions";
-    @import "../scss/size";
-    @import "../scss/normal-bg";
-    @import "../scss/variable";
-    @import "../scss/comm-class";
+  @import "../scss/functions";
+  @import "../scss/size";
+  @import "../scss/normal-bg";
+  @import "../scss/variable";
+  @import "../scss/comm-class";
 
-    .tree {
-        &-ul {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            list-style: none;
-        }
-
-        &-li {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        &-p {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: nowrap;
-            align-items: center;
-            width: 100%;
-            margin: 0;
-            font-size: 14px;
-        }
+  .tree {
+    &-ul {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      list-style: none;
     }
+
+    &-li {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    &-p {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      align-items: center;
+      width: 100%;
+      margin: 0;
+      font-size: 14px;
+      .content-wrap{
+        display: flex;
+        flex: 1;
+        align-items: center;
+      }
+      span.active{
+        color: $info;
+      }
+      .text-content{
+        flex: 1;
+      }
+      &:hover {
+        background: lighten($info, 10%);
+        span.active{
+          color: #fff;
+        }
+      }
+    }
+  }
 </style>

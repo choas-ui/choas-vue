@@ -26,7 +26,8 @@
         }
       };
       const props={
-        activeColor: '#333'
+        activeColor: '#333',
+
       };
       if (this.$slots['expand-icon'] && this.$slots['pick-up-icon']) {
         return !expand ? createSingleIcon(this.$slots['expand-icon'], h , {on,props}) :
@@ -36,7 +37,9 @@
           {
             props: {
               iconName: expand ? 'choas-fill-arrow-down' : 'choas-fill-arrow-right',
-              activeColor: '#333'
+              activeColor: '#333',
+              width: '24',
+              height: '24'
             },
             on,
           }

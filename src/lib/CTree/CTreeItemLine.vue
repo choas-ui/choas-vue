@@ -7,12 +7,6 @@
       lineProps,
     ],
     props: {
-      hasChildren: {
-        type: Boolean
-      },
-      hasFileIcon: {
-        type: Boolean
-      },
       levelNum: {
         type: Number,
         default() {
@@ -31,7 +25,7 @@
     },
     methods: {},
     render(h) {
-      const {levelNum, lineHeight, hasChildren} = this;
+      const {levelNum, lineHeight} = this;
       if (!levelNum) {
         return null
       }
@@ -114,7 +108,7 @@
                               style: {
                                 display: 'inline-block',
                                 width: '1px',
-                                height: hasChildren ? '100%' : '60%',
+                                height: '100%',
                                 background: '#aaa',
                                 verticalAlign: 'top'
                               }

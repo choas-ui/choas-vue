@@ -2,6 +2,8 @@
   import classNames from 'classnames';
   import _ from 'lodash';
   import {
+    checkboxProps,
+    conditionPropsMix,
     controllersProps,
     fileIconProps,
     lineProps,
@@ -25,6 +27,9 @@
       lineProps,
       fileIconProps,
       controllersProps,
+      conditionPropsMix,
+      checkboxProps,
+      multipleProps
     ],
     props: {
       // 外层组件已经同步,阻止tree标记同步数据,提升性能.
@@ -68,7 +73,26 @@
         });
       }
     },
-    methods: {},
+    methods: {
+      updateListData(type, selfMarkId, value) {
+        // 更新 markDownListData backUpListData  dirtySelectedData
+        // value 为null 删除  dirtySelectedData 父节点children依次向上传递
+      },
+      editItemHandle(params, itemData) {
+        this.$emit('editItemHandle', params, itemData);
+      },
+      deleteItemHandle(value, selfMarkId) {
+        this.$emit('deleteItemHandle', value, selfMarkId);
+      },
+      // 修改列表
+      listChangeHandle(list){
+        if(this.$listeners.dirtyListChange){
+          this.$emit('dirtyListChange',list);
+        }else{
+          this.$set(this, 'dirtySelectedData', list);
+        }
+      }
+    },
     watch: {
       listData: {
         handler(v) {
@@ -82,13 +106,16 @@
       },
       value: {
         handler(v) {
-
           const pureSelectedValue = removeDirtyKey(this.dirtySelectedData, treeDirtyKeys);
           if (!_.isEqual(v, pureSelectedValue)) {
             // 根据已选值同步渲染树形数据
             const dirtySelectedData = [];
-
-            syncTreeListData(this.markDownListData, this.markDownListData, _.cloneDeep(v), this.reflectKey['value'], this.multiple, dirtySelectedData);
+            // 无需处理数据
+            if (this.isAlreadyMarked) {
+              dirtySelectedData.concat(v);
+            } else {
+              syncTreeListData(this.markDownListData, this.markDownListData, _.cloneDeep(v), this.reflectKey['value'], this.multiple, dirtySelectedData);
+            }
             this.$set(this, 'backUpListData', this.markDownListData);
             this.$set(this, 'markDownListData', this.markDownListData);
             this.$set(this, 'dirtySelectedData', dirtySelectedData);
@@ -113,11 +140,18 @@
         line,
         fileIcon,
         controllers,
-        dirtySelectedData
+        dirtySelectedData,
+        conditionProps,
+        checkbox,
+        multiple,
+
+        editItemHandle,
+        deleteItemHandle,
+        listChangeHandle,
       } = this;
       let {lineHeight} = this;
       if (!lineHeight) {
-        lineHeight = _.get(this.$slots, 'expand-icon.0.componentOptions.propsData.height', '18');
+        lineHeight = _.get(this.$slots, 'expand-icon.0.componentOptions.propsData.height', '24');
       }
       return h('div',
           {
@@ -134,6 +168,14 @@
                     lineHeight, // 行高
                     fileIcon, // 显示文件
                     controllers,
+                    conditionProps,
+                    checkbox,
+                    multiple,
+                  },
+                  on: {
+                    editItemHandle,
+                    deleteItemHandle,
+                    listChangeHandle,
                   }
                 },
                 [
@@ -176,10 +218,10 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/functions";
-    @import "../scss/size";
-    @import "../scss/normal-bg";
-    @import "../scss/variable";
-    @import "../scss/comm-class";
+  @import "../scss/functions";
+  @import "../scss/size";
+  @import "../scss/normal-bg";
+  @import "../scss/variable";
+  @import "../scss/comm-class";
 
 </style>
