@@ -270,3 +270,11 @@ export const componentIndexProps = {
   }
 };
 
+export const isAlreadyMarkedProps = {
+  props: {
+    isAlreadyMarked: {
+      type: Boolean,
+    },
+  },
+};
+

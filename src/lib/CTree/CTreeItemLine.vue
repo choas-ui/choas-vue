@@ -25,7 +25,7 @@
     },
     methods: {},
     render(h) {
-      const {levelNum, lineHeight} = this;
+      const {levelNum, lineHeight,line} = this;
       if (!levelNum) {
         return null
       }
@@ -49,7 +49,7 @@
                       }
                     },
                     [
-                      h('span',
+                      line?h('span',
                           {
                             style: {
                               display: 'inline-block',
@@ -58,7 +58,7 @@
                               background: '#aaa',
                             }
                           }
-                      )
+                      ):null
                     ]
                 )
               } else if (index === arr.length - 1) {
@@ -70,7 +70,7 @@
                       }
                     },
                     [
-                      h('span',
+                      line? h('span',
                           {
                             style: {
                               display: 'inline-block',
@@ -80,7 +80,7 @@
                               verticalAlign: 'middle'
                             }
                           }
-                      )
+                      ): null
                     ]
                 )
               } else {
@@ -103,7 +103,7 @@
                         }
                       },
                       [
-                        h('span',
+                        line?h('span',
                             {
                               style: {
                                 display: 'inline-block',
@@ -113,7 +113,7 @@
                                 verticalAlign: 'top'
                               }
                             }
-                        )
+                        ): null
                       ]
                   )
                 }

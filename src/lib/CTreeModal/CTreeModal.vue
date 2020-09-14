@@ -1,116 +1,132 @@
 <template>
-    <CModal v-model="isModalShow"
-            :width="width"
-            :height="height"
-            :mask="mask"
-            :cancel="cancel"
-            :draggable="draggable"
-            :controllerColor="controllerColor"
-            :activeColor="activeColor"
-            ref="treeModal"
-    >
-        <slot slot="header">
-            <div class="modal-header"
-                 :style="{
+  <CModal v-model="isModalShow"
+          :width="width"
+          :height="height"
+          :mask="mask"
+          :cancel="cancel"
+          :draggable="draggable"
+          :controllerColor="controllerColor"
+          :activeColor="activeColor"
+          ref="treeModal"
+  >
+    <slot slot="header">
+      <div class="modal-header"
+           :style="{
                     background: `url('${titleImg}') left center/100% 100%`
                  }"
-            >
-                {{title}}
-            </div>
-        </slot>
+      >
+        {{title}}
+      </div>
+    </slot>
 
-        <div :class="getWrapBoxClass">
-            <div :class="getTreeBoxClass">
-                <div :class="getTreeFootBoxClass"></div>
-                <div class="search-box-wrap">
-                    <CInput type="text" v-model="searchStr" :placeholder="noticeTxt" size="small"/>
-                    <CButton size="small" v-if="addTreeNode" v-show="!isCascadeShow" @click="openCascade">新增</CButton>
-                    <CButton size="small" v-show="isCascadeShow" @click="addTreeListHandle">保存</CButton>
-                    <CButton size="small" v-show="isCascadeShow" type="danger" @click="addBtnCancelHandle">取消</CButton>
-                </div>
-                <CCascade v-model="cascadeData"
-                          v-if="isCascadeShow"
-                          :list-data="cascadeList"
-                          :reflectKey="reflectKey"
-                          :placeholder="placeholder"
-                          :conditionProps="cascadeConditionProps || conditionProps"
-                />
-                <div class="content-box">
-                    <div v-if="list_data.length">
-                        <CTree
-                                file-icon
-                                :multiple="multiple"
-                                :checkbox="checkbox"
-                                :line="line"
-                                v-model="selectedData"
-                                :list-data="list_data"
-                                :reflect-key="reflectKey"
-                                :search-str="searchStr"
-                                :condition-props="conditionProps"
-                                :controllers="controllers"
-                                @getDirtyData="getDirtyData"
-                        />
-                    </div>
-                    <div v-else class="empty-box">
-                        当前没有可选数据
-                    </div>
-                </div>
-            </div>
-            <div class="selected-box">
-                <div :class="getTreeFootBoxClass">
-                    已选{{dirtyData.length}}项
-                </div>
-                <div class="selected-content">
-                    <p v-for="item of dirtyData"
-                       :key="item[reflectKey['value']]"
-                    >
-                        <b>{{item[reflectKey['key']]}}</b>
-                        <CIcon icon-name="choas-fill-close"
-                               width="20"
-                               height="20"
-                               color="#666"
-                               active-color="#ff5e5c"
-                               :style="{
+    <div :class="getWrapBoxClass">
+      <div :class="getTreeBoxClass">
+        <div :class="getTreeFootBoxClass"></div>
+        <div class="search-box-wrap">
+          <CInput type="text" v-model="searchStr" :placeholder="noticeTxt" size="small"/>
+        </div>
+        <div class="content-box">
+          <div v-if="markDownListData.length">
+            <CTree
+                    file-icon
+                    :multiple="multiple"
+                    :checkbox="checkbox"
+                    :line="line"
+                    v-model="dirtySelectedData"
+                    :list-data="markDownListData"
+                    :reflect-key="reflectKey"
+                    :search-str="searchStr"
+                    :condition-props="conditionProps"
+                    :controllers="controllers"
+                    isAlreadyMarked
+                    @getDirtySelectedData="getDirtySelectedData"
+                    @getMarkDownListData="getMarkDownListData"
+            />
+          </div>
+          <div v-else class="empty-box">
+            当前没有可选数据
+          </div>
+        </div>
+      </div>
+      <div class="selected-box">
+        <div :class="getTreeFootBoxClass">
+          已选{{dirtySelectedData.length}}项
+        </div>
+        <div class="selected-content">
+          <p v-for="item of dirtySelectedData"
+             :key="item[reflectKey['value']]"
+          >
+            <b>{{item[reflectKey['key']]}}</b>
+            <CIcon icon-name="choas-fill-close"
+                   width="20"
+                   height="20"
+                   color="#666"
+                   active-color="#ff5e5c"
+                   :style="{
                                     lineHeight: '100%'
                                }"
-                               @click="removeHandle(item)"
-                        ></CIcon>
-                    </p>
-                </div>
-            </div>
+                   @click="removeHandle(item)"
+            ></CIcon>
+          </p>
         </div>
-        <slot slot="footer">
-            <div class="modal-footer">
-                <CButton type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</CButton>
-                <CButton @click="confirmHandle">确&nbsp;&nbsp;认</CButton>
-            </div>
-        </slot>
-    </CModal>
+      </div>
+    </div>
+    <slot slot="footer">
+      <div class="modal-footer">
+        <CButton type="danger" @click="cancelHandle">取&nbsp;&nbsp;消</CButton>
+        <CButton @click="confirmHandle">确&nbsp;&nbsp;认</CButton>
+      </div>
+    </slot>
+  </CModal>
 </template>
 
 <script>
   import _ from 'lodash'
-  import {markIdentifyIfNotHave, removeDirtyKey} from "../../utils";
+  import {
+    changeChildrenNodeStatus,
+    changeParentNodeStatus,
+    getCheckedValue, isInArray,
+    markListDataIdentify,
+    removeDirtyKey,
+    syncTreeListData
+  } from "../../utils";
   import classNames from 'classnames'
   import defaultImg from './imgs/header.png'
   import {
     activeColorProps,
     cancelProps,
-    checkboxProps, classNameProps, conditionPropsMix, controllerColorProps,
-    controllersProps, draggableProps,
-    lineProps, maskProps,
-    multipleProps, placeholderProps, prefixProps,
+    checkboxProps,
+    classNameProps,
+    conditionPropsMix,
+    controllerColorProps,
+    controllersProps,
+    draggableProps,
+    isAlreadyMarkedProps,
+    lineProps,
+    maskProps,
+    multipleProps,
+    prefixProps,
     reflectKeyProps
   } from "../../consts/mixins";
+  import {treeDirtyKeys} from "../../consts/consts";
 
   export default {
     name: 'CTreeModal',
     mixins: [
-      reflectKeyProps, lineProps, multipleProps,
-      checkboxProps, cancelProps, controllersProps,
-      placeholderProps, controllerColorProps, maskProps,
-      conditionPropsMix, prefixProps, classNameProps,
-      activeColorProps, draggableProps
+      reflectKeyProps,
+      lineProps,
+      multipleProps,
+      checkboxProps,
+      cancelProps,
+      controllersProps,
+      controllerColorProps,
+      maskProps,
+      conditionPropsMix,
+      prefixProps,
+      classNameProps,
+      activeColorProps,
+      draggableProps,
+      isAlreadyMarkedProps,
     ],
     props: {
       listData: {
@@ -151,33 +167,17 @@
           return []
         }
       },
-      // 级联不可选条件
-      cascadeConditionProps: {
-        type: String,
-        default() {
-          return ''
-        }
-      },
-      addTreeNode: {
-        type: Function
-      },
     },
     data() {
       return {
-        isCascadeShow: false,
         isModalShow: this.isShow,
+        dirtySelectedData: [],
         selectedData: [],
-        dirtyData: [],
         searchStr: '',
-        list_data: [],
-        cascadeData: [],
-        cascadeList: [],
+        markDownListData: [],
+        backUpListData: [],
         noticeTxt: '搜索节点'
       }
-    },
-    mounted() {
-      this.list_data = _.cloneDeep(this.listData);
-      this.cascadeList = _.cloneDeep(this.listData)
     },
     computed: {
       getTreeFootBoxClass() {
@@ -206,347 +206,275 @@
         )
       }
     },
+    mounted() {
+      this.$emit('input', this.selectedData);
+    },
     methods: {
-      getDirtyData(v) {
-        this.$set(this, 'dirtyData', v);
+      getDirtySelectedData(v) {
+        this.$set(this, 'dirtySelectedData', v);
       },
-      openCascade() {
-        this.isCascadeShow = true
+      getMarkDownListData(v) {
+        this.$set(this, 'markDownListData', v);
       },
       confirmHandle() {
         this.$emit('toggleShow', false);
-        this.$emit('input', this.selectedData)
+        this.$emit('input', this.selectedData);
+        // 点击确定后修改备份
+        this.$set(this, 'backUpListData', _.cloneDeep(this.markDownListData));
       },
       cancelHandle() {
+        const lists = [];
         this.$emit('toggleShow', false);
-        this.$set(this, 'selectedData', this.value)
-      },
-      addTreeListHandle() {
-        const pId = this.cascadeData[this.cascadeData.length - 1] ? this.cascadeData[this.cascadeData.length - 1][this.reflectKey['value']] : '';
-        this.addTreeNode({pId: pId || '', value: this.searchStr})
-      },
-      addBtnCancelHandle() {
-        this.isCascadeShow = false;
-        this.searchStr = ''
+        this.$set(this, 'markDownListData', _.cloneDeep(this.backUpListData));
+        const {markDownListData, reflectKey, multiple} = this;
+        // 根据已选值同步渲染树形数据
+        syncTreeListData(markDownListData, markDownListData, _.cloneDeep(this.value), reflectKey['value'], multiple);
+        getCheckedValue(markDownListData, lists, multiple);
+        this.$set(this, 'dirtySelectedData', lists);
       },
       // 右侧移除按钮
-      removeHandle(value) {
-        if (this.multiple) {
-          const index = this.dirtyData.findIndex(item => item[this.reflectKey['value']] === value[this.reflectKey['value']]);
-          if (index > -1) {
-            // 删自己
-            const data = this.dirtyData.splice(index, 1);
-            // 移除选中节点的父节点 及子节点选中
-            const targetItem = data[0];
-            let listData = this.dirtyData;
-            // 删父元素
-            listData = this.removeParents(targetItem._c_tree_self_id, listData);
-            // 删子元素
-            listData = this.removeChildrenItem(targetItem.children, listData);
-            this.$set(this, 'dirtyData', listData);
+      removeHandle(itemData) {
+        const {reflectKey, conditionProps, multiple, dirtySelectedData, markDownListData} = this;
+        const valueName = reflectKey['value'];
+        if (!multiple) {
+          // 单选情况简单处理
+          if (itemData.disabled || itemData[conditionProps]) {
+            return false;
+          }
+          if (isInArray(dirtySelectedData, itemData, valueName)) {
+            this.$set(dirtySelectedData[0], 'checked', false);
+            this.$set(this, 'dirtySelectedData', []);
+          } else {
+            const preData = dirtySelectedData[0];
+            if (preData) {
+              this.$set(dirtySelectedData[0], 'checked', false);
+            }
+            this.$set(itemData, 'checked', true);
+            this.$set(this, 'dirtySelectedData', [itemData]);
           }
         } else {
-          this.dirtyData = []
+          this.$set(itemData, 'checked', !itemData.checked);
+          // 多选
+          //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
+          //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
+          const lists = [];
+          changeParentNodeStatus(this, markDownListData, itemData._c_tree_parent_id);
+          changeChildrenNodeStatus(this, itemData, itemData.checked);
+          getCheckedValue(markDownListData, lists, multiple);
+          this.$set(this, 'dirtySelectedData', lists);
         }
-      },
-      // 同步数据
-      syncCopyListData(copyListData, listData, selectData, valueKey, res = []) {
-        if (Object.prototype.toString.call(listData) !== '[object Array]') {
-          return;
-        }
-        if (Object.prototype.toString.call(selectData) !== '[object Array]') {
-          return;
-        }
-        listData.forEach(item => {
-          const index = selectData.findIndex(selected => selected[valueKey] === item[valueKey]);
-          if (index > -1) {
-            // 移除选中副本 减少遍历次数
-            selectData.splice(index, 1);
-            item.checked = true;
-            delete item.halfChecked;
-            // 修改当前值
-            const itemInListData = _.cloneDeepWith(item, (v, k) => {
-              // 不复制子元素
-              if (k !== 'children') {
-                return v
-              }
-            });
-            res.push(itemInListData);
-            if (this.multiple) {
-              // 向上修改父类
-              this.changeParentNodeStatus(copyListData, item._c_tree_parent_id);
-              // 向下修改子类
-              this.changeChildrenNodeStatus(item, item.checked);
-            }
-          }
-          if (selectData.length) {
-            this.syncCopyListData(copyListData, item.children, selectData, valueKey, res);
-          }
-        })
-      },
-      // 修改子节点属性
-      changeChildrenNodeStatus(data, checked) {
-        (data.children || []).forEach(item => {
-          delete item.halfChecked;
-          this.$set(item, 'checked', checked);
-          this.changeChildrenNodeStatus(item, checked)
-        })
-      },
-      // 修改父节点属性
-      changeParentNodeStatus(lisData, parentPath, deep = true) {
-        const parentValue = _.get(lisData, parentPath.split('-').join('.children.'), null);
-        if (parentValue) {
-          if (parentValue.children.every(item => !item.checked && !item.halfChecked)) {
-            delete parentValue.checked;
-            delete parentValue.halfChecked;
-          } else if (parentValue.children.every(item => item.checked)) {
-            delete parentValue.halfChecked;
-            this.$set(parentValue, 'checked', true)
-          } else {
-            delete parentValue.checked;
-            this.$set(parentValue, 'halfChecked', true)
-          }
-          if (deep) {
-            this.changeParentNodeStatus(lisData, parentValue._c_tree_parent_id, deep)
-          }
-        }
-      },
-      // 递归移除父元素
-      removeParents(pId = '', listData = []) {
-        if (!pId.length) {
-          return listData;
-        }
-        listData = listData.filter(list => list._c_tree_self_id !== pId);
-        const arr = pId.split('-');
-        arr.pop();
-        return this.removeParents(arr.join('-'), listData);
-      },
-      // 逐级移除子元素
-      removeChildrenItem(data = [], listData = []) {
-        for (let i = 0; i < data.length; i++) {
-          let item = data[i];
-          listData = listData.filter(list => list._c_tree_self_id !== item._c_tree_self_id) || [];
-          if ((item.children || []).length) {
-            listData = this.removeChildrenItem(item.children, listData);
-          }
-        }
-        return listData;
       },
     },
     watch: {
+      listData: {
+        handler(v) {
+          // 标记数据
+          const markDownListData = markListDataIdentify(_.cloneDeep(v));
+          if (!this.isAlreadyMarked) {
+            const {multiple, reflectKey, value} = this;
+            syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
+            this.$set(this, 'markDownListData', markDownListData);
+            this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
+            const lists = [];
+            getCheckedValue(markDownListData, lists, multiple);
+            this.$set(this, 'dirtySelectedData', lists);
+          } else {
+            this.$set(this, 'markDownListData', markDownListData);
+            this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
+          }
+        },
+        deep: true,
+        immediate: true,
+      },
       value: {
         handler(v) {
-          if (!_.isEqual(v, this.selectedData)) {
-            this.$set(this, 'selectedData', v);
-          }
+          //   const pureSelectedValue = removeDirtyKey(this.dirtySelectedData, treeDirtyKeys);
+          //   if (!_.isEqual(v, pureSelectedValue)) {
+          //     let lists = v;
+          //     if (!this.isAlreadyMarked) {
+          //       lists = [];
+          //       const {markDownListData, reflectKey, multiple} = this;
+          //       // 根据已选值同步渲染树形数据
+          //       syncTreeListData(markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
+          //       this.$set(this, 'markDownListData', markDownListData);
+          //       this.$set(this, 'backUpListData', markDownListData);
+          //       getCheckedValue(markDownListData, lists, multiple);
+          //     }
+          //     this.$set(this, 'dirtySelectedData', lists);
+          //   }
         },
         deep: true,
         immediate: true
       },
-      selectedData: {
+      dirtySelectedData: {
         handler(v) {
-          this.$emit('input', _.cloneDeep(v))
+          const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
+          this.$set(this, 'selectedData', pureSelectedValue);
         },
         deep: true,
-      },
-      dirtyData: {
-        handler(v) {
-          // 返回脏数据
-          const keys = [
-            '_c_tree_parent_id',
-            '_c_tree_self_id',
-            'checked',
-            'halfChecked',
-            'children',
-            'expand',
-          ];
-
-          const pureCopyValue = removeDirtyKey(_.cloneDeep(v), keys);
-          this.$set(this, 'selectedData', pureCopyValue);
-          this.$emit('getDirtyData', v)
-        },
-        deep: true,
+        immediate: true
       },
       isShow(v) {
         this.isModalShow = v
       },
-      isCascadeShow(v) {
-        if (v) {
-          this.noticeTxt = '请输入新增节点名称'
-        } else {
-          this.noticeTxt = '搜索节点'
-        }
-      },
       isModalShow(v) {
         if (!v) {
           // 关闭清空
-          this.cascadeData = [];
-          this.isCascadeShow = false;
           this.$emit('toggleShow', false);
           this.searchStr = '';
-          this.$set(this, 'selectedData', this.value)
         }
       },
-      listData: {
-        handler(v) {
-          let copyListData = markIdentifyIfNotHave(v);
-          this.$set(this, 'list_data', copyListData);
-          this.$set(this, 'cascadeList', copyListData);
-        },
-        deep: true,
-        immediate: true
-      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-    @import '../scss/variable';
-    @import '../scss/size';
-    @import '../scss/functions';
+  @import '../scss/variable';
+  @import '../scss/size';
+  @import '../scss/functions';
 
-    .modal-header {
+  .modal-header {
+    width: 100%;
+    height: 50px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: addPX($sm-letterSp);
+  }
+
+  .modal-footer {
+    height: addPX($llg-height);
+    line-height: addPX(llg-height);
+  }
+
+  .tree {
+    &-box-wrap {
+      height: 100%;
+      display: flex;
+      padding: 0 addPX($df-padding) 0 addPX($df-padding);
+      box-sizing: border-box;
+    }
+
+    &-box {
+      flex: 3;
+      box-sizing: border-box;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+
+      .search-box-wrap {
+        padding-right: addPX($lg-padding);
         width: 100%;
-        height: 50px;
-        color: #fff;
-        font-size: 18px;
-        font-weight: bold;
-        letter-spacing: addPX($sm-letterSp);
-    }
-
-    .modal-footer {
-        height: addPX($llg-height);
-        line-height: addPX(llg-height);
-    }
-
-    .tree {
-        &-box-wrap {
-            height: 100%;
-            display: flex;
-            padding: 0 addPX($df-padding) 0 addPX($df-padding);
-            box-sizing: border-box;
-        }
-
-        &-box {
-            flex: 3;
-            box-sizing: border-box;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-
-            .search-box-wrap {
-                padding-right: addPX($lg-padding);
-                width: 100%;
-                box-sizing: border-box;
-                display: flex;
-                justify-content: space-between;
-
-                input {
-                    width: 60%;
-                    border: 1px solid $lineColor;
-                    height: addPX($df-height);
-                    line-height: addPX($df-height);
-                    box-sizing: border-box;
-                    border-radius: addPX($df-radius);
-                    padding-left: addPX($df-padding);
-
-                    &:focus {
-                        outline: none;
-                        border: 1px solid $primary;
-                    }
-                }
-            }
-
-            .title-box {
-                width: 100%;
-                height: addPX($df-height);
-                line-height: addPX($df-height);
-                font-size: addPX($lg-fs);
-                background: $primary;
-                color: #fff;
-                text-indent: addPX($df-fs * 2);
-                letter-spacing: addPX($df-letterSp);
-                border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
-            }
-
-            .cascade-box {
-                padding: addPX($lg-padding) addPX($lg-padding) 0 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-wrap: wrap;
-                text-align: center;
-            }
-
-            .content-box {
-                margin: addPX($lg-padding* 1.5) 0;
-                width: 100%;
-                flex: 1;
-                box-sizing: border-box;
-                overflow-y: auto;
-                display: flex;
-
-                .empty-box {
-                    width: 100%;
-                    align-self: center;
-                    text-align: center;
-                }
-            }
-        }
-
-        &-footer-box {
-            width: 100%;
-            height: addPX($sm-height);
-            text-align: right;
-            line-height: addPX($sm-height);
-            text-indent: addPX($df-fs * 2);
-            letter-spacing: addPX($df-letterSp);
-            padding-right: addPX($lg-padding);
-            box-sizing: border-box;
-        }
-
-    }
-
-    .selected-box {
-        flex: 2;
-        word-break: break-all;
-        display: flex;
-        flex-wrap: wrap;
         box-sizing: border-box;
-        flex-direction: column;
+        display: flex;
+        justify-content: space-between;
 
-        & > .selected-content {
-            width: 100%;
-            height: 100%;
-            flex: 1;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            border-left: addPX($ssm-borderWt) solid $lineColor;
-            overflow-y: auto;
+        input {
+          width: 60%;
+          border: 1px solid $lineColor;
+          height: addPX($df-height);
+          line-height: addPX($df-height);
+          box-sizing: border-box;
+          border-radius: addPX($df-radius);
+          padding-left: addPX($df-padding);
 
-            > p {
-                width: 100%;
-                line-height: addPX($ssm-height);
-                box-sizing: border-box;
-                text-align: left;
-                margin: addPX($sm-margin) 0 0 0;
-                padding-left: addPX($df-padding);
-                display: flex;
-                font-size: addPX($df-fs);
-                align-items: center;
-
-                > b {
-                    flex: 1;
-                    text-align: left;
-                }
-
-                &:hover {
-                    color: $primary;
-                }
-            }
-
+          &:focus {
+            outline: none;
+            border: 1px solid $primary;
+          }
         }
+      }
+
+      .title-box {
+        width: 100%;
+        height: addPX($df-height);
+        line-height: addPX($df-height);
+        font-size: addPX($lg-fs);
+        background: $primary;
+        color: #fff;
+        text-indent: addPX($df-fs * 2);
+        letter-spacing: addPX($df-letterSp);
+        border-radius: addPX($sm-radius) addPX($sm-radius) 0 0;
+      }
+
+      .cascade-box {
+        padding: addPX($lg-padding) addPX($lg-padding) 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        text-align: center;
+      }
+
+      .content-box {
+        margin: addPX($lg-padding* 1.5) 0;
+        width: 100%;
+        flex: 1;
+        box-sizing: border-box;
+        overflow-y: auto;
+        display: flex;
+
+        .empty-box {
+          width: 100%;
+          align-self: center;
+          text-align: center;
+        }
+      }
     }
+
+    &-footer-box {
+      width: 100%;
+      height: addPX($sm-height);
+      text-align: right;
+      line-height: addPX($sm-height);
+      text-indent: addPX($df-fs * 2);
+      letter-spacing: addPX($df-letterSp);
+      padding-right: addPX($lg-padding);
+      box-sizing: border-box;
+    }
+
+  }
+
+  .selected-box {
+    flex: 2;
+    word-break: break-all;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    flex-direction: column;
+
+    & > .selected-content {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      border-left: addPX($ssm-borderWt) solid $lineColor;
+      overflow-y: auto;
+
+      > p {
+        width: 100%;
+        line-height: addPX($ssm-height);
+        box-sizing: border-box;
+        text-align: left;
+        margin: addPX($sm-margin) 0 0 0;
+        padding-left: addPX($df-padding);
+        display: flex;
+        font-size: addPX($df-fs);
+        align-items: center;
+
+        > b {
+          flex: 1;
+          text-align: left;
+        }
+
+        &:hover {
+          color: $primary;
+        }
+      }
+
+    }
+  }
 
 </style>

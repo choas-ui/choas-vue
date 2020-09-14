@@ -113,6 +113,7 @@
                 {
                   props: {
                     iconName: 'choas-add',
+                    color: '#1ac756',
                     activeColor: '#1ac756',
                   },
                   on: {

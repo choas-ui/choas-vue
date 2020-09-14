@@ -11,7 +11,7 @@
   import CTreeExpandIcon from "./CTreeExpandIcon";
   import CTreeFileIcon from "./CTreeFileIcon";
   import CTreeControllerBox from "./CTreeControllerBox";
-  import {createSingleIcon, isInArray} from "../../utils";
+  import {createSingleIcon} from "../../utils";
   import _ from 'lodash'
 
   export default {
@@ -102,7 +102,6 @@
         deleteItemHandle, // 删除按钮
       } = this;
       const keyName = reflectKey['key'];
-      const valueName = reflectKey['value'];
       return h('ul',
           {
             class: ['tree-ul']
@@ -176,45 +175,57 @@
                                       createSingleIcon(this.$slots['file-icon'], h),
                                     ]
                                 ),
-                                multiple && checkbox ? h('CCheckbox', {
-                                  props: {
-                                    option: cloneItem,
-                                    reflectKey: this.reflectKey,
-                                    width: '16',
-                                    height: '16',
-                                    noText: true,
-                                    checkedData: [cloneItem],
-                                  },
-                                  style: {
-                                    marginRight: '8px',
-                                  }
-                                }) : null,
-                                item.status === 'edit' ? h('CInput',
+                                h('span',
                                     {
-                                      props: {
-                                        size: 'ssmall',
-                                        value: this.editContent || [item[keyName]],
-                                      },
-                                      on: {
-                                        input: (v) => {
-                                          this.editContent = v
-                                        },
-                                        focus: () => {
-                                          this.editContent = item[keyName]
-                                        },
-                                      }
-                                    }
-                                ) : h('span',
-                                    {
-                                      class: [isInArray(dirtySelectedData, item, valueName) ? 'active' : null, 'text-content'],
                                       on: {
                                         click: () => {
                                           this.$emit('listChangeHandle', item);
                                         },
                                       },
+                                      style:{
+                                        display:'flex',
+                                        flex: 1,
+
+                                      }
                                     },
-                                    [item[keyName]]
-                                )
+                                    [
+                                      multiple && checkbox ? h('CCheckbox', {
+                                        props: {
+                                          option: cloneItem,
+                                          reflectKey: this.reflectKey,
+                                          width: '16',
+                                          height: '16',
+                                          noText: true,
+                                          checkedData: [cloneItem],
+                                        },
+                                        style: {
+                                          marginRight: '8px',
+                                        }
+                                      }) : null,
+                                      item.status === 'edit' ? h('CInput',
+                                          {
+                                            props: {
+                                              size: 'ssmall',
+                                              value: this.editContent || [item[keyName]],
+                                            },
+                                            on: {
+                                              input: (v) => {
+                                                this.editContent = v
+                                              },
+                                              focus: () => {
+                                                this.editContent = item[keyName]
+                                              },
+                                            }
+                                          }
+                                      ) : h('span',
+                                          {
+                                            class: [item.checked ? 'active' : null, 'text-content'],
+                                          },
+                                          [item[keyName]]
+                                      )
+                                    ]
+                                ),
+
                               ]
                           ),
                           /* */
@@ -233,7 +244,6 @@
                                   cancelEditModelHandle,
                                   editItemHandle,
                                   deleteItemHandle,
-                                  listChangeHandle: this.$listeners.listChangeHandle,
                                 }
                               },
                               [
@@ -319,7 +329,8 @@
       }
 
       span.active {
-        color: $info;
+        color: $primary;
+        font-weight: bold;
       }
 
       .text-content {

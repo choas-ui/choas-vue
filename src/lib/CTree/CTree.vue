@@ -5,7 +5,7 @@
     checkboxProps,
     conditionPropsMix,
     controllersProps,
-    fileIconProps,
+    fileIconProps, isAlreadyMarkedProps,
     lineProps,
     multipleProps,
     reflectKeyProps,
@@ -13,7 +13,8 @@
   } from "../../consts/mixins";
   import {
     changeChildrenNodeStatus,
-    changeParentNodeStatus, findIndexInArray, isInArray,
+    changeParentNodeStatus,
+    getCheckedValue,
     markListDataIdentify,
     removeDirtyKey,
     syncTreeListData
@@ -35,13 +36,10 @@
       controllersProps,
       conditionPropsMix,
       checkboxProps,
-      multipleProps
+      multipleProps,
+      isAlreadyMarkedProps,
     ],
     props: {
-      // 外层组件已经同步,阻止tree标记同步数据,提升性能.
-      isAlreadyMarked: {
-        type: Boolean,
-      },
       listData: {
         type: Array,
         default() {
@@ -80,85 +78,85 @@
       }
     },
     methods: {
-      updateListData(type, selfMarkId, value) {
-        // 更新 markDownListData backUpListData  dirtySelectedData
-        // value 为null 删除  dirtySelectedData 父节点children依次向上传递
-      },
+      // updateListData(type, selfMarkId, value) {
+      //   // 更新 markDownListData backUpListData  dirtySelectedData
+      //   // value 为null 删除  dirtySelectedData 父节点children依次向上传递
+      // },
       editItemHandle(params, itemData) {
-        this.$emit('editItemHandle', params, itemData);
+        this.$emit('editTreeNode', params, itemData);
       },
       deleteItemHandle(value, selfMarkId) {
         this.$emit('deleteItemHandle', value, selfMarkId);
       },
       // 修改列表
       listChangeHandle(itemData) {
-        const {reflectKey, conditionProps, multiple, dirtySelectedData, markDownListData} = this;
-        const valueName = reflectKey['value'];
-        const copyValue = _.cloneDeep(this.value);
-        let lists;
-        itemData.checked = !itemData.checked;
-        console.log(markDownListData)
-        if (multiple) {
-          if (!itemData.disabled) {
+        const {conditionProps, multiple, dirtySelectedData, markDownListData} = this;
+        if (!multiple) {
+          // 单选情况简单处理
+          if (itemData.disabled || itemData[conditionProps]) {
             return false;
           }
-          lists = [];
-          const index = findIndexInArray(copyValue, itemData, valueName);
-          if (index < 0) {
-            copyValue.push(itemData);
-          } else {
-            copyValue.splice(index, 1)
+          if (dirtySelectedData[0]) {
+            this.$set(dirtySelectedData[0], 'checked', false);
           }
+          if (_.isEqual(dirtySelectedData[0], itemData)) {
+            this.$set(this, 'dirtySelectedData', [])
+          } else {
+            this.$set(itemData, 'checked', true);
+            this.$set(this, 'dirtySelectedData', [itemData])
+          }
+        } else {
+          this.$set(itemData, 'checked', !itemData.checked);
           // 多选
           //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
           //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
-          syncTreeListData(markDownListData, markDownListData, copyValue, valueName, multiple, lists);
-          this.$set(this, 'markDownListData', markDownListData);
-          this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
-        } else {
-          if (!itemData.disabled || itemData[conditionProps]) {
-            return false;
-          }
-          // 单选
-          lists = dirtySelectedData;
-          if (lists.find(list => list[valueName] === itemData[valueName])) {
-            lists = []
-          } else {
-            lists = [itemData]
-          }
+          const lists = [];
+          changeParentNodeStatus(this, markDownListData, itemData._c_tree_parent_id);
+          changeChildrenNodeStatus(this, itemData, itemData.checked);
+          getCheckedValue(markDownListData, lists);
+          this.$set(this, 'dirtySelectedData', lists);
         }
-        this.$set(this, 'dirtySelectedData', lists);
       },
     },
     watch: {
       listData: {
         handler(v) {
-          // 标记数据
-          const markDownListData = this.isAlreadyMarked ? _.cloneDeep(v) : markListDataIdentify(_.cloneDeep(v));
-          const dirtySelectedData = [];
-          syncTreeListData(this.markDownListData, this.markDownListData, _.cloneDeep(v), this.reflectKey['value'], this.multiple, dirtySelectedData);
-          this.$set(this, 'markDownListData', markDownListData);
-          this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
-          this.$set(this, 'dirtySelectedData', dirtySelectedData);
+          if (!_.isEqual(this.markDownListData, v)) {
+            // 标记数据
+            const {isAlreadyMarked, reflectKey, multiple, value} = this;
+            if (isAlreadyMarked) {
+              this.$set(this, 'markDownListData', v);
+              this.$set(this, 'backUpListData', _.cloneDeep(v));
+              return;
+            }
+            const markDownListData = markListDataIdentify(_.cloneDeep(v));
+            syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
+            this.$set(this, 'markDownListData', markDownListData);
+            this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
+            const lists = [];
+            getCheckedValue(markDownListData, lists, multiple);
+            this.$set(this, 'dirtySelectedData', lists);
+          }
         },
         deep: true,
         immediate: true,
       },
       value: {
         handler(v) {
-          const pureSelectedValue = removeDirtyKey(this.dirtySelectedData, treeDirtyKeys);
-          if (!_.isEqual(v, pureSelectedValue)) {
-            // 根据已选值同步渲染树形数据
-            const dirtySelectedData = [];
-            // 无需处理数据
-            if (this.isAlreadyMarked) {
-              dirtySelectedData.concat(v);
+          if (!_.isEqual(removeDirtyKey(v, treeDirtyKeys), removeDirtyKey(this.dirtySelectedData, treeDirtyKeys))) {
+            const {isAlreadyMarked, reflectKey, multiple} = this;
+            if (isAlreadyMarked) {
+              this.$set(this, 'dirtySelectedData', v);
             } else {
-              syncTreeListData(this.markDownListData, this.markDownListData, _.cloneDeep(v), this.reflectKey['value'], this.multiple, dirtySelectedData);
+              const markDownListData = markListDataIdentify(_.cloneDeep(this.listData));
+              syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
+              this.$set(this, 'markDownListData', markDownListData);
+              this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
+              const lists = [];
+              getCheckedValue(markDownListData, lists, multiple);
+              this.$set(this, 'dirtySelectedData', lists);
             }
-            this.$set(this, 'backUpListData', this.markDownListData);
-            this.$set(this, 'markDownListData', this.markDownListData);
-            this.$set(this, 'dirtySelectedData', dirtySelectedData);
+
           }
         },
         deep: true,
@@ -168,9 +166,17 @@
         handler(v) {
           const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
           this.$emit('input', pureSelectedValue);
+          this.$emit('getDirtySelectedData', v);
+          this.$emit('getMarkDownListData', this.markDownListData);
         },
         deep: true,
-        immediate: true
+      },
+      markDownListData: {
+        handler(v) {
+          this.$emit('getDirtySelectedData', this.dirtySelectedData);
+          this.$emit('getMarkDownListData', v);
+        },
+        deep: true,
       }
     },
     render(h) {
