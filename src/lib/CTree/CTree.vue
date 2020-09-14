@@ -98,6 +98,7 @@
           }
           if (dirtySelectedData[0]) {
             this.$set(dirtySelectedData[0], 'checked', false);
+            this.$set(dirtySelectedData[0], 'halfChecked', false);
           }
           if (_.isEqual(dirtySelectedData[0], itemData)) {
             this.$set(this, 'dirtySelectedData', [])
@@ -107,6 +108,7 @@
           }
         } else {
           this.$set(itemData, 'checked', !itemData.checked);
+          this.$set(itemData, 'halfChecked', false);
           // 多选
           //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
           //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
@@ -142,8 +144,8 @@
         immediate: true,
       },
       value: {
-        handler(v) {
-          if (!_.isEqual(removeDirtyKey(v, treeDirtyKeys), removeDirtyKey(this.dirtySelectedData, treeDirtyKeys))) {
+        handler(v,old) {
+          if (!_.isEqual(v,old)) {
             const {isAlreadyMarked, reflectKey, multiple} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'dirtySelectedData', v);
@@ -156,7 +158,6 @@
               getCheckedValue(markDownListData, lists, multiple);
               this.$set(this, 'dirtySelectedData', lists);
             }
-
           }
         },
         deep: true,
