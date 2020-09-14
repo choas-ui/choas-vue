@@ -3,8 +3,8 @@
         <template v-if="!canBeEdited">
             <div class="input-like-wrap">
                 <div class="input-like input-like-unedited">
-                    <template v-if="dirtyData.length">
-                        <CTag v-for="(item, index) of dirtyData"
+                    <template v-if="dirtySelectedData.length">
+                        <CTag v-for="(item, index) of dirtySelectedData"
                               :key="index + item[reflectKey['value']]"
                         >
                             {{ item[[reflectKey['key']]] }}
@@ -18,8 +18,8 @@
               <div class="input-like"
                    @click="inputClick"
               >
-                      <template v-if="dirtyData.length && multiple">
-                          <CTag v-for="(item, index) of dirtyData"
+                      <template v-if="dirtySelectedData.length && multiple">
+                          <CTag v-for="(item, index) of dirtySelectedData"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
                                 @close="(e)=>removeHandle(item, e)"
@@ -28,15 +28,15 @@
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
-                      <template v-if="selectedData.length && !multiple">
-                          <CTag v-for="(item, index) of selectedData"
+                      <template v-if="dirtySelectedData.length && !multiple">
+                          <CTag v-for="(item, index) of dirtySelectedData"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
                           >
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
-                  <template v-if="!selectedData.length">
+                  <template v-if="!dirtySelectedData.length">
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
@@ -45,8 +45,8 @@
           </div>
         </template>
         <CTreeModal ref="cTreeModal"
-                    :list-data="copyListData"
-                    v-model="dirtyData"
+                    :list-data="markDownListData"
+                    v-model="dirtySelectedData"
                     :title="title"
                     :is-show="isModalShow"
                     @toggleShow="v => this.isModalShow= v"
@@ -57,6 +57,9 @@
                     :multiple="multiple"
                     :checkbox="checkbox"
                     :controllers="controllers"
+                    isAlreadyMarked
+                    @getDirtySelectedData="getDirtySelectedData"
+                    @getMarkDownListData="getMarkDownListData"
 
                     :width="width"
                     :height="height"
@@ -91,7 +94,15 @@
     activeColorProps,
     controllersProps
   } from "../../consts/mixins";
-  import {markIdentifyIfNotHave, removeDirtyKey} from "../../utils";
+  import {
+    changeChildrenNodeStatus,
+    changeParentNodeStatus,
+    getCheckedValue, isInArray,
+    markListDataIdentify,
+    removeDirtyKey,
+    syncTreeListData
+  } from "../../utils";
+  import {treeDirtyKeys} from "../../consts/consts";
 
 
   export default {
@@ -180,12 +191,17 @@
     data() {
       return {
         isModalShow: false,
-        selectedData: [],
-        copyListData: [],
-        dirtyData: []
+        dirtySelectedData: [],
+        markDownListData: [],
       }
     },
     methods: {
+      getDirtySelectedData(v) {
+        this.$set(this, 'dirtySelectedData', v);
+      },
+      getMarkDownListData(v) {
+        this.$set(this, 'markDownListData', v);
+      },
       inputClick() {
         if (!this.buttonTxt) {
           this.isModalShow = true
@@ -194,162 +210,119 @@
       addTreeNode(v) {
         this.$emit('addTreeNode', v)
       },
-      removeHandle(item, $event) {
-        const valueKey = this.reflectKey['value'];
-        const dirtyData = this.dirtyData.filter(item => item[valueKey] !== item[valueKey]);
-        this.$set(this, 'dirtyData', dirtyData);
+      removeHandle(itemData, $event) {
+        const {reflectKey, conditionProps, multiple, dirtySelectedData, markDownListData} = this;
+        const valueName = reflectKey['value'];
+        if (!multiple) {
+          // 单选情况简单处理
+          if (itemData.disabled || itemData[conditionProps]) {
+            return false;
+          }
+          if (isInArray(dirtySelectedData, itemData, valueName)) {
+            this.$set(dirtySelectedData[0], 'checked', false);
+            this.$set(this, 'dirtySelectedData', []);
+          } else {
+            const preData = dirtySelectedData[0];
+            if (preData) {
+              this.$set(dirtySelectedData[0], 'checked', false);
+            }
+            this.$set(itemData, 'checked', true);
+            this.$set(this, 'dirtySelectedData', [itemData]);
+          }
+        } else {
+          console.log(itemData)
+          this.$set(itemData, 'checked', !itemData.checked);
+          // 多选
+          //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
+          //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
+          const lists = [];
+          changeParentNodeStatus(this, markDownListData, itemData._c_tree_parent_id);
+          changeChildrenNodeStatus(this, itemData, itemData.checked);
+          getCheckedValue(markDownListData, lists, multiple);
+          this.$set(this, 'dirtySelectedData', lists);
+        }
         $event.stopPropagation();
         $event.preventDefault();
-      },
-      // 同步数据
-      syncCopyListData(copyListData, listData, selectData, valueKey, res = []) {
-        if (Object.prototype.toString.call(listData) !== '[object Array]') {
-          return;
-        }
-        if (Object.prototype.toString.call(selectData) !== '[object Array]') {
-          return;
-        }
-        listData.forEach(item => {
-          const index = selectData.findIndex(selected => selected[valueKey] === item[valueKey]);
-          if (index > -1) {
-            // 移除选中副本 减少遍历次数
-            selectData.splice(index, 1);
-            item.checked = true;
-            delete item.halfChecked;
-            // 修改当前值
-            const itemInListData = _.cloneDeepWith(item, (v, k) => {
-              // 不复制子元素
-              if (k !== 'children') {
-                return v
-              }
-            });
-            res.push(itemInListData);
-            if (this.multiple) {
-              // 向上修改父类
-              this.changeParentNodeStatus(copyListData, item._c_tree_parent_id);
-              // 向下修改子类
-              this.changeChildrenNodeStatus(item, item.checked);
-            }
-          }
-          if (selectData.length) {
-            this.syncCopyListData(copyListData, item.children, selectData, valueKey, res);
-          }
-        })
-      },
-      // 修改子节点属性
-      changeChildrenNodeStatus(data, checked) {
-        (data.children || []).forEach(item => {
-          delete item.halfChecked;
-          this.$set(item, 'checked', checked);
-          this.changeChildrenNodeStatus(item, checked)
-        })
-      },
-      // 修改父节点属性
-      changeParentNodeStatus(lisData, parentPath, deep = true) {
-        const parentValue = _.get(lisData, parentPath.split('-').join('.children.'), null);
-        if (parentValue) {
-          if (parentValue.children.every(item => !item.checked && !item.halfChecked)) {
-            delete parentValue.checked;
-            delete parentValue.halfChecked;
-          } else if (parentValue.children.every(item => item.checked)) {
-            delete parentValue.halfChecked;
-            this.$set(parentValue, 'checked', true)
-          } else {
-            delete parentValue.checked;
-            this.$set(parentValue, 'halfChecked', true)
-          }
-          if (deep) {
-            this.changeParentNodeStatus(lisData, parentValue._c_tree_parent_id, deep)
-          }
-        }
       },
     },
     watch: {
       listData: {
         handler(v) {
-          let copyListData = markIdentifyIfNotHave(v);
-          this.$set(this, 'copyListData', copyListData);
+          // 标记数据
+          const markDownListData = markListDataIdentify(_.cloneDeep(v));
+          const {multiple, reflectKey, value} = this;
+          syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
+          this.$set(this, 'markDownListData', markDownListData);
+          const lists = [];
+          getCheckedValue(markDownListData, lists, multiple);
+          this.$set(this, 'dirtySelectedData', lists);
         },
         deep: true,
-        immediate: true
-      },
-      selectedData: {
-        handler(v) {
-          this.$emit('input', _.cloneDeep(v))
-        },
-        deep: true,
-        immediate: true
-      },
-      dirtyData: {
-        handler(v) {
-          const keys = [
-            '_c_tree_parent_id',
-            '_c_tree_self_id',
-            'checked',
-            'halfChecked',
-            'children',
-            'expand',
-          ];
-          // 返回脏数据
-          const pureCopyValue = removeDirtyKey(_.cloneDeep(v), keys);
-          this.$set(this, 'selectedData', pureCopyValue);
-        },
-        deep: true,
+        immediate: true,
       },
       value: {
-        handler(v) {
-          if (!_.isEqual(v, this.selectedData)) {
-            const value = _.cloneDeep(v);
-            // 同步列表数据
-            const dirtyData = [];
-            // 同步列表和选中值
-            this.syncCopyListData(this.copyListData, this.copyListData, value, this.reflectKey['value'], dirtyData);
-            this.$set(this, 'dirtyData', dirtyData);
+        handler(v,old) {
+          if (!_.isEqual(v, old)) {
+            let lists = [];
+            const {markDownListData, reflectKey, multiple} = this;
+            syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
+            this.$set(this, 'markDownListData', markDownListData);
+            getCheckedValue(this.markDownListData, lists, multiple);
+            this.$set(this, 'dirtySelectedData', lists);
           }
         },
         deep: true,
         immediate: true
+      },
+      dirtySelectedData: {
+        handler(v) {
+          const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
+          this.$set(this, 'markDownListData', this.markDownListData);
+          this.$emit('input', pureSelectedValue);
+        },
+        deep: true,
+        immediate: true,
       },
     }
   }
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/normal-bg";
-    @import "../scss/size";
-    @import "../scss/variable";
-    @import "../scss/functions";
+  @import "../scss/normal-bg";
+  @import "../scss/size";
+  @import "../scss/variable";
+  @import "../scss/functions";
 
-    .input-like-wrap {
-        font-size: addPX($df-fs);
+  .input-like-wrap {
+    font-size: addPX($df-fs);
+    display: flex;
+
+    .input-like {
+      border: addPX($ssm-borderWt) solid #D9D9D9;
+      border-radius: addPX($sm-radius);
+      line-height: addPX($df-height);
+      min-height: addPX($df-height);
+      padding-left: addPX($sm-padding);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      cursor: pointer;
+      flex: 1;
+
+      &-unedited {
+        border: none;
+        cursor: not-allowed;
         display: flex;
+      }
 
-        .input-like {
-            border: addPX($ssm-borderWt) solid #D9D9D9;
-            border-radius: addPX($sm-radius);
-            line-height: addPX($df-height);
-            min-height: addPX($df-height);
-            padding-left: addPX($sm-padding);
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            cursor: pointer;
-            flex: 1;
-
-            &-unedited {
-                border: none;
-                cursor: not-allowed;
-                display: flex;
-            }
-
-            .placeholder-span {
-                color: #ccc;
-            }
-        }
-
-        .input-button {
-            margin-left: addPX($sm-margin);
-        }
+      .placeholder-span {
+        color: #ccc;
+      }
     }
+
+    .input-button {
+      margin-left: addPX($sm-margin);
+    }
+  }
 </style>

@@ -106,7 +106,7 @@
     maskProps,
     multipleProps,
     prefixProps,
-    reflectKeyProps
+    reflectKeyProps,
   } from "../../consts/mixins";
   import {treeDirtyKeys} from "../../consts/consts";
 
@@ -288,20 +288,20 @@
       },
       value: {
         handler(v) {
-          //   const pureSelectedValue = removeDirtyKey(this.dirtySelectedData, treeDirtyKeys);
-          //   if (!_.isEqual(v, pureSelectedValue)) {
-          //     let lists = v;
-          //     if (!this.isAlreadyMarked) {
-          //       lists = [];
-          //       const {markDownListData, reflectKey, multiple} = this;
-          //       // 根据已选值同步渲染树形数据
-          //       syncTreeListData(markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
-          //       this.$set(this, 'markDownListData', markDownListData);
-          //       this.$set(this, 'backUpListData', markDownListData);
-          //       getCheckedValue(markDownListData, lists, multiple);
-          //     }
-          //     this.$set(this, 'dirtySelectedData', lists);
-          //   }
+            const pureSelectedValue = removeDirtyKey(this.dirtySelectedData, treeDirtyKeys);
+            if (!_.isEqual(v, pureSelectedValue)) {
+              let lists = v;
+              if (!this.isAlreadyMarked) {
+                lists = [];
+                const {markDownListData, reflectKey, multiple} = this;
+                // 根据已选值同步渲染树形数据
+                syncTreeListData(markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
+                this.$set(this, 'markDownListData', markDownListData);
+                this.$set(this, 'backUpListData', markDownListData);
+                getCheckedValue(markDownListData, lists, multiple);
+              }
+              this.$set(this, 'dirtySelectedData', lists);
+            }
         },
         deep: true,
         immediate: true
@@ -323,7 +323,7 @@
           this.$emit('toggleShow', false);
           this.searchStr = '';
         }
-      },
+      }
     }
   }
 </script>

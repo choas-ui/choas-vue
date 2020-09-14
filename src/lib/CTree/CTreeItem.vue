@@ -5,7 +5,7 @@
     controllersProps,
     fileIconProps,
     lineProps, multipleProps,
-    reflectKeyProps
+    reflectKeyProps, searchStrProps
   } from "../../consts/mixins";
   import CTreeItemLine from "./CTreeItemLine";
   import CTreeExpandIcon from "./CTreeExpandIcon";
@@ -13,6 +13,7 @@
   import CTreeControllerBox from "./CTreeControllerBox";
   import {createSingleIcon} from "../../utils";
   import _ from 'lodash'
+  import classNames from 'classnames'
 
   export default {
     name: 'CTreeItem',
@@ -29,7 +30,8 @@
       controllersProps,
       conditionPropsMix,
       checkboxProps,
-      multipleProps
+      multipleProps,
+      searchStrProps,
     ],
     props: {
       dirtySelectedData: {
@@ -52,6 +54,12 @@
       },
       lineHeight: {
         type: String,
+      },
+      markColor: {
+        type: String,
+        default() {
+          return 'red';
+        }
       }
     },
     data() {
@@ -95,6 +103,9 @@
         conditionProps,
         checkbox,
         multiple,
+        searchStr,
+        markColor,
+
 
         removeLastChildrenHandle, // 移除添加的末尾函数
         cancelEditModelHandle, // 取消编辑状体
@@ -109,6 +120,10 @@
           [
             markDownListData.map((item, index) => {
               const cloneItem = _.cloneDeep(item);
+              const style ={};
+              if(this.searchStr && item[keyName].indexOf(this.searchStr)>-1){
+                style.color = this.markColor;
+              }
               return h('li',
                   {
                     class: ['tree-li'],
@@ -182,8 +197,8 @@
                                           this.$emit('listChangeHandle', item);
                                         },
                                       },
-                                      style:{
-                                        display:'flex',
+                                      style: {
+                                        display: 'flex',
                                         flex: 1,
 
                                       }
@@ -219,9 +234,15 @@
                                           }
                                       ) : h('span',
                                           {
-                                            class: [item.checked ? 'active' : null, 'text-content'],
+                                            class: classNames({
+                                              'text-content': true,
+                                               'active' : item.checked,
+                                            }),
+                                            style,
                                           },
-                                          [item[keyName]]
+                                          [
+                                            item[keyName]
+                                          ]
                                       )
                                     ]
                                 ),
@@ -268,6 +289,8 @@
                             conditionProps,
                             checkbox,
                             multiple,
+                            searchStr,
+                            markColor,
                           },
                           on: {
                             editItemHandle: this.$listeners.editItemHandle,

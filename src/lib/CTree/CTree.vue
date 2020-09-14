@@ -57,8 +57,7 @@
         default() {
           return '';
         },
-      },
-
+      }
     },
     data() {
       return {
@@ -66,8 +65,6 @@
         markDownListData: [], // 标记数据
         dirtySelectedData: [], // 脏数据
       };
-    },
-    mounted() {
     },
     computed: {
       getTreeWrap() {
@@ -119,6 +116,24 @@
           this.$set(this, 'dirtySelectedData', lists);
         }
       },
+      // 筛选数据
+      filterData(data, v, key) {
+        for (let i = 0; i < data.length; ++i) {
+          const item = data[i];
+          data[i].expand = true;
+          if ((item.children || []).length) {
+            this.filterData(item.children, v, key);
+          }
+          if (!(item.children || []).length) {
+            delete item.children;
+            if (item[key].indexOf(v) < 0) {
+              data.splice(i, 1);
+              --i;
+            }
+          }
+        }
+      },
+
     },
     watch: {
       listData: {
@@ -144,8 +159,8 @@
         immediate: true,
       },
       value: {
-        handler(v,old) {
-          if (!_.isEqual(v,old)) {
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
             const {isAlreadyMarked, reflectKey, multiple} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'dirtySelectedData', v);
@@ -172,13 +187,16 @@
         },
         deep: true,
       },
-      markDownListData: {
-        handler(v) {
-          this.$emit('getDirtySelectedData', this.dirtySelectedData);
-          this.$emit('getMarkDownListData', v);
-        },
-        deep: true,
-      }
+      // 搜索
+      searchStr(v) {
+        if (v) {
+          const listData = _.cloneDeep(this.backUpListData);
+          this.filterData(listData, v, this.reflectKey['key']);
+          this.$set(this, 'markDownListData', listData);
+        } else {
+          this.$set(this, 'markDownListData', _.cloneDeep(this.backUpListData));
+        }
+      },
     },
     render(h) {
       const {
@@ -191,6 +209,7 @@
         conditionProps,
         checkbox,
         multiple,
+        searchStr,
 
         editItemHandle,
         deleteItemHandle,
@@ -218,6 +237,7 @@
                     conditionProps,
                     checkbox,
                     multiple,
+                    searchStr,
                   },
                   on: {
                     editItemHandle,
