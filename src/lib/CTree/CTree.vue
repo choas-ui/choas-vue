@@ -14,10 +14,10 @@
   import {
     changeChildrenNodeStatus,
     changeParentNodeStatus,
-    getCheckedValue,
+    getCheckedValue, isInArray,
     markListDataIdentify,
     removeDirtyKey,
-    syncTreeListData
+    syncTreeListData, treeSelectListChangeHandle
   } from "../../utils";
   import {treeDirtyKeys} from "../../consts/consts";
   import CTreeItem from "./CTreeItem";
@@ -87,34 +87,7 @@
       },
       // 修改列表
       listChangeHandle(itemData) {
-        const {conditionProps, multiple, dirtySelectedData, markDownListData} = this;
-        if (!multiple) {
-          // 单选情况简单处理
-          if (itemData.disabled || itemData[conditionProps]) {
-            return false;
-          }
-          if (dirtySelectedData[0]) {
-            this.$set(dirtySelectedData[0], 'checked', false);
-            this.$set(dirtySelectedData[0], 'halfChecked', false);
-          }
-          if (_.isEqual(dirtySelectedData[0], itemData)) {
-            this.$set(this, 'dirtySelectedData', [])
-          } else {
-            this.$set(itemData, 'checked', true);
-            this.$set(this, 'dirtySelectedData', [itemData])
-          }
-        } else {
-          this.$set(itemData, 'checked', !itemData.checked);
-          this.$set(itemData, 'halfChecked', false);
-          // 多选
-          //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
-          //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
-          const lists = [];
-          changeParentNodeStatus(this, markDownListData, itemData._c_tree_parent_id);
-          changeChildrenNodeStatus(this, itemData, itemData.checked);
-          getCheckedValue(markDownListData, lists);
-          this.$set(this, 'dirtySelectedData', lists);
-        }
+       treeSelectListChangeHandle(this, itemData)
       },
       // 筛选数据
       filterData(data, v, key) {
@@ -179,11 +152,13 @@
         immediate: true
       },
       dirtySelectedData: {
-        handler(v) {
-          const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
-          this.$emit('input', pureSelectedValue);
-          this.$emit('getDirtySelectedData', v);
-          this.$emit('getMarkDownListData', this.markDownListData);
+        handler(v, old) {
+          if (!_.isEqual(v, old)) {
+            const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
+            this.$emit('input', pureSelectedValue);
+            this.$emit('getDirtySelectedData', v);
+            this.$emit('getMarkDownListData', this.markDownListData);
+          }
         },
         deep: true,
       },
@@ -285,10 +260,10 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../scss/functions";
-  @import "../scss/size";
-  @import "../scss/normal-bg";
-  @import "../scss/variable";
-  @import "../scss/comm-class";
+	@import "../scss/functions";
+	@import "../scss/size";
+	@import "../scss/normal-bg";
+	@import "../scss/variable";
+	@import "../scss/comm-class";
 
 </style>

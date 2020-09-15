@@ -5,8 +5,8 @@
                 <div class="input-like input-like-unedited">
                     <template v-if="dirtySelectedData.length">
                         <CTag v-for="(item, index) of dirtySelectedData"
-															:key="index + item[reflectKey['value']]"
-												>
+                              :key="index + item[reflectKey['value']]"
+                        >
                             {{ item[[reflectKey['key']]] }}
                         </CTag>
                     </template>
@@ -15,24 +15,22 @@
         </template>
         <template v-else>
           <div class="input-like-wrap">
-              <div class="input-like"
-									 @click="inputClick"
-							>
+              <div class="input-like" @click="inputClick">
                       <template v-if="dirtySelectedData.length && multiple">
                           <CTag v-for="(item, index) of dirtySelectedData"
-																:key="index + item[reflectKey['value']]"
-																size="small"
-																@close="(e)=>removeHandle(item, e)"
-																active-color="#ff5e5c"
-													>
+                                :key="index + item[reflectKey['value']]"
+                                size="small"
+                                @close="(e)=>listChangeHandle(item, e)"
+                                active-color="#ff5e5c"
+                          >
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
                       <template v-if="dirtySelectedData.length && !multiple">
                           <CTag v-for="(item, index) of dirtySelectedData"
-																:key="index + item[reflectKey['value']]"
-																size="small"
-													>
+                                :key="index + item[reflectKey['value']]"
+                                size="small"
+                          >
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
@@ -40,39 +38,41 @@
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
-              <CButton class-name="input-button" v-if="buttonTxt"
-											 @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
+              <CButton
+                      class-name="input-button"
+                      v-if="buttonTxt"
+                      @click="isModalShow = !isModalShow">{{buttonTxt}}</CButton>
           </div>
         </template>
         <CTreeModal ref="cTreeModal"
-										:list-data="markDownListData"
-										v-model="dirtySelectedData"
-										:title="title"
-										:is-show="isModalShow"
-										@toggleShow="v => this.isModalShow= v"
-										:condition-props="conditionProps"
-										:cascade-condition-props="cascadeConditionProps"
-										:add-tree-node="$listeners.addTreeNode? addTreeNode : null"
-										:reflect-key="reflectKey"
-										:multiple="multiple"
-										:checkbox="checkbox"
-										:controllers="controllers"
-										isAlreadyMarked
-										@getDirtySelectedData="getDirtySelectedData"
-										@getMarkDownListData="getMarkDownListData"
+                    :list-data="markDownListData"
+                    v-model="dirtySelectedData"
+                    :title="title"
+                    :is-show="isModalShow"
+                    @toggleShow="v => this.isModalShow= v"
+                    :condition-props="conditionProps"
+                    :cascade-condition-props="cascadeConditionProps"
+                    :add-tree-node="$listeners.addTreeNode? addTreeNode : null"
+                    :reflect-key="reflectKey"
+                    :multiple="multiple"
+                    :checkbox="checkbox"
+                    :controllers="controllers"
+                    isAlreadyMarked
+                    @getDirtySelectedData="getDirtySelectedData"
+                    @getMarkDownListData="getMarkDownListData"
 
-										:width="width"
-										:height="height"
-										:top="top"
-										:left="left"
-										:mask="mask"
-										:line="line"
-										:cancel="cancel"
-										:draggable="draggable"
-										:controllerColor="controllerColor"
-										:activeColor="activeColor"
-										:placeholder="placeholder"
-				/>
+                    :width="width"
+                    :height="height"
+                    :top="top"
+                    :left="left"
+                    :mask="mask"
+                    :line="line"
+                    :cancel="cancel"
+                    :draggable="draggable"
+                    :controllerColor="controllerColor"
+                    :activeColor="activeColor"
+                    :placeholder="placeholder"
+        />
     </span>
 </template>
 <script>
@@ -100,7 +100,7 @@
     getCheckedValue, isInArray,
     markListDataIdentify,
     removeDirtyKey,
-    syncTreeListData
+    syncTreeListData, treeSelectListChangeHandle
   } from "../../utils";
   import {treeDirtyKeys} from "../../consts/consts";
 
@@ -210,38 +210,8 @@
       addTreeNode(v) {
         this.$emit('addTreeNode', v)
       },
-      removeHandle(itemData, $event) {
-        const {reflectKey, conditionProps, multiple, dirtySelectedData, markDownListData} = this;
-        const valueName = reflectKey['value'];
-        if (!multiple) {
-          // 单选情况简单处理
-          if (itemData.disabled || itemData[conditionProps]) {
-            return false;
-          }
-          if (isInArray(dirtySelectedData, itemData, valueName)) {
-            this.$set(dirtySelectedData[0], 'checked', false);
-            this.$set(this, 'dirtySelectedData', []);
-          } else {
-            const preData = dirtySelectedData[0];
-            if (preData) {
-              this.$set(dirtySelectedData[0], 'checked', false);
-            }
-            this.$set(itemData, 'checked', true);
-            this.$set(this, 'markDownListData', this.markDownListData);
-            this.$set(this, 'dirtySelectedData', [itemData]);
-          }
-        } else {
-          this.$set(itemData, 'checked', !itemData.checked);
-          // 多选
-          //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
-          //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
-          const lists = [];
-          changeParentNodeStatus(this, markDownListData, itemData._c_tree_parent_id);
-          changeChildrenNodeStatus(this, itemData, itemData.checked);
-          this.$set(this, 'markDownListData', markDownListData);
-          getCheckedValue(markDownListData, lists, multiple);
-          this.$set(this, 'dirtySelectedData', lists);
-        }
+      listChangeHandle(itemData, $event) {
+        treeSelectListChangeHandle(this, itemData);
         $event.stopPropagation();
         $event.preventDefault();
       },
@@ -289,41 +259,41 @@
 </script>
 
 <style lang="scss" scoped>
-	@import "../scss/normal-bg";
-	@import "../scss/size";
-	@import "../scss/variable";
-	@import "../scss/functions";
-	
-	.input-like-wrap {
-		font-size: addPX($df-fs);
-		display: flex;
-		
-		.input-like {
-			border: addPX($ssm-borderWt) solid #D9D9D9;
-			border-radius: addPX($sm-radius);
-			line-height: addPX($df-height);
-			min-height: addPX($df-height);
-			padding-left: addPX($sm-padding);
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-			flex-wrap: wrap;
-			cursor: pointer;
-			flex: 1;
-			
-			&-unedited {
-				border: none;
-				cursor: not-allowed;
-				display: flex;
-			}
-			
-			.placeholder-span {
-				color: #ccc;
-			}
-		}
-		
-		.input-button {
-			margin-left: addPX($sm-margin);
-		}
-	}
+  @import "../scss/normal-bg";
+  @import "../scss/size";
+  @import "../scss/variable";
+  @import "../scss/functions";
+
+  .input-like-wrap {
+    font-size: addPX($df-fs);
+    display: flex;
+
+    .input-like {
+      border: addPX($ssm-borderWt) solid #D9D9D9;
+      border-radius: addPX($sm-radius);
+      line-height: addPX($df-height);
+      min-height: addPX($df-height);
+      padding-left: addPX($sm-padding);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      cursor: pointer;
+      flex: 1;
+
+      &-unedited {
+        border: none;
+        cursor: not-allowed;
+        display: flex;
+      }
+
+      .placeholder-span {
+        color: #ccc;
+      }
+    }
+
+    .input-button {
+      margin-left: addPX($sm-margin);
+    }
+  }
 </style>

@@ -255,3 +255,50 @@ export const findIndexInArray = (listData, value, key) => {
   }
   return listData.find(list => list[key] === value[key]);
 };
+
+/**
+ * @name treeSelectListChangeHandle 用于移除tree形组件中的某些值
+ * @param context 上下文
+ * @param itemData 值
+ * */
+export const treeSelectListChangeHandle=(context, itemData)=> {
+  const {conditionProps, multiple, dirtySelectedData, markDownListData,reflectKey} = context;
+  const valueName = reflectKey['value'];
+  if (!multiple) {
+    // 单选情况简单处理
+    if (itemData.disabled || itemData[conditionProps]) {
+      return false;
+    }
+    if (isInArray(dirtySelectedData, itemData, valueName)) {
+      const itemDataInTree = _.get(context.markDownListData,itemData._c_tree_self_id.split('-').join('.children.'),{});
+      context.$set(itemDataInTree, 'checked', false);
+      context.$set(itemDataInTree, 'halfChecked', false);
+      context.$set(context, 'dirtySelectedData', []);
+    } else {
+      const preData = dirtySelectedData[0];
+      if (preData) {
+        const itemDataInTree = _.get(context.markDownListData,preData._c_tree_self_id.split('-').join('.children.'),{});
+        context.$set(itemDataInTree, 'checked', false);
+        context.$set(itemDataInTree, 'halfChecked', false);
+      }
+      const itemDataInTree = _.get(context.markDownListData,itemData._c_tree_self_id.split('-').join('.children.'),{});
+      context.$set(itemDataInTree, 'checked', true);
+      context.$set(itemDataInTree, 'halfChecked', false);
+      context.$set(context, 'markDownListData', context.markDownListData);
+      context.$set(context, 'dirtySelectedData', [itemDataInTree]);
+    }
+  } else {
+    const itemDataInTree = _.get(context.markDownListData,itemData._c_tree_self_id.split('-').join('.children.'),{});
+    context.$set(itemDataInTree, 'checked', !itemData.checked);
+    context.$set(itemDataInTree, 'halfChecked', false);
+    // 多选
+    //  向上遍历副元素 点选情况判断父元素是否半选或者全选 同时修改list
+    //  再向下遍历子元素 向下依次全选 或者半选父元素 同时修改list
+    const lists = [];
+    changeParentNodeStatus(context, markDownListData, itemDataInTree._c_tree_parent_id);
+    changeChildrenNodeStatus(context, itemDataInTree, itemDataInTree.checked);
+    context.$set(context, 'markDownListData', markDownListData);
+    getCheckedValue(markDownListData, lists, multiple);
+    context.$set(context, 'dirtySelectedData', lists);
+  }
+};
