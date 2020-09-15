@@ -172,7 +172,6 @@
         isModalShow: this.isShow,
         dirtySelectedData: [],
         backupDirtySelectedData: [],
-        selectedData: [],
         searchStr: '',
         markDownListData: [],
         backUpListData: [],
