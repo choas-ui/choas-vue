@@ -83,11 +83,11 @@
 <script>
   import _ from 'lodash'
   import {
-    changeChildrenNodeStatus,
-    changeParentNodeStatus,
-    getCheckedValue, isInArray,
-    markListDataIdentify, removeDirtyKey,
-    syncTreeListData, treeSelectListChangeHandle
+    getCheckedValue,
+    markListDataIdentify,
+    removeDirtyKey,
+    syncTreeListData,
+    treeSelectListChangeHandle
   } from "../../utils";
   import classNames from 'classnames'
   import defaultImg from './imgs/header.png'
@@ -207,7 +207,7 @@
       }
     },
     mounted() {
-      this.$emit('input', this.selectedData);
+      this.$emit('input', removeDirtyKey(this.dirtySelectedData, treeDirtyKeys));
     },
     methods: {
       getDirtySelectedData(v) {
@@ -226,7 +226,7 @@
       cancelHandle() {
         this.$emit('toggleShow', false);
         this.$set(this, 'markDownListData', _.cloneDeep(this.backUpListData));
-        this.$set(this, 'dirtySelectedData',  _.cloneDeep(this.backupDirtySelectedData));
+        this.$set(this, 'dirtySelectedData', _.cloneDeep(this.backupDirtySelectedData));
       },
       // 右侧移除按钮
       listChangeHandle(itemData) {
