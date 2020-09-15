@@ -3,8 +3,8 @@
         <template v-if="!canBeEdited">
             <div class="input-like-wrap">
                 <div class="input-like input-like-unedited">
-                    <template v-if="dirtySelectedData.length">
-                        <CTag v-for="(item, index) of dirtySelectedData"
+                    <template v-if="filterDirtySelectedDataByCondition.length">
+                        <CTag v-for="(item, index) of filterDirtySelectedDataByCondition"
                               :key="index + item[reflectKey['value']]"
                         >
                             {{ item[[reflectKey['key']]] }}
@@ -16,8 +16,8 @@
         <template v-else>
           <div class="input-like-wrap">
               <div class="input-like" @click="inputClick">
-                      <template v-if="dirtySelectedData.length && multiple">
-                          <CTag v-for="(item, index) of dirtySelectedData"
+                      <template v-if="filterDirtySelectedDataByCondition.length && multiple">
+                          <CTag v-for="(item, index) of filterDirtySelectedDataByCondition"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
                                 @close="(e)=>listChangeHandle(item, e)"
@@ -26,15 +26,15 @@
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
-                      <template v-if="dirtySelectedData.length && !multiple">
-                          <CTag v-for="(item, index) of dirtySelectedData"
+                      <template v-if="filterDirtySelectedDataByCondition.length && !multiple">
+                          <CTag v-for="(item, index) of filterDirtySelectedDataByCondition"
                                 :key="index + item[reflectKey['value']]"
                                 size="small"
                           >
                           {{ item[[reflectKey['key']]] }}
                           </CTag>
                       </template>
-                  <template v-if="!dirtySelectedData.length">
+                  <template v-if="!filterDirtySelectedDataByCondition.length">
                       <span class="placeholder-span">{{ placeholder }}</span>
                   </template>
               </div>
@@ -95,9 +95,7 @@
     controllersProps
   } from "../../consts/mixins";
   import {
-    changeChildrenNodeStatus,
-    changeParentNodeStatus,
-    getCheckedValue, isInArray,
+    getCheckedValue,
     markListDataIdentify,
     removeDirtyKey,
     syncTreeListData, treeSelectListChangeHandle
@@ -195,6 +193,11 @@
         markDownListData: [],
       }
     },
+    computed: {
+      filterDirtySelectedDataByCondition() {
+        return this.dirtySelectedData.filter(item => !item[this.conditionProps])
+      },
+    },
     methods: {
       getDirtySelectedData(v) {
         this.$set(this, 'dirtySelectedData', v);
@@ -221,11 +224,11 @@
         handler(v) {
           // 标记数据
           const markDownListData = markListDataIdentify(_.cloneDeep(v));
-          const {multiple, reflectKey, value, conditionProps} = this;
+          const {multiple, reflectKey, value} = this;
           syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
           this.$set(this, 'markDownListData', markDownListData);
           const lists = [];
-          getCheckedValue(markDownListData,conditionProps, lists, multiple);
+          getCheckedValue(markDownListData, lists, multiple);
           this.$set(this, 'dirtySelectedData', lists);
         },
         deep: true,
@@ -235,10 +238,10 @@
         handler(v, old) {
           if (!_.isEqual(v, old)) {
             let lists = [];
-            const {markDownListData, reflectKey, multiple,conditionProps} = this;
+            const {markDownListData, reflectKey, multiple} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
             this.$set(this, 'markDownListData', markDownListData);
-            getCheckedValue(this.markDownListData, conditionProps,lists, multiple);
+            getCheckedValue(this.markDownListData, lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
           }
         },
@@ -246,8 +249,8 @@
         immediate: true
       },
       dirtySelectedData: {
-        handler(v) {
-          const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
+        handler() {
+          const pureSelectedValue = removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys);
           this.$set(this, 'markDownListData', this.markDownListData);
           this.$emit('input', pureSelectedValue);
         },

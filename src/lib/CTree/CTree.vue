@@ -12,9 +12,7 @@
     searchStrProps
   } from "../../consts/mixins";
   import {
-    changeChildrenNodeStatus,
-    changeParentNodeStatus,
-    getCheckedValue, isInArray,
+    getCheckedValue,
     markListDataIdentify,
     removeDirtyKey,
     syncTreeListData, treeSelectListChangeHandle
@@ -67,6 +65,9 @@
       };
     },
     computed: {
+      filterDirtySelectedDataByCondition(){
+        return this.dirtySelectedData.filter(item=>!item[this.conditionProps])
+      },
       getTreeWrap() {
         const prefix = this.prefix ? this.prefix + '-' : '';
         return classNames({
@@ -113,7 +114,7 @@
         handler(v) {
           if (!_.isEqual(this.markDownListData, v)) {
             // 标记数据
-            const {isAlreadyMarked, reflectKey,conditionProps, multiple, value} = this;
+            const {isAlreadyMarked, reflectKey, multiple, value} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'markDownListData', v);
               this.$set(this, 'backUpListData', _.cloneDeep(v));
@@ -124,7 +125,7 @@
             this.$set(this, 'markDownListData', markDownListData);
             this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
             const lists = [];
-            getCheckedValue(markDownListData,conditionProps, lists, multiple);
+            getCheckedValue(markDownListData, lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
           }
         },
@@ -134,7 +135,7 @@
       value: {
         handler(v, old) {
           if (!_.isEqual(v, old)) {
-            const {isAlreadyMarked,conditionProps, reflectKey, multiple} = this;
+            const {isAlreadyMarked, reflectKey, multiple} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'dirtySelectedData', v);
             } else {
@@ -143,7 +144,7 @@
               this.$set(this, 'markDownListData', markDownListData);
               this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
               const lists = [];
-              getCheckedValue(markDownListData,conditionProps, lists, multiple);
+              getCheckedValue(markDownListData, lists, multiple);
               this.$set(this, 'dirtySelectedData', lists);
             }
           }
@@ -154,13 +155,14 @@
       dirtySelectedData: {
         handler(v, old) {
           if (!_.isEqual(v, old)) {
-            const pureSelectedValue = removeDirtyKey(v, treeDirtyKeys);
+            const pureSelectedValue = removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys);
             this.$emit('input', pureSelectedValue);
             this.$emit('getDirtySelectedData', v);
             this.$emit('getMarkDownListData', this.markDownListData);
           }
         },
         deep: true,
+        immediate: true
       },
       // 搜索
       searchStr(v) {

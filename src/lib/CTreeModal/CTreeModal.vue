@@ -50,10 +50,10 @@
       </div>
       <div class="selected-box">
         <div :class="getTreeFootBoxClass">
-          已选{{dirtySelectedData.length}}项
+          已选{{filterDirtySelectedDataByCondition.length}}项
         </div>
         <div class="selected-content">
-          <p v-for="item of dirtySelectedData"
+          <p v-for="item of filterDirtySelectedDataByCondition"
              :key="item[reflectKey['value']]"
           >
             <b>{{item[reflectKey['key']]}}</b>
@@ -179,6 +179,9 @@
       }
     },
     computed: {
+      filterDirtySelectedDataByCondition(){
+        return this.dirtySelectedData.filter(item=>!item[this.conditionProps])
+      },
       getTreeFootBoxClass() {
         const prefix = this.prefix ? this.prefix + '-' : '';
         return classNames(
@@ -217,7 +220,7 @@
       },
       confirmHandle() {
         this.$emit('toggleShow', false);
-        this.$emit('input', removeDirtyKey(this.dirtySelectedData, treeDirtyKeys));
+        this.$emit('input', removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys));
         this.$emit('getDirtySelectedData', this.dirtySelectedData);
         this.$emit('getMarkDownListData', this.markDownListData);
         this.$set(this, 'backUpListData', _.cloneDeep(this.markDownListData));
@@ -238,12 +241,12 @@
           // 标记数据
           const markDownListData = markListDataIdentify(_.cloneDeep(v));
           if (!this.isAlreadyMarked) {
-            const {multiple, reflectKey, value, conditionProps} = this;
+            const {multiple, reflectKey, value} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
             this.$set(this, 'markDownListData', _.cloneDeep(markDownListData));
             this.$set(this, 'backUpListData', markDownListData);
             const lists = [];
-            getCheckedValue(markDownListData, conditionProps,lists, multiple);
+            getCheckedValue(markDownListData,lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
             this.$set(this, 'backupDirtySelectedData', _.cloneDeep(lists));
           } else {
@@ -260,12 +263,12 @@
             let lists = v;
             if (!this.isAlreadyMarked) {
               lists = [];
-              const {markDownListData, reflectKey,conditionProps, multiple} = this;
+              const {markDownListData, reflectKey, multiple} = this;
               // 根据已选值同步渲染树形数据
               syncTreeListData(markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
               this.$set(this, 'markDownListData', _.cloneDeep(markDownListData));
               this.$set(this, 'backUpListData', markDownListData);
-              getCheckedValue(markDownListData,conditionProps, lists, multiple);
+              getCheckedValue(markDownListData, lists, multiple);
             }
             this.$set(this, 'dirtySelectedData', lists);
             this.$set(this, 'backupDirtySelectedData', _.cloneDeep(lists));
