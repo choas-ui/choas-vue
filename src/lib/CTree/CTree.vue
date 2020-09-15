@@ -113,7 +113,7 @@
         handler(v) {
           if (!_.isEqual(this.markDownListData, v)) {
             // 标记数据
-            const {isAlreadyMarked, reflectKey, multiple, value} = this;
+            const {isAlreadyMarked, reflectKey,conditionProps, multiple, value} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'markDownListData', v);
               this.$set(this, 'backUpListData', _.cloneDeep(v));
@@ -124,7 +124,7 @@
             this.$set(this, 'markDownListData', markDownListData);
             this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
             const lists = [];
-            getCheckedValue(markDownListData, lists, multiple);
+            getCheckedValue(markDownListData,conditionProps, lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
           }
         },
@@ -134,7 +134,7 @@
       value: {
         handler(v, old) {
           if (!_.isEqual(v, old)) {
-            const {isAlreadyMarked, reflectKey, multiple} = this;
+            const {isAlreadyMarked,conditionProps, reflectKey, multiple} = this;
             if (isAlreadyMarked) {
               this.$set(this, 'dirtySelectedData', v);
             } else {
@@ -143,7 +143,7 @@
               this.$set(this, 'markDownListData', markDownListData);
               this.$set(this, 'backUpListData', _.cloneDeep(markDownListData));
               const lists = [];
-              getCheckedValue(markDownListData, lists, multiple);
+              getCheckedValue(markDownListData,conditionProps, lists, multiple);
               this.$set(this, 'dirtySelectedData', lists);
             }
           }

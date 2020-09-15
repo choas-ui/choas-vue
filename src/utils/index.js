@@ -163,26 +163,26 @@ export const changeParentNodeStatus = (context,lisData, parentPath='', deep = tr
 };
 
 /**
- * @name getCheckedValue 获取列表选择值
+ * @name getCheckedValue 树形节点多选时 获取列表选择值
  * @name listData 获取列表选择值
  * @name selectedValue 获取列表选择值
  * */
 
-export const getCheckedValue = (listData, selectedValue = [],multiple=true) => {
+export const getCheckedValue = (listData, conditionProps='node',selectedValue = [],multiple=true) => {
   for (let i = 0; i < (listData || []).length; ++i) {
     let itemData = listData[i];
-    if (itemData.checked) {
+    if (itemData.checked && !itemData[conditionProps]) {
       selectedValue.push(itemData);
     }
     if(!multiple){
       if(selectedValue.length){
         return
       }
-      getCheckedValue(itemData.children, selectedValue,multiple);
+      getCheckedValue(itemData.children,conditionProps, selectedValue,multiple);
     }else{
       if (itemData.checked || itemData.halfChecked) {
         if ((itemData.children || []).length) {
-          getCheckedValue(itemData.children, selectedValue,multiple);
+          getCheckedValue(itemData.children,conditionProps, selectedValue,multiple);
         }
       }
     }
@@ -298,7 +298,7 @@ export const treeSelectListChangeHandle=(context, itemData)=> {
     changeParentNodeStatus(context, markDownListData, itemDataInTree._c_tree_parent_id);
     changeChildrenNodeStatus(context, itemDataInTree, itemDataInTree.checked);
     context.$set(context, 'markDownListData', markDownListData);
-    getCheckedValue(markDownListData, lists, multiple);
+    getCheckedValue(markDownListData,conditionProps, lists, multiple);
     context.$set(context, 'dirtySelectedData', lists);
   }
 };

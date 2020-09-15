@@ -221,11 +221,11 @@
         handler(v) {
           // 标记数据
           const markDownListData = markListDataIdentify(_.cloneDeep(v));
-          const {multiple, reflectKey, value} = this;
+          const {multiple, reflectKey, value, conditionProps} = this;
           syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(value), reflectKey['value'], multiple);
           this.$set(this, 'markDownListData', markDownListData);
           const lists = [];
-          getCheckedValue(markDownListData, lists, multiple);
+          getCheckedValue(markDownListData,conditionProps, lists, multiple);
           this.$set(this, 'dirtySelectedData', lists);
         },
         deep: true,
@@ -235,10 +235,10 @@
         handler(v, old) {
           if (!_.isEqual(v, old)) {
             let lists = [];
-            const {markDownListData, reflectKey, multiple} = this;
+            const {markDownListData, reflectKey, multiple,conditionProps} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
             this.$set(this, 'markDownListData', markDownListData);
-            getCheckedValue(this.markDownListData, lists, multiple);
+            getCheckedValue(this.markDownListData, conditionProps,lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
           }
         },
