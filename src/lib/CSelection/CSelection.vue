@@ -328,7 +328,7 @@
             box-sizing: content-box;
             align-items: center;
 
-            ul {
+            ul,.tree-wrap {
                 position: absolute;
                 left: 0;
                 width: 100%;

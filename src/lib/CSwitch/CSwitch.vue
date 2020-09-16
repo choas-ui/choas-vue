@@ -210,7 +210,7 @@
             font-size: addPX($df-fs);
 
             & > .inner-text {
-                padding: 0 4px;
+                padding: 0 10px;
                 color: white;
             }
         }

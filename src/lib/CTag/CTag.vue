@@ -39,7 +39,7 @@
           return '#fff'
         }
       },
-      bkg: {
+      bgc: {
         type: String,
         default() {
           return '#a5a5a5'
@@ -93,7 +93,7 @@
         }
         return {
           color: this.color,
-          background: this.bkg,
+          background: this.bgc,
         }
       }
     },
