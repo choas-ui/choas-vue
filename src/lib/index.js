@@ -5,9 +5,13 @@ import CCascade from './CCascade'
 import CCheckbox from "./CCheckbox";
 import CCheckboxGroup from "./CCheckboxGroup";
 import CDatePicker from "./CDatePicker";
+import CDropdown from "./CDropdown";
 import CIcon from './CIcon'
 import CInput from './CInput'
 import CInputTreeModal from './CInputTreeModal'
+import CMenu from './CMenu'
+import CMenuSubItem from './CMenuSubItem'
+import CMenuItem from './CMenuItem'
 import CModal from './CModal'
 import CProgress from './CProgress'
 import CPrompt from "./CPrompt/CPrompt";
@@ -33,10 +37,14 @@ const components = [
     CCheckbox,
     CCheckboxGroup,
     CDatePicker,
+    CDropdown,
     CIcon,
     CInput,
     CInputCascade,
     CInputTreeModal,
+    CMenu,
+    CMenuSubItem,
+    CMenuItem,
     CModal,
     CProgress,
     CPrompt,
@@ -68,10 +76,14 @@ export default {
     CCheckbox,
     CCheckboxGroup,
     CDatePicker,
+    CDropdown,
     CIcon,
     CInput,
     CInputCascade,
     CInputTreeModal,
+    CMenu,
+    CMenuSubItem,
+    CMenuItem,
     CModal,
     CProgress,
     CPrompt,
