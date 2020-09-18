@@ -10,8 +10,9 @@ import CIcon from './CIcon'
 import CInput from './CInput'
 import CInputTreeModal from './CInputTreeModal'
 import CMenu from './CMenu'
-import CMenuSubItem from './CMenuSubItem'
 import CMenuItem from './CMenuItem'
+import CMenuItemGroup from './CMenuItemGroup'
+import CMenuSubItem from './CMenuSubItem'
 import CModal from './CModal'
 import CProgress from './CProgress'
 import CPrompt from "./CPrompt/CPrompt";
@@ -43,8 +44,9 @@ const components = [
     CInputCascade,
     CInputTreeModal,
     CMenu,
-    CMenuSubItem,
     CMenuItem,
+    CMenuItemGroup,
+    CMenuSubItem,
     CModal,
     CProgress,
     CPrompt,
@@ -82,8 +84,9 @@ export default {
     CInputCascade,
     CInputTreeModal,
     CMenu,
-    CMenuSubItem,
     CMenuItem,
+    CMenuItemGroup,
+    CMenuSubItem,
     CModal,
     CProgress,
     CPrompt,

@@ -17,7 +17,10 @@
     },
     methods: {},
     render(h) {
-      return h('div', {}, ['AAA']);
+      return h('div',
+          {},
+          ['CMenuSubItem']
+      );
     }
   }
 </script>

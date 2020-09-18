@@ -4,7 +4,17 @@
 
   export default {
     name: 'CMenu',
-    props: {},
+    props: {
+      listData:{
+        type: Array,
+        default(){
+          return [];
+        },
+      },
+      nextLevelIndent:{
+
+      }
+    },
     data() {
       return {};
     },
@@ -17,15 +27,22 @@
     },
     methods: {},
     render(h) {
-      return h('div', {}, ['AAA']);
+      // 节点需要带入值
+      return h('div',
+          {
+          },
+          [
+            this.$slots.default
+          ]
+      );
     }
   }
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/functions";
-    @import "../scss/size";
-    @import "../scss/normal-bg";
-    @import "../scss/variable";
-    @import "../scss/comm-class";
+  @import "../scss/functions";
+  @import "../scss/size";
+  @import "../scss/normal-bg";
+  @import "../scss/variable";
+  @import "../scss/comm-class";
 </style>

@@ -3,7 +3,7 @@
   import _ from 'lodash';
 
   export default {
-    name: 'CMenuItem',
+    name: 'CMenuItemGroup',
     props: {},
     data() {
       return {};
@@ -18,16 +18,8 @@
     methods: {},
     render(h) {
       return h('div',
-          {
-            on:{
-              click: (e)=>{
-                console.log(e.target.key)
-              }
-            }
-          },
-          [
-            this.$slots.default
-          ]
+          {},
+          ['CMenuItemGroup']
       );
     }
   }
