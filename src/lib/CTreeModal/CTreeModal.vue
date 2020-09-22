@@ -28,7 +28,7 @@
         <div class="content-box">
           <div v-if="markDownListData.length">
             <CTree
-                    file-icon
+                    :file-icon="fileIcon"
                     :multiple="multiple"
                     :checkbox="checkbox"
                     :line="line"
@@ -99,7 +99,7 @@
     conditionPropsMix,
     controllerColorProps,
     controllersProps,
-    draggableProps,
+    draggableProps, fileIconProps,
     isAlreadyMarkedProps,
     lineProps,
     maskProps,
@@ -126,6 +126,7 @@
       activeColorProps,
       draggableProps,
       isAlreadyMarkedProps,
+      fileIconProps,
     ],
     props: {
       listData: {
@@ -179,8 +180,8 @@
       }
     },
     computed: {
-      filterDirtySelectedDataByCondition(){
-        return this.dirtySelectedData.filter(item=>!item[this.conditionProps])
+      filterDirtySelectedDataByCondition() {
+        return this.dirtySelectedData.filter(item => !item[this.conditionProps])
       },
       getTreeFootBoxClass() {
         const prefix = this.prefix ? this.prefix + '-' : '';
@@ -246,7 +247,7 @@
             this.$set(this, 'markDownListData', _.cloneDeep(markDownListData));
             this.$set(this, 'backUpListData', markDownListData);
             const lists = [];
-            getCheckedValue(markDownListData,lists, multiple);
+            getCheckedValue(markDownListData, lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
             this.$set(this, 'backupDirtySelectedData', _.cloneDeep(lists));
           } else {

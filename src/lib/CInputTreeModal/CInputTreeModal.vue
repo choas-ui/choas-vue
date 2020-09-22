@@ -67,6 +67,7 @@
                     :left="left"
                     :mask="mask"
                     :line="line"
+                    :file-icon="fileIcon"
                     :cancel="cancel"
                     :draggable="draggable"
                     :controllerColor="controllerColor"
@@ -92,7 +93,7 @@
     canBeEditedProps,
     controllerColorProps,
     activeColorProps,
-    controllersProps
+    controllersProps, fileIconProps
   } from "../../consts/mixins";
   import {
     getCheckedValue,
@@ -110,7 +111,8 @@
       reflectKeyProps, placeholderProps, maskProps,
       lineProps, multipleProps, checkboxProps,
       draggableProps, cancelProps, canBeEditedProps,
-      controllerColorProps, activeColorProps, controllersProps
+      controllerColorProps, activeColorProps, controllersProps,
+      fileIconProps,
     ],
     props: {
       cascadeConditionProps: {
