@@ -237,8 +237,9 @@
         immediate: true,
       },
       value: {
-        handler(v, old) {
-          if (!_.isEqual(v, old)) {
+        handler(v) {
+            const pureSelectedValue = removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys);
+            if (!_.isEqual(v, pureSelectedValue)) {
             let lists = [];
             const {markDownListData, reflectKey, multiple} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
@@ -257,7 +258,6 @@
           this.$emit('input', pureSelectedValue);
         },
         deep: true,
-        immediate: true,
       },
     }
   }
