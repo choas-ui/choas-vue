@@ -238,14 +238,15 @@
       },
       value: {
         handler(v) {
-            const pureSelectedValue = removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys);
-            if (!_.isEqual(v, pureSelectedValue)) {
+          const pureSelectedValue = removeDirtyKey(this.dirtySelectedData.filter(item => !item[this.conditionProps]), treeDirtyKeys);
+          if (!_.isEqual(v, pureSelectedValue)) {
             let lists = [];
             const {markDownListData, reflectKey, multiple} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);
             this.$set(this, 'markDownListData', markDownListData);
             getCheckedValue(this.markDownListData, lists, multiple);
             this.$set(this, 'dirtySelectedData', lists);
+            console.log(this.dirtySelectedData)
           }
         },
         deep: true,
@@ -253,9 +254,9 @@
       },
       dirtySelectedData: {
         handler() {
-          const pureSelectedValue = removeDirtyKey(this.filterDirtySelectedDataByCondition, treeDirtyKeys);
-          this.$set(this, 'markDownListData', this.markDownListData);
+          const pureSelectedValue = removeDirtyKey(this.dirtySelectedData.filter(item => !item[this.conditionProps]), treeDirtyKeys);
           this.$emit('input', pureSelectedValue);
+          this.$set(this, 'markDownListData', this.markDownListData);
         },
         deep: true,
       },
