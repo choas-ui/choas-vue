@@ -106,13 +106,17 @@ export const syncTreeListData = (context,changeParentsParams, changeChildrenPara
       selectedData.splice(index, 1);
       context.$set(item, 'checked', true);
       context.$set(item, 'halfChecked', false);
-      // 修改当前值
-      if (multiple) {
-        // 向上修改父类
-        changeParentNodeStatus(context,changeParentsParams, item._c_tree_parent_id);
-        // 向下修改子类
-        changeChildrenNodeStatus(context,item, item.checked);
-      }
+    }else{
+      selectedData.splice(index, 1);
+      context.$set(item, 'checked', false);
+      context.$set(item, 'halfChecked', false);
+    }
+    // 修改当前值
+    if (multiple) {
+      // 向上修改父类
+      changeParentNodeStatus(context,changeParentsParams, item._c_tree_parent_id);
+      // 向下修改子类
+      changeChildrenNodeStatus(context,item, item.checked);
     }
     if (selectedData.length) {
       syncTreeListData(context,changeParentsParams, item.children || [], selectedData, valueKey, multiple);
