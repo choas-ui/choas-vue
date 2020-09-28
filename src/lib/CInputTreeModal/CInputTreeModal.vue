@@ -237,8 +237,9 @@
         immediate: true,
       },
       value: {
-        handler(v,old) {
-          if (!_.isEqual(v, old)) {
+        handler(v) {
+          const pureSelectedValue = removeDirtyKey(this.dirtySelectedData.filter(item => !item[this.conditionProps]), treeDirtyKeys);
+          if (!_.isEqual(v, pureSelectedValue)) {
             let lists = [];
             const {markDownListData, reflectKey, multiple} = this;
             syncTreeListData(this, markDownListData, markDownListData, _.cloneDeep(v), reflectKey['value'], multiple);

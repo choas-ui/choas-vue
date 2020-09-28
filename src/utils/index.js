@@ -107,7 +107,6 @@ export const syncTreeListData = (context,changeParentsParams, changeChildrenPara
       context.$set(item, 'checked', true);
       context.$set(item, 'halfChecked', false);
     }else{
-      selectedData.splice(index, 1);
       context.$set(item, 'checked', false);
       context.$set(item, 'halfChecked', false);
     }
