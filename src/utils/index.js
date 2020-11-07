@@ -6,8 +6,6 @@ import _ from 'lodash'
  * @param startId 起始节点
  * */
 
-
-
 export const markListDataIdentify = (data, startId = '') => {
   if (Object.prototype.toString.call(data) !== '[object Array]') {
     return;
